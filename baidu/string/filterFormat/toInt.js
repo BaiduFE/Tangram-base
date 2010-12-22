@@ -1,6 +1,6 @@
 /*
  * Tangram
- * Copyright 2009 Baidu Inc. All rights reserved.
+ * Copyright 2009 Baidu, Inc. All rights reserved.
  * 
  * path: baidu/string/filterFormat/toInt.js
  * author: rocy

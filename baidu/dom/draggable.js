@@ -25,7 +25,7 @@
  */
 /*
  * Tangram
- * Copyright 2010 Baidu Inc. All rights reserved.
+ * Copyright 2010 Baidu, Inc. All rights reserved.
  * 
  * path: baidu/dom/draggable.js
  * author: meizz, rocy, berg

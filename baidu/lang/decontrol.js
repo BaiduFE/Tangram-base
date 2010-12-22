@@ -1,6 +1,6 @@
 /*
  * Tangram
- * Copyright 2010 Baidu Inc. All rights reserved.
+ * Copyright 2010 Baidu, Inc. All rights reserved.
  * 
  * path: baidu/lang/decontrol.js
  * author: meizz

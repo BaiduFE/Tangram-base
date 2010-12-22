@@ -1,6 +1,6 @@
 /*
  * Tangram
- * Copyright 2010 Baidu Inc. All right reserved.
+ * Copyright 2010 Baidu, Inc. All right reserved.
  * 
  * path: baidu/dom/element.js
  * author: berg

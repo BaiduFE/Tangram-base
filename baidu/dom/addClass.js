@@ -1,6 +1,6 @@
 /*
  * Tangram
- * Copyright 2009 Baidu Inc. All right reserved.
+ * Copyright 2009 Baidu, Inc. All right reserved.
  * 
  * path: baidu/dom/addClass.js
  * author: allstar, erik
