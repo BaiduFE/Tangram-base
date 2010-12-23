@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8" />
+	<title>Draggable Visual Test : Draggable option containment array</title>
+	<link rel="stylesheet" href="visual.css" type="text/css" />
+	<script type="text/javascript" src="../../js/jquery-1.3.2.js"></script>
+	<script type="text/javascript" src="../../js/include.js"></script>	
+	<script type="text/javascript">
+		var interfaces = {
+			src : [
+	            'baidu.browser',
+	            'baidu.browser.ie',
+	            'baidu.dom',
+	            'baidu.dom._g',
+	            'baidu.dom.g',
+	            'baidu.dom._styleFixer',
+	            'baidu.dom._styleFilter',
+	            'baidu.dom._styleFilter.filter',
+	            'baidu.string',
+	            'baidu.string.toCamelCase',
+	            'baidu.dom.getStyle',
+	            'baidu.event',
+	            'baidu.event._listeners',
+	            'baidu.event.on',
+	            'baidu.event.un',
+	            'baidu.event.preventDefault',
+	            'baidu.object',
+	            'baidu.object.extend',
+	            'baidu.page',
+	            'baidu.page.getScrollLeft',
+	            'baidu.page.getScrollTop',
+	            'baidu.page.getMousePosition',
+	            'baidu.dom.drag',
+	            'baidu.dom.draggable',
+	            'baidu.dom.setStyle'	            
+			],
+			basedir : '../../'
+		};
+        include(interfaces);
+	</script>
+	<script type="text/javascript">
+		$(document).ready(
+			function(){
+				baidu.dom.draggable("draggable", {"range":[50, 600, 600, 50]});
+			});	
+	</script>
+</head>
+<body>
+<h1>drag - range</h1>
+<div id="draggable" style="z-index:10;"><p>Draggable</p></div>
+<div style="position:absolute;border:solid;top:50px;left:50px;width:550px;height:550px;z-index:9;"></div>
+</body>
+</html>

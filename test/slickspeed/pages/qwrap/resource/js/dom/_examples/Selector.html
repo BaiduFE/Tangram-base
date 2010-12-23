@@ -1,0 +1,133 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>Selector</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="../../../css/base.css" rel="stylesheet" type="text/css" media="screen"/>
+<script type="text/javascript" src="../../core/core.js"></script>
+<script type="text/javascript" src="../../dom/dom.js"></script>
+<style>
+.section-ctn li{margin:0.3em;}
+</style>
+</head>
+
+<body>
+
+<div id=doc3>
+	<h1 class="page-h1">Selector功能说明.</h1>
+	<div id=hd>
+		<!-- keep it -->
+	</div>
+	<div id="bd" >
+		<div class="section-ctn">
+			<!--h3 class="section-hd">点击,以运行相关代码</h3-->
+			<ul>
+
+				<li>
+					功能说明：<input type=checkbox checked onclick="G('selector_help').style.display=this.checked?'':'none';"/>
+					<ul id="selector_help" style='display:;'>
+						<li>
+<pre>
+/** 
+ * Selector.query(pEl,sSelector): 得到pEl下的符合过滤条件的HTML Elements. 
+ * selector， 目前支持的运算符：
+	*	√
+	E	√
+	.class 	√
+	#id	√
+	E F	√
+	E >	√
+	E + F	√
+	E[attr]	√
+	E[attr=val]	√
+	E[attr~=val]	√
+	E[attr|=val]	√
+	:first-child	√
+	:link 
+	:visited 
+	:lang()    
+	:before
+	::before
+	:after
+	::after
+	:first-letter
+	::first-letter
+	:first-line
+	::first-line
+	--------------------------
+	下面的选择器属于CSS3 (上面的在以前的版本中)
+	E[attr^=val]	√
+	E[attr$=val]	√
+	E[attr*=val]	√
+	E ~ F	√
+	:root 
+	:last-child	√
+	:only-child	√
+	:nth-child()	√
+	:nth-last-child()	√
+	:first-of-type	√
+	:last-of-type	√
+	:only-of-type	√
+	:nth-of-type()	√
+	:nth-last-of-type()	√
+	:empty	√
+	:not()	√
+	:target 
+	:enabled	√
+	:disabled	√
+	:checked	√
+	--------------------------
+	其它
+	:parent	√
+	--------------------------
+	示例：
+	"ul li" 
+	">ul li"
+	"ul li:first-child"
+	"li:nth-child(2n)"----nth支持参数如：'even', 'odd', '5', '2n', '3n+2', '4n-1', '-n+6'
+ * @param {HTMLElement} pEl: 容器对象 
+ * @returns {array} : 返回elements数组。 
+ */
+
+
+ </pre>
+
+						</li>
+						<li>
+						</li>
+
+					</ul>
+
+
+				</li>
+			</ul>
+		</div>
+<hr/>
+<div><input type=button value="作为页面内容，进行测试" onclick="test()">
+<textarea id="html4Test" style="width:800px;height:300px;display:block" >
+var s='textarea';
+var els=QW.Selector.query(0,s);
+alert([s,':\n',els].join(''));
+</textarea>
+</div>
+
+	</div>
+	<div id="ft">
+		QWrap (<a href="http://www.qwrap.com">www.qwrap.com</a>)
+	</div>
+</div>
+
+
+
+
+<script>
+function G(id){
+	return document.getElementById(id);
+}
+function test(){
+	eval(G('html4Test').value);
+}
+</script>
+
+</body>
+</html>

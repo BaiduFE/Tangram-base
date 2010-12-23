@@ -1,0 +1,83 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>string</title>
+<!--qunit js -->
+<script type="text/javascript" src="../../tools/jquery-1.3.2.js">
+    </script>
+<script type="text/javascript" src="../../tools/testrunner.js">
+    </script>
+<link media="screen" href="../../tools/testsuite.css" type="text/css"
+	rel="stylesheet" />
+<!--qunit js -->
+
+	
+</head>
+<body>
+<h1 id="qunit-header">String Test</h1>
+<h2 id="qunit-banner"></h2>
+<h2 id="qunit-userAgent"></h2>
+<ol id="qunit-tests"></ol>
+
+
+<script type="text/javascript" src="../../tools/include.js"></script>
+<script type="text/javascript" src="../../tools/UserAction.js"></script>
+<script type="text/javascript" src="../../../src/import.js"></script>
+
+
+
+<script type="text/javascript">
+        var interfaces = {
+            projectroot : '../../../',
+			src : [
+	            /* "baidu",
+	            "baidu.browser",
+				"baidu.browser.ie",
+				"baidu.browser.firefox",
+				"baidu.browser.opera",
+				"baidu.browser.isWebkit",
+				"baidu.browser.isGecko",
+				"baidu.browser.isStrict",
+				"baidu.string",
+				"baidu.string.trim",
+				"baidu.string.escapeReg",
+				"baidu.string.toCamelCase",
+				"baidu.string.decodeHTML",
+				"baidu.string.encodeHTML",
+				"baidu.string.escapeReg",
+				"baidu.string.filterFormat",
+				"baidu.string.filterFormat.escapeString",
+				"baidu.string.filterFormat.escapeJs",
+				"baidu.string.filterFormat.toInt",
+				"baidu.string.format",
+				"baidu.string.getByteLength",
+				"baidu.string.subByte",
+				"baidu.string.toCamelCase",
+				"baidu.string.toHalfWidth",
+				"baidu.string.wbr" */
+			],	
+			testdir : "test/baidu/string/",		
+			testcase : {
+				core:[
+					'decodeHTML',
+					'encodeHTML',
+					'escapeReg',
+					'format',
+					'toCamelCase',
+					'trim'
+				],
+				other:[				
+					'filterFormat',
+					'getByteLength',
+					'subByte',
+					'toHalfWidth',
+					'wbr'
+					
+				]
+			}
+		};
+        include(interfaces);
+	</script>
+</body>
+</html>

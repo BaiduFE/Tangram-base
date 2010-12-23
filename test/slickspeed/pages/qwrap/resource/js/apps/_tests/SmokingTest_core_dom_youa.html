@@ -1,0 +1,47 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>SmokingTest</title>
+<meta http-equiv="Content-Type" content="text/html; charset=GB2312" />
+<link href="../assets/base.css" rel="stylesheet" type="text/css" media="screen"/>
+<script type="text/javascript" src="../../apps/core_dom_youa.js"></script>
+
+<script type="text/javascript" src="../../_tools/smokingtest/SmokingTest.js"></script>
+<link href="../../_tools/smokingtest/assets/page.css" rel="stylesheet" type="text/css" media="screen"/>
+</head>
+
+<body>
+<div id=doc3>
+	<h1 class="page-h1">Core.js 冒烟测试</h1>
+	<div id=hd>
+		<!-- keep it -->
+	</div>
+	<div id="bd" >
+		<div class="section-ctn" id="ST_ctn">
+		</div>
+	</div>
+	<div>
+		<hr/>
+本示例是Retouch后的效果。<br/>
+如相里无污染，只支持静态方法的，请到<a href="SmokingTest_core_dom_pure.html">SmokingTest_Core.html</a>
+<hr/>
+<pre>
+一些常用例子：
+QW.NodeW("textarea").css("color","blue").css("width","600px"); //NodeW的链式调用示例
+
+var d=new Date();
+var elW=QW.NodeW.$("ST_msg").css("backgroundColor","#ccc").css("color","red").on("click",function(){alert("加这个事件的时间是："+d)}); //NodeW的链式调用示例
+alert(elW.html());//w对象，通过.core来得到被包装的对象.
+</pre>
+</pre>
+	</div>
+	<div id="ft">
+		QWrap (<a href="http://www.qwrap.com">www.qwrap.com</a>)
+	</div>
+</div>
+
+<script>
+SmokingTest.init(document.getElementById('ST_ctn'),['QW']);
+</script>
+</body>
+</html>

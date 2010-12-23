@@ -1,0 +1,13 @@
+baidu.dom.g
+baidu.dom.addClass
+baidu.dom.removeClass
+baidu.dom.remove
+baidu.dom.getPosition
+baidu.dom.hide
+baidu.dom.show
+baidu.dom.insertHTML
+baidu.dom.first
+baidu.dom.last
+baidu.dom.next
+baidu.dom.prev
+baidu.string.trim

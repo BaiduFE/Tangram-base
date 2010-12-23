@@ -1,0 +1,40 @@
+body {
+    font-size: 62.5%;
+}
+
+.resizeable {
+    width: 100px;
+    height: 100px;
+    background: #abc;
+    position: absolute;
+}
+
+.r1 {
+    top:10px;
+    left:10px;
+}
+.r2{
+    top :400px;
+    left:300px;
+}
+
+.content {
+    top:100px;
+    left:200px;
+    width: 120px;
+    height: 120px;
+    background: red;
+    padding:10px 10px 10px 10px;
+}
+
+.tangram-resizable-s{
+    background-color:green;
+}
+
+.tangram-resizable-e{
+    background-color:black;
+}
+
+.tangram-resizable-se{
+    background-color:yellow;
+}

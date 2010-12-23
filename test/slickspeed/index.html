@@ -1,0 +1,36 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title>slickspeed</title>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+    <link rel="stylesheet" type="text/css" href="slickspeed.css"/>
+</head>
+<body>
+<div id="doc">
+    <div id="container">
+        <h1>slickspeed</h1>
+        <div id="controls">
+            <a id="stop" href="javascript:void(0);">stop tests</a>
+            <a id="start" href="javascript:void(0);">start tests</a>
+            <div id="clear"></div>
+        </div>
+        <div id="results"></div>
+        <div id="iframes"></div>
+    </div>
+    <h2>Legend</h2>
+	<table id="legend">
+        <tr><th>the faster</th><th>the slower</th><th>exception thrown or zero elements found</th><th>different returned elements</th></tr>
+		<tr><td class="good"></td><td class="bad"></td><td class="exception"></td><td class="mismatch"></td></tr>
+    </table>
+    <h2>speed/validity selectors test for frameworks.</h2>
+    <p>Every framework runs in his own iFrame, thus no conflicts can happen. </p>
+    <p>Tests are run in a neutral environment, no library or framework is included in the main javascript test, to avoid favoritism.</p>
+    <p>Tests are run against a local copy of <a href="http://www.w3.org/TR/2001/CR-css3-selectors-20011113/">this document</a>.</p>
+    <div id="footer">
+        <p class="footer">copyright &copy; 2010 Baidu</p>
+    </div>
+</div>
+<script type="text/javascript" charset="utf-8" src="slickspeed.js"></script>
+</body>
+</html>

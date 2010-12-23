@@ -1,0 +1,10 @@
+body {
+	font-size: 62.5%;
+}
+
+#draggable {
+	width: 100px;
+	height: 100px;
+	background: #abc;
+	position: absolute;
+}

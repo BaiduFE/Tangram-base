@@ -1,0 +1,62 @@
+body {
+    background: #F3F1F1;
+    color: #41464D;
+    font: normal normal normal 11px/normal 'Lucida Grande', 'Trebuchet MS', Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+#doc {
+    padding: 30px;
+}
+#controls a:visited, #controls a:link {
+    float: right;
+    font-size: 13px;
+    padding: 7px 10px;
+    text-align: center;
+    text-decoration: none;
+    text-shadow: #B9ACAC 2px 2px 1px;
+    font-weight: bold;
+    display: block;
+    color: #41464D;
+    background: #D0C8C8;
+    border: 3px solid white;
+    margin-left: 10px;
+}
+#controls a:hover, #controls a:active {
+    background: #F3F1F1;
+    color: #528CE0;
+}
+
+#controls #clear {
+    clear: both;
+    height: 5px;
+}
+
+#iframes {
+    position: absolute;
+    height: 0;
+    width: 0;
+    overflow: hidden;
+}
+
+#results table {
+    border-collapse: collapse;
+    width: 100%;
+}
+#results table th, #results table td {
+    padding: 5px 8px;
+    border: 3px solid white;
+}
+#results table thead th {
+    color: #8A7575;
+    background-color: #D0C8C8;
+}
+#results table tbody th {
+    color: #528CE0;
+    background-color: #D2E0E6;
+    width: 180px;
+}
+#results table tbody td {
+    color: #41464D;
+    background-color: #C8CBD0;
+}

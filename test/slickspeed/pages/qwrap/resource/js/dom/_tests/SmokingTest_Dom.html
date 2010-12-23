@@ -1,0 +1,38 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>SmokingTest</title>
+<meta http-equiv="Content-Type" content="text/html; charset=GB2312" />
+<link href="../../../css/base.css" rel="stylesheet" type="text/css" media="screen"/>
+<script type="text/javascript" src="../../core/core.js"></script>
+<script type="text/javascript" src="../../dom/dom.js"></script>
+
+<script type="text/javascript" src="../../_tools/smokingtest/SmokingTest.js"></script>
+<link href="../../_tools/smokingtest/assets/page.css" rel="stylesheet" type="text/css" media="screen"/>
+</head>
+
+<body>
+<div id=doc3>
+	<h1 class="page-h1">Dom 冒烟测试</h1>
+	<div id=hd>
+		<!-- keep it -->
+	</div>
+	<div id="bd" >
+		<div class="section-ctn" id="ST_ctn">
+		</div>
+	</div>
+	<div>
+		<hr/>
+如想查看dom链式调用的效果，请到<a href="SmokingTest_Dom_Retouch.html">SmokingTest_Dom_Retouch.html</a>
+</pre>
+	</div>
+	<div id="ft">
+		QWrap (<a href="http://www.qwrap.com">www.qwrap.com</a>)
+	</div>
+</div>
+
+<script>
+SmokingTest.init(document.getElementById('ST_ctn'),['QW'],'SmokingTest.dump(QW.NodeH)');
+</script>
+</body>
+</html>

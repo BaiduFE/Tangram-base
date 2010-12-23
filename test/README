@@ -1,0 +1,20 @@
+测试代码与开发代码以一一对应关系，
+所有src下的代码，在测试目录下都可以找到一一对应关系的测试代码
+
+测试执行依赖apache+php
+访问路径为http://localhost/path/to/tangram/test/tools/br/list.php
+
+list.php说明：
+该页面用于承载和展现用例，所有用例以A标签展示，拥有class testcase，
+页面以iframe方式加载每一个用例的执行，保证用例的执行环境相互隔离，
+参数 - filter：以参数开头的所有测试用例过滤，如list.php?filter=baidu.dom
+参数 - batchrun：在用例列表页展示完成时启动用例的执行，如list.php?batchrun=true
+参数 - release：载入源码时引用编译后的文件，release/xxx.js
+run.php说明：
+用例和源码的js文件在该页面默认加载，会同时加载jquery1.3.2和qunit，
+该页面一般用于单用例的调试
+参数 - case : 此参数用于传入当前用例名称，如run.pnp?case=baidu.dom.query
+
+测试框架引入：
+覆盖率工具，jsCoverage http://siliconforks.com/jscoverage/license.html
+测试执行，QUnit http://docs.jquery.com/Qunit

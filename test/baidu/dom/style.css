@@ -1,0 +1,12 @@
+.content {
+	float: left;
+	width: 200px;
+	color: #00ff00;
+	display: block;
+	position: relative;
+	left: 50px;
+}
+
+.pid {
+	font-size: 14px;
+}
