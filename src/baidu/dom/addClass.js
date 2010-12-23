@@ -29,7 +29,19 @@
  */
 baidu.dom.addClass = function (element, className) {
     element = baidu.dom.g(element);
-    element.className += ' ' + className;
+    var classArray = className.split(/\s+/),
+        result = element.className,
+        classMatch = " " + result + " ",
+        i = 0,
+        l = classArray.length;
+
+    for (; i < l; i++){
+         if ( classMatch.indexOf( " " + classArray[i] + " " ) < 0 ) {
+             result += ' ' + classArray[i];
+         }
+    }
+
+    element.className = result;
     return element;
 };
 

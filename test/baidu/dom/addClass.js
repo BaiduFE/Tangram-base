@@ -14,8 +14,10 @@ test("给没有className的元素添加",function(){
 	var scDiv = baidu.addClass(div,"div_class4");//快捷方式
 	equal(trim(div.className),"div_class1 div_class2 div_class3 div_class4");
 	equal(scDiv,div,"equal div using shortcut");
+    console.log("hi");
 	baidu.addClass(div,"div_class1 div_class4");//重名
-	equal(trim(div.className),"div_class1 div_class2 div_class3 div_class4 div_class1 div_class4");
+    console.log("hi");
+	equal(trim(div.className),"div_class1 div_class2 div_class3 div_class4");
 	document.body.removeChild(div);
 })
 
@@ -32,6 +34,6 @@ test("给有className的元素添加",function(){
 	equal(trim(div.className),"orig_class class1 class2 class3","add 2 new classes")//添加2个class
 	equal(scDiv,div,"equal div using short cut");
 	baidu.addClass(div,"orig_class class2 class3");//添加3个class orig_class class2 class3
-	equal(trim(div.className),"orig_class class1 class2 class3 orig_class class2 class3");
+	equal(trim(div.className),"orig_class class1 class2 class3");
 	document.body.removeChild(div);
 })
