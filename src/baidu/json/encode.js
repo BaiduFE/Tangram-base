@@ -21,6 +21,5 @@
  *             
  * @returns {string} 序列化后的字符串
  */
-baidu.json.encode = function (value) {
-    return baidu.json.stringify(value);
-};
+baidu.json.encode = baidu.json.stringify(value);
+
