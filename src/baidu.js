@@ -25,7 +25,7 @@
 /**
  * 声明baidu包
  */
-var baidu = baidu || {version: "dev"}; 
+var baidu = baidu || {version: "1-3-3"}; 
 baidu.guid = "$BAIDU$";//提出guid，防止修改window[undefined] 20100504 berg
 
 /**
