@@ -3,9 +3,9 @@
  * Copyright 2009 Baidu Inc. All rights reserved.
  * 
  * path: baidu/json/encode.js
- * author: erik
- * version: 1.1.0
- * date: 2009/11/24
+ * author: erik, cat
+ * version: 1.3.4
+ * date: 2010/12/23
  */
 
 ///import baidu.json.stringify;
@@ -21,6 +21,4 @@
  *             
  * @returns {string} 序列化后的字符串
  */
-baidu.json.encode = function (value) {
-    return baidu.json.stringify(value);
-};
+baidu.json.encode = baidu.json.stringify;

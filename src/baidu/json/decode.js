@@ -3,9 +3,9 @@
  * Copyright 2009 Baidu Inc. All rights reserved.
  * 
  * path: baidu/json/decode.js
- * author: erik
- * version: 1.1.0
- * date: 2009/11/23
+ * author: erik, cat
+ * version: 1.3.4
+ * date: 2010/12/23
  */
 
 ///import baidu.json.parse;
@@ -21,6 +21,4 @@
  *             
  * @returns {JSON} 解析结果json对象
  */
-baidu.json.decode = function (source) {
-    return baidu.json.parse(source);
-};
+baidu.json.decode = baidu.json.parse;
