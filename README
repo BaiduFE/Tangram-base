@@ -8,19 +8,16 @@ http://tangram.baidu.com
 主干是稳定版本，如果你想提交代码、查看最新版本，请使用dev分支。
 Tangram有完整的单元测试用例，用例执行依赖web server和php环境。
 提交代码前，请确认测试用例的执行情况。
-测试用例地址：
-http://localhost/path/to/tangram/test/tools/br/list.php
+测试用例地址：http://localhost/path/to/tangram/test/tools/br/list.php
 
-Tangram component是基于Tangram base开发的组件，见：
-https://github.com/BaiduFE/Tangram-component
 
 Tangram is a simple and reliable JavaScript library designed for building web products.
-It is used by almost every Baidu product, such as Zhidao and AD Manager.
+It is used by almost eveny Baidu product, such as Zhidao and AD Manager.
 
 For more information about Tangram, visit:
 http://tangram.baidu.com
 
 To developers:
-If you want to commit code, please folk dev branch.
+If you want commit code, please folk dev branch.
 you can find unit test here:
 http://localhost/path/to/tangram/test/tools/br/list.php
