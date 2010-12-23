@@ -1,5 +1,16 @@
+Tangram是一个简单可依赖的Javascript库，适合开发互联网产品。
+被几乎所有百度产品做为基础库引用，如百度知道，百度广告管家等。
+
+你可以在下面的地址看到API文档和DEMO，以及一些介绍文章：
+http://tangram.baidu.com
+
+主干是稳定版本，如果你想提交代码，请folk development分支。
+
+
 Tangram is a simple and reliable JavaScript library designed for building web products.
 It is used by almost eveny Baidu product, such as Zhidao and Ad Manager.
 
 For more information about Tangram, visit:
 http://tangram.baidu.com
+
+If you want commit code, please folk development branch.
