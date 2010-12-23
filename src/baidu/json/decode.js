@@ -21,4 +21,4 @@
  *             
  * @returns {JSON} 解析结果json对象
  */
-baidu.json.decode = baidu.json.parse(source);
+baidu.json.decode = baidu.json.parse;
