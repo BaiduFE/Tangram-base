@@ -1,7 +1,7 @@
 <<<<<<< HEAD:baidu/dom/toggleClass.js
 /*
  * Tangram
- * Copyright 2009 Baidu, Inc. All rights reserved.
+ * Copyright 2009 Baidu Inc. All rights reserved.
  * 
  * path: baidu/dom/toggleClass.js
  * author: berg

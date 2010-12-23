@@ -1,7 +1,7 @@
 <<<<<<< HEAD:baidu/lang/Class/addEventListeners.js
 /*
  * Tangram
- * Copyright 2010 Baidu, Inc. All rights reserved.
+ * Copyright 2010 Baidu Inc. All rights reserved.
  * 
  * path: baidu/lang/Class/addEventListeners.js
  * author: berg
