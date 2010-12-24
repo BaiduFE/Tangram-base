@@ -18,7 +18,6 @@ if(!$quirk){?>
 <body>
 <div id="title">
 <h1>Tangram Test Index Page</h1>
-<p><a href="http://fe.baidu.com/nighty/tangram/">Tangram Nighty Document</a></p>
 </div>
 <div id="id_control" class="control"><input id="id_control_runnext"
 	type="checkbox" />自动下一个 <input id="id_control_breakonerror"

@@ -14,8 +14,8 @@ var isLoaded = function(){
 	}
     setTimeout(function() {
 		var flag1 = false,flag2 = false;
-		var k1 = loadedTest1();
-		var k2 = loadedTest2();
+		var k1 = typeof loadedTest1 == 'function' && loadedTest1();
+		var k2 = typeof loadedTest2 == 'function' && loadedTest2();
 		if(k1&&k1==1 ){
         	flag1 = true;
 		}

@@ -19,7 +19,6 @@
  * @param {Object} options 需要删除的cookie对应的 path domain 等值
  * @meta standard
  */
- //20100402 meizz 在删除 cookie 的时候若指定删除的 cookie 的 domain path 等信息与原设定的 cookie 信息不致时，是无法删除这个 cookie 的。
 baidu.cookie.remove = function (key, options) {
     options = options || {};
     options.expires = new Date(0);
