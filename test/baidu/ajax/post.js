@@ -8,7 +8,8 @@ test("正确url和正确data", function() {
 	var arg = "var1=baidu&var2=tangram";
 	var xhr = baidu.ajax.post(urlstring, arg);
 	var check = function() {
-		return xhr.responseText.length > 0;
+    // IE下面遇到了"完成该操作所需的数据还不可使用。"的错误
+		return xhr.responseText && xhr.responseText.length > 0;
 	}, onsuccess = function() {
 		equals(xhr.responseText, "baidutangram", "xhr return");
 		start();

@@ -1,5 +1,4 @@
 module("baidu.dom.setStyle");
-//Import("baidu.dom._styleFixer.float");
 test("set style",function(){
 	baidu.dom._styleFixer["float"] = ua.browser.ie ? "styleFloat" : "cssFloat";
 	expect(3);

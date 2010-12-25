@@ -79,9 +79,9 @@ module('baidu.ajax.form');
 		selmul.options[selmul.options.length] = new Option('2', '2');
 		selmul.options[selmul.options.length] = new Option('3', '3');
 		selmul.options[selmul.options.length] = new Option('4', '4');
-		selmul.options[2].selected = "selected";
-		selmul.options[1].selected = "selected";
 		selmul.options[0].selected = "selected";
+		selmul.options[1].selected = "selected";
+		selmul.options[2].selected = "selected";
 
 		button.id = "sub";
 		button.value = "提交";

@@ -11,7 +11,7 @@ test("valid key", function() {
 test("delete key with option", function() {
 	document.cookie = "r21=21;path=/tangram/";
 	baidu.cookie.remove("r21");
-	ok(document.cookie.match('r21=') != null, 'delete fail without options');
+	ok(document.cookie.match('r21=') == null, 'delete fail without options');
 	baidu.cookie.remove("r21", {
 		path : '/tangram/'
 	});

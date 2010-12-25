@@ -224,7 +224,7 @@ test('直接返回返回值 ', function() {
 	equal(baidu.e(div).contains(div1), 'true', 'check contains : ');
 	equal(baidu.e(div).getAttr('id'), 'div', 'check getAttr : ');
 	equal(baidu.e(div).getPosition()[0].left, 0, 'check getPosition : ');
-	equal(baidu.e(div).getStyle('left'), '0px', 'check getStyle : ');
+  equal(parseInt(baidu.e(div).getStyle('left')[0], 10), 0, 'check getStyle : ');
 	equal(baidu.e(div).hasClass('berg'), 'true', 'check hasClass : ');
 	equal(baidu.e(div).intersect(div1), 'true', 'check intersect : ');
 	equal(baidu.e(div).hasAttr('id'), 'true', 'check hasAttr : ');
