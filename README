@@ -5,7 +5,7 @@ Tangram是一个简单可依赖的Javascript库，适合开发互联网产品。
 http://tangram.baidu.com
 
 致开发者：
-主干是稳定版本，如果你想提交代码，请folk development分支。
+主干是稳定版本，如果你想提交代码，请fork development分支。
 Tangram有完整的单元测试用例，用例执行依赖web server和php环境。
 提交代码前，请确认测试用例的执行情况。
 测试用例地址：http://localhost/path/to/tangram/test/tools/br/list.php
@@ -18,6 +18,6 @@ For more information about Tangram, visit:
 http://tangram.baidu.com
 
 To developers:
-If you want commit code, please folk development branch.
+If you want commit code, please fork development branch.
 you can find unit test here:
 http://localhost/path/to/tangram/test/tools/br/list.php 
