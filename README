@@ -15,12 +15,12 @@ Tangram component是基于Tangram base开发的组件，见：
 https://github.com/BaiduFE/Tangram-component
 
 Tangram is a simple and reliable JavaScript library designed for building web products.
-It is used by almost eveny Baidu product, such as Zhidao and AD Manager.
+It is used by almost every Baidu product, such as Zhidao and AD Manager.
 
 For more information about Tangram, visit:
 http://tangram.baidu.com
 
 To developers:
-If you want commit code, please folk dev branch.
+If you want to commit code, please folk dev branch.
 you can find unit test here:
 http://localhost/path/to/tangram/test/tools/br/list.php
