@@ -9,5 +9,5 @@ test("基础校验", function(){
 test("特殊情况", function(){
 	//空数组
 	var arr = [], ite = function(acc, i){return acc+1;};
-	equals(baidu.array.map(arr, ite, 0), 0, "空串转换应该返回初始值");
+	equals(baidu.array.reduce(arr, ite, 0), 0, "空串转换应该返回初始值");
 });
