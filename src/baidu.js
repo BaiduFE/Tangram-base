@@ -15,22 +15,18 @@
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
- * 
- * path: baidu.js
- * author: allstar, erik
- * version: 1.1.0
- * date: 2009/12/2
  */
 
 /**
  * 声明baidu包
+ * @author: allstar, erik, meizz, berg
  */
 var baidu = baidu || {version: "dev"}; 
-baidu.guid = "$BAIDU$";//提出guid，防止修改window[undefined] 20100504 berg
 
-/**
- * meizz 2010/02/04
- * 顶级域名 baidu 有可能被闭包劫持，而需要页面级唯一信息时需要用到下面这个对象
- */
+//提出guid，防止在与老版本Tangram混用时
+//在下一行错误的修改window[undefined]
+baidu.guid = "$BAIDU$";
 
+//Tangram可能被放在闭包中
+//一些页面级别唯一的属性，需要挂载在window[baidu.guid]上
 window[baidu.guid] = window[baidu.guid] || {};
