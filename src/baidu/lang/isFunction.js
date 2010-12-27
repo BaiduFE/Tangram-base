@@ -22,6 +22,6 @@
  * @returns {boolean} 类型判断结果
  */
 baidu.lang.isFunction = function (source) {
-	// chrome下,'function' == typeof /a/ 为true.
+	  // chrome下,'function' == typeof /a/ 为true.
     return '[object Function]' == Object.prototype.toString.call(source);
 };
