@@ -1,7 +1,7 @@
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
- * 
+ *
  * path: baidu/event/_unload.js
  * author: erik, berg
  * version: 1.1.0
@@ -14,27 +14,30 @@
  * 卸载所有事件监听器
  * @private
  */
-baidu.event._unload = function () {
+baidu.event._unload = function() {
     var lis = baidu.event._listeners,
         len = lis.length,
         standard = !!window.removeEventListener,
         item, el;
-        
+
     while (len--) {
         item = lis[len];
         //20100409 berg: 不解除unload的绑定，保证用户的事件一定会被执行
         //否则用户挂载进入的unload事件也可能会在这里被删除
-        if(item[1] == 'unload'){
+        if (item[1] == 'unload') {
             continue;
         }
-        el = item[0];
+        //如果el被移除，不做判断将导致js报错
+        if (!(el = item[0])) {
+            continue;
+        }
         if (el.removeEventListener) {
             el.removeEventListener(item[1], item[3], false);
-        } else if (el.detachEvent){
+        } else if (el.detachEvent) {
             el.detachEvent('on' + item[1], item[3]);
         }
     }
-    
+
     if (standard) {
         window.removeEventListener('unload', baidu.event._unload, false);
     } else {
