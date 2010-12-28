@@ -10,6 +10,7 @@ test("URL中只有一个参数的情况", function(){
 	same(baidu.url.queryToJson("http://baidu.com?Key123!@=Value456*("), {"Key123!@":"Value456*("}, '');
 	same(baidu.url.queryToJson("http://baidu.com?k=v"), {"k":"v"}, '');
 	same(baidu.url.queryToJson("http://baidu.com?中文abc=英文123"), {"中文abc":"英文123"}, '');
+	same(baidu.url.queryToJson("http://baidu.com???中文abc=英文123"), {"中文abc":"英文123"}, '');
 	same(baidu.url.queryToJson("http://baidu.com?ＡＢｚ１２％\t\n=ｄｋＦＺ２３\b\a"), {"ＡＢｚ１２％\t\n":"ｄｋＦＺ２３\b\a"}, '');
 });
 

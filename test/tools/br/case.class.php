@@ -175,7 +175,7 @@ class Kiss{
 				print("<a href=\"javascript:void(0)\" id=\"$c->case_id\"
 				target=\"_blank\" title=\"$name\" onclick=\"run('$name');return false;\">"
 				/*过长的时候屏蔽超出20的部分，因为隐藏的处理，所有用例不能直接使用标签a中的innerHTML，而应该使用title*/
-				.(strlen($name)>20?(substr($name,0,18)."..."):$name)."</a>");
+				.(substr($name, 6))."</a>");
 			}
 		}
 	}
