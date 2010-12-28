@@ -11,6 +11,8 @@
 
 ///import baidu.lang.Class;
 ///import baidu.lang.guid;
+///import baidu.lang.isFunction;
+///import baidu.lang.isString;
 
 /**
  * 自定义的事件对象。
@@ -39,7 +41,7 @@ baidu.lang.Event = function (type, target) {
  * @remark 	事件类型区分大小写。如果自定义事件名称不是以小写"on"开头，该方法会给它加上"on"再进行判断，即"click"和"onclick"会被认为是同一种事件。 
  */
 baidu.lang.Class.prototype.addEventListener = function (type, handler, key) {
-    if (typeof handler != "function") {
+    if (!baidu.lang.isFunction(handler)) {
         return;
         // throw("addEventListener:" + handler + " is not a function");
     }
@@ -71,9 +73,9 @@ baidu.lang.Class.prototype.addEventListener = function (type, handler, key) {
  * @remark 	如果第二个参数handler没有被绑定到对应的自定义事件中，什么也不做。
  */
 baidu.lang.Class.prototype.removeEventListener = function (type, handler) {
-    if (typeof handler == "function") {
+    if (baidu.lang.isFunction(handler)) {
         handler = handler.hashCode;
-    } else if (typeof handler != "string") {
+    } else if (!baidu.lang.isString(handler)) {
         return;
     }
 
@@ -98,7 +100,7 @@ myobj.onMyEvent = function(){}<br>
 myobj.addEventListener("onMyEvent", function(){});
  */
 baidu.lang.Class.prototype.dispatchEvent = function (event, options) {
-    if("string" == typeof event){
+    if (baidu.lang.isString(event)) {
         event = new baidu.lang.Event(event);
     }
     !this.__listeners && (this.__listeners = {});
@@ -115,7 +117,7 @@ baidu.lang.Class.prototype.dispatchEvent = function (event, options) {
 
     p.indexOf("on") != 0 && (p = "on" + p);
 
-    typeof this[p] == "function" && this[p].apply(this, arguments);
+    baidu.lang.isFunction(this[p]) && this[p].apply(this, arguments);
 
     if (typeof t[p] == "object") {
         for (i in t[p]) {

@@ -16,6 +16,7 @@
  * @function
  * @grammar baidu.url.escapeSymbol(source)
  * @param {string} source 需要转义的字符串
+ * @return {string} 转义之后的字符串.
  * @remark
  * 用于get请求转义。在服务器只接受gbk，并且页面是gbk编码时，可以经过本转义后直接发get请求。
  *             

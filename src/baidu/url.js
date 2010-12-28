@@ -11,5 +11,5 @@
 ///import baidu;
 /**
  * @namespace baidu.url 操作url的方法。
-*/
+ */
 baidu.url = baidu.url || {};

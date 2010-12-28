@@ -10,6 +10,7 @@
 
 ///import baidu.lang.guid;
 ///import baidu.lang._instances;
+///import baidu.lang.isFunction;
 
 /**
  * Tangram继承机制提供的一个基类，用户可以通过继承baidu.lang.Class来获取它的属性及方法。
@@ -38,7 +39,7 @@ baidu.lang.Class.prototype.dispose = function(){
     delete window[baidu.guid]._instances[this.guid];
 
     for(var property in this){
-        if (typeof this[property] != "function"){
+        if (!baidu.lang.isFunction(this[property])) {
             delete this[property];
         }
     }
