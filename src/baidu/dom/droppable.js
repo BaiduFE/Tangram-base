@@ -13,7 +13,7 @@
 ///import baidu.dom.getPosition;
 ///import baidu.page.getMousePosition;
 ///import baidu.dom.intersect;
-
+///import baidu.lang.guid;
 
 //TODO: 添加对 accept, hoverclass 等参数的支持.
 /**
@@ -40,34 +40,37 @@ baidu.dom.droppable = function(element, options){
 	options = options || {};
 	var manager = baidu.dom.ddManager,
 		target = baidu.dom.g(element),
+	    guid = baidu.lang.guid(),
 		//拖拽进行时判断
 		_dragging = function(event){
-			var _targetsDroppingOver = manager._targetsDroppingOver;
+			var _targetsDroppingOver = manager._targetsDroppingOver,
+			    eventData = {trigger:event.DOM,reciever: target};
 			//判断被拖拽元素和容器是否相撞
 			if(baidu.dom.intersect(target, event.DOM)){
 				//进入容器区域
-				if(! _targetsDroppingOver[target]){
+				if(! _targetsDroppingOver[guid]){
 					//初次进入
-					(typeof options.ondropover == 'function') && options.ondropover.call(target,event.DOM);
-					manager.dispatchEvent("ondropover", {trigger:event.DOM,reciever: target});
-					_targetsDroppingOver[target] = true;
+					(typeof options.ondropover == 'function') && options.ondropover.call(target,eventData);
+					manager.dispatchEvent("ondropover", eventData);
+					_targetsDroppingOver[guid] = true;
 				}
 			} else {
 				//出了容器区域
-				if(_targetsDroppingOver[target]){
-					(typeof options.ondropout == 'function') && options.ondropout.call(target,event.DOM);
-					manager.dispatchEvent("ondropout", {trigger:event.DOM,reciever: target});
+				if(_targetsDroppingOver[guid]){
+					(typeof options.ondropout == 'function') && options.ondropout.call(target,eventData);
+					manager.dispatchEvent("ondropout", eventData);
 				}
-				delete _targetsDroppingOver[target];
+				delete _targetsDroppingOver[guid];
 			}
 		},
 		//拖拽结束时判断
 		_dragend = function(event){
+			var eventData = {trigger:event.DOM,reciever: target};
 			if(baidu.dom.intersect(target, event.DOM)){
-				typeof options.ondrop == 'function' && options.ondrop.call(target, event.DOM);
-				manager.dispatchEvent("ondrop", {trigger:event.DOM,reciever: target});
+				typeof options.ondrop == 'function' && options.ondrop.call(target, eventData);
+				manager.dispatchEvent("ondrop", eventData);
 			}
-			delete manager._targetsDroppingOver[target];
+			delete manager._targetsDroppingOver[guid];
 		};
 	//事件注册,return object提供事件解除
 	manager.addEventListener("ondrag", _dragging);
