@@ -28,6 +28,33 @@ test("指定owner不存在的模块扩展", function(){
 	equals(noex.sum(1,2), 3, 'declare owner noExist module extend');
 });
 
+test("指定namespace下面进行扩展", function(){
+  var com = {
+    'leeight' : {
+      'package' : {
+      
+      },
+      'name' : 'leeight',
+      'age' : 25,
+      'height' : 0
+    }
+  };
+  
+  baidu.lang.module("sum", function(a, b){ return a + b;}, com.leeight.package);
+  equals(com.leeight.package.sum(1, 2), 3, "exists");
+
+  baidu.lang.module("sum", function(a, b){ return a + b + 1;}, com.leeight.package);
+  equals(com.leeight.package.sum(1, 2), 3, "can't be override");
+
+  baidu.lang.module("sum", function(a, b){ return a + b;}, com.leeight.name);
+  equals(com.leeight.name.sum, undefined, "exists");
+
+  baidu.lang.module("sum", function(a, b){ return a + b;}, com.leeight.age);
+  equals(com.leeight.age.sum, undefined, "exists");
+  
+  baidu.lang.module("sum", function(a, b){ return a + b;}, com.leeight.height);
+  equals(com.leeight.height.sum, undefined, "exists");
+});
 
 
 
