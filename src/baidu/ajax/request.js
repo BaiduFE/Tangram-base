@@ -174,13 +174,12 @@ baidu.ajax.request = function (url, options) {
         xhr = getXHR();
         
         if (method == 'GET') {
-            url += (url.indexOf('?') >= 0 ? '&' : '?');
             if (data) {
-                url += data + '&';
+                url += (url.indexOf('?') >= 0 ? '&' : '?') + data;
                 data = null;
             }
             if(options['noCache'])
-                url += 'b' + (new Date()).getTime() + '=1';
+                url += '&b' + (new Date()).getTime() + '=1';
         }
         
         if (username) {
