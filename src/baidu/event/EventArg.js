@@ -20,13 +20,14 @@
  * @meta standard
  * @remark 1.1.0开始支持
  * @see baidu.event.get
+ * @constructor
  */
 baidu.event.EventArg = function (event, win) {
     win = win || window;
     event = event || win.event;
     var doc = win.document;
     
-    this.target = event.target || event.srcElement;
+    this.target = /** @type {Node} */ (event.target) || event.srcElement;
     this.keyCode = event.which || event.keyCode;
     for (var k in event) {
         var item = event[k];
@@ -51,7 +52,7 @@ baidu.event.EventArg = function (event, win) {
  * 阻止事件的默认行为
  * @name preventDefault
  * @grammar eventArgObj.preventDefault()
- * @returns {EventArg} EventArg对象
+ * @returns {baidu.event.EventArg} EventArg对象
  */
 baidu.event.EventArg.prototype.preventDefault = function () {
     if (this._event.preventDefault) {
@@ -66,7 +67,7 @@ baidu.event.EventArg.prototype.preventDefault = function () {
  * 停止事件的传播
  * @name stopPropagation
  * @grammar eventArgObj.stopPropagation()
- * @returns {EventArg} EventArg对象
+ * @returns {baidu.event.EventArg} EventArg对象
  */
 baidu.event.EventArg.prototype.stopPropagation = function () {
     if (this._event.stopPropagation) {
@@ -81,7 +82,7 @@ baidu.event.EventArg.prototype.stopPropagation = function () {
  * 停止事件
  * @name stop
  * @grammar eventArgObj.stop()
- * @returns {EventArg} EventArg对象
+ * @returns {baidu.event.EventArg} EventArg对象
  */
 baidu.event.EventArg.prototype.stop = function () {
     return this.stopPropagation().preventDefault();

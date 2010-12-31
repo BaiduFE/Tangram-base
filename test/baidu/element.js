@@ -232,3 +232,21 @@ test('直接返回返回值 ', function() {
 	var d = document.getElementById("div");
 	equal(d, null, 'check remove : ');
 });
+
+
+test('封装基础 - 构造函数', function(){
+  var div = document.body.appendChild(
+      document.createElement('DIV'));
+  div.innerHTML = new Array(10).join('<span>hello</span>');
+
+  var a = new baidu.element.Element(div);
+  equal(a._dom.length, 1, "passed test");
+  deepEqual(a._dom, [div], "passed test");
+
+  var childs = div.getElementsByTagName('span'),
+      b = new baidu.element.Element(childs);
+  equal(b._dom.length, 9, "passed test");
+  deepEqual(b._dom, baidu.lang.toArray(childs), "passed test");
+  
+  document.body.removeChild(div);
+});

@@ -33,8 +33,12 @@
 baidu.event.on = function (element, type, listener) {
     type = type.replace(/^on/i, '').toLowerCase();
     element = baidu.dom._g(element);
+    if (!element) {
+        return element;
+    }
+
     var realListener = function (ev) {
-            // 1. 这里不支持EventArgument,  原因是跨frame的时间挂载
+            // 1. 这里不支持EventArgument,  原因是跨frame的事件挂载
             // 2. element是为了修正this
             listener.call(element, ev);
         },
@@ -44,18 +48,19 @@ baidu.event.on = function (element, type, listener) {
         realType = type;
     // filter过滤
     if(filter && filter[type]){
-    	afterFilter = filter[type](element, type, realListener);
-    	realType = afterFilter.type;
-    	realListener = afterFilter.listener;
+    	  afterFilter = filter[type](element, type, realListener);
+    	  realType = afterFilter.type;
+    	  realListener = afterFilter.listener;
     }
     
     // 事件监听器挂载
     if (element.addEventListener) {
-		element.addEventListener(realType, realListener, false);
+		    element.addEventListener(realType, realListener, false);
     } else if (element.attachEvent) {
         element.attachEvent('on' + realType, realListener);
     }
-	// 将监听器存储到数组中
+	
+    // 将监听器存储到数组中
     lis[lis.length] = [element, type, listener, realListener, realType];
     return element;
 };
