@@ -1,11 +1,6 @@
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
- * 
- * path: baidu/ajax/request.js
- * author: allstar, erik, berg
- * version: 1.1.1
- * date: 2009/12/02
  */
 
 ///import baidu.ajax;
@@ -13,6 +8,7 @@
 
 /**
  * 发送一个ajax请求
+ * @author: allstar, erik, berg
  * @name baidu.ajax.request
  * @function
  * @grammar baidu.ajax.request(url[, options])
