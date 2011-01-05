@@ -23,7 +23,7 @@
  * 
 1. 不支持跨浏览器的鼠标滚轮事件监听器添加<br>
 2. 改方法不为监听器灌入事件对象，以防止跨iframe事件挂载的事件对象获取失败
-		
+    
  * @shortcut on
  * @meta standard
  * @see baidu.event.un
@@ -48,18 +48,18 @@ baidu.event.on = function (element, type, listener) {
         realType = type;
     // filter过滤
     if(filter && filter[type]){
-    	  afterFilter = filter[type](element, type, realListener);
-    	  realType = afterFilter.type;
-    	  realListener = afterFilter.listener;
+        afterFilter = filter[type](element, type, realListener);
+        realType = afterFilter.type;
+        realListener = afterFilter.listener;
     }
     
     // 事件监听器挂载
     if (element.addEventListener) {
-		    element.addEventListener(realType, realListener, false);
+        element.addEventListener(realType, realListener, false);
     } else if (element.attachEvent) {
         element.attachEvent('on' + realType, realListener);
     }
-	
+  
     // 将监听器存储到数组中
     lis[lis.length] = [element, type, listener, realListener, realType];
     return element;
