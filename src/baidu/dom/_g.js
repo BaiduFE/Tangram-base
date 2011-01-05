@@ -9,7 +9,7 @@
  */
 
 ///import baidu.dom;
-///import baidu.lang.isString
+///import baidu.lang.isString;
 
 /**
  * 从文档中获取指定的DOM元素
