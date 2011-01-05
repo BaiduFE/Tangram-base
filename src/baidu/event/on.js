@@ -33,9 +33,6 @@
 baidu.event.on = function (element, type, listener) {
     type = type.replace(/^on/i, '').toLowerCase();
     element = baidu.dom._g(element);
-    if (!element) {
-        return element;
-    }
 
     var realListener = function (ev) {
             // 1. 这里不支持EventArgument,  原因是跨frame的事件挂载

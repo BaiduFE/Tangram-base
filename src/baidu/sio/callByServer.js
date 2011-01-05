@@ -10,7 +10,6 @@
 
 ///import baidu.sio;
 ///import baidu.lang.isFunction;
-///import baidu.lang.isString;
 ///import baidu.sio._removeScriptTag;
 
 /**
@@ -50,12 +49,10 @@ baidu.sio.callByServer = function(url, callback, opt_options) {
                 baidu.sio._removeScriptTag(scr);
             }
         };
-    } else if (baidu.lang.isString(callback)) {
+    } else {
         // XXX 如果callback是一个字符串的话，就需要保证url是唯一的，不要去改变它
         // TODO 当调用了callback之后，无法删除动态创建的script标签
         callbackName = callback;
-    } else {
-        return;
     }
 
     url = url.replace((new RegExp('(\\?|&)callback=[^&]*')), '\x241' + queryField + '=' + callbackName);
