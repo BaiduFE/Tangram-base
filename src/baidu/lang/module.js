@@ -26,7 +26,7 @@ baidu.lang.module = function(name, module, owner) {
         packageName,
         i = 0;
 
-    //如果没有owner，找当前作用域，如果当前作用域没有此变量，在window创建
+    // 如果没有owner，找当前作用域，如果当前作用域没有此变量，在window创建
     if (!owner) {
         try {
             if (!(new RegExp('^[a-zA-Z_\x24][a-zA-Z0-9_\x24]*\x24')).test(packages[0])) {

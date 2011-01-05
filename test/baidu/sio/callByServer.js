@@ -40,6 +40,27 @@ test('charset gbk', function() {
 	});
 });
 
+test('确保所有动态创建的script都被删除了', function(){
+  start();
+  var head = document.getElementsByTagName('HEAD')[0];
+  var scripts = document.getElementsByTagName('SCRIPT');
+  for(var i = 0, j = scripts.length; i < j; i ++){
+    if(scripts[i].src){
+      equal(scripts[i].src.indexOf('callback=') == -1, true);
+    }
+  }
+});
+
+test('throw exception in callback', function(){
+  stop();
+  var check = function(){
+    ok(true);
+    throw new Error("custom exception");
+  };
+  baidu.sio.callByServer(upath+"callByServer.php", check);
+  setTimeout(function(){start();}, 500);
+});
+
 /**
  * 由于不存在网页不会触发回调，设置半秒超时，用例可能会有问题……
  */

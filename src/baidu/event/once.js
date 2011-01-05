@@ -27,10 +27,11 @@
  */
 baidu.event.once = function(element, type, listener){
     element = baidu.dom._g(element);
-	function onceListener(event){
-		listener.call(element,event);  
-		baidu.event.un(element, type, onceListener);
-	} 
-	baidu.event.on(element, type, onceListener);
-	return element;
+    function onceListener(event){
+        listener.call(element,event);
+        baidu.event.un(element, type, onceListener);
+    } 
+    
+    baidu.event.on(element, type, onceListener);
+    return element;
 };
