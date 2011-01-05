@@ -9,6 +9,7 @@
  */
 
 ///import baidu.ajax;
+///import baidu.fn.blank;
 
 /**
  * 发送一个ajax请求
@@ -99,8 +100,10 @@ baidu.ajax.request = function (url, options) {
              */
             window.setTimeout(
                 function() {
-                    // 避免内存泄露
-                    xhr.onreadystatechange = new Function();
+                    // 避免内存泄露.
+                    // 由new Function改成不含此作用域链的 baidu.fn.blank 函数,
+                    // 以避免作用域链带来的隐性循环引用导致的IE下内存泄露. By rocy 2011-01-05 .
+                    xhr.onreadystatechange = baidu.fn.blank;
                     if (async) {
                         xhr = null;
                     }
