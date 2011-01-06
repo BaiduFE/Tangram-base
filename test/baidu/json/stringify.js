@@ -69,6 +69,25 @@ test("输入的对象当中包含了function", function(){
 	equals(s, "{\"a\":1,\"b\":\"test\",\"c\":true,\"d\":3.12345,\"e\":false,\"f\":null,\"g\":[1,2,3],\"h\":{\"aa\":1,\"bb\":2}}");
 });
 
+document.write('<script type="text/javascript" src="../../../test/tools/br/import.php?f=baidu.browser.ie"></script>');
+test("hasOwnProperty", function(){
+  var object = {
+    "hasOwnProperty" : null,
+    "constructor" : null,
+    "isPrototypeOf" : null,
+    "propertyIsEnumerable" : null,
+    "toLocaleString" : null,
+    "valueOf" : null,
+    "toString" : null
+  };
+
+  if(baidu.browser.ie && baidu.browser.ie <= 8){
+    equals(baidu.json.stringify(object), '{}');
+  }else{
+    equals(baidu.json.stringify(object), '{"hasOwnProperty":null,"constructor":null,"isPrototypeOf":null,"propertyIsEnumerable":null,"toLocaleString":null,"valueOf":null,"toString":null}');
+  }
+});
+
 //describe("baidu.json.stringify测试",{
 //
 //    "stringify函数输入符合Json要求的对象":function() {
