@@ -27,16 +27,24 @@ var checkX = function(x, offset, type) {// 不直接调用这个方法，防止�
 };
 
 var checkscrollX = function(x, offset, type) {// 通过设置div的宽度制造滚动条，从而可以设置scrollLeft
-	var img = document.createElement('img');
-	document.body.appendChild(img);
-	img.style.width = '5000px';// 用于产生滚动条
-	img.style.border = '3px';
-	img.src = upath + 'test.jpg';
-	window.scrollTo(offset, document.body.scrollTop);// scrollLeft set to be
-														// 2000
+//	var img = document.createElement('img');
+//	document.body.appendChild(img);
+//	img.style.width = '5000px';// 用于产生滚动条
+//	img.style.border = '3px';
+//	img.src = upath + 'test.jpg';
+//	window.scrollTo(offset, document.body.scrollTop);// scrollLeft set to be
+//														// 2000
+//	checkX(x, offset, type);
+//	window.scrollTo(0, document.body.scrollTop);
+//	document.body.removeChild(img);
+	
+	var div = document.createElement('div');
+	document.body.appendChild(div);
+	$(div).css('width', 5000).css('height', 5000).css('border', 'solid');
+	window.scrollTo(offset, document.body.scrollTop);
 	checkX(x, offset, type);
 	window.scrollTo(0, document.body.scrollTop);
-	document.body.removeChild(img);
+	document.body.removeChild(div);
 };
 
 test("getPageX", function() {
