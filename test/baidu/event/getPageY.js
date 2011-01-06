@@ -29,7 +29,7 @@ var checkX = function(y, offset, type) {// 不直接调用这个方法，防止�
 var checkscrollY = function(x, offset, type) {// 通过设置div的宽度制造滚动条，从而可以设置scrollLeft
 	var div = document.createElement('div');
 	document.body.appendChild(div);
-	$(div).css('height', 5000).css('border', 'solid');
+	$(div).css('width', 200).css('height', 5000).css('border', 'solid');
 	window.scrollTo(document.body.scrollLeft, offset);
 	checkX(x, offset, type);
 	window.scrollTo(document.body.scrollLeft, 0);

@@ -40,7 +40,7 @@ var checkscrollX = function(x, offset, type) {// 通过设置div的宽度制造�
 	
 	var div = document.createElement('div');
 	document.body.appendChild(div);
-	$(div).css('width', 5000).css('height', 5000).css('border', 'solid');
+	$(div).css('width', 5000).css('height', 200).css('border', 'solid');
 	window.scrollTo(offset, document.body.scrollTop);
 	checkX(x, offset, type);
 	window.scrollTo(0, document.body.scrollTop);

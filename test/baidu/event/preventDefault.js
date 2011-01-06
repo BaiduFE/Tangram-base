@@ -3,9 +3,7 @@ module("preventDefault");
 test("阻止默认行为", function() {
 	expect(1);
 	var div = document.createElement('div');
-	var img = document.createElement('img');
-	img.src = upath + 'test.jpg';
-	img.style.height = "2000px";
+	$(div).css('width', 5000).css('height', 200).css('border', 'solid');
 	div.appendChild(img);
 	document.body.appendChild(div);
 	var a = document.createElement('a');
