@@ -1,12 +1,6 @@
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
- * 
- * path: baidu/dom/ready.js
- * author: allstar
- * version: 1.1.0
- * date: 2009/11/17
- *
  */
 
 ///import baidu.browser.safari;
@@ -16,6 +10,7 @@
 
 /**
  * 使函数在页面dom节点加载完毕时调用
+ * @author allstar
  * @name baidu.dom.ready
  * @function
  * @grammar baidu.dom.ready(callback)
@@ -50,7 +45,7 @@ baidu.dom.ready = function () {
             opera = baidu.browser.opera;
 
         // Mozilla, Opera (see further below for it) and webkit nightlies currently support this event
-        if (doc.addEventListener && !opera) {
+        if (doc.addEventListener) {
             // Use the handy event callback
             doc.addEventListener("DOMContentLoaded", opera ? function () {
                 if (isReady) {

@@ -9,6 +9,7 @@
  * @param {Number} 		options.interval 	拖曳行为的触发频度（时间：毫秒）.
  * @param {Boolean} 	options.capture 	鼠标拖曳粘滞.
  * @param {Object} 		options.mouseEvent 	键名为clientX和clientY的object，若不设置此项，默认会获取当前鼠标位置.
+ * @param {Function} 	options.onbeforedragstart drag开始前触发（即鼠标按下时）.
  * @param {Function} 	options.ondragstart drag开始时触发.
  * @param {Function} 	options.ondrag 		drag进行中触发.
  * @param {Function} 	options.ondragend 	drag结束时触发.
@@ -22,7 +23,7 @@
 
  * @see baidu.dom.drag
  *
- * @return {Draggable Instance} 拖拽实例，包含cancel方法，可以停止拖拽
+ * @return {Draggable Instance} 拖拽实例，包含cancel方法，可以停止拖拽.
  */
 /*
  * Tangram
@@ -85,19 +86,22 @@ baidu.dom.draggable = function(element, options) {
             })(eventName);
         }
     }
-    if (baidu.dom.getStyle(element, 'position') != 'static') {
-        baidu.dom.setStyle(element, 'position', 'relative');
-    }
+
 
     // 拖曳只针对有 position 定位的元素
     if (element) {
-
         function handlerMouseDown(e) {
             options.mouseEvent = window.event || e;
             // 可以通过配置项里的这个开关函数暂停或启用拖曳功能
-            if (typeof options.toggle == 'function' && !options.toggle())
+            if (typeof options.toggle == 'function' && !options.toggle()) {
                 return;
-
+            }
+            if (baidu.dom.getStyle(element, 'position') == 'static') {
+                baidu.dom.setStyle(element, 'position', 'relative');
+            }
+            if (baidu.lang.isFunction(options.onbeforedragstart)) {
+                options.onbeforedragstart(element);
+            }
             dragSingle = baidu.dom.drag(element, options);
             draggableSingle.stop = dragSingle.stop;
             draggableSingle.update = dragSingle.update;

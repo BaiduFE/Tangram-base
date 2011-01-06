@@ -1,17 +1,14 @@
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
- * 
- * path: baidu/ajax/request.js
- * author: allstar, erik, berg
- * version: 1.1.1
- * date: 2009/12/02
  */
 
 ///import baidu.ajax;
+///import baidu.fn.blank;
 
 /**
  * 发送一个ajax请求
+ * @author: allstar, erik, berg
  * @name baidu.ajax.request
  * @function
  * @grammar baidu.ajax.request(url[, options])
@@ -99,8 +96,10 @@ baidu.ajax.request = function (url, options) {
              */
             window.setTimeout(
                 function() {
-                    // 避免内存泄露
-                    xhr.onreadystatechange = new Function();
+                    // 避免内存泄露.
+                    // 由new Function改成不含此作用域链的 baidu.fn.blank 函数,
+                    // 以避免作用域链带来的隐性循环引用导致的IE下内存泄露. By rocy 2011-01-05 .
+                    xhr.onreadystatechange = baidu.fn.blank;
                     if (async) {
                         xhr = null;
                     }
