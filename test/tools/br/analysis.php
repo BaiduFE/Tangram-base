@@ -21,7 +21,7 @@ class Analysis{
 		$ss = explode('/', substr($_SERVER['SCRIPT_NAME'], 1));
 		if(sizeof(self::$projpath) == 0){
 			self::$projpath[0] = '../../../src/';
-			self::$projpath[1] = '../../../../tangram/src';
+			self::$projpath[1] = '../../../../tangram/src/';
 				
 			//TODO : 项目路径提取方式应该考虑使用test切分，用于支持ui项目使用同一套框架
 		}
@@ -65,6 +65,7 @@ class Analysis{
 		new Analysis();
 		if(!array_key_exists($domain, self::$_cache)){
 			$path = join('/', explode('.', $domain)).'.js';
+//			echo "read [$path]\n";
 			//文件在当前项目存在则取当前项目，否则取tangram项目
 			$cnt = file_get_contents(self::$projpath[(file_exists(self::$projpath[0].$path) ? 0:1/*self::$projpath[0] : self::$projpath[1]*/)].$path);
 
