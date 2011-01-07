@@ -1,4 +1,4 @@
-module('baidu.dom.setPosition');
+﻿module('baidu.dom.setPosition');
 
 test('基础用例', function() {
 
@@ -17,7 +17,7 @@ test('基础用例', function() {
     equal(baidu.dom.getStyle(div, "left"), '-100px', "应该减去margin-left的偏移");
     equal(baidu.dom.getStyle(div, "top"), '-100px', "应该减去margin-top的偏移");
 });
-
+    
 test('not set marginLeft value', function() {
 
     var div = document.createElement('div');
