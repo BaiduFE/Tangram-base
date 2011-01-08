@@ -11,7 +11,7 @@
  * @function
  * @grammar baidu.array.every(source, iterator)
  * @param {Array} source 需要判断的数组.
- * @param {Function} iterator 判断函数.
+ * @param {Function} iterator 判断函数
  * @return {boolean} 判断结果.
  * @see baidu.array.some
  * @author berg
@@ -19,8 +19,8 @@
 baidu.array.every = function(source, iterator) {
     var i = 0,
         len = source.length;
-    for (; i < len; i++) {
-        if (!iterator.call(source, source[i], i)) {
+    for (;i<len;i++) {
+        if(!iterator.call(source, source[i],i)){
             return false;
         }
     }
