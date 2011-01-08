@@ -12,7 +12,7 @@
  * @function
  * @grammar baidu.array.contains(source, obj)
  * @param {Array} source 需要判断的数组.
- * @param {Any} obj 要查找的元素
+ * @param {Any} obj 要查找的元素.
  * @return {boolean} 判断结果.
  * @author berg
  */
