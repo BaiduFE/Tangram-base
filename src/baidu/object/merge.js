@@ -8,21 +8,21 @@
 ///import baidu.lang.isFunction;
 
 /**
- * ºÏ²¢Ô´¶ÔÏóµÄÊôĞÔµ½Ä¿±ê¶ÔÏó¡£
- * Ä¬ÈÏÇé¿öÏÂ£¬ËùÓĞÔÚÔ´¶ÔÏóÉÏµÄÊôĞÔ¶¼»á±»·Çµİ¹éµØºÏ²¢µ½Ä¿±ê¶ÔÏóÉÏ
- * ²¢ÇÒÈç¹ûÄ¿±ê¶ÔÏóÉÏÒÑÓĞ´ËÊôĞÔ£¬²»»á±»¸²¸Ç
+ * åˆå¹¶æºå¯¹è±¡çš„å±æ€§åˆ°ç›®æ ‡å¯¹è±¡ã€‚
+ * é»˜è®¤æƒ…å†µä¸‹ï¼Œæ‰€æœ‰åœ¨æºå¯¹è±¡ä¸Šçš„å±æ€§éƒ½ä¼šè¢«éé€’å½’åœ°åˆå¹¶åˆ°ç›®æ ‡å¯¹è±¡ä¸Š
+ * å¹¶ä¸”å¦‚æœç›®æ ‡å¯¹è±¡ä¸Šå·²æœ‰æ­¤å±æ€§ï¼Œä¸ä¼šè¢«è¦†ç›–
  *
  * @name baidu.array.merge
  * @function
  * @grammar baidu.array.merge(target, source[, opt_options])
  *
- * @param {Function} target Ä¿±ê¶ÔÏó.
- * @param {Function} source Ô´¶ÔÏó.
- * @param {Object} opt_options optional mergeÑ¡Ïî.
- * @config {boolean} overwrite optional Èç¹ûÎªÕæ£¬Ô´¶ÔÏóÊôĞÔ»á¸²¸ÇµôÄ¿±ê¶ÔÏóÉÏµÄÒÑÓĞÊôĞÔ£¬Ä¬ÈÏÎª¼Ù.
- * @config {string[]} whiteList optional °×Ãûµ¥£¬Ä¬ÈÏÎª¿Õ£¬Èç¹û´æÔÚ£¬Ö»ÓĞÔÚÕâÀïµÄÊôĞÔ²Å»á±»´¦Àí.
- * @config {boolean} recursive optional ÊÇ·ñµİ¹éºÏ²¢¶ÔÏóÀïÃæµÄobject£¬Ä¬ÈÏÎª·ñ.
- * @return {object} mergeºóµÄobject.
+ * @param {Function} target ç›®æ ‡å¯¹è±¡.
+ * @param {Function} source æºå¯¹è±¡.
+ * @param {Object} opt_options optional mergeé€‰é¡¹.
+ * @config {boolean} overwrite optional å¦‚æœä¸ºçœŸï¼Œæºå¯¹è±¡å±æ€§ä¼šè¦†ç›–æ‰ç›®æ ‡å¯¹è±¡ä¸Šçš„å·²æœ‰å±æ€§ï¼Œé»˜è®¤ä¸ºå‡.
+ * @config {string[]} whiteList optional ç™½åå•ï¼Œé»˜è®¤ä¸ºç©ºï¼Œå¦‚æœå­˜åœ¨ï¼Œåªæœ‰åœ¨è¿™é‡Œçš„å±æ€§æ‰ä¼šè¢«å¤„ç†.
+ * @config {boolean} recursive optional æ˜¯å¦é€’å½’åˆå¹¶å¯¹è±¡é‡Œé¢çš„objectï¼Œé»˜è®¤ä¸ºå¦.
+ * @return {object} mergeåçš„object.
  * @see baidu.array.extend
  * @author berg
  */
@@ -34,7 +34,7 @@ var isPlainObject = function(source) {
 function mergeItem(target, source, index, overwrite, recursive) {
     if (source.hasOwnProperty(index)) {
         if (recursive && isPlainObject(target[index])) {
-            // Èç¹ûĞèÒªµİ¹é¸²¸Ç£¬¾Íµİ¹éµ÷ÓÃmerge
+            // å¦‚æœéœ€è¦é€’å½’è¦†ç›–ï¼Œå°±é€’å½’è°ƒç”¨merge
             baidu.object.merge(
                 target[index],
                 source[index],
@@ -44,7 +44,7 @@ function mergeItem(target, source, index, overwrite, recursive) {
                 }
             );
         } else if (overwrite || !(index in target)) {
-            // ·ñÔòÖ»´¦ÀíoverwriteÎªtrue£¬»òÕßÔÚÄ¿±ê¶ÔÏóÖĞÃ»ÓĞ´ËÊôĞÔµÄÇé¿ö
+            // å¦åˆ™åªå¤„ç†overwriteä¸ºtrueï¼Œæˆ–è€…åœ¨ç›®æ ‡å¯¹è±¡ä¸­æ²¡æœ‰æ­¤å±æ€§çš„æƒ…å†µ
             target[index] = source[index];
         }
     }
@@ -58,7 +58,7 @@ baidu.object.merge = function(target, source, opt_options) {
         recursive = options['recursive'],
         len;
 
-    // Ö»´¦ÀíÔÚ°×Ãûµ¥ÖĞµÄÊôĞÔ
+    // åªå¤„ç†åœ¨ç™½åå•ä¸­çš„å±æ€§
     if (whiteList && whiteList.length) {
         len = whiteList.length;
         for (; i < len; ++i) {
