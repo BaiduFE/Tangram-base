@@ -1,0 +1,23 @@
+<html>
+<head>
+<script type="text/javascript" src="../../../src/import.php?f=baidu.event.on,baidu.event.un"></script>
+</head>
+<body>
+<button onclick="bindScroll()">绑定绿色区域滚动事件(默认已绑定)</button>
+<button onclick="unbindScroll()">取消绿色区域滚动事件</button>
+<div style="height:2000px;background-color:#ccFFcc" id="sc">
+</div>
+<script type="text/javascript">
+function scroll(){
+	document.title = ++document.title || 0;
+}
+function bindScroll(){
+	baidu.on("sc","DOMMouseScroll", scroll);
+}
+function unbindScroll(){
+	baidu.un("sc","DOMMouseScroll", scroll);
+}
+bindScroll();
+</script>
+</body>
+</html>
