@@ -10,6 +10,7 @@
 
 ///import baidu.lang;
 ///import baidu.lang.Class;
+///import baidu.lang.Event;
 
 /**
  * 创建一个baidu.lang.Class的单例实例
