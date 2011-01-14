@@ -14,8 +14,15 @@ body {
     left:10px;
 }
 .r2{
-    top :400px;
-    left:300px;
+    right :400px;
+    bottom:300px;
+}
+
+.r3{
+    top :60px;
+    right:300px;
+    width:100%;
+    height:100%;
 }
 
 .content {
@@ -35,6 +42,26 @@ body {
     background-color:black;
 }
 
+.tangram-resizable-n{
+    background-color:gray;
+}
+
+.tangram-resizable-w{
+    background-color:purple;
+}
+
 .tangram-resizable-se{
     background-color:yellow;
+}
+
+.tangram-resizable-sw{
+    background-color:teal;
+}
+
+.tangram-resizable-nw{
+    background-color:aqua;
+}
+
+.tangram-resizable-ne{
+    background-color:blue;
 }
