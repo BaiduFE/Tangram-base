@@ -27,7 +27,7 @@
  */
 baidu.event.un = function (element, type, listener) {
     element = baidu.dom._g(element);
-    type = type.replace(/^on/i, '');
+    type = type.replace(/^on/i, '').toLowerCase();
     
     var lis = baidu.event._listeners, 
         len = lis.length,
