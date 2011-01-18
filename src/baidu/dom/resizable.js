@@ -17,6 +17,7 @@
 ///import baidu.dom.getPosition;
 ///import baidu.event.getTarget;
 ///import baidu.dom.remove;
+///import baidu.dom.setOuter;
 
 /**
  * 绘制可以根据鼠标行为改变HTMLElement大小的resize handle
@@ -168,6 +169,7 @@ baidu.dom.resizable = function(element,options) {
 
         /*
          * 获取鼠标坐标
+         * 偏移量计算
          */
         var orgMousePosition = baidu.page.getMousePosition();
         orgStyles = getOrgStyle();
@@ -205,6 +207,8 @@ baidu.dom.resizable = function(element,options) {
         currentEle = null;
         
         baidu.lang.isFunction(op.onresizeend) && op.onresizeend();
+
+        vOffset = hOffset = 0;
     }
 
     /**
@@ -239,9 +243,9 @@ baidu.dom.resizable = function(element,options) {
             height = Math.min(height, range[3]);
             top = orgStyles['top'] - (height - orgStyles['height']);
         }
-
+         
         styles = {'width': width, 'height': height, 'top': top, 'left': left};
-        baidu.setStyles(target, styles);
+        baidu.dom.setOuter(target,styles);
 
         /*
          * ie6 fix
@@ -250,7 +254,8 @@ baidu.dom.resizable = function(element,options) {
         resizeHandle['e'] && baidu.setStyle(resizeHandle['e'], 'height', height);
         resizeHandle['w'] && baidu.setStyle(resizeHandle['w'], 'height', height);
 
-        baidu.lang.isFunction(op.onresize) && op.onresize(styles);
+
+        baidu.lang.isFunction(op.onresize) && op.onresize({current:styles,original:orgStyles});
     }
 
     /**
@@ -291,5 +296,12 @@ baidu.dom.resizable = function(element,options) {
         };
     }
 
+    function getStyleNum(style) {                                                         
+        var result = parseInt(baidu.getStyle(target, style));                                    
+        result = isNaN(result) ? 0 : result;                                                
+        result = baidu.lang.isNumber(result) ? result : 0;                                  
+        return result;                                                                      
+    } 
+    
     return {cancel:cancel};
 };
