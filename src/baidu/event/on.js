@@ -31,7 +31,7 @@
  * @returns {HTMLElement|window} 目标元素
  */
 baidu.event.on = function (element, type, listener) {
-    type = type.replace(/^on/i, '').toLowerCase();
+    type = type.replace(/^on/i, '');
     element = baidu.dom._g(element);
 
     var realListener = function (ev) {
@@ -43,6 +43,7 @@ baidu.event.on = function (element, type, listener) {
         filter = baidu.event._eventFilter,
         afterFilter,
         realType = type;
+    type = type.toLowerCase();
     // filter过滤
     if(filter && filter[type]){
         afterFilter = filter[type](element, type, realListener);
