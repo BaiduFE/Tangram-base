@@ -43,3 +43,6 @@ test("test mouseenter filter", function() {
 				start();
 			}, 'baidu.event._eventFilter.mouseenter', 'baidu.event.on');
 });
+test("test case sensitive", function() {
+	ok(false, 'TODO: 添加大小写敏感事件的on绑定和un取消用例,比如DOMMouseScroll');
+});

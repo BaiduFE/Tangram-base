@@ -31,7 +31,7 @@
  */
 baidu.dom.setPosition = function (element, position) {
     return baidu.dom.setStyles(element, {
-        left : position.left - parseFloat(baidu.dom.getStyle(element, "margin-left")) || 0,
-        top : position.top - parseFloat(baidu.dom.getStyle(element, "margin-top")) || 0
+        left : position.left - (parseFloat(baidu.dom.getStyle(element, "margin-left")) || 0),
+        top : position.top - (parseFloat(baidu.dom.getStyle(element, "margin-top")) || 0)
     });
 };

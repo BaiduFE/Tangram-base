@@ -137,8 +137,8 @@ baidu.json.stringify = (function () {
                     preComma,
                     item;
                     
-                for (key in value) {
-                    if (value.hasOwnProperty(key)) {
+                for (var key in value) {
+                    if (Object.prototype.hasOwnProperty.call(value, key)) {
                         item = value[key];
                         switch (typeof item) {
                         case 'undefined':
