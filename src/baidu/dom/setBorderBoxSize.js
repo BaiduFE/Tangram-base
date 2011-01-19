@@ -1,11 +1,6 @@
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
- * 
- * path: baidu/dom/setOuter.js
- * author: berg
- * version: 1.0
- * date: 2010/12/15
  */
 
 ///import baidu.dom;
@@ -16,32 +11,36 @@
 ///import baidu.browser.isStrict;
 
 /**
- * 设置元素的outerHeight和outerWidth，暂时只支持元素的padding/border/height/width使用同一种计量单位的情况。不支持：1. 非数字值(medium)，2. em/px在不同的属性中混用。
- * @name baidu.dom.setOuter
+ * 按照border-box模型设置元素的height和width值
+ * 只支持元素的padding/border/height/width使用同一种计量单位的情况。
+ * 不支持：
+ * 1. 非数字值(medium)
+ * 2. em/px在不同的属性中混用
+ * @name baidu.dom.setBorderBoxSize
+ * @author berg
  * @function
- * @grammar baidu.dom.setOuter(element, styles)
+ * @grammar baidu.dom.setBorderBoxSize(element, size)
  * @param {HTMLElement|string} element 元素或DOM元素的id
- * @param {object} styles 包含height和width键名的对象，表示要设置的height和width
+ * @param {object} size 包含height和width键名的对象
  *
  * @return {HTMLElement}  设置好的元素
  */
- //(TODO，在getStyle里面做统一filter)
-baidu.dom.setOuter = function (element, styles) {
+baidu.dom.setBorderBoxSize= function (element, size) {
     var result = {};
     function getNumericalStyle(element, name){
         return parseFloat(baidu.getStyle(element, name)) || 0;
     }
     
     if(baidu.browser.isStrict){
-        if(styles.width){
-            result.width = styles.width  -
+        if(size.width){
+            result.width = size.width  -
                            getNumericalStyle(element, 'paddingLeft') - 
                            getNumericalStyle(element, 'paddingRight') - 
                            getNumericalStyle(element, 'borderLeftWidth') -
                            getNumericalStyle(element, 'borderRightWidth');
         }
-        if(styles.height){
-            result.height = styles.height -
+        if(size.height){
+            result.height = size.height -
                             getNumericalStyle(element, 'paddingTop') - 
                             getNumericalStyle(element, 'paddingBottom') - 
                             getNumericalStyle(element, 'borderTopWidth') - 
