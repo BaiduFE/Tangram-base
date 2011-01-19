@@ -27,24 +27,26 @@
  */
  //(TODO，在getStyle里面做统一filter)
 baidu.dom.setOuter = function (element, styles) {
-    function getNumericalStyle(name){
-        //global element;
+    var result = {};
+    function getNumericalStyle(element, name){
         return parseFloat(baidu.getStyle(element, name)) || 0;
     }
     
     if(baidu.browser.isStrict){
         if(styles.width){
-            styles.width -= getNumericalStyle('paddingLeft') + 
-                            getNumericalStyle('paddingRight') + 
-                            getNumericalStyle('borderLeftWidth') + 
-                            getNumericalStyle('borderRightWidth');
+            result.width = styles.width  -
+                           getNumericalStyle(element, 'paddingLeft') - 
+                           getNumericalStyle(element, 'paddingRight') - 
+                           getNumericalStyle(element, 'borderLeftWidth') -
+                           getNumericalStyle(element, 'borderRightWidth');
         }
         if(styles.height){
-            styles.height -= getNumericalStyle('paddingTop') + 
-                             getNumericalStyle('paddingBottom') + 
-                             getNumericalStyle('borderTopWidth') + 
-                             getNumericalStyle('borderBottomWidth');
+            result.height = styles.height -
+                            getNumericalStyle(element, 'paddingTop') - 
+                            getNumericalStyle(element, 'paddingBottom') - 
+                            getNumericalStyle(element, 'borderTopWidth') - 
+                            getNumericalStyle(element, 'borderBottomWidth');
         }
     }
-    return baidu.dom.setStyles(element, styles);
+    return baidu.dom.setStyles(element, result);
 };
