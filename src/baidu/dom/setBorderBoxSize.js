@@ -23,6 +23,8 @@
  * @param {HTMLElement|string} element 元素或DOM元素的id
  * @param {object} size 包含height和width键名的对象
  *
+ * @see baidu.dom.setBorderBoxWidth, baidu.dom.setBorderBoxHeight
+ *
  * @return {HTMLElement}  设置好的元素
  */
 baidu.dom.setBorderBoxSize= function (element, size) {
