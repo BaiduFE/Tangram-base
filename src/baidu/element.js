@@ -100,7 +100,8 @@ baidu.element._initChain = function(){ //将dom/event包下的东西挂到protot
     baidu.each(("addClass empty hide show insertAfter insertBefore insertHTML removeClass " + 
               "setAttr setAttrs setStyle setStyles show toggleClass toggle children next first " + 
               "getAncestorByClass getAncestorBy getAncestorByTag getDocument getParent getWindow " +
-              "last next prev g q query removeStyle setOuter setOuterWidth setOuterHeight setPosition").split(' '),
+              "last next prev g q query removeStyle setBorderBoxSize setOuterWidth setOuterHeight " +
+              "setBorderBoxWidth setBorderBoxHeight setPosition").split(' '),
               function(fn){
                   proto[fn] = proto[fn.replace(/^get[A-Z]/g, stripGet)] = wrapFn(baidu.dom[fn], 0);
               });
