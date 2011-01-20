@@ -1,4 +1,4 @@
-module("baidu.dom.setOuterWidth");
+module("baidu.dom.setBorderBoxHeight");
 
 test("base", function() {
 	var check = function(styles, expects) {
@@ -8,7 +8,7 @@ test("base", function() {
 			for ( var style in styles) {
 				$(div).css(style, styles[style]);
 			}
-			baidu.dom.setOuterWidth(div, styles["width"]);
+			baidu.dom.setBorderBoxHeight(div, styles['height']);
 			for ( var expect in expects) {
 				equals(parseInt($(div).css(expect)), expects[expect], "check "
 						+ expect);
@@ -18,49 +18,50 @@ test("base", function() {
 	};
 
 	check({
-		width : 50,
+		height : 50,
 		padding : 0,
-		borderWidth : 0
+		border : 0
 	}, {
-		width : 50
+		height : 50
 	});
 
 	check({
-		width : 50,
+		height : 50,
 		padding : 10,
-		borderWidth : 10
+		border : 10
 	}, {
-		width : 10
+		height : 10
 	});
 
 	check({
-		width : 50,
+		height : 50,
 		padding : 10,
-		borderWidth : 0
+		border : 0
 	}, {
-		width : 30
+		height : 30
 	});
 
 	check({
-		width : 50,
+		height : 50,
 		padding : 0,
-		borderWidth : 10
+		border : 10
 	}, {
-		width : 30
+		height : 30
 	});
 
 	check({
-		width : 50,
-		paddingLeft : 10,
-		borderWidth : 0
+		height : 50,
+		paddingTop : 10,
+		paddingBottom : 0,
+		border : 0
 	}, {
-		width : 40
+		height : 40
 	});
 	check({
-		width : 50,
+		height : 50,
 		padding : 0,
-		borderLeftWidth : 10
+		borderTopWidth : 10
 	}, {
-		width : 40
+		height : 40
 	});
 });
