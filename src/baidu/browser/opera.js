@@ -18,5 +18,5 @@ if (/opera\/(\d+\.\d)/i.test(navigator.userAgent)) {
  * @meta standard
  * @see baidu.browser.ie,baidu.browser.firefox,baidu.browser.safari,baidu.browser.chrome 
  */
-    baidu.browser.opera = parseFloat(RegExp['\x241']);
+    baidu.browser.opera = + RegExp['\x241'];
 }

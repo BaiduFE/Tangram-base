@@ -18,5 +18,5 @@ if ((/(\d+\.\d)(\.\d)?\s+safari/i.test(navigator.userAgent) && !/chrome/i.test(n
  * @meta standard
  * @see baidu.browser.ie,baidu.browser.firefox,baidu.browser.opera,baidu.browser.chrome   
  */
-    baidu.browser.safari = parseFloat(RegExp['\x241']);
+    baidu.browser.safari = + RegExp['\x241'];
 }

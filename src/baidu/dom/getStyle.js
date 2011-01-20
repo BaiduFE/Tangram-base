@@ -49,13 +49,7 @@ baidu.dom.getStyle = function (element, key) {
             // 3. 无法解决样式值为非数字值的情况（medium等 IE）
     	    style = element.currentStyle || (baidu.browser.ie ? element.style : getComputedStyle(element, null));
             
-        if ('string' == typeof fixer) {
-            value = style[fixer];
-        } else if (fixer && fixer.get) {
-            value = fixer.get(element, style);
-        } else {
-            value = style[key];
-        }
+        value = fixer && fixer.get ? fixer.get(element, style) : style[fixer || key];
     }
     
     /* 检查结果过滤器 */

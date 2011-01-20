@@ -20,5 +20,5 @@ if (/msie (\d+\.\d)/i.test(navigator.userAgent)) {
  * @shortcut ie
  * @see baidu.browser.firefox,baidu.browser.safari,baidu.browser.opera,baidu.browser.chrome,baidu.browser.maxthon 
  */
-   baidu.browser.ie = baidu.ie = document.documentMode || parseFloat(RegExp['\x241']);
+   baidu.browser.ie = baidu.ie = document.documentMode || + RegExp['\x241'];
 }
