@@ -78,6 +78,9 @@ baidu.dom.getPosition = function (element) {
             pos.left -= isNaN(htmlBorderLeftWidth) ? 2 : htmlBorderLeftWidth;
             pos.top  -= isNaN(htmlBorderTopWidth) ? 2 : htmlBorderTopWidth;
         }
+    /*
+     * 因为firefox 3.6和4.0在特定页面下(场景待补充)都会出现1px偏移,所以暂时移除该逻辑分支
+     * 如果 2.0版本时firefox仍存在问题,该逻辑分支将彻底移除. by rocy 2011-01-20
     } else if (doc.getBoxObjectFor && !BUGGY_GECKO_BOX_OBJECT){ // gecko 1.9-
 
         // 1.9以下的Gecko，会忽略ancestors的scroll值
@@ -88,7 +91,8 @@ baidu.dom.getPosition = function (element) {
         var vpBox = doc.getBoxObjectFor(viewport);
         pos.left = box.screenX - vpBox.screenX;
         pos.top  = box.screenY - vpBox.screenY;
-    } else { // safari/opera
+        */
+    } else { // safari/opera/firefox
         parent = element;
 
         do {
