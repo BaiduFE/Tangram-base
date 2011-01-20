@@ -17,7 +17,8 @@
 ///import baidu.dom.getPosition;
 ///import baidu.event.getTarget;
 ///import baidu.dom.remove;
-///import baidu.dom.setOuter;
+///import baidu.dom.setBorderBoxHeight;
+///import baidu.dom.setBorderBoxWidth;
 
 /**
  * 绘制可以根据鼠标行为改变HTMLElement大小的resize handle
@@ -76,8 +77,8 @@ baidu.dom.resizable = function(element,options) {
      */
     handlePosition = baidu.extend({
         'e' : {'right': '-5px', 'top': '0px', 'width': '7px', 'height': target.offsetHeight},
-        's' : {'left': '0px', 'bottom': '-5px', 'height': '7px', 'width': '100%'},
-        'n' : {'left': '0px', 'top': '-5px', 'height': '7px', 'width': '100%'},
+        's' : {'left': '0px', 'bottom': '-5px', 'height': '7px', 'width': target.offsetWidth},
+        'n' : {'left': '0px', 'top': '-5px', 'height': '7px', 'width': target.offsetWidth},
         'w' : {'left': '-5px', 'top': '0px', 'height': target.offsetHeight, 'width': '7px'},
         'se': {'right': '1px', 'bottom': '1px', 'height': '16px', 'width': '16px'},
         'sw': {'left': '1px', 'bottom': '1px', 'height': '16px', 'width': '16px'},
@@ -207,8 +208,6 @@ baidu.dom.resizable = function(element,options) {
         currentEle = null;
         
         baidu.lang.isFunction(op.onresizeend) && op.onresizeend();
-
-        vOffset = hOffset = 0;
     }
 
     /**
@@ -245,15 +244,14 @@ baidu.dom.resizable = function(element,options) {
         }
          
         styles = {'width': width, 'height': height, 'top': top, 'left': left};
-        baidu.dom.setOuter(target,styles);
-
-        /*
-         * ie6 fix
-         * 在ie中resize的时候，若高度改变，resizeHandle.e和resizeHandle.w的高度不会改变
-         */
+        baidu.dom.setOuterHeight(target,height);
+        baidu.dom.setOuterWidth(target,width);
+        baidu.setStyles(target,{"top":top,"left":left});
+        
+        resizeHandle['n'] && baidu.setStyle(resizeHandle['n'], 'width', width);
+        resizeHandle['s'] && baidu.setStyle(resizeHandle['s'], 'width', width);
         resizeHandle['e'] && baidu.setStyle(resizeHandle['e'], 'height', height);
         resizeHandle['w'] && baidu.setStyle(resizeHandle['w'], 'height', height);
-
 
         baidu.lang.isFunction(op.onresize) && op.onresize({current:styles,original:orgStyles});
     }
@@ -295,13 +293,6 @@ baidu.dom.resizable = function(element,options) {
             left:left
         };
     }
-
-    function getStyleNum(style) {                                                         
-        var result = parseInt(baidu.getStyle(target, style));                                    
-        result = isNaN(result) ? 0 : result;                                                
-        result = baidu.lang.isNumber(result) ? result : 0;                                  
-        return result;                                                                      
-    } 
     
     return {cancel:cancel};
 };

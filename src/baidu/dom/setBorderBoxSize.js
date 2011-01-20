@@ -40,6 +40,7 @@ baidu.dom.setBorderBoxSize= function (element, size) {
                            getNumericalStyle(element, 'paddingRight') - 
                            getNumericalStyle(element, 'borderLeftWidth') -
                            getNumericalStyle(element, 'borderRightWidth');
+            result.width < 0 && (result.width = 0);
         }
         if(size.height){
             result.height = size.height -
@@ -47,6 +48,7 @@ baidu.dom.setBorderBoxSize= function (element, size) {
                             getNumericalStyle(element, 'paddingBottom') - 
                             getNumericalStyle(element, 'borderTopWidth') - 
                             getNumericalStyle(element, 'borderBottomWidth');
+            result.height < 0 && (result.height = 0);
         }
     }
     return baidu.dom.setStyles(element, result);
