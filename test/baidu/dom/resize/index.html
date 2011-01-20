@@ -7,27 +7,42 @@
     <script type="text/javascript" src="../../../../src/import.php?f=baidu.dom.*"></script>
     
     <script type="text/javascript">
+        var reArray = [];    
         baidu.dom.ready(function(){
-            baidu.dom.resizable("resizeable1",{
+            
+            reArray[0] = baidu.dom.resizable("resizeable1",{
                 minWidth:50,
                 minHeight:50,
                 maxWidth:300,
                 maxHeight:300,
-                container:"resizeable1Content"
+                direction:["s","e","n","w","nw","ne","sw","se"]
             });
                 
-            baidu.dom.ready(function(){
-                baidu.dom.resizable("resizeable2");
+            reArray[1] = baidu.dom.resizable("resizeable2",{
+                direction:["s","e","n","w","nw","ne","sw","se"]
             });
+
+            reArray[2] = baidu.dom.resizable("resizeable3",{
+                direction:["s","e","n","w","nw","ne","sw","se"]
+            });
+            
         });
-        
+        function cancel(){
+            baidu.each(reArray,function(item){
+                item.cancel();    
+            });
+        }
 	</script>
 </head>
 <body>
-<h1>resize</h1>
+    <h1>resize</h1>
+    <input type="button" value="dispose" onclick="javascript:cancel();"></input>
 <div id="resizeable1Content" class="resizeable content">
     <div id="resizeable1" class="resizeable r1"><p>Resiaze1</p></div>
 </div>
 <div id="resizeable2" class="resizeable r2"><p>Resiaze2</p></div>
+<div style="width:300px; height:400px; position:absolute; right:100px; top:300px">
+    <div id="resizeable3" class="resizeable r3"><p>Resiaze3</p></div>
+</div>
 </body>
 </html>

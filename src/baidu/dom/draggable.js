@@ -1,3 +1,20 @@
+/*
+ * Tangram
+ * Copyright 2010 Baidu Inc. All rights reserved.
+ */
+
+///import baidu.dom.g;
+///import baidu.dom.drag;
+///import baidu.dom.getStyle;
+///import baidu.dom.setStyle;
+///import baidu.event.on;
+///import baidu.event.un;
+///import baidu.object.extend;
+
+///import baidu.lang.isFunction;
+///import baidu.lang.Class;
+
+
 /**
  * 让一个DOM元素可拖拽
  * @name baidu.dom.draggable
@@ -25,34 +42,6 @@
  *
  * @return {Draggable Instance} 拖拽实例，包含cancel方法，可以停止拖拽.
  */
-/*
- * Tangram
- * Copyright 2010 Baidu Inc. All rights reserved.
- *
- * path: baidu/dom/draggable.js
- * author: meizz, rocy, berg
- * version: 1.1.0
- * date: 2010/06/02
- */
-
-///import baidu.dom.g;
-///import baidu.dom.drag;
-///import baidu.dom.getStyle;
-///import baidu.dom.setStyle;
-///import baidu.event.on;
-///import baidu.event.un;
-///import baidu.object.extend;
-
-///import baidu.lang.isFunction;
-///import baidu.lang.Class;
-
-/**
- * 拖曳DOM元素
- * @param   {HTMLElement|ID}    element 被拖曳的元素.
- * @param   {JSON}              options 拖曳配置项
- *          {toggle, autoStop, interval, capture, range, ondragstart, ondragend, ondrag}.
- * @return {Draggable Instance}            拖拽实例，包含cancel方法，可以停止拖拽.
- */
 
 baidu.dom.draggable = function(element, options) {
     options = baidu.object.extend({toggle: function() {return true}}, options || {});
@@ -66,7 +55,7 @@ baidu.dom.draggable = function(element, options) {
         dragSingle,
         draggableSingle = {
             dispose: function() {
-                dragSingle && dragSingle.dispose();
+                dragSingle && dragSingle.stop();
                 baidu.event.un(options.handler, 'onmousedown', handlerMouseDown);
                 baidu.lang.Class.prototype.dispose.call(draggableSingle);
             }
