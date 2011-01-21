@@ -14,9 +14,9 @@ test("给没有className的元素添加",function(){
 	var scDiv = baidu.addClass(div,"div_class4");//快捷方式
 	equal(trim(div.className),"div_class1 div_class2 div_class3 div_class4");
 	equal(scDiv,div,"equal div using shortcut");
-    console.log("hi");
+//    console.log("hi");
 	baidu.addClass(div,"div_class1 div_class4");//重名
-    console.log("hi");
+//    console.log("hi");
 	equal(trim(div.className),"div_class1 div_class2 div_class3 div_class4");
 	document.body.removeChild(div);
 })

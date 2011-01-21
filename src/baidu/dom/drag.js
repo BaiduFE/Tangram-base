@@ -107,7 +107,7 @@
             op.ondragstart(target, op);
         }
 
-        return {stop : stop, dispose : stop, update : update};
+        return {stop : stop, update : update};
     };
 
     /**

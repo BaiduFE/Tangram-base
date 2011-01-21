@@ -1,4 +1,4 @@
-module("baidu.dom.setOuter");
+module("baidu.dom.setBorderBoxSize");
 
 test("base", function() {
 	var id = 0;
@@ -10,7 +10,7 @@ test("base", function() {
 			for ( var style in styles) {
 				$(div).css(style, styles[style]);
 			}
-			baidu.dom.setOuter(div, styles);
+			baidu.dom.setBorderBoxSize(div, styles);
 			for ( var expect in expects) {
 				equals(parseInt($(div).css(expect)), expects[expect], "check "
 						+ expect);
