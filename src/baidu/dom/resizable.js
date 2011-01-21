@@ -179,7 +179,7 @@ baidu.dom.resizable = function(element,options) {
         }, 20);
 
         baidu.lang.isFunction(op.onresizestart) && op.onresizestart();
-
+        baidu.event.preventDefault(e);
     }
 
     /**
@@ -247,7 +247,7 @@ baidu.dom.resizable = function(element,options) {
         baidu.dom.setOuterHeight(target,height);
         baidu.dom.setOuterWidth(target,width);
         baidu.setStyles(target,{"top":top,"left":left});
-        
+
         resizeHandle['n'] && baidu.setStyle(resizeHandle['n'], 'width', width);
         resizeHandle['s'] && baidu.setStyle(resizeHandle['s'], 'width', width);
         resizeHandle['e'] && baidu.setStyle(resizeHandle['e'], 'height', height);

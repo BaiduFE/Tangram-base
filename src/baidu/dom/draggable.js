@@ -9,6 +9,7 @@
 ///import baidu.dom.setStyle;
 ///import baidu.event.on;
 ///import baidu.event.un;
+///import baidu.event.preventDefault;
 ///import baidu.object.extend;
 
 ///import baidu.lang.isFunction;
@@ -94,6 +95,8 @@ baidu.dom.draggable = function(element, options) {
             dragSingle = baidu.dom.drag(element, options);
             draggableSingle.stop = dragSingle.stop;
             draggableSingle.update = dragSingle.update;
+            //防止ff下出现禁止拖拽的图标
+            baidu.event.preventDefault(options.mouseEvent);
         }
 
         // 对拖曳的扳机元素监听 onmousedown 事件，以便进行拖曳行为
