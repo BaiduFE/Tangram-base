@@ -1,6 +1,6 @@
 module("baidu.dom.q")
 
-test('1 param--className',function(){
+test('1 param--className', function() {
 	expect(4);
 	var div = document.createElement('div');
 	var div2 = document.createElement('div');
@@ -19,18 +19,17 @@ test('1 param--className',function(){
 	textArea.className = 'class1';
 	p.className = 'class';
 	var result = baidu.dom.q('class1');
-	equal(result.length,3,'get 3 results');
-	equal(result[0],div,'div result');
-	equal(result[1],span,'span result');
-	equal(result[2],textArea,'textarea result');
-	
+	equal(result.length, 3, 'get 3 results');
+	equal(result[0], div, 'div result');
+	equal(result[1], span, 'span result');
+	equal(result[2], textArea, 'textarea result');
+
 	result = null;
 	document.body.removeChild(div2);
 	document.body.removeChild(div);
 })
 
-
-test('2 params,element',function(){
+test('2 params,element', function() {
 	expect(3);
 	var div = document.createElement('div');
 	var div2 = document.createElement('div');
@@ -55,17 +54,17 @@ test('2 params,element',function(){
 	span.className = 'class2';
 	textArea.className = 'class2';
 	input.className = 'Class2';
-	var result = baidu.dom.q('class2',form);
-	
-	equal(result.length,2,'get 2 results');
-	equal(result[0],span,'span result');
-	equal(result[1],textArea,'textarea result');
-	
+	var result = baidu.dom.q('class2', form);
+
+	equal(result.length, 2, 'get 2 results');
+	equal(result[0], span, 'span result');
+	equal(result[1], textArea, 'textarea result');
+
 	result = null;
 	document.body.removeChild(div2);
 	document.body.removeChild(div);
 })
-test('2 params,document',function(){
+test('2 params,document', function() {
 	expect(5);
 	var div = document.createElement('div');
 	var div2 = document.createElement('div');
@@ -80,20 +79,20 @@ test('2 params,document',function(){
 	div.className = 'class2';
 	div2.className = 'class2';
 	input.className = 'Class2';
-	var result = baidu.dom.q('class2',undefined,'textarea');
-	equal(result.length,1,'get 1 result');
-	equal(result[0],textArea,'textarea result');
-	
-	result = baidu.dom.q('class2',undefined,'div');
-	equal(result.length,2,'get 2 results');
-	equal(result[0],div,'div result');
-	equal(result[1],div2,'div2 result');
-	
+	var result = baidu.dom.q('class2', undefined, 'textarea');
+	equal(result.length, 1, 'get 1 result');
+	equal(result[0], textArea, 'textarea result');
+
+	result = baidu.dom.q('class2', undefined, 'div');
+	equal(result.length, 2, 'get 2 results');
+	equal(result[0], div, 'div result');
+	equal(result[1], div2, 'div2 result');
+
 	result = null;
 	document.body.removeChild(div2);
 	document.body.removeChild(div);
 })
-test('3 params',function(){
+test('3 params', function() {
 	expect(4);
 	var div = document.createElement('div');
 	var div2 = document.createElement('div');
@@ -118,65 +117,65 @@ test('3 params',function(){
 	span.className = 'class2';
 	textArea.className = 'class2';
 	input.className = 'Class2';
-	var result = baidu.dom.q('class2',form,'span');
-	
-	equal(result.length,1,'get 1 result');
-	equal(result[0],span,'span result');
-	
-	result = baidu.dom.q('class2',form,'textarea');
-	equal(result.length,1,'get 1 result');
-	equal(result[0],textArea,'textArea result');
-	
+	var result = baidu.dom.q('class2', form, 'span');
+
+	equal(result.length, 1, 'get 1 result');
+	equal(result[0], span, 'span result');
+
+	result = baidu.dom.q('class2', form, 'textarea');
+	equal(result.length, 1, 'get 1 result');
+	equal(result[0], textArea, 'textArea result');
+
 	result = null;
 	document.body.removeChild(div2);
 	document.body.removeChild(div);
 })
-test('short cut',function(){
+test('short cut', function() {
 	expect(7);
 	var div = document.createElement('div');
 	document.body.appendChild(div);
 	div.className = 'class3';
-	var result = baidu.Q('class3',document,'div');
-	equal(result[0],div,'baidu.Q');
-	
-	result = baidu.Q('class3',undefined,'div');
-	equal(result[0],div,'baidu.Q--2 params');
-	
+	var result = baidu.Q('class3', document, 'div');
+	equal(result[0], div, 'baidu.Q');
+
+	result = baidu.Q('class3', undefined, 'div');
+	equal(result[0], div, 'baidu.Q--2 params');
+
 	result = baidu.Q('class3');
-	equal(result[0],div,'baidu.Q--1 param');
-	
-	result = baidu.q('class3',document,'div');
-	equal(result[0],div,'baidu.q--3params');
-	
-	result = baidu.q('class3',undefined,'div');
-	equal(result[0],div,'baidu.q--2 params');
-	
-	result = baidu.q('class3',document);
-	equal(result[0],div,'baidu.q--2 params document');
-	
+	equal(result[0], div, 'baidu.Q--1 param');
+
+	result = baidu.q('class3', document, 'div');
+	equal(result[0], div, 'baidu.q--3params');
+
+	result = baidu.q('class3', undefined, 'div');
+	equal(result[0], div, 'baidu.q--2 params');
+
+	result = baidu.q('class3', document);
+	equal(result[0], div, 'baidu.q--2 params document');
+
 	result = baidu.q('class3');
-	equal(result[0],div,'baidu.q--1 param');
-	
+	equal(result[0], div, 'baidu.q--1 param');
+
 	result = null;
 	document.body.removeChild(div);
 })
 
-test('null',function(){
+test('null', function() {
 	expect(2);
 	var result = baidu.dom.q('');
-	equal(result,null,'null param');
+	equal(result.length, 0, '空参数返回空数组');
 	result = baidu.dom.q();
-	equal(result,"",'no param');
+	equal(result, "", 'no param');
 })
 
-test('异常case',function(){
+test('异常case', function() {
 	expect(2);
 	var div = document.createElement('div');
 	document.body.appendChild(div);
 	div.className = 'classAbnormal';
 	var result = baidu.dom.q('class');
-	equal(result,"","no result");
-	result = baidu.dom.q('classAbnormal',undefined,'span');
-	equal(result,"","no result of span");
+	equal(result, "", "no result");
+	result = baidu.dom.q('classAbnormal', undefined, 'span');
+	equal(result, "", "no result of span");
 	document.body.removeChild(div);
 })
