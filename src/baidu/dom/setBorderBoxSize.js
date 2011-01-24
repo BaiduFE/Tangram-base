@@ -35,18 +35,20 @@ baidu.dom.setBorderBoxSize= function (element, size) {
     
     if(baidu.browser.isStrict){
         if(size.width){
-            result.width = size.width  -
+            result.width = parseFloat(size.width)  -
                            getNumericalStyle(element, 'paddingLeft') - 
                            getNumericalStyle(element, 'paddingRight') - 
                            getNumericalStyle(element, 'borderLeftWidth') -
                            getNumericalStyle(element, 'borderRightWidth');
+            result.width < 0 && (result.width = 0);
         }
         if(size.height){
-            result.height = size.height -
+            result.height = parseFloat(size.height) -
                             getNumericalStyle(element, 'paddingTop') - 
                             getNumericalStyle(element, 'paddingBottom') - 
                             getNumericalStyle(element, 'borderTopWidth') - 
                             getNumericalStyle(element, 'borderBottomWidth');
+            result.height < 0 && (result.height = 0);
         }
     }
     return baidu.dom.setStyles(element, result);

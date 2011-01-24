@@ -1,17 +1,16 @@
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
- * 
- * path: baidu/object/extend.js
- * author: erik, berg
- * version: 1.1.0
- * date: 2009/11/30
  */
 
 ///import baidu.object;
+///import baidu.lang.isArray;
+///import baidu.lang.isObject;
 
 /**
  * 对一个object进行深度拷贝
+ * 
+ * @author berg
  * @name baidu.object.clone
  * @function
  * @grammar baidu.object.clone(source)
@@ -30,13 +29,13 @@ baidu.object.clone  = (function(buildInObject){
             || source instanceof String
             || source instanceof Boolean) {
             return result;
-        } else if (source instanceof Array) {
+        } else if (baidu.lang.isArray(source)) {
             result = [];
             var resultLen = 0;
             for (i = 0, len = source.length; i < len; i++) {
                 result[resultLen++] = baidu.object.clone(source[i]);
             }
-        } else if ('object' == typeof source) {
+        } else if (baidu.lang.isObject(source)) {
             if(buildInObject[Object.prototype.toString.call(source)]){
                 return result;
             }
