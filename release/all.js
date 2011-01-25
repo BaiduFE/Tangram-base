@@ -211,6 +211,8 @@
 ///import baidu.array.reduce;
 ///import baidu.array.some;
 ///import baidu.dom.resizable;
+///import baidu.page.load;
+///import baidu.page.lazyLoadImage;
 ///import baidu.fn.blank;
 ///import baidu.object.merge;
 ///import baidu.dom.setBorderBoxSize;
