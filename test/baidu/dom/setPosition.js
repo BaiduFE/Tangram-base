@@ -30,6 +30,6 @@ test('not set marginLeft value', function() {
         left : 100
     });
 
-    equal(baidu.dom.getStyle(div, "left"), '-100px', "应该减去margin-left的偏移");
-    equal(baidu.dom.getStyle(div, "top"), '-100px', "应该减去margin-top的偏移");
+    equal(baidu.dom.getStyle(div, "left"), '100px', "应该减去margin-left的偏移");
+    equal(baidu.dom.getStyle(div, "top"), '100px', "应该减去margin-top的偏移");
 });

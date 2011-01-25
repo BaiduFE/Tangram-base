@@ -14,6 +14,7 @@
  * @param {Function} iterator    对每个数组元素进行处理的函数.
  * @param {Object}   initializer 合并的初始项.
  * @return {Array} map后的数组.
+ * @version 1.3.4
  * @author cat
  * @see baidu.array.map
  */

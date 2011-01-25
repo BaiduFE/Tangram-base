@@ -55,10 +55,10 @@ baidu.dom._styleFixer.textOverflow = (function () {
                 cache[i] = o.offsetWidth;
             }
 
-            /* 计算非ASCII字符的宽度、字符间距、省略号的宽度 */
-            setText(o, "一");
+            /* 计算非ASCII字符的宽度、字符间距、省略号的宽度,\u4e00是汉字一的编码*/
+            setText(o, "\u4e00");
             cache[256] = o.offsetWidth;
-            setText(o, "一一");
+            setText(o, "\u4e00\u4e00");
             cache[257] = o.offsetWidth - cache[256] * 2;
             cache[258] = cache[".".charCodeAt(0)] * 3 + cache[257] * 3;
 

@@ -29,20 +29,20 @@
 baidu.dom.removeClass = function (element, className) {
     element = baidu.dom.g(element);
 
-    var oldClasses = element.className.split(/\s+/).sort(),
-        newClasses = className.split(/\s+/).sort(),
-        i = oldClasses.length,
-        j = newClasses.length;
-
-    for (; i && j; ) {
-        if (oldClasses[i - 1] == newClasses[j - 1]) {
-            oldClasses.splice(--i, 1);
-        }
-        else if (oldClasses[i - 1] < newClasses[j - 1]) {
-            j--;
-        }
-        else {
-            i--;
+    var oldClasses = element.className.split(/\s+/),
+        newClasses = className.split(/\s+/),
+        lenOld,
+        lenDel = newClasses.length,
+        j,
+        i = 0;
+    //考虑到同时删除多个className的应用场景概率较低,故放弃进一步性能优化 
+    // by rocy @1.3.4
+    for (; i < lenDel; ++i){
+        for(j = 0, lenOld = oldClasses.length; j < lenOld; ++j){
+            if(oldClasses[j] == newClasses[i]){
+            	oldClasses.splice(j, 1);
+            	break;
+            }
         }
     }
     element.className = oldClasses.join(' ');

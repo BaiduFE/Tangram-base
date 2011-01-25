@@ -18,6 +18,6 @@ try {
  * @grammar baidu.browser.maxthon
  * @see baidu.browser.ie  
  */
-        baidu.browser.maxthon = parseFloat(RegExp['\x241']);
+        baidu.browser.maxthon = + RegExp['\x241'];
     }
 } catch (e) {}

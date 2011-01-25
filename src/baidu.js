@@ -21,7 +21,8 @@
  * 声明baidu包
  * @author: allstar, erik, meizz, berg
  */
-var baidu = baidu || {version: "dev"}; 
+var T,
+    baidu = T = baidu || {version: "dev"}; 
 
 //提出guid，防止在与老版本Tangram混用时
 //在下一行错误的修改window[undefined]

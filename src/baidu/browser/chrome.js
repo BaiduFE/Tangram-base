@@ -16,5 +16,5 @@ if (/chrome\/(\d+\.\d)/i.test(navigator.userAgent)) {
  * @see baidu.browser.ie,baidu.browser.firefox,baidu.browser.safari,baidu.browser.opera   
  * @property chrome chrome版本号
  */
-    baidu.browser.chrome = parseFloat(RegExp['\x241']);
+    baidu.browser.chrome = + RegExp['\x241'];
 }

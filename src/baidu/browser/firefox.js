@@ -18,5 +18,5 @@ if (/firefox\/(\d+\.\d)/i.test(navigator.userAgent)) {
  * @meta standard
  * @see baidu.browser.ie,baidu.browser.safari,baidu.browser.opera,baidu.browser.chrome   
  */
-    baidu.browser.firefox = parseFloat(RegExp['\x241']);
+    baidu.browser.firefox = + RegExp['\x241'];
 }
