@@ -5,8 +5,9 @@ if($_GET['type'] == 'img'){
 	header("Cache-Control: no-cache; ALL: no-store;");
 	imagepng(imagecreatefrompng("test.png"));
 }else {
+	header("Content-Type: text/html; charset=utf-8");
 	print '<html>
-	<script src="../../tools/br/import.php?f=baidu.page.lazyLoadImage"></script>
+	<script type="text/javascript" src="../../tools/br/import.php?f=baidu.page.lazyLoadImage&fromframe=true"></script>
 	<script type="text/javascript">
 	baidu.page.lazyLoadImage({	
 		onlazyload : function(){
