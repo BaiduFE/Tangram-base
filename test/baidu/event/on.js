@@ -44,5 +44,15 @@ test("test mouseenter filter", function() {
 			}, 'baidu.event._eventFilter.mouseenter', 'baidu.event.on');
 });
 test("test case sensitive", function() {
-	ok(false, 'TODO: 添加大小写敏感事件的on绑定和un取消用例,比如DOMMouseScroll');
+	//ok(false, 'TODO: 添加大小写敏感事件的on绑定和un取消用例,比如DOMMouseScroll');
+	expect(1);
+	var div = document.createElement('div');
+	document.body.appendChild(div);
+	var listener = function() {
+		ok(true, '用DOMNodeInserted测试大小写敏感事件的on绑定');
+	};
+	baidu.on(div, 'DOMNodeInserted', listener);
+	var div1 = document.createElement('div');
+	div.appendChild(div1);
+	$(div).remove();
 });

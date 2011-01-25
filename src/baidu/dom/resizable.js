@@ -11,6 +11,7 @@
 ///import baidu.dom.create;
 ///import baidu.lang.isNumber;
 ///import baidu.event.on;
+///import baidu.event.un;
 ///import baidu.dom.addClass;
 ///import baidu.page.getMousePosition;
 ///import baidu.lang.isFunction;
