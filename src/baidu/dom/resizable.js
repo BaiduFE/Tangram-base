@@ -54,7 +54,9 @@ baidu.dom.resizable = function(element,options) {
         range, mozUserSelect,
         orgCursor,
         offsetParent,
-        currentEle;
+        currentEle,
+        timer,
+        handlePosition;
 
     if (!(target = baidu.dom.g(element)) && baidu.getStyle(target, 'position') == 'static') {
         return false;
