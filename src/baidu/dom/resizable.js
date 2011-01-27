@@ -17,9 +17,11 @@
 ///import baidu.lang.isFunction;
 ///import baidu.dom.getPosition;
 ///import baidu.event.getTarget;
+///import baidu.event.preventDefault;
 ///import baidu.dom.remove;
 ///import baidu.dom.setBorderBoxHeight;
 ///import baidu.dom.setBorderBoxWidth;
+///import baidu.object.extend;
 
 /**
  * 绘制可以根据鼠标行为改变HTMLElement大小的resize handle
@@ -52,7 +54,9 @@ baidu.dom.resizable = function(element,options) {
         range, mozUserSelect,
         orgCursor,
         offsetParent,
-        currentEle;
+        currentEle,
+        timer,
+        handlePosition;
 
     if (!(target = baidu.dom.g(element)) && baidu.getStyle(target, 'position') == 'static') {
         return false;
