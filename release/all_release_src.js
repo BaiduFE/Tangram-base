@@ -5154,6 +5154,7 @@ baidu.dom.removeStyle = function (){
 
 
 
+
 baidu.dom.setBorderBoxSize= function (element, size) {
     var result = {};
     function getNumericalStyle(element, name){
@@ -5196,6 +5197,7 @@ baidu.dom.setBorderBoxWidth = function (element, width) {
 };
 
 
+
 baidu.dom.resizable = function(element,options) {
     var target,
         op,
@@ -5205,7 +5207,9 @@ baidu.dom.resizable = function(element,options) {
         range, mozUserSelect,
         orgCursor,
         offsetParent,
-        currentEle;
+        currentEle,
+        timer,
+        handlePosition;
 
     if (!(target = baidu.dom.g(element)) && baidu.getStyle(target, 'position') == 'static') {
         return false;
