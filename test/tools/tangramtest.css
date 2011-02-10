@@ -21,6 +21,7 @@ body,#container {
 
 a {
 	text-decoration: none;
+	overflow: hidden;
 }
 
 #title {
