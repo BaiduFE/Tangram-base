@@ -9,6 +9,15 @@ body {
     position: absolute;
 }
 
+.r0{
+    width:100px;
+    height:100px;
+    background:#abc;
+    position:relative;
+    top:10px;
+    left:5px;
+}
+
 .r1 {
     top:10px;
     left:10px;
