@@ -1,4 +1,4 @@
-module('baidu.dom.getTarget');
+module('baidu.event.getTarget');
 (function() {
 	var on = function(element, type, fn) {
 		if (element.addEventListener) {
