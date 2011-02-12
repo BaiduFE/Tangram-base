@@ -1,4 +1,5 @@
 <?php
+header("Content-type: text/html; charset=utf-8");
 require_once 'lib/Request.php';
 $r = new Request($_SERVER);
 $filter = array_key_exists('filter', $_GET) ? $_GET['filter'] : '*';

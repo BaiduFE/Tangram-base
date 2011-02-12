@@ -67,20 +67,19 @@
  * 		onload : fnWhenEverythingIsOK
  * });
  */
-//Todo: {String} resources.charset NOT SUPPORTED YET! resource的charset，默认UTF8。
 baidu.page.load = function(resources, options){
-	//TODO failure, 整体onload能不能每个都调用
+	//TODO failure, 整体onload能不能每个都调用; resources.charset
 	options = options || {};
 	var self = baidu.page.load,
 		cache = self._cache = self._cache || {},
 		parallel = options.parallel;
 	
 	function allLoadedChecker(){
-		baidu.each(resources, function(res){
-			if(!cache[res.url]){
-				return;
-			}
-		});
+		for(var i=0, len=resources.length; i < len; ++i){
+            if(!cache[resources[i].url]){
+            	return;
+            }
+		}
 		options.onload();
 	};
 	

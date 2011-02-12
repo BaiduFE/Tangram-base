@@ -43,3 +43,19 @@ test("window resize", function() {
 		}
 	});
 });
+test("test case sensitive", function() {
+	//ok(false, 'TODO: 添加大小写敏感事件的on绑定和un取消用例,比如DOMMouseScroll');
+	expect(1);
+	var div = document.createElement('div');
+	document.body.appendChild(div);
+	var listener = function() {
+		ok(true, '用DOMNodeInserted测试大小写敏感事件的un取消');
+	};
+	baidu.on(div, 'DOMNodeInserted', listener);
+	var div1 = document.createElement('div');
+	div.appendChild(div1);
+	baidu.un(div, 'DOMNodeInserted', listener);
+	var div2 = document.createElement('div');
+	div.appendChild(div2);
+	$(div).remove();
+});

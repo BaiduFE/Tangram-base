@@ -1,0 +1,28 @@
+<tc>
+<alias>
+    <find cmd="%php% %tc_modules_dir%/find/run.php" />
+    <compress cmd="%php% %tc_modules_dir%/compress/run.php" />
+    <cat cmd="%php% %tc_modules_dir%/cat/run.php" />
+    <merge cmd="%php% %tc_modules_dir%/merge/run.php" />
+    <jsloader2tcl cmd="%php% %tc_modules_dir%/jsloader2tcl/run.php" />
+    <TCL cmd="%php% %tc_modules_dir%/tcl/run.php" />
+</alias>
+
+<process>
+    <find type="file" pattern=".*\.svn.*|.*CVS.*" invert="true" />
+
+
+    <jsloader2tcl />
+    <cat file="all.js,core.js">
+        <TCL include_remove_duplication='true' />
+        <compress type="js" encode="utf8" engine="YUI" />
+    </cat>
+
+    <cat file="all_src.js,core_src.js">
+        <TCL include_remove_duplication='true' />
+    </cat>
+
+    <find pattern=".*core\.js|.*all\.js|.*core_src\.js|.*all_src\.js" />
+
+</process>
+</tc>

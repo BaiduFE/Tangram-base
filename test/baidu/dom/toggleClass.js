@@ -11,7 +11,7 @@ test('add', function(){
 	baidu.dom.toggleClass(div,"div_class2 div_class3 div_class4");
 	equal(trim(div.className),"div_class1 div_class2 div_class3 div_class4","add class");
 	baidu.dom.toggleClass(div,"div_class5 div_class1");
-	equal(trim(div.className),"div_class1 div_class2 div_class3 div_class4 div_class5 div_class1","add class");
+	equal(trim(div.className),"div_class1 div_class2 div_class3 div_class4 div_class5","add class");
 })
 
 /**
