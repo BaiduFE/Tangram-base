@@ -105,7 +105,7 @@ baidu.dom.resizable = function(element,options) {
      * 绘制resizable handle 
      */
     function render(){
-       
+      
         //位置属性
         handlePosition = baidu.extend({
             'e' : {'right': '-5px', 'top': '0px', 'width': '7px', 'height': target.offsetHeight},
@@ -167,6 +167,8 @@ baidu.dom.resizable = function(element,options) {
     function update(options){
         if(!isCancel){
             op = baidu.extend(op,options || {});
+            cancel();
+            render();
         }
     }
 
