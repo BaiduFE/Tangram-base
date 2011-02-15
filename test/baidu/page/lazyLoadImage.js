@@ -10,9 +10,6 @@ test("base", function() {
 	$(iframe).css('height', 200).css('width', 200);
 	stop();
 	iframe.src = upath + 'lli.php';
-	var doc = function(){
-		return frames[0].document;
-	};
 	setTimeout(function() {
 		equals(frames[0].document.getElementById("test_img").src, "",
 				"图片链接被替换为空");
@@ -22,8 +19,10 @@ test("base", function() {
 		equals(frames[0].document.getElementById("test_img").src, "",
 				"图片不显示时链接依然为空");
 		frames[0].scroll(0, 200);
-		ok(frames[0].document.getElementById("test_img").src
-				.indexOf("test.png") >= 0, "图片显示时链接更新");
-		start();
+		setTimeout(function(){
+			ok(frames[0].document.getElementById("test_img").src
+					.indexOf("test.png") >= 0, "图片显示时链接更新");
+			start();
+		}, 10);
 	}, 1000);
 });
