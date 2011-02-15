@@ -9,6 +9,7 @@
 ///import baidu.dom._styleFilter.px;
 
 ///import baidu.browser.isStrict;
+///import baidu.browser.ie;
 
 /**
  * 按照border-box模型设置元素的height和width值
@@ -29,6 +30,9 @@
  */
 baidu.dom.setBorderBoxSize= function (element, size) {
     var result = {};
+    size.width && (result.width = parseFloat(size.width));
+    size.height && (result.height = parseFloat(size.height));
+
     function getNumericalStyle(element, name){
         return parseFloat(baidu.getStyle(element, name)) || 0;
     }

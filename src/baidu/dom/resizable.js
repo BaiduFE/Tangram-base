@@ -55,41 +55,31 @@ baidu.dom.resizable = function(element,options) {
         orgCursor,
         offsetParent,
         currentEle,
+        handlePosition,
         timer,
-        handlePosition;
+        isCancel = false,
+        defaultOptions = {
+            direction: ['e', 's', 'se'],
+            minWidth: 16,
+            minHeight: 16,
+            classPrefix: 'tangram',
+            directionHandlePosition: {}
+        };
 
+        
     if (!(target = baidu.dom.g(element)) && baidu.getStyle(target, 'position') == 'static') {
         return false;
     }
     offsetParent = target.offsetParent;
-    
+    var orgPosition = baidu.getStyle(target,'position');
+
     /*
      * 必要参数的扩展
      * resize handle以方向命名
      * 顺时针的顺序为
      * north northwest west southwest south southeast east northeast
      */
-    op = baidu.extend({
-        direction: ['e', 's', 'se'],
-        minWidth: 16,
-        minHeight: 16,
-        classPrefix: 'tangram',
-        directionHandlePosition: {}
-    }, options);
-
-    /*
-     * resizeHandle的位置参数
-     */
-    handlePosition = baidu.extend({
-        'e' : {'right': '-5px', 'top': '0px', 'width': '7px', 'height': target.offsetHeight},
-        's' : {'left': '0px', 'bottom': '-5px', 'height': '7px', 'width': target.offsetWidth},
-        'n' : {'left': '0px', 'top': '-5px', 'height': '7px', 'width': target.offsetWidth},
-        'w' : {'left': '-5px', 'top': '0px', 'height': target.offsetHeight, 'width': '7px'},
-        'se': {'right': '1px', 'bottom': '1px', 'height': '16px', 'width': '16px'},
-        'sw': {'left': '1px', 'bottom': '1px', 'height': '16px', 'width': '16px'},
-        'ne': {'right': '1px', 'top': '1px', 'height': '16px', 'width': '16px'},
-        'nw': {'left': '1px', 'top': '1px', 'height': '16px', 'width': '16px'}
-    },op.directionHandlePosition);
+    op = baidu.extend(defaultOptions, options);
 
     /*
      * 必要参数转换
@@ -109,29 +99,50 @@ baidu.dom.resizable = function(element,options) {
         op.maxHeight || Number.MAX_VALUE
     ];
 
-    /*
-     * 创建resizeHandle
+    render(); 
+
+    /**
+     * 绘制resizable handle 
      */
-    baidu.each(op.direction, function(key) {
-        var className = op.classPrefix.split(' ');
-        className[0] = className[0] + '-resizable-' + key;
+    function render(){
+      
+        //位置属性
+        handlePosition = baidu.extend({
+            'e' : {'right': '-5px', 'top': '0px', 'width': '7px', 'height': target.offsetHeight},
+            's' : {'left': '0px', 'bottom': '-5px', 'height': '7px', 'width': target.offsetWidth},
+            'n' : {'left': '0px', 'top': '-5px', 'height': '7px', 'width': target.offsetWidth},
+            'w' : {'left': '-5px', 'top': '0px', 'height':target.offsetHeight , 'width': '7px'},
+            'se': {'right': '1px', 'bottom': '1px', 'height': '16px', 'width': '16px'},
+            'sw': {'left': '1px', 'bottom': '1px', 'height': '16px', 'width': '16px'},
+            'ne': {'right': '1px', 'top': '1px', 'height': '16px', 'width': '16px'},
+            'nw': {'left': '1px', 'top': '1px', 'height': '16px', 'width': '16px'}
+        },op.directionHandlePosition);
+        
+        //创建resizeHandle
+        baidu.each(op.direction, function(key) {
+            var className = op.classPrefix.split(' ');
+            className[0] = className[0] + '-resizable-' + key;
 
-        var ele = baidu.dom.create('div', {
-            className: className.join(' ')
-        }),
-        styles = handlePosition[key];
+            var ele = baidu.dom.create('div', {
+                className: className.join(' ')
+            }),
+                styles = handlePosition[key];
 
-        styles['cursor'] = key + '-resize';
-        styles['position'] = 'absolute';
-        baidu.setStyles(ele, styles);
-        ele.key = key;
-        ele.style.MozUserSelect = 'none';
+            styles['cursor'] = key + '-resize';
+            styles['position'] = 'absolute';
+            baidu.setStyles(ele, styles);
+            
+            ele.key = key;
+            ele.style.MozUserSelect = 'none';
 
-        target.appendChild(ele);
-        resizeHandle[key] = ele;
+            target.appendChild(ele);
+            resizeHandle[key] = ele;
 
-        baidu.on(ele, 'mousedown', start);
-    });
+            baidu.on(ele, 'mousedown', start);
+        });
+
+        isCancel = false;
+    }
 
     /**
      * cancel resizeHandle
@@ -144,6 +155,21 @@ baidu.dom.resizable = function(element,options) {
             baidu.un(item,"mousedown",start);
             baidu.dom.remove(item);
         });
+        isCancel = true;    
+    }
+
+    /**
+     * update resizable
+     * @public 
+     * @param {Object} options
+     * @return null
+     */
+    function update(options){
+        if(!isCancel){
+            op = baidu.extend(op,options || {});
+            cancel();
+            render();
+        }
     }
 
     /**
@@ -178,9 +204,9 @@ baidu.dom.resizable = function(element,options) {
          * 偏移量计算
          */
         var orgMousePosition = baidu.page.getMousePosition();
-        orgStyles = getOrgStyle();
+        orgStyles = _getOrgStyle();
         timer = setInterval(function(){
-            render(key,orgMousePosition);
+            resize(key,orgMousePosition);
         }, 20);
 
         baidu.lang.isFunction(op.onresizestart) && op.onresizestart();
@@ -211,7 +237,7 @@ baidu.dom.resizable = function(element,options) {
         clearInterval(timer);
         baidu.setStyle(document.body, 'cursor',orgCursor);
         currentEle = null;
-        
+
         baidu.lang.isFunction(op.onresizeend) && op.onresizeend();
     }
 
@@ -222,7 +248,7 @@ baidu.dom.resizable = function(element,options) {
      * @param {Object} orgMousePosition 鼠标坐标{x,y}
      * @return void
      */
-    function render(key,orgMousePosition) {
+    function resize(key,orgMousePosition) {
         var xy = baidu.page.getMousePosition(),
             width = orgStyles['width'],
             height = orgStyles['height'],
@@ -236,8 +262,8 @@ baidu.dom.resizable = function(element,options) {
         }else if (key.indexOf('w') >= 0) {
             width = Math.max(orgMousePosition.x - xy.x + orgStyles['width'], range[0]);
             width = Math.min(width, range[1]);
-            left = orgStyles['left'] - (width - orgStyles['width']);
-        }
+            left -= width - orgStyles['width'];
+       }
 
         if (key.indexOf('s') >= 0) {
             height = Math.max(xy.y - orgMousePosition.y + orgStyles['height'], range[2]);
@@ -245,7 +271,7 @@ baidu.dom.resizable = function(element,options) {
         }else if (key.indexOf('n') >= 0) {
             height = Math.max(orgMousePosition.y - xy.y + orgStyles['height'], range[2]);
             height = Math.min(height, range[3]);
-            top = orgStyles['top'] - (height - orgStyles['height']);
+            top -= height - orgStyles['height'];
         }
          
         styles = {'width': width, 'height': height, 'top': top, 'left': left};
@@ -276,18 +302,23 @@ baidu.dom.resizable = function(element,options) {
      * @private
      * @return {Object} {width,height,top,left}
      */
-    function getOrgStyle() {
+    function _getOrgStyle() {
         var offset_parent = baidu.dom.getPosition(target.offsetParent),
             offset_target = baidu.dom.getPosition(target),
             top,
             left;
        
-        if(target.offsetParent == document.body){
-            top = offset_target.top;
-            left = offset_target.left;
+        if(orgPosition == "absolute"){
+            if(target.offsetParent == document.body){
+                top = offset_target.top;
+                left = offset_target.left;
+            }else{
+                top =  offset_target.top - offset_parent.top;
+                left = offset_target.left - offset_parent.left;
+            }
         }else{
-            top =  offset_target.top - offset_parent.top;
-            left = offset_target.left - offset_parent.left;
+            top = parseFloat(baidu.getStyle(target,"top")) || -parseFloat(baidu.getStyle(target,"bottom")) || 0;
+            left = parseFloat(baidu.getStyle(target,"left")) || -parseFloat(baidu.getStyle(target,"right")) || 0; 
         }
         baidu.setStyles(target,{top:top,left:left});
 
@@ -299,5 +330,5 @@ baidu.dom.resizable = function(element,options) {
         };
     }
     
-    return {cancel:cancel};
+    return {cancel:cancel,update:update,enable:render};
 };
