@@ -83,7 +83,8 @@ function getFileContents($filename){
             return $content;
         }
     }
-    return file_get_contents("../../tangram/src/". $filename);
+    //为编译更新路径by bell 2011-2-15
+    return file_get_contents("../../Tangram-base/src/". $filename);
 }
 
 function getPackage($packagePath){
