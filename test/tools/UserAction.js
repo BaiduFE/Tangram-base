@@ -873,7 +873,7 @@ UserAction = {
 			var p = win;
 			for ( var i = 0; i < mm.length; i++) {
 				if (typeof (p[mm[i]]) == 'undefined') {
-					console.log(mm[i]);
+//					console.log(mm[i]);
 					return;
 				}
 				p = p[mm[i]];
