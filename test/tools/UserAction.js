@@ -392,7 +392,7 @@ UserAction = {
 			customEvent = document.createEvent("MouseEvents");
 
 			// Safari 2.x (WebKit 418) still doesn't implement initMouseEvent()
-			if (customEvent.initMouseEvent) {
+			if (this.browser.ie !== 9 && customEvent.initMouseEvent) {
 				customEvent.initMouseEvent(type, bubbles, cancelable, view,
 						detail, screenX, screenY, clientX, clientY, ctrlKey,
 						altKey, shiftKey, metaKey, button, relatedTarget);
