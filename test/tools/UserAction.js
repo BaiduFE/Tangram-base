@@ -329,6 +329,8 @@ UserAction = {
 			case "click":
 			case "dblclick":
 			case "mousemove":
+			case "mouseenter"://非标准支持，仅为测试提供
+			case "mouseleave":
 				break;
 			default:
 				throw new Error("simulateMouseEvent(): Event type '" + type
@@ -751,7 +753,8 @@ UserAction = {
 		op = typeof op == 'function' ? {
 			ontest : op
 		} : op;
-		var pw = op.win || window, w, f, url = '', id = op.id || 'f', fid = 'iframe#' + id;
+		var pw = op.win || window, w, f, url = '', id = op.id || 'f', fid = 'iframe#'
+				+ id;
 
 		op.finish = function() {
 			pw.$(fid).unbind();
@@ -771,9 +774,9 @@ UserAction = {
 			}
 		});
 		pw.$(fid).attr('src', cpath + 'frame.php' + url).load(function() {
-			var h = setInterval(function(){
+			var h = setInterval(function() {
 				w = pw.frames[pw.frames.length - 1];
-				if(w.baidu){//等待加载完成，IE6下这地方总出问题
+				if (w.baidu) {// 等待加载完成，IE6下这地方总出问题
 					clearInterval(h);
 					op.ontest(w, w.frameElement);
 				}
@@ -836,15 +839,17 @@ UserAction = {
 				callback();
 			return;
 		}
-		
+
 		win = win || window;
 		var doc = win.document;
 
 		var srcpath = location.href.split("/test/")[0]
 				+ "/test/tools/br/import.php";
 		var param0 = src;
-		var ps = {f:src};
-		if(exclude)
+		var ps = {
+			f : src
+		};
+		if (exclude)
 			ps.e = exclude;
 		var param1 = exclude || "";
 		/**
@@ -867,7 +872,7 @@ UserAction = {
 		var h = setInterval(function() {
 			var p = win;
 			for ( var i = 0; i < mm.length; i++) {
-				if (typeof (p[mm[i]]) == 'undefined'){
+				if (typeof (p[mm[i]]) == 'undefined') {
 					console.log(mm[i]);
 					return;
 				}
@@ -1074,72 +1079,72 @@ UserAction = {
 			}
 
 			// Modern KHTML browsers should qualify as Safari X-Grade
-	if ((/KHTML/).test(ua)) {
-		o.webkit = 1;
-	}
-	// Modern WebKit browsers are at least X-Grade
-	m = ua.match(/AppleWebKit\/([^\s]*)/);
-	if (m && m[1]) {
-		o.webkit = numberify(m[1]);
-
-		// Mobile browser check
-		if (/ Mobile\//.test(ua)) {
-			o.mobile = "Apple"; // iPhone or iPod Touch
-		} else {
-			m = ua.match(/NokiaN[^\/]*|Android \d\.\d|webOS\/\d\.\d/);
-			if (m) {
-				o.mobile = m[0]; // Nokia N-series, Android, webOS,
-				// ex:
-				// NokiaN95
+			if ((/KHTML/).test(ua)) {
+				o.webkit = 1;
 			}
-		}
-
-		var m1 = ua.match(/Safari\/([^\s]*)/);
-		if (m1 && m1[1]) // Safari
-			o.safari = numberify(m1[1]);
-		m = ua.match(/Chrome\/([^\s]*)/);
-		if (o.safari && m && m[1]) {
-			o.chrome = numberify(m[1]); // Chrome
-		} else {
-			m = ua.match(/AdobeAIR\/([^\s]*)/);
-			if (m) {
-				o.air = m[0]; // Adobe AIR 1.0 or better
-			}
-		}
-	}
-
-	if (!o.webkit) { // not webkit
-		// @todo check Opera/8.01 (J2ME/MIDP; Opera Mini/2.0.4509/1316;
-		// fi; U;
-		// try get firefox and it's ver
-		// ssr)
-		m = ua.match(/Opera[\s\/]([^\s]*)/);
-		if (m && m[1]) {
-			o.opera = numberify(m[1]);
-			m = ua.match(/Opera Mini[^;]*/);
-			if (m) {
-				o.mobile = m[0]; // ex: Opera Mini/2.0.4509/1316
-			}
-		} else { // not opera or webkit
-			m = ua.match(/MSIE\s([^;]*)/);
+			// Modern WebKit browsers are at least X-Grade
+			m = ua.match(/AppleWebKit\/([^\s]*)/);
 			if (m && m[1]) {
-				o.ie = numberify(m[1]);
-			} else { // not opera, webkit, or ie
-				m = ua.match(/Gecko\/([^\s]*)/);
-				if (m) {
-					o.gecko = 1; // Gecko detected, look for revision
-					m = ua.match(/rv:([^\s\)]*)/);
+				o.webkit = numberify(m[1]);
+
+				// Mobile browser check
+				if (/ Mobile\//.test(ua)) {
+					o.mobile = "Apple"; // iPhone or iPod Touch
+				} else {
+					m = ua.match(/NokiaN[^\/]*|Android \d\.\d|webOS\/\d\.\d/);
+					if (m) {
+						o.mobile = m[0]; // Nokia N-series, Android, webOS,
+						// ex:
+						// NokiaN95
+					}
+				}
+
+				var m1 = ua.match(/Safari\/([^\s]*)/);
+				if (m1 && m1[1]) // Safari
+					o.safari = numberify(m1[1]);
+				m = ua.match(/Chrome\/([^\s]*)/);
+				if (o.safari && m && m[1]) {
+					o.chrome = numberify(m[1]); // Chrome
+				} else {
+					m = ua.match(/AdobeAIR\/([^\s]*)/);
+					if (m) {
+						o.air = m[0]; // Adobe AIR 1.0 or better
+					}
+				}
+			}
+
+			if (!o.webkit) { // not webkit
+				// @todo check Opera/8.01 (J2ME/MIDP; Opera Mini/2.0.4509/1316;
+				// fi; U;
+				// try get firefox and it's ver
+				// ssr)
+				m = ua.match(/Opera[\s\/]([^\s]*)/);
+				if (m && m[1]) {
+					o.opera = numberify(m[1]);
+					m = ua.match(/Opera Mini[^;]*/);
+					if (m) {
+						o.mobile = m[0]; // ex: Opera Mini/2.0.4509/1316
+					}
+				} else { // not opera or webkit
+					m = ua.match(/MSIE\s([^;]*)/);
 					if (m && m[1]) {
-						o.gecko = numberify(m[1]);
+						o.ie = numberify(m[1]);
+					} else { // not opera, webkit, or ie
+						m = ua.match(/Gecko\/([^\s]*)/);
+						if (m) {
+							o.gecko = 1; // Gecko detected, look for revision
+							m = ua.match(/rv:([^\s\)]*)/);
+							if (m && m[1]) {
+								o.gecko = numberify(m[1]);
+							}
+						}
 					}
 				}
 			}
 		}
-	}
-}
 
-return o;
-})()
+		return o;
+	})()
 };
 var ua = UserAction;
 var upath = ua.commonData.currentPath();
