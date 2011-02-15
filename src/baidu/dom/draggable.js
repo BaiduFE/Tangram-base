@@ -81,9 +81,10 @@ baidu.dom.draggable = function(element, options) {
     // 拖曳只针对有 position 定位的元素
     if (element) {
         function handlerMouseDown(e) {
-            options.mouseEvent = window.event || e;
-            // 可以通过配置项里的这个开关函数暂停或启用拖曳功能
-            if (typeof options.toggle == 'function' && !options.toggle()) {
+            var event = options.mouseEvent = window.event || e;
+            if (event.button > 1 //只支持鼠标左键拖拽; 左键代码: IE为1,W3C为0
+                // 可以通过配置项里的这个开关函数暂停或启用拖曳功能
+                || (baidu.lang.isFunction(options.toggle) && !options.toggle())) {
                 return;
             }
             if (baidu.dom.getStyle(element, 'position') == 'static') {
@@ -96,7 +97,7 @@ baidu.dom.draggable = function(element, options) {
             draggableSingle.stop = dragSingle.stop;
             draggableSingle.update = dragSingle.update;
             //防止ff下出现禁止拖拽的图标
-            baidu.event.preventDefault(options.mouseEvent);
+            baidu.event.preventDefault(event);
         }
 
         // 对拖曳的扳机元素监听 onmousedown 事件，以便进行拖曳行为
