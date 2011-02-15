@@ -329,7 +329,7 @@ UserAction = {
 			case "click":
 			case "dblclick":
 			case "mousemove":
-			case "mouseenter"://非标准支持，仅为测试提供
+			case "mouseenter"://非标准支持，仅为测试提供，该项仅IE下work
 			case "mouseleave":
 				break;
 			default:
