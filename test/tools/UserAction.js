@@ -771,8 +771,13 @@ UserAction = {
 			}
 		});
 		pw.$(fid).attr('src', cpath + 'frame.php' + url).load(function() {
-			w = pw.frames[pw.frames.length - 1];
-			op.ontest(w, w.frameElement);
+			var h = setInterval(function(){
+				w = pw.frames[pw.frames.length - 1];
+				if(w.baidu){//等待加载完成，IE6下这地方总出问题
+					clearInterval(h);
+					op.ontest(w, w.frameElement);
+				}
+			}, 50);
 		});
 	},
 
@@ -822,7 +827,7 @@ UserAction = {
 		}
 	},
 
-	importsrc : function(src, callback, matcher, exclude) {
+	importsrc : function(src, callback, matcher, exclude, win) {
 		/**
 		 * 支持release分之，此处应该直接返回
 		 */
@@ -831,25 +836,27 @@ UserAction = {
 				callback();
 			return;
 		}
+		
+		win = win || window;
+		var doc = win.document;
 
 		var srcpath = location.href.split("/test/")[0]
 				+ "/test/tools/br/import.php";
 		var param0 = src;
+		var ps = {f:src};
+		if(exclude)
+			ps.e = exclude;
 		var param1 = exclude || "";
-
 		/**
 		 * IE下重复载入会出现无法执行情况
 		 */
-		if (window.execScript) {
-			$.get(srcpath, {
-				f : param0,
-				e : param1
-			}, function(data) {
-				window.execScript(data);
+		if (win.execScript) {
+			$.get(srcpath, ps, function(data) {
+				win.execScript(data);
 			});
 		} else {
-			var head = document.getElementsByTagName('head')[0];
-			var sc = document.createElement('script');
+			var head = doc.getElementsByTagName('head')[0];
+			var sc = doc.createElement('script');
 			sc.type = 'text/javascript';
 			sc.src = srcpath + "?f=" + param0 + "&e=" + param1;
 			head.appendChild(sc);
@@ -858,10 +865,12 @@ UserAction = {
 		matcher = matcher || src;
 		var mm = matcher.split(",")[0].split(".");
 		var h = setInterval(function() {
-			var p = window;
+			var p = win;
 			for ( var i = 0; i < mm.length; i++) {
-				if (typeof (p[mm[i]]) == 'undefined')
+				if (typeof (p[mm[i]]) == 'undefined'){
+					console.log(mm[i]);
 					return;
+				}
 				p = p[mm[i]];
 			}
 			clearInterval(h);
