@@ -37,7 +37,7 @@ test("window resize", function() {
 			setTimeout(function() {
 				baidu.un(w, 'resize', fn);
 				$(f).css('width', 240);
-				op.finish();
+				setTimeout(op.finish, 100);
 			}, 500);
 		}
 	});
