@@ -20,13 +20,14 @@
  * @meta standard
  */
 baidu.dom.ready = function () {
-    var isReady = false,
-        readyBound = false,
-        readyList = [];
+    var readyBound = false,
+        readyList = [],
+        ready = baidu.dom.ready,
+        ready.isReady = false;
 
     function ready() {
-        if (!isReady) {
-            isReady = true;
+        if (!ready.isReady) {
+            ready.isReady = true;
             for (var i = 0, j = readyList.length; i < j; i++) {
                     readyList[i]();
             }
@@ -48,7 +49,7 @@ baidu.dom.ready = function () {
         if (doc.addEventListener) {
             // Use the handy event callback
             doc.addEventListener("DOMContentLoaded", opera ? function () {
-                if (isReady) {
+                if (ready.isReady) {
                     return;
                 }
                 for (var i = 0; i < doc.styleSheets.length; i++) {
@@ -64,7 +65,7 @@ baidu.dom.ready = function () {
             // If IE is used and is not in a frame
             // Continually check to see if the doc is ready
             (function () {
-                if (isReady) {
+                if (ready.isReady) {
                     return;
                 }
 
@@ -82,7 +83,7 @@ baidu.dom.ready = function () {
         } else if (baidu.browser.safari) {
             var numStyles;
             (function () {
-                if (isReady) {
+                if (ready.isReady) {
                     return;
                 }
                 if (doc.readyState != "loaded" && doc.readyState != "complete") {
@@ -116,8 +117,8 @@ baidu.dom.ready = function () {
         w.attachEvent ? w.attachEvent("onload", ready) : w.addEventListener("load", ready, false);
     }
 
-    return function (callback) {
+    return function(callback) {
         bindReady();
-        isReady ? callback() : (readyList[readyList.length] = callback);
+        ready.isReady ? callback() : (readyList[readyList.length] = callback);
     };
 }();
