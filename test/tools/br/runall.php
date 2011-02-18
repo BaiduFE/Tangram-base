@@ -36,10 +36,7 @@ function run($b, $release=false, $debug = false){
 //	print $result;
 }
 
-require 'lib/Request.php';
-$r = new Request($_SERVER);
-
-if($r->contain('clearreport')){
+if(array_key_exists('clear', $_GET)){
 	print 'debug - clear report';
 	require_once 'lib/Staf.php';
 	Staf::process('stop all confirm', '10.81.23.218');

@@ -3,14 +3,18 @@ function generateXML($post, $server) {
 	$dom = new DOMDocument('1.0', 'utf-8');
 	$report = $dom->appendChild($dom->createElement('report'));
 
-	require_once 'lib/Request.php';
 	require_once 'config.php';
-	$config = $_POST['config'];
-	$r = new Request($config);
-
-	if(!$r->contain('browser'))
+	$cfg = explode('&=', $_POST['config']);
+	$browser = '';
+	foreach($cfg as $key=>$item){
+		if($item == 'browser'){
+			$browser = $cfg[$key + 1];
+			break;
+		}
+	}
+	if($browser == '')
 	return;
-	$b = $r->get('browser');
+
 	foreach ($post as $kiss => $info) {
 		if ($kiss == 'config')
 		continue;
@@ -72,7 +76,7 @@ function interXML($onlyfails = false) {
 			settype($fail, "string");
 			settype($total, "string");
 			settype($cov, "float");
-				
+
 			if (!array_key_exists($caseName, $caseList)) { //如果这个用例不存在
 				$caseInfo = array (
 					'hostInfo' => $host,
@@ -129,5 +133,4 @@ function interXML($onlyfails = false) {
 	rmdir("report");
 	return $caseList;
 }
-
 ?>
