@@ -20,13 +20,17 @@ function run($b, $release=false, $debug = false){
 	$path = $debug ? 'C:\\Users\\yangbo\\AppData\\Local\\Google\\Chrome\\Application\\chrome.exe' : $browser[1];
 	
 	$url = "http://".$_SERVER['SERVER_ADDR'].substr($_SERVER['PHP_SELF'], 0, -11)."/list.php?batchrun=true";
-	$url .= "^&browser=$b^&mail=true";
+	$url .= "^&browser=$b^&mail=true";	
 	
 	if($release)
 	$url .= "^&release=true";
 	else
 	$url .= "^&cov=true";
 
+	if($b == 'baidu'){
+		$url = '-\"'.$url.'\"';
+	}
+	
 	require_once 'lib/Staf.php';
 	$result = Staf::process_start($path, $url, $host);
 //	print $result;
