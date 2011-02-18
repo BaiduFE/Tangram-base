@@ -28,7 +28,7 @@ function run($b, $release=false, $debug = false){
 //	$url .= "^&cov=true";
 
 	if($b == 'baidu'){
-		$url = '-\"'.$url.'\"';
+		$url = "--'$url'";
 	}
 	
 	require_once 'lib/Staf.php';
