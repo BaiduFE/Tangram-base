@@ -4,7 +4,7 @@ function generateXML($post, $server) {
 	$report = $dom->appendChild($dom->createElement('report'));
 
 	require_once 'config.php';
-	$cfg = grep_split('/[&=]/', $_POST['config']);
+	$cfg = preg_split('/[&=]/', $_POST['config']);
 	$b = '';
 	foreach($cfg as $key=>$item){
 		if($item == 'browser'){
