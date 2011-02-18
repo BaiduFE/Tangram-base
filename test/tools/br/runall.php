@@ -76,7 +76,7 @@ if(file_exists('report')){
 }
 
 /*记录运行时信息*/
-$b = $r->contain('browser') ? $r->get('browser') : 'all';
+$b = array_key_exists('browser', $_GET) ? $_GET['browser'] : 'all';
 if($b !='all'){
 	run($b, $tag, true);
 }else{
