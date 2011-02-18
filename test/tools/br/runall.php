@@ -7,6 +7,7 @@
  */
 $release = preg_match('/release=(\d+\.\d+\.\d+\.\d+)/i', $_SERVER['QUERY_STRING'], $arr);
 
+require 'config.php';
 /**
  * 考虑单浏览器执行入口，从config提取浏览器ip信息，通过staf启动用例的执行
  * @param $b
