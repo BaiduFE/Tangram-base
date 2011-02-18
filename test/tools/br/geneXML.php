@@ -4,15 +4,15 @@ function generateXML($post, $server) {
 	$report = $dom->appendChild($dom->createElement('report'));
 
 	require_once 'config.php';
-	$cfg = explode('&=', $_POST['config']);
-	$browser = '';
+	$cfg = grep_split('/[&=]/', $_POST['config']);
+	$b = '';
 	foreach($cfg as $key=>$item){
 		if($item == 'browser'){
-			$browser = $cfg[$key + 1];
+			$b = $cfg[$key + 1];
 			break;
 		}
 	}
-	if($browser == '')
+	if($b == '')
 	return;
 
 	foreach ($post as $kiss => $info) {

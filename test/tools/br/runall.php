@@ -24,8 +24,8 @@ function run($b, $release=false, $debug = false){
 	
 	if($release)
 	$url .= "^&release=true";
-	else
-	$url .= "^&cov=true";
+//	else
+//	$url .= "^&cov=true";
 
 	if($b == 'baidu'){
 		$url = '-\"'.$url.'\"';
