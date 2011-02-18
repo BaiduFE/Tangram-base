@@ -24,6 +24,8 @@ function run($b, $release=false, $debug = false){
 
 	if($release)
 	$url .= "^&release=true";
+	if(array_key_exists("filter", $_GET))
+	$url .= "^&filter={$_GET['filter']}";
 	//	else
 	//	$url .= "^&cov=true";
 
