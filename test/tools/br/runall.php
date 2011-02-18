@@ -18,22 +18,39 @@ function run($b, $release=false, $debug = false){
 	$browser = Config::$BROWSERS[$b];
 	$host = $debug ? 'localhost' : $browser[0];
 	$path = $debug ? 'C:\\Users\\yangbo\\AppData\\Local\\Google\\Chrome\\Application\\chrome.exe' : $browser[1];
-	
+
 	$url = "http://".$_SERVER['SERVER_ADDR'].":8000".substr($_SERVER['PHP_SELF'], 0, -11)."/list.php?batchrun=true";
-	$url .= "^&browser=$b^&mail=true";	
-	
+	$url .= "^&browser=$b^&mail=true";
+
 	if($release)
 	$url .= "^&release=true";
-//	else
-//	$url .= "^&cov=true";
+	//	else
+	//	$url .= "^&cov=true";
 
 	if($b == 'baidu'){
 		$url = "--'$url'";
 	}
-	
+
 	require_once 'lib/Staf.php';
 	$result = Staf::process_start($path, $url, $host);
-//	print $result;
+	//	print $result;
+}
+
+function delDirAndFile( $dirName )
+{
+	if ( $handle = opendir( "$dirName" ) ) {
+		while ( false !== ( $item = readdir( $handle ) ) ) {
+			if ( $item != "." && $item != ".." ) {
+				if ( is_dir( "$dirName/$item" ) ) {
+					delDirAndFile( "$dirName/$item" );
+				} else {
+					if( unlink( "$dirName/$item" ) )echo "成功删除文件： $dirName/$item<br />\n";
+				}
+			}
+		}
+		closedir( $handle );
+		if( rmdir( $dirName ) )echo "成功删除目录： $dirName<br />\n";
+	}
 }
 
 if(array_key_exists('clear', $_GET)){
@@ -46,7 +63,7 @@ if(array_key_exists('clear', $_GET)){
 	Staf::process('free all', '10.81.23.219');
 	Staf::process('free all', '10.81.23.220');
 	if(file_exists('report'))
-	rmdir('report');
+	delDirAndFile('report');
 }
 
 if(file_exists('report')){

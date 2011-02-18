@@ -60,7 +60,7 @@ function interXML($onlyfails = false) {
 	foreach ($fs as $f) {
 		if (substr($f, 0, 1) == '.')
 		continue;
-		$xmlFile = simpleXML_load_file("report\\$f");
+		$xmlFile = simpleXML_load_file("report/$f");
 
 		foreach ($xmlFile as $testResult) {
 			//			$totalCov = 0;
@@ -114,7 +114,7 @@ function interXML($onlyfails = false) {
 			}
 
 		}
-		unlink("report\\$f");
+		unlink("report/$f");
 	}
 
 	//根据需求添加仅记录失败情况的接口
