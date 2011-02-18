@@ -26,7 +26,7 @@ function geneHTML($caseList, $name=''){
 	$html = "<!DOCTYPE><html><head><meta http-equiv='Content-Type' content='text/html; charset=utf-8' />
 <style>td, th {border: 1px solid white;}</style></head><body><div>
 <h2 align='center'>自动化用例测试结果".date('Y-m-d H:i:s')."</h2>
-<a href='http://$url/../../../../../base-history/$name' style='font:normal bolder 12pt Arial' title='效果应该比邮件好'>网页版</a>
+<a href='http://$url/../../../../../report/base/$name' style='font:normal bolder 12pt Arial' title='效果应该比邮件好'>网页版</a>
 <table cellspacing='0' style='border: 1px solid black; color: #fff; background-color: #0d3349; text-shadow: rgba(0, 0, 0, 0.5) 2px 2px 1px; text-align: center;'>
 <thead><tr><th rowspan='2'>用例名称</th><th rowspan='2'>总覆盖率</th>".getThBrowser($caseList).
 "</tr></thead>".getTrCase($caseList).
