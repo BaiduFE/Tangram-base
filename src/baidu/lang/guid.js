@@ -19,8 +19,13 @@
  * @returns {String} 当前页面的唯一标识字符串
  */
 ///import baidu.lang;
-baidu.lang.guid = function() {
-    return "TANGRAM__" + (window[baidu.guid]._counter ++).toString(36);
-};
+(function(){
+    //不直接使用window，可以提高3倍左右性能
+    var guid = window[baidu.guid];
 
-window[baidu.guid]._counter = window[baidu.guid]._counter || 1;
+    baidu.lang.guid = function() {
+        return "TANGRAM__" + (guid._counter ++).toString(36);
+    };
+
+    guid._counter = guid._counter || 1;
+})();
