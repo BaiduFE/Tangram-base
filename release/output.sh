@@ -14,4 +14,5 @@ echo >>$LOG
 echo >>$LOG
 echo "====INFO from all.js====" >> $LOG
 $JAVAHOME/java -jar yuicompressor-2.4.2.jar -v -o all_release.js all_release_src.js 2>> $LOG
-cat $LOG | mail -s 'yui info from build.sh' -c 'leizhixing@baidu.com,wangpengcheng@baidu.com' yangbo@baidu.com
+cat $LOG | mail -s 'yui info from build.sh' yangbo@baidu.com 
+#-c 'leizhixing@baidu.com,wangpengcheng@baidu.com' yangbo@baidu.com
