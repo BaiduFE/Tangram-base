@@ -56,7 +56,8 @@
         top, left, mozUserSelect,
         lastLeft, lastTop,
         isFunction = baidu.lang.isFunction,
-        timer;
+        timer,
+        offset_parent,offset_target;
     
     baidu.dom.drag = function(element, options) {
         //每次开始拖拽的时候重置lastTop和lastLeft
@@ -69,8 +70,16 @@
             ,interval : 20  // 拖曳行为的触发频度（时间：毫秒）
         }, options);
 
-        top = parseInt(baidu.dom.getStyle(target, "top")) || 0;
-        left= parseInt(baidu.dom.getStyle(target, "left"))|| 0;
+        offset_parent = baidu.dom.getPosition(target.offsetParent);
+        offset_target = baidu.dom.getPosition(target);
+       
+        if(baidu.getStyle(target,'position') == "absolute"){
+            top =  offset_target.top - (target.offsetParent == document.body ? 0 : offset_parent.top);
+            left = offset_target.left - (target.offsetParent == document.body ? 0 :offset_parent.left);
+        }else{
+            top = parseFloat(baidu.getStyle(target,"top")) || -parseFloat(baidu.getStyle(target,"bottom")) || 0;
+            left = parseFloat(baidu.getStyle(target,"left")) || -parseFloat(baidu.getStyle(target,"right")) || 0; 
+        }
 
         if(op.mouseEvent){
             // [2010/11/16] 可以不依赖getMousePosition，直接通过一个可选参数获得鼠标位置

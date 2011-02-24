@@ -309,13 +309,8 @@ baidu.dom.resizable = function(element,options) {
             left;
        
         if(orgPosition == "absolute"){
-            if(target.offsetParent == document.body){
-                top = offset_target.top;
-                left = offset_target.left;
-            }else{
-                top =  offset_target.top - offset_parent.top;
-                left = offset_target.left - offset_parent.left;
-            }
+            top =  offset_target.top - (target.offsetParent == document.body ? 0 : offset_parent.top);
+            left = offset_target.left - (target.offsetParent == document.body ? 0 :offset_parent.left);
         }else{
             top = parseFloat(baidu.getStyle(target,"top")) || -parseFloat(baidu.getStyle(target,"bottom")) || 0;
             left = parseFloat(baidu.getStyle(target,"left")) || -parseFloat(baidu.getStyle(target,"right")) || 0; 
