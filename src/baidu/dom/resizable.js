@@ -22,6 +22,7 @@
 ///import baidu.dom.setBorderBoxHeight;
 ///import baidu.dom.setBorderBoxWidth;
 ///import baidu.object.extend;
+///import baidu.dom.getPosition;
 
 /**
  * 绘制可以根据鼠标行为改变HTMLElement大小的resize handle

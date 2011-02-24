@@ -20,6 +20,7 @@
 ///import baidu.page.getScrollTop;
 
 ///import baidu.lang.isFunction;
+///import baidu.dom.getPosition;
 
 /**
  * 拖动指定的DOM元素
