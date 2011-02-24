@@ -1,24 +1,72 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="Tangram-base" default="build" basedir="..">
+<project name="Tangram-base" default="compressor" basedir="..">
+	<!-- debug mode-->
+	<property name="DEBUG_MODE" value="false" />
+
 	<property name="src" location="src" />
 	<property name="target" location="release" />
+	<property name="release" value="release/output" />
+	<!--list js-->
 	<property name="corelist" location="${target}/core.js" />
 	<property name="alllist" location="${target}/all.js" />
-	<property name="coretarget" value="${target}/core_release_src.js" />
-	<property name="alltarget" value="${target}/all_release_src.js" />
+	<!--file before compressor-->
+	<property name="coretarget" value="${release}/core_release_src.js" />
+	<property name="alltarget" value="${release}/all_release_src.js" />
+	<!--file after compressor-->
+	<property name="core_release" value="${release}/core_release.js" />
+	<property name="all_release" value="${release}/all_release.js" />
+	<!--file path of yui compresson-->
+	<property name="yuicompressor" value="release/yuicompressor-2.4.2.jar" />
 
-	<propertyset>
-	</propertyset>
+
+	<!--define classpath for run-->
+	<path id="libpath">
+		<fileset dir="test/tools/lib" id="toolslib">
+			<include name="JSTAF.jar" />
+			<include name="STAFAnt.jar" />
+		</fileset>
+		<pathelement path="release/build.jar" />
+		<pathelement path="${yuicompressor}" />
+	</path>
+
+	<!--init for build-->
 	<target name="init">
-		<mkdir dir="${target}" />
+		<delete dir="${release}" />
+		<mkdir dir="${release}" />
 	</target>
 
-	<taskdef name="ImportTask" classname="org.cactus.ant.tasks.ImportTask" classpath="release/build.jar" />
-	<target name="concat" depends="init">
+	<!--replace import.php to ant-->
+	<taskdef name="ImportTask" classname="org.cactus.ant.tasks.ImportTask">
+		<classpath refid="libpath" />
+	</taskdef>
+	<target name="import" depends="init">
 		<ImportTask />
 	</target>
 
-	<target name="build" depends="concat">
+	<!--yui compressor-->
+	<target name="compressor" depends="import">
+		<apply executable="java" parallel="false" failonerror="true" verbose="true">
+			<fileset dir="${release}" includes="*_src.js" />
+			<arg line="-jar" />
+			<arg path="${yuicompressor}" />
+			<arg line="--charset utf-8" />
+			<arg line="-v" />
+			<srcfile />
+			<arg line="-o" />
+			<mapper type="glob" from="*_src.js" to="$*.js" />
+			<targetfile />
+		</apply>
+	</target>
+
+	<target name="build" depends="compressor">
 
 	</target>
+
+	<!--an example of how to run staf in ant	<taskdef name="staf" classname="com.ibm.staf.ant.taskdef.STAF">
+		<classpath refid="libpath" />
+	</taskdef>
+	<target name="test">-->
+	<!--give up test from shell-->
+	<!--<staf location="local" service="ping" request="ping" throwBuildException="1" />
+	</target>-->
 </project>
