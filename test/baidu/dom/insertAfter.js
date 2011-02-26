@@ -67,3 +67,15 @@ test('异常case',function(){
 	equal(img.nextSibling,null,'insert failed');
 })
 
+test("Insert Document Fragment", function(){
+        expect(1);
+
+        var div = document.createElement('DIV');
+
+        var fragment = document.createDocumentFragment();
+        fragment.innerHTML = "<div id='hello-leeight'>CONTENT</div>";
+
+        baidu.dom.insertAfter(fragment, div);
+
+        equal(div.nextSibling, document.getElementById("hello-leeight"), "pass test");
+});

@@ -1,18 +1,13 @@
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
- * 
- * path: baidu/dom/getStyle.js
- * author: allstar, berg
- * version: 1.1.0
- * date: 2009/11/18
  */
 
 ///import baidu.dom.g;
+///import baidu.dom.getComputedStyle;
 ///import baidu.dom._styleFixer;
 ///import baidu.dom._styleFilter.filter;
 ///import baidu.string.toCamelCase;
-///import baidu.browser.ie;
 
 /**
  * 获取目标元素的样式值
@@ -28,28 +23,27 @@
  * 其中_styleFilter能对颜色和px进行归一化处理，_styleFixer能对display，float，opacity，textOverflow的浏览器兼容性bug进行处理。	
  * @shortcut getStyle
  * @meta standard
- * @see baidu.dom.setStyle,baidu.dom.setStyles
+ * @see baidu.dom.setStyle,baidu.dom.setStyles, baidu.dom.getComputedStyle
  *             
  * @returns {string} 目标元素的样式值
  */
+// TODO
+// 1. 无法解决px/em单位统一的问题（IE）
+// 2. 无法解决样式值为非数字值的情况（medium等 IE）
 baidu.dom.getStyle = function (element, key) {
     var dom = baidu.dom;
 
     element = dom.g(element);
     key = baidu.string.toCamelCase(key);
-    var value = element.style[key];
+    //computed style, then cascaded style, then explicitly set style.
+    var value = element.style[key] ||
+                (element.currentStyle ? element.currentStyle[style] : "") || 
+                dom.getComputedStyle(element, key);
 
     // 在取不到值的时候，用fixer进行修正
     if (!value) {
-        var fixer = dom._styleFixer[key],
-        	/* 在IE下，Element没有在文档树上时，没有currentStyle属性 */
-            // TODO
-            // 1. 应当优先使用getComputedStyle，再使用currentStyle
-            // 2. 无法解决px/em单位统一的问题（IE）
-            // 3. 无法解决样式值为非数字值的情况（medium等 IE）
-    	    style = element.currentStyle || (baidu.browser.ie ? element.style : getComputedStyle(element, null));
-            
-        value = fixer && fixer.get ? fixer.get(element, style) : style[fixer || key];
+        var fixer = dom._styleFixer[key];
+        value = fixer && fixer.get ? fixer.get(element) : style[fixer || key];
     }
     
     /* 检查结果过滤器 */
