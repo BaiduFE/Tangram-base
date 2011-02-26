@@ -117,8 +117,9 @@
             w.attachEvent ? w.attachEvent('onload', ready) : w.addEventListener('load', ready, false);
         }
 
+        bindReady();
+
         return function(callback) {
-            bindReady();
             ready.isReady ? callback() : (readyList[readyList.length] = callback);
         };
     }();

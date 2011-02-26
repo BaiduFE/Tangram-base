@@ -12,9 +12,9 @@
  * 默认情况下，所有在源对象上的属性都会被非递归地合并到目标对象上
  * 并且如果目标对象上已有此属性，不会被覆盖
  *
- * @name baidu.array.merge
+ * @name baidu.object.merge
  * @function
- * @grammar baidu.array.merge(target, source[, opt_options])
+ * @grammar baidu.object.merge(target, source[, opt_options])
  *
  * @param {Function} target 目标对象.
  * @param {Function} source 源对象.
@@ -23,7 +23,7 @@
  * @config {string[]} whiteList optional 白名单，默认为空，如果存在，只有在这里的属性才会被处理.
  * @config {boolean} recursive optional 是否递归合并对象里面的object，默认为否.
  * @return {object} merge后的object.
- * @see baidu.array.extend
+ * @see baidu.object.extend
  * @author berg
  */
 (function() {
