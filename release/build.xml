@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Tangram-base" default="build" basedir="..">
+	<property name="src" location="src" />
+	<property name="target" location="release" />
+	<property name="corelist" location="${target}/core.js" />
+	<property name="alllist" location="${target}/all.js" />
+	<property name="coretarget" value="${target}/core_release_src.js" />
+	<property name="alltarget" value="${target}/all_release_src.js" />
+
+	<propertyset>
+	</propertyset>
+	<target name="init">
+		<mkdir dir="${target}" />
+	</target>
+
+	<taskdef name="ImportTask" classname="org.cactus.ant.tasks.ImportTask" classpath="release/build.jar" />
+	<target name="concat" depends="init">
+		<ImportTask />
+	</target>
+
+	<target name="build" depends="concat">
+
+	</target>
+</project>

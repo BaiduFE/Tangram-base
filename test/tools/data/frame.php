@@ -1,3 +1,5 @@
+<?php header("Content-type: text/html; charset=utf-8");
+?>
 <html>
 <head>
 <script type="text/javascript" src="../jquery-1.3.2.js"></script>

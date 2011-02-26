@@ -9,6 +9,7 @@
  */
 
 ///import baidu.dom._styleFixer;
+///import baidu.dom.getStyle;
 ///import baidu.browser.firefox;
 ///import baidu.browser.opera;
 
@@ -130,9 +131,15 @@ baidu.dom._styleFixer.textOverflow = (function () {
     }
 
     return {
-		get: function (element, style) {
-            var browser = baidu.browser;
-			return (browser.opera ? style.OTextOverflow : browser.firefox ? element._baiduOverflow: style.textOverflow) || "clip";
+		get: function (element) {
+            var browser = baidu.browser,
+                getStyle = dom.getStyle;
+			return (browser.opera ?
+                        getStyle("OTextOverflow") :
+                        browser.firefox ?
+                            element._baiduOverflow :
+                            getStyle("textOverflow")) ||
+                   "clip";
 		},
 
 		set: function (element, value) {

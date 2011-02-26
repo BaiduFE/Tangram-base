@@ -18,7 +18,7 @@ header("Content-type: text/javascript; charset=utf-8");
 $DEBUG = false;
 
 $f = explode(',', $_GET['f']);
-$e = array_key_exists('e', $_GET) ? explode(",", $_GET['e']) : array();
+$e = (array_key_exists('e', $_GET) && $_GET['e']!='') ? explode(",", $_GET['e']) : array();
 require_once 'analysis.php';
 $analysis = new Analysis();
 $IGNORE = array();
@@ -32,7 +32,6 @@ foreach($f as $d){
 	$cnt.=importSrc($d);
 }
 echo $cnt;
-//var_dump($IGNORE);
 function importSrc($d){
 	global $IGNORE;
 	foreach($IGNORE as $idx=>$domain)
