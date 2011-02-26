@@ -20,7 +20,7 @@
 /**
  * @namespace baidu.element 通过该方法封装的对象可使用dom、event方法集合以及each方法进行链式调用。
  */
-baidu.e = baidu.element = function(node){
+baidu.element = baidu.e = function(node){
     var gNode = baidu._g(node);
     if(!gNode && baidu.dom.query){
         gNode = baidu.dom.query(node);
@@ -35,7 +35,6 @@ baidu.e = baidu.element = function(node){
  * Element类，所有扩展到链条上的方法都会被放在这里面
  * @name baidu.element.Element
  * @grammar baidu.element.Element(node)
- * @constructor
  * @param {DOMElement|NodeList} node   目标元素，可以是数组或者单个node节点
  * @returns {ElementObj} 包装后的DOM对象
  * @version 1.3

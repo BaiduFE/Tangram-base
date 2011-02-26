@@ -14,8 +14,7 @@
 
 
 /**
- * 延迟加载图片. 默认只加载可见高度以上的图片, 随着窗口滚动加载剩余图片.
- * 注意: 仅支持垂直方向.
+ * 延迟加载图片. 默认只加载可见高度以上的图片, 随着窗口滚动加载剩余图片.注意: 仅支持垂直方向.
  * @name baidu.page.lazyLoadImage
  * @function
  * @grammar baidu.page.lazyLoadImage([options])

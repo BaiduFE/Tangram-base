@@ -15,8 +15,8 @@
 ///import baidu.lang.isString;
 
 /**
- * 自定义的事件对象。
- * @function
+ * 
+ * @class   自定义的事件对象。
  * @name 	baidu.lang.Event
  * @grammar baidu.lang.Event(type[, target])
  * @param 	{string} type	 事件类型名称。为了方便区分事件和一个普通的方法，事件类型名称必须以"on"(小写)开头。
@@ -73,12 +73,10 @@ baidu.lang.Class.prototype.addEventListener = function (type, handler, key) {
  * @remark 	如果第二个参数handler没有被绑定到对应的自定义事件中，什么也不做。
  */
 baidu.lang.Class.prototype.removeEventListener = function (type, handler) {
-    if (typeof handler != "undefined") {
-        if (baidu.lang.isFunction(handler)) {
-            handler = handler.hashCode;
-        } else if (!baidu.lang.isString(handler)) {
-            return;
-        }
+    if (baidu.lang.isFunction(handler)) {
+        handler = handler.hashCode;
+    } else if (!baidu.lang.isString(handler)) {
+        return;
     }
 
     !this.__listeners && (this.__listeners = {});
@@ -89,13 +87,7 @@ baidu.lang.Class.prototype.removeEventListener = function (type, handler) {
     if (!t[type]) {
         return;
     }
-    if (typeof handler != "undefined") {
-        t[type][handler] && delete t[type][handler];
-    } else {
-        for(var guid in t[type]){
-            delete t[type][guid];
-        }
-    }
+    t[type][handler] && delete t[type][handler];
 };
 
 /**
