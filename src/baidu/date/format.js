@@ -58,7 +58,7 @@ baidu.date.format = function (source, pattern) {
         seconds = source.getSeconds();
 
     replacer(/yyyy/g, pad(year, 4));
-    replacer(/yy/g, pad(year.toString().slice(2), 2));
+    replacer(/yy/g, pad(parseInt(year.toString().slice(2), 10), 2));
     replacer(/MM/g, pad(month, 2));
     replacer(/M/g, month);
     replacer(/dd/g, pad(date2, 2));

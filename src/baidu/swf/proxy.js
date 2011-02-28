@@ -1,21 +1,13 @@
-/***************************************************************************
+/*
+ * Tangram
+ * Copyright 2011 Baidu Inc. All rights reserved.
  *
- * Copyright (c) 2011 Baidu.com, Inc. All Rights Reserved
- * $Id$
- *
- **************************************************************************/
+ * path: baidu/swf.js
+ * author: liyubei@baidu.com (leeight)
+ * version: 1.0.0
+ * date: 2011/02/28
+ */
 
-
-
-/**
- * swf/proxy.js ~ 2011/01/22 23:54:27
- * @author leeight(liyubei@baidu.com)
- * @version $Revision$
- * @description
- * 参考自福尔摩斯代码中的FlashProxy。
- * 当想要调用一个Flash的方法是，并不能保证这个Flash已经初始化完毕了，需要
- * 等待一会儿。
- **/
 
 ///import baidu.swf;
 ///import baidu.swf.getMovie;
@@ -40,7 +32,7 @@ baidu.swf.proxy = function(id, property, opt_loadedHandler) {
 };
 
 /**
- * @type {HTMLElement} Flash对象.
+ * @return {HTMLElement} Flash对象.
  */
 baidu.swf.proxy.prototype.getFlash = function() {
     return (this._flash || (this._flash = baidu.swf.getMovie(this._id)));
