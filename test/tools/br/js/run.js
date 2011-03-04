@@ -65,7 +65,7 @@ function run(kiss, runnext) {
 				if (wb.runnext
 						&& (!wb.breakOnError || parseInt(wb.kisses[wb.kiss]
 								.split(',')[0]) == 0)) {
-					var nextA = wb.kissnode[0].nextSibling;
+					var nextA = wb.kissnode.next()[0];
 					if (nextA.tagName == 'A') {
 						run(nextA.title, wb.runnext);
 					} else {

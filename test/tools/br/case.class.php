@@ -107,6 +107,7 @@ class Kiss{
 		$ps = explode('.', $this->name);
 		array_pop($ps);
 		array_push($ps, 'tools');
+		if(file_exists($this->projroot.'test/'.implode('/', $ps).'.js'))//没有就不加载了
 		print '<script type="text/javascript" src="'.$this->projroot.'test/'.implode('/', $ps).'.js"></script>'."\n";
 		print '<script type="text/javascript" src="'.$this->path.'"></script>'."\n";
 	}
