@@ -50,7 +50,7 @@ if(!$quirk){?>
 	<?php
 	require_once "case.class.php";
 	//if(array_key_exists("showsrconly", $_GET))
-	Kiss::listSrcOnly();
+	Kiss::listSrcOnly(true);
 	?>
 		<div class="clear"></div>
 	</div>

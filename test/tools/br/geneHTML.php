@@ -30,7 +30,7 @@ function geneHTML($caseList, $name=''){
 <table cellspacing='0' style='border: 1px solid black; color: #fff; background-color: #0d3349; text-shadow: rgba(0, 0, 0, 0.5) 2px 2px 1px; text-align: center;'>
 <thead><tr><th rowspan='2'>用例名称</th><th rowspan='2'>总覆盖率</th>".getThBrowser($caseList).
 "</tr></thead>".getTrCase($caseList).
-"</table>"._srcOnlyList()."</div></body></html>";
+"</table></div>"._srcOnlyList()."</body></html>";
 	return $html;
 }
 

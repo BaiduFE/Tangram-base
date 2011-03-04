@@ -159,11 +159,11 @@ class Kiss{
 			if($c->match($matcher)){
 				print("<a href=\"javascript:void(0)\" id=\"$c->case_id\" class=\"jsframe_qunit\" target=\"_blank\" title=\"$name\" onclick=\"run('$name');\$('#id_rerun').html('$name');return false;\">"
 				/*过长的时候屏蔽超出20的部分，因为隐藏的处理，所有用例不能直接使用标签a中的innerHTML，而应该使用title*/
-				.(strlen($name)>20?(substr($name,0,18)."..."):$name)."</a>");
+				.substr($name, 6)."</a>\n");
 			}
 		}
 	}
-	
+
 	public static function listSrcOnly($print=true, $projroot = '../../../'){
 		$srcpath = $projroot.'src/';
 		$testpath = $projroot.'test/';
@@ -183,4 +183,5 @@ class Kiss{
 		return $srcList;
 	}
 }
+
 ?>
