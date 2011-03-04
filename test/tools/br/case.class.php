@@ -92,11 +92,12 @@ class Kiss{
 		print '<script type="text/javascript" src="js/testrunner.js"></script>'."\n";
 		print '<script type="text/javascript" src="js/ext_qunit.js"></script>'."\n";
 		print '<script type="text/javascript" src="js/UserAction.js"></script>'."\n";
+		
 		print '<link media="screen" href="css/testsuite.css" type="text/css" rel="stylesheet" />'."\n";
 
 		if($release == 0){
 			/* load case source*/
-			$importurl = "$this->projroot/test/tools/br/import.php?f=$this->name";
+			$importurl = "$this->projroot/test/tools/br/import.php?f=$this->name\n";
 			if($cov) $importurl.='&cov=true';
 			print "<script type='text/javascript' src='$importurl' ></script>\n";
 		}else{
