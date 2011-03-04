@@ -27,17 +27,6 @@ if(!$quirk){?>
 			id="id_control_clearstatus" type="button" value="清除用例状态"
 			onclick="$('.testlist a').removeClass('running_case pass_case fail_case');" />
 	</div>
-	<a id="id_srconly" class="button"><span
-		onclick="$('#id_showSrcOnly').slideToggle('slow');">遗漏用例</span> </a>
-	<div class='clear'></div>
-	<div id="id_showSrcOnly" class="testlist">
-	<?php
-	require_once "case.class.php";
-	//if(array_key_exists("showsrconly", $_GET))
-	Kiss::listSrcOnly();
-	?>
-		<div style="clear: both; overflow: hidden"></div>
-	</div>
 	<a id="id_testlist_status" class="button"><span
 		onclick="$('div#id_testlist').slideToggle('slow');">折叠用例</span> </a>
 	<div id="id_rerun" onclick="run($('#id_rerun').html());return false;"></div>
@@ -54,5 +43,16 @@ if(!$quirk){?>
 		style="border: solid; display: none"></div>
 	<div id="id_reportarea" class="reportarea" style="display: none"></div>
 
+	<a id="id_srconly" class="button"><span
+		onclick="$('#id_showSrcOnly').slideToggle('slow');">遗漏用例</span> </a>
+	<div class='clear'></div>
+	<div id="id_showSrcOnly" class="testlist">
+	<?php
+	require_once "case.class.php";
+	//if(array_key_exists("showsrconly", $_GET))
+	Kiss::listSrcOnly();
+	?>
+		<div class="clear"></div>
+	</div>
 </body>
 </html>
