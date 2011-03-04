@@ -168,5 +168,6 @@ a.button:active span {
 .reportarea {
 	padding: 10px;
 	border: 10px blue;
-	height: 50%;
+	max-height: 200px;
+	overflow-y: scroll;
 }

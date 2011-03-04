@@ -1,4 +1,3 @@
-﻿
 <?php
 $debug = false;
 //$debug = false;
@@ -10,8 +9,6 @@ $debug = false;
 //	mkdir('report');
 //}
 
-//if ($debug)
-//print "browser : $b \r\n";
 require_once 'geneXML.php';
 generateXML($_POST, $_SERVER);
 
@@ -31,13 +28,8 @@ if(sizeof($kissList)>0){
 	}
 
 	if(!$debug){
-		require_once 'lib/Staf.php';
-		Staf::process('stop all confirm', '10.81.23.218');
-		Staf::process('stop all confirm', '10.81.23.219');
-		Staf::process('stop all confirm', '10.81.23.220');
-		Staf::process('free all', '10.81.23.218');
-		Staf::process('free all', '10.81.23.219');
-		Staf::process('free all', '10.81.23.220');
+		require_once 'config.php';
+		Config::StopAll();
 	}
 }
 ?>

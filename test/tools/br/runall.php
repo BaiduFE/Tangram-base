@@ -57,13 +57,7 @@ function delDirAndFile( $dirName )
 
 if(array_key_exists('clear', $_GET)){
 	print 'debug - clear report';
-	require_once 'lib/Staf.php';
-	Staf::process('stop all confirm', '10.81.23.218');
-	Staf::process('stop all confirm', '10.81.23.219');
-	Staf::process('stop all confirm', '10.81.23.220');
-	Staf::process('free all', '10.81.23.218');
-	Staf::process('free all', '10.81.23.219');
-	Staf::process('free all', '10.81.23.220');
+	Config::StopAll();
 	if(file_exists('report'))
 	delDirAndFile('report');
 }

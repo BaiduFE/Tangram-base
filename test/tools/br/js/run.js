@@ -9,7 +9,7 @@ function run(kiss, runnext) {
 		return;
 	}
 
-	wb.timeout = wb.timeout || 5000;
+	wb.timeout = wb.timeout || 20000;
 	wb.breakOnError = /breakonerror=true/gi.test(location.search)
 			|| $('input#id_control_breakonerror').attr('checked');
 	wb.runnext = /batchrun=true/gi.test(location.search) || runnext
