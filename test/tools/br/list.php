@@ -9,7 +9,7 @@ if(!$quirk){?>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Tangram Test Index Page</title>
-<script type="text/javascript" src="../jquery-1.3.2.js"></script>
+<script type="text/javascript" src="js/jquery-1.3.2.js"></script>
 <script type="text/javascript" src="js/run.js"></script>
 <link media="screen" href="css/tangramtest.css" type="text/css"
 	rel="stylesheet" />
@@ -27,11 +27,10 @@ if(!$quirk){?>
 			id="id_control_clearstatus" type="button" value="清除用例状态"
 			onclick="$('.testlist a').removeClass('running_case pass_case fail_case');" />
 	</div>
-	<a id="id_srconly" class="button"
-		onclick="$('#id_showSrcOnly').slideToggle('slow');"><span>遗漏用例</span>
-	</a>
+	<a id="id_srconly" class="button"><span
+		onclick="$('#id_showSrcOnly').slideToggle('slow');">遗漏用例</span> </a>
 	<div class='clear'></div>
-	<div id="id_showSrcOnly" class="showSrcOnly">
+	<div id="id_showSrcOnly" class="testlist">
 	<?php
 	require_once "case.class.php";
 	//if(array_key_exists("showsrconly", $_GET))
@@ -39,8 +38,8 @@ if(!$quirk){?>
 	?>
 		<div style="clear: both; overflow: hidden"></div>
 	</div>
-	<a id="id_testlist_status" class="button"
-		onclick="$('#id_testlist').slideToggle('slow');"><span>折叠用例</span> </a>
+	<a id="id_testlist_status" class="button"><span
+		onclick="$('div#id_testlist').slideToggle('slow');">折叠用例</span> </a>
 	<div id="id_rerun" onclick="run($('#id_rerun').html());return false;"></div>
 	<div style="clear: both"></div>
 	<div id="id_testlist" class="testlist">

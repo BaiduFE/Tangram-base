@@ -69,7 +69,7 @@ h3 {
 }
 
 .testlist {
-	max-height: 360px;
+	max-height: 200px;
 	overflow-y: scroll;
 	border-style: double;
 }
@@ -87,21 +87,8 @@ h3 {
 	float: left;
 }
 
-.showSrcOnly a {
-	display: block;
-	width: 150px;
-	color: #657528;
-	background: #d5dea7;
-	border: 1px solid #c8dc7b;
-	margin: 5px 0 0 5px;
-	text-indent: 5px;
-	line-height: 24px;
-	font-size: 14px;
-	float: left;
-}
-
 a.button {
-	background: transparent url('br/css/bg_button_a.gif') no-repeat scroll top
+	background: transparent url('bg_button_a.gif') no-repeat scroll top
 		right;
 	color: #444;
 	display: block;
@@ -114,7 +101,7 @@ a.button {
 }
 
 a.button span {
-	background: transparent url('br/css/bg_button_span.gif') no-repeat;
+	background: transparent url('bg_button_span.gif') no-repeat;
 	display: block;
 	line-height: 14px;
 	padding: 5px 0 5px 18px;
