@@ -37,7 +37,7 @@ baidu.dom.getStyle = function (element, key) {
     key = baidu.string.toCamelCase(key);
     //computed style, then cascaded style, then explicitly set style.
     var value = element.style[key] ||
-                (element.currentStyle ? element.currentStyle[style] : "") || 
+                (element.currentStyle ? element.currentStyle[key] : "") || 
                 dom.getComputedStyle(element, key);
 
     // 在取不到值的时候，用fixer进行修正
