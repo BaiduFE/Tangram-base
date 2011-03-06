@@ -1,14 +1,4 @@
 <?php
-$debug = false;
-//$debug = false;
-/*非批量运行*/
-//if (!file_exists('report')) {
-//	if (!$debug)
-//	return;
-//	else
-//	mkdir('report');
-//}
-
 require_once 'geneXML.php';
 generateXML($_POST, $_SERVER);
 
