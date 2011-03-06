@@ -51,7 +51,7 @@ function interXML($onlyfails = false) {
 	$fs = scandir('report');
 	require_once 'config.php';
 	foreach (Config :: $BROWSERS as $b => $machine) {
-		if (!in_array($b . '.xml', $fs)) {
+		if (!Config::$DEBUG && !in_array($b . '.xml', $fs)) {
 			print "none browser xml exist $b";
 			return;
 		}
@@ -114,7 +114,7 @@ function interXML($onlyfails = false) {
 			}
 
 		}
-		unlink("report/$f");
+//		unlink("report/$f");
 	}
 
 	//根据需求添加仅记录失败情况的接口
@@ -126,11 +126,11 @@ function interXML($onlyfails = false) {
 				$all_success = false;//如果有失败情况则终止循环并进入下一个用例分析
 				break;
 			}
-			if($all_success) //如果全部通过则从记录中移除
-			unset($caseList[$name]);
+			//if($all_success) //如果全部通过则从记录中移除
+			//unset($caseList[$name]);
 		}
 	}
-	rmdir("report");
+	//rmdir("report");
 	return $caseList;
 }
 ?>
