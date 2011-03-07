@@ -1,6 +1,7 @@
 module("baidu.dom.getStyle");
 
 test("get style from attribute", function() {
+	//载入float fixer
 	baidu.dom._styleFixer["float"] = baidu.browser.ie ? "styleFloat"
 			: "cssFloat";
 	expect(3);
@@ -68,17 +69,12 @@ test("get style from css file", function() {
 	var head = document.getElementsByTagName("head").item(0);
 	div.appendChild(p);
 	div.appendChild(img);
-	$(link).attr('href', upath + 'style.css');
-	$(link).attr('type', 'text/css');
-	$(link).attr('rel', 'stylesheet');
-	$(link).attr('media', 'screen');
 	$(div).attr('className', "content");
 	$(div1).attr('className', 'content');
 	$(img).attr('className', 'content');
 	$(p).attr('className', 'pid');
-	head.appendChild(link);
 
-	var handle = setTimeout(function() {
+	var handle = function() {
 		/** IE的float属性叫styleFloat，firefox则是cssFloat * */
 		equal(baidu.dom.getStyle(div, 'float'), 'left');
 		equal(baidu.dom.getStyle(div, 'width'), '200px');
@@ -96,11 +92,12 @@ test("get style from css file", function() {
 		document.body.removeChild(div);
 		document.body.removeChild(div1);
 		start();
-	}, 100);
+	};
 
+	ua.loadcss(upath + 'style.css', handle, 'content', 'width', '200px');
 });
 
-test("get style from fixer", function() {
+test("get opacity from fixer", function() {
 	stop();
 	ua.importsrc('baidu.dom._styleFixer.opacity', function() {
 		var div = document.createElement('div');

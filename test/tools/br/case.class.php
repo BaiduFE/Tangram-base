@@ -54,13 +54,13 @@ class Kiss{
 		}else{
 			$path = implode('/', explode('.', $name));
 		}
+
 		$this->path = $this->projroot.'test/'.$path.'.js';
 		if(filesize($this->path)<20){
 			$this->empty = true;
 			return;
 		}
 		$this->is_core();
-		$this->js_frame();
 		$this->case_id = 'id_case_'.join('_', explode('.', $name));
 	}
 
@@ -87,26 +87,17 @@ class Kiss{
 		}
 	}
 
-	private function js_frame(){
-		$filename = $this->path;
-		if(filesize($filename)>20 && $handle = fopen($filename, 'r')){
-			$contents = fread($handle, filesize($filename));
-			$this->js_frame = sizeof(explode('module', $contents))>1;
-			fclose($handle);
-		}else{
-		}
-	}
-
-	public function print_js($cov = 0, $release = 0){
-		print '<script type="text/javascript" src="../jquery-1.3.2.js"></script>'."\n";
-		print '<script type="text/javascript" src="../testrunner.js"></script>'."\n";
+	public function print_js($cov=false, $release=false){
+		print '<script type="text/javascript" src="js/jquery-1.3.2.js"></script>'."\n";
+		print '<script type="text/javascript" src="js/testrunner.js"></script>'."\n";
 		print '<script type="text/javascript" src="js/ext_qunit.js"></script>'."\n";
-		print '<script type="text/javascript" src="../UserAction.js"></script>'."\n";
-		print '<link media="screen" href="../testsuite.css" type="text/css" rel="stylesheet" />'."\n";
+		print '<script type="text/javascript" src="js/UserAction.js"></script>'."\n";
+
+		print '<link media="screen" href="css/testsuite.css" type="text/css" rel="stylesheet" />'."\n";
 
 		if($release == 0){
 			/* load case source*/
-			$importurl = "$this->projroot/test/tools/br/import.php?f=$this->name";
+			$importurl = "$this->projroot/test/tools/br/import.php?f=$this->name\n";
 			if($cov) $importurl.='&cov=true';
 			print "<script type='text/javascript' src='$importurl' ></script>\n";
 		}else{
@@ -114,13 +105,12 @@ class Kiss{
 		}
 
 		/* load case and case dependents*/
-		if(strlen($this->ext)>0){
-			$ps = explode('.', $this->name);
-			array_pop($ps);
-			array_push($ps, 'js', 'tools');
-			print '<script type="text/javascript" src="'.$this->projroot.'test/'.implode('/', $ps).'.js"></script>'."\n";
-		}
-		print "<script type='text/javascript' src='{$this->path}'></script>\n";
+		$ps = explode('.', $this->name);
+		array_pop($ps);
+		array_push($ps, 'tools');
+		if(file_exists($this->projroot.'test/'.implode('/', $ps).'.js'))//没有就不加载了
+		print '<script type="text/javascript" src="'.$this->projroot.'test/'.implode('/', $ps).'.js"></script>'."\n";
+		print '<script type="text/javascript" src="'.$this->path.'"></script>'."\n";
 	}
 
 	public function match($matcher){
@@ -132,7 +122,7 @@ class Kiss{
 		 * 处理多选分支，有一个成功则成功，filter后面参数使用|切割
 		 * @var unknown_type
 		 */
-		$ms = explode('|', $matcher);
+		$ms = explode(',', $matcher);
 		if(sizeof($ms)>1){
 			foreach($ms as $matcher1){
 				if($this->match($matcher1))
@@ -157,14 +147,11 @@ class Kiss{
 		return substr($this->name, 0, $len) == $matcher;
 	}
 
-	public static function listcase($matcher="*"){
-		$projroot = '../../../';
+	public static function listcase($matcher="*", $projroot = '../../../'){
 		$srcpath = $projroot.'src/';
 		$testpath = $projroot.'test/';
 		require_once 'filehelper.php';
-
 		$caselist = getSameFile($srcpath, $testpath, '');
-		$as = listFile($srcpath);
 		foreach($caselist as $caseitem){
 			/*将文件名替换为域名方式，替换/为.，移除.js*/
 			$name = str_replace('/','.',substr($caseitem,0, -3));
@@ -172,28 +159,32 @@ class Kiss{
 			if($c->empty)
 			continue;
 			if($c->match($matcher)){
-				print("<a href=\"javascript:void(0)\" id=\"$c->case_id\"
-				target=\"_blank\" title=\"$name\" onclick=\"run('$name');return false;\">"
+				print("<a href=\"javascript:void(0)\" id=\"$c->case_id\" class=\"jsframe_qunit\" target=\"_blank\" title=\"$name\" onclick=\"run('$name');\$('#id_rerun').html('$name');return false;\">"
 				/*过长的时候屏蔽超出20的部分，因为隐藏的处理，所有用例不能直接使用标签a中的innerHTML，而应该使用title*/
-				.(substr($name, 6))."</a>");
+				.substr($name, 6)."</a>\n");
 			}
 		}
 	}
 
-	public static function listSrcOnly($matcher="*", $projroot = '../../../'){
+	public static function listSrcOnly($print=true, $projroot = '../../../'){
 		$srcpath = $projroot.'src/';
 		$testpath = $projroot.'test/';
 		require_once 'filehelper.php';
-		$caselist = getSrcOnlyFile($srcpath, $testpath, '');
+		$caselist = getSameFile($srcpath, $testpath, '');
+		$srclist = getSrcOnlyFile($srcpath, $testpath, '');
 		$srcList = array();
-		foreach($caselist as $case){
-			$c = array();
-			$c = explode('/',$case);
-			if(count($c)>=3)
-			array_push($srcList,$case);
+		foreach($srclist as $case){
+			if(in_array($case, $caselist))
+			continue;
+			$name = str_replace('/','.',substr($case,0, -3));
+			$tag = '<a href="javascript:void(0)" class="jsframe_qunit">'
+				.substr($name, 6).'</a>';
+			array_push($srcList, $tag);
+			if($print)
+			echo $tag;
 		}
 		return $srcList;
-
 	}
 }
+
 ?>

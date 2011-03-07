@@ -491,7 +491,6 @@ UserAction = {
 			throw new Error(
 					"simulateMouseEvent(): No event simulation framework present.");
 		}
-
 	},
 
 	// --------------------------------------------------------------------------
@@ -814,7 +813,9 @@ UserAction = {
 	 **************************************************************************/
 	commonData : {// 针对测试文件的路径而不是UserAction的路径
 		"testdir" : '../../',
-		"datadir" : '../../tools/data/',
+		datadir : (function() {
+			return location.href.split("/test/")[0] + "/test/tools/data/";
+		})(),
 		currentPath : function() {
 			var params = location.search.substring(1).split('&');
 			for ( var i = 0; i < params.length; i++) {
@@ -883,6 +884,33 @@ UserAction = {
 				callback();
 		}, 20);
 	},
+	
+	/* 用于加载css文件，如果没有加载完毕则不执行回调函数*/
+	loadcss : function(url, callback, classname, style, value) {
+			var links = document.getElementsByTagName('link');
+			for ( var link in links) {
+				if (link.href == url) {
+					callback();
+					return;
+				}
+			}
+			var head = document.getElementsByTagName('head')[0];
+			var link = head.appendChild(document.createElement('link'));
+		    link.setAttribute("rel", "stylesheet");
+		    link.setAttribute("type", "text/css");
+		    link.setAttribute("href",url);
+		    var div = document.body.appendChild(document.createElement("div"));
+			$(document).ready(function() {
+				div.className = classname || 'cssloaded';
+				var h = setInterval(function() {
+						if ($(div).css(style||'width')==value||$(div).css(style||'width')=='20px') {
+							clearInterval(h);
+							document.body.removeChild(div);
+							setTimeout(callback, 20);
+						}
+				}, 20);
+			});
+		},
 
 	/**
 	 * options supported
@@ -913,7 +941,7 @@ UserAction = {
 	},
 
 	browser : (function() {
-		win = window;
+		var win = window;
 
 		var numberify = function(s) {
 			var c = 0;
@@ -1144,8 +1172,42 @@ UserAction = {
 		}
 
 		return o;
-	})()
+	})(),
+
+	/**
+	 * 提供队列方式执行用例的方案，接口包括start、add、next，方法全部执行完毕时会启动用例继续执行
+	 */
+	functionListHelper : function() {
+		var check = {
+			list : [],
+			start : function() {
+				var self = this;
+				$(this).bind('next', function() {
+					setTimeout(function() {// 避免太深的堆栈
+						if (self.list.length == 0)
+							start();
+						else
+							self.list.shift()();
+					}, 0);
+				});
+				self.next();
+			},
+			add : function(func) {
+				this.list.push(func);
+			},
+			next : function(delay) {
+				var self = this;
+				if (delay) {
+					setTimeout(function() {
+						$(self).trigger('next');
+					}, delay);
+				} else
+					$(this).trigger('next');
+			}
+		};
+		return check;
+	}
 };
 var ua = UserAction;
 var upath = ua.commonData.currentPath();
-var cpath = ua.commonData['datadir'];
+var cpath = ua.commonData.datadir;

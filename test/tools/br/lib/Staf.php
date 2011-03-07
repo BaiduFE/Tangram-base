@@ -33,8 +33,8 @@ class Staf{
 	 * @param unknown_type $handle
 	 * @param unknown_type $host
 	 */
-	public static function process_stop($handle, $host='local'){
-		$cmd = "STOP HANDLE $handle";
+	public static function process_stop($handle, $host='local', $all=0){
+		$cmd = $all ? "STOP ALL CONFIRM":"STOP HANDLE $handle";		
 		return self::process($cmd, $host);
 	}
 

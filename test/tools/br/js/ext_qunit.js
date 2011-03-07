@@ -27,10 +27,10 @@
 	var s = QUnit.testStart, e = QUnit.testDone, ms = QUnit.moduleStart, me = QUnit.moduleEnd, d = QUnit.done;
 	QUnit.testStart = function() {
 		// mySetup();
-		s.call(this, arguments);
+		s.apply(this, arguments);
 	};
 	QUnit.testDone = function() {
-		e.call(this, arguments);
+		e.apply(this, arguments);
 		// myTeardown();
 	};
 	QUnit.moduleStart = function() {
@@ -43,18 +43,18 @@
 				clearInterval(h);
 
 				_ms(arguments);
-				ms.call(this, arguments);
-
+				ms.apply(this, arguments);;
+				
 				start();
 			}
 		}, 20);
 		stop();
 	};
 	QUnit.moduleEnd = function() {
-		me.call(this, arguments);
+		me.apply(this, arguments);
 	};
 	QUnit.done = function() {
 		_d(arguments);
-		return d.apply(this, arguments);
+		d.apply(this, arguments);
 	};
 })();

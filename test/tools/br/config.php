@@ -9,9 +9,25 @@ class Config{
 	,'opera'=>array('10.81.23.219', "C:\\Program Files\\Opera\\opera.exe")
 	,'ie8'=>array('10.81.23.220', "C:\\Program Files\\Internet Explorer\\iexplore.exe")
 	,'safari'=>array('10.81.23.220', "C:\\Program Files\\Safari\\Safari.exe")
-	,'360'=>array('10.81.23.220', "C:\\Program Files\\360\\360se3\\360SE.exe")
+//	,'360'=>array('10.81.23.220', "C:\\Program Files\\360\\360se3\\360SE.exe")
+//	, 'baidu'=>array('10.81.21.93', "C:\\Program Files\\baidu\\baidubrowser\\baidubrowser.exe")
 	);
 
 	public static $DEBUG = false;
+	
+	public static $HISTORY_REPORT_PATH = '/report';
+
+	public static function StopAll(){
+		$hostarr = array();
+		foreach (Config::$BROWSERS as $b=>$h){
+			$host = $h[0];
+			if(in_array($host, $hostar))
+			continue;
+			array_push($hostarr, $host);
+			require_once 'lib/Staf.php';
+			Staf::process_stop('', $host, true);
+			Staf::process("free all");
+		}
+	}
 }
 ?>

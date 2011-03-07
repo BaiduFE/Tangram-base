@@ -3,14 +3,18 @@ function generateXML($post, $server) {
 	$dom = new DOMDocument('1.0', 'utf-8');
 	$report = $dom->appendChild($dom->createElement('report'));
 
-	require_once 'lib/Request.php';
 	require_once 'config.php';
-	$config = $_POST['config'];
-	$r = new Request($config);
-
-	if(!$r->contain('browser'))
+	$cfg = preg_split('/[&=]/', $_POST['config']);
+	$b = '';
+	foreach($cfg as $key=>$item){
+		if($item == 'browser'){
+			$b = $cfg[$key + 1];
+			break;
+		}
+	}
+	if($b == '')
 	return;
-	$b = $r->get('browser');
+
 	foreach ($post as $kiss => $info) {
 		if ($kiss == 'config')
 		continue;
@@ -47,7 +51,7 @@ function interXML($onlyfails = false) {
 	$fs = scandir('report');
 	require_once 'config.php';
 	foreach (Config :: $BROWSERS as $b => $machine) {
-		if (!in_array($b . '.xml', $fs)) {
+		if (!Config::$DEBUG && !in_array($b . '.xml', $fs)) {
 			print "none browser xml exist $b";
 			return;
 		}
@@ -56,7 +60,7 @@ function interXML($onlyfails = false) {
 	foreach ($fs as $f) {
 		if (substr($f, 0, 1) == '.')
 		continue;
-		$xmlFile = simpleXML_load_file("report\\$f");
+		$xmlFile = simpleXML_load_file("report/$f");
 
 		foreach ($xmlFile as $testResult) {
 			//			$totalCov = 0;
@@ -72,7 +76,7 @@ function interXML($onlyfails = false) {
 			settype($fail, "string");
 			settype($total, "string");
 			settype($cov, "float");
-				
+
 			if (!array_key_exists($caseName, $caseList)) { //如果这个用例不存在
 				$caseInfo = array (
 					'hostInfo' => $host,
@@ -110,7 +114,7 @@ function interXML($onlyfails = false) {
 			}
 
 		}
-		unlink("report\\$f");
+//		unlink("report/$f");
 	}
 
 	//根据需求添加仅记录失败情况的接口
@@ -122,12 +126,11 @@ function interXML($onlyfails = false) {
 				$all_success = false;//如果有失败情况则终止循环并进入下一个用例分析
 				break;
 			}
-			if($all_success) //如果全部通过则从记录中移除
-			unset($caseList[$name]);
+			//if($all_success) //如果全部通过则从记录中移除
+			//unset($caseList[$name]);
 		}
 	}
-	rmdir("report");
+	//rmdir("report");
 	return $caseList;
 }
-
 ?>

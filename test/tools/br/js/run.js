@@ -38,39 +38,40 @@ function run(kiss, runnext) {
 	/**
 	 * 为当前用例绑定一个一次性事件
 	 */
-	$(wbkiss)
-			.one('done', function(event, a, b, cov) {
+	$(wbkiss).one(
+			'done',
+			function(event, a, b, cov) {
 				clearTimeout(toh);
 				var wb = window.brtest, errornum = b[0], allnum = b[1];
 				var kissPerc;
 				if (!!cov)// 如果支持覆盖率
-						kissPerc = calCov(cov);
-					wb.kissnode.removeClass('running_case');
-					/*
-					 * ext_qunit.js的_d方法会触发done事件 top.$(wbkiss).trigger('done', [
-					 * new Date().getTime(), args ]); new
-					 * Date().getTime()指向a参数，args指向b参数
-					 */
-					wb.kisses[wb.kiss] = /*
-											 * a + ',' + wb.starttime + ',' +
-											 */errornum + ',' + allnum + ',' + kissPerc;
+					kissPerc = calCov(cov);
+				wb.kissnode.removeClass('running_case');
+				/*
+				 * ext_qunit.js的_d方法会触发done事件 top.$(wbkiss).trigger('done', [
+				 * new Date().getTime(), args ]); new
+				 * Date().getTime()指向a参数，args指向b参数
+				 */
+				wb.kisses[wb.kiss] = /*
+										 * a + ',' + wb.starttime + ',' +
+										 */errornum + ',' + allnum + ',' + kissPerc;
 
-					if (errornum > 0) {
-						wb.kissnode.addClass('fail_case');
-						// wb.kisses[kiss + '_error'] =
-						// window.frames[0].innerHTML;
+				if (errornum > 0) {
+					wb.kissnode.addClass('fail_case');
+					// wb.kisses[kiss + '_error'] =
+					// window.frames[0].innerHTML;
 				} else
 					wb.kissnode.addClass('pass_case');
 
 				if (wb.runnext
 						&& (!wb.breakOnError || parseInt(wb.kisses[wb.kiss]
 								.split(',')[0]) == 0)) {
-					var nextA = wb.kissnode[0].nextSibling;
+					var nextA = wb.kissnode.next()[0];
 					if (nextA.tagName == 'A') {
 						run(nextA.title, wb.runnext);
 					} else {
 						/* 隐藏执行区 */
-						// $('div#id_runningarea').toggle();
+						$('div#id_runningarea').toggle();
 						/**
 						 * 提取参数中的信息
 						 * 
@@ -94,18 +95,18 @@ function run(kiss, runnext) {
 						/**
 						 * 启动时间，结束时间，校验点失败数，校验点总数
 						 */
-						$.ajax( {
+						$.ajax({
 							url : 'record.php',
 							type : 'post',
 							data : wb.kisses,
 							success : function(msg) {
 								// $('#id_testlist').hide();
-							/* 展示报告区 */
-							$('#id_reportarea').show().html(msg);
-						},
-						error : function(xhr, msg) {
-							alert('fail' + msg);
-						}
+								/* 展示报告区 */
+								$('#id_reportarea').show().html(msg);
+							},
+							error : function(xhr, msg) {
+								alert('fail' + msg);
+							}
 						});
 					}
 				}
