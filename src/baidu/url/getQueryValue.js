@@ -27,7 +27,7 @@ baidu.url.getQueryValue = function (url, key) {
     var reg = new RegExp(
                         "(^|&|\\?|#)" 
                         + baidu.string.escapeReg(key) 
-                        + "=([^&]*)(&|\x24)", 
+                        + "=([^&#]*)(&|\x24|#)", 
                     "");
     var match = url.match(reg);
     if (match) {
