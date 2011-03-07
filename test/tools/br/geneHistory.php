@@ -10,5 +10,9 @@ function geneHistory($html){
 	$file_pointer = fopen($file_name, "w");
 	fwrite($file_pointer, $html);
 	fclose($file_pointer);
+	//提供一个供jenkens查看的报告链接
+	$handle = fopen("$path/index.html", "w");
+	fwrite($handle, $html);
+	fclose($handle);
 }
 ?>
