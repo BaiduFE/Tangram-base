@@ -74,11 +74,11 @@ baidu.lang.Class.prototype.addEventListener = function (type, handler, key) {
  */
 baidu.lang.Class.prototype.removeEventListener = function (type, handler) {
     if (typeof handler != "undefined") {
-         if (baidu.lang.isFunction(handler)) {
-             handler = handler.hashCode;
-         } else if (!baidu.lang.isString(handler)) {
-             return;
-         }
+        if (baidu.lang.isFunction(handler)) {
+            handler = handler.hashCode;
+        } else if (!baidu.lang.isString(handler)) {
+            return;
+        }
     }
 
     !this.__listeners && (this.__listeners = {});
@@ -89,11 +89,11 @@ baidu.lang.Class.prototype.removeEventListener = function (type, handler) {
     if (!t[type]) {
         return;
     }
-	if (typeof handler != "undefined") {
+    if (typeof handler != "undefined") {
         t[type][handler] && delete t[type][handler];
     } else {
         for(var guid in t[type]){
-             delete t[type][guid];
+            delete t[type][guid];
         }
     }
 };
