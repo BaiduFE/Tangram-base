@@ -177,8 +177,7 @@ class Kiss{
 			if(in_array($case, $caselist))
 			continue;
 			$name = str_replace('/','.',substr($case,0, -3));
-			$tag = '<a href="javascript:void(0)" class="jsframe_qunit">'
-				.substr($name, 6).'</a>';
+			$tag = "<a class=\"jsframe_qunit\" title=\"$name\">".(strlen($name)>20? substr($name, 6) : $name)."</a>";
 			array_push($srcList, $tag);
 			if($print)
 			echo $tag;
