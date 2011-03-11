@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="project" default="getreport" basedir="../">
+	<property name="report" value="test/tools/br/report" />
+	<property name="usr" value="bellcliff" />
+	<property name="test_project" value="Tangram-base" />
+	<target name="init">
+		<delete dir="${report}" />
+	</target>
+
+	<target name="execute" depends="init">
+		<get src="http://10.32.34.115:8000/
+			bellcliff/Tangram-base/test/tools/br/
+			runall.php?filter=baidu.array" dest="/tmp/${usr}_${test_project}.php" />
+	</target>
+	<target name="getreport" depends="execute">
+		<waitfor maxwait="5" maxwaitunit="second">
+			<available file="test/tools/br/report/chrome.xml" />
+		</waitfor>
+	</target>
+</project>
