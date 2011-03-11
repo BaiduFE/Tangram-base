@@ -8,9 +8,7 @@
 	</target>
 
 	<target name="execute" depends="init">
-		<get src="http://10.32.34.115:8000/
-			bellcliff/Tangram-base/test/tools/br/
-			runall.php?filter=baidu.array" dest="/tmp/${usr}_${test_project}.php" />
+		<get src="http://10.32.34.115:8000/bellcliff/Tangram-base/test/tools/br/runall.php?filter=baidu.array" dest="/tmp/${usr}_${test_project}.php" />
 	</target>
 	<target name="getreport" depends="execute">
 		<waitfor maxwait="5" maxwaitunit="second">
