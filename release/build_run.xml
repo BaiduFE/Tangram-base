@@ -1,14 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="project" default="getreport" basedir="../">
+<project name="project" default="execute" basedir="../">
+	<!-- 配置信息 10.32.34.115:8000-->
+	<property name="serverip" value="localhost" />
 	<property name="report" value="test/tools/br/report" />
-	<property name="usr" value="bellcliff" />
-	<property name="test_project" value="Tangram-base" />
+	<property name="git.project" value="Tangram-base" />
+	<property name="git.user" value="" />
+	<path id="ext.classpath">
+		<fileset dir="test/tools/lib">
+			<include name="**/*.jar" />
+		</fileset>
+	</path>
+
+	<!--为hudson做的扩展，用于支持多用户运行环境，会直接提取当前项目的父目录名称作为user-->
+	<taskdef name="gitext" classname="com.baidu.tangram.GitExt" classpathref="ext.classpath" />
+
 	<target name="init">
+		<gitext />
 		<delete dir="${report}" />
 	</target>
 
 	<target name="execute" depends="init">
-		<get src="http://10.32.34.115:8000/bellcliff/Tangram-base/test/tools/br/runall.php?filter=baidu.array" dest="/tmp/${usr}_${test_project}.php" />
+		<get src="http://${serverip}/${git.user}/${git.project}/test/tools/br/runall.php?browser=chrome" dest="/tmp/${git.user}_${git.project}.php" />
 	</target>
 	<target name="getreport" depends="execute">
 		<waitfor maxwait="5" maxwaitunit="second">
