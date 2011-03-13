@@ -8,9 +8,6 @@ test("Number对象", function(){
 	equals(baidu.lang.isNumber(new Number(1)), true, 'baidu.lang.isNumber(new Number(1)) is true');
 });
 
-test("NaN", function(){
-	equals(baidu.lang.isNumber(NaN), true, 'baidu.lang.isNumber(NaN) is true');
-});
 
 test("Object参数", function(){
 	equals(baidu.lang.isNumber({}), false, 'baidu.lang.isNumber({}) is true');
@@ -44,6 +41,10 @@ test("null参数", function(){
 
 test("undefined参数", function(){
 	equals(baidu.lang.isNumber(void(0)), false, 'baidu.lang.isNumber(void(0)) is false');
+});
+
+test("NaN", function(){
+	equals(baidu.lang.isNumber(NaN), false, 'baidu.lang.isNumber(NaN) is false');
 });
 
 
