@@ -38,79 +38,67 @@ function run(kiss, runnext) {
 	/**
 	 * 为当前用例绑定一个一次性事件
 	 */
-	$(wbkiss).one(
-			'done',
-			function(event, a, b, cov) {
-				clearTimeout(toh);
-				var wb = window.brtest, errornum = b[0], allnum = b[1];
-				var kissPerc;
-				if (!!cov)// 如果支持覆盖率
-					kissPerc = calCov(cov);
-				wb.kissnode.removeClass('running_case');
-				/*
-				 * ext_qunit.js的_d方法会触发done事件 top.$(wbkiss).trigger('done', [
-				 * new Date().getTime(), args ]); new
-				 * Date().getTime()指向a参数，args指向b参数
-				 */
-				wb.kisses[wb.kiss] = /*
-										 * a + ',' + wb.starttime + ',' +
-										 */errornum + ',' + allnum + ',' + kissPerc;
-
-				if (errornum > 0) {
-					wb.kissnode.addClass('fail_case');
-					// wb.kisses[kiss + '_error'] =
-					// window.frames[0].innerHTML;
-				} else
-					wb.kissnode.addClass('pass_case');
-
-				if (wb.runnext
-						&& (!wb.breakOnError || parseInt(wb.kisses[wb.kiss]
-								.split(',')[0]) == 0)) {
-					var nextA = wb.kissnode.next()[0];
-					if (nextA.tagName == 'A') {
-						run(nextA.title, wb.runnext);
-					} else {
-						/* 隐藏执行区 */
-						$('div#id_runningarea').toggle();
-						/**
-						 * 提取参数中的信息
-						 * 
-						 * @param param
-						 * @return
+	$(wbkiss)
+			.one(
+					'done',
+					function(event, a, b, cov) {
+						clearTimeout(toh);
+						var wb = window.brtest, errornum = b[0], allnum = b[1];
+						wb.kissend = new Date().getTime();
+						var kissPerc;
+						if (!!cov)// 如果支持覆盖率
+							kissPerc = calCov(cov);
+						wb.kissnode.removeClass('running_case');
+						/*
+						 * ext_qunit.js的_d方法会触发done事件
+						 * top.$(wbkiss).trigger('done', [ new Date().getTime(),
+						 * args ]); new Date().getTime()指向a参数，args指向b参数
 						 */
-						var br__search = function(param) {
-							var params = location.search.substring(1)
-									.split(',');
-							for ( var i = 0; i < params.length; i++) {
-								var p = params[i];
-								if (p.split('=')[0] == param)
-									return p.split('=')[1];
-							}
-							return '';
-						};
+						wb.kisses[wb.kiss] = errornum + ',' + allnum + ','
+								+ (kissPerc || 0) + ',' + wb.kissstart + ','
+								+ wb.kissend;
 
-						/* ending 提交数据到后台 */
-						var browser = br__search('browser');
-						wb.kisses['config'] = location.search.substring(1);
-						/**
-						 * 启动时间，结束时间，校验点失败数，校验点总数
-						 */
-						$.ajax({
-							url : 'record.php',
-							type : 'post',
-							data : wb.kisses,
-							success : function(msg) {
-								// $('#id_testlist').hide();
-								/* 展示报告区 */
-								$('#id_reportarea').show().html(msg);
-							},
-							error : function(xhr, msg) {
-								alert('fail' + msg);
+						if (errornum > 0) {
+							wb.kissnode.addClass('fail_case');
+							// wb.kisses[kiss + '_error'] =
+							// window.frames[0].innerHTML;
+						} else
+							wb.kissnode.addClass('pass_case');
+
+						if (wb.runnext
+								&& (!wb.breakOnError || parseInt(wb.kisses[wb.kiss]
+										.split(',')[0]) == 0)) {
+							var nextA = wb.kissnode.next()[0];
+							if (nextA.tagName == 'A') {
+								run(nextA.title, wb.runnext);
+							} else {
+								/* 隐藏执行区 */
+								$('div#id_runningarea').toggle();
+
+								/* ending 提交数据到后台 */
+								wb.kisses['config'] = location.search
+										.substring(1);
+								var url = /mail=true/.test(location.search) ? 'record.php'
+										: 'report.php';
+								/**
+								 * 启动时间，结束时间，校验点失败数，校验点总数
+								 */
+								$.ajax({
+									url : url,
+									type : 'post',
+									data : wb.kisses,
+									success : function(msg) {
+										// $('#id_testlist').hide();
+										/* 展示报告区 */
+										$('#id_reportarea').show().html(msg);
+									},
+									error : function(xhr, msg) {
+										alert('fail' + msg);
+									}
+								});
 							}
-						});
-					}
-				}
-			});
+						}
+					});
 	toh = setTimeout(tohf, wb.timeout);
 
 	/**
@@ -146,6 +134,7 @@ function run(kiss, runnext) {
 	$('div#id_runningarea').empty().css('display', 'block').append(
 			'<iframe id="' + fid + '" src="' + url
 					+ '" class="runningframe"></iframe>');
+	wb.kissstart = new Date().getTime();
 };
 
 function calCov(fileCC) {

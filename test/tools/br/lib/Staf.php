@@ -5,7 +5,7 @@ class Staf{
 	public static function handle($src, $cmd, $host='local'){
 		$_cmd = "staf $host $src $cmd";
 
-//		print $_cmd;
+		//print $_cmd;
 		exec($_cmd, $back);
 		return StafResult::parse($back);
 	}
