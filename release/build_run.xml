@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="project" default="execute" basedir="../">
 	<!-- 配置信息 10.32.34.115:8000-->
-	<property name="serverip" value="localhost" />
+	<property name="serverip" value="10.32.34.115:8000" />
 	<property name="report.path" value="test/tools/br/report" />
 	<property name="report.file" value="test/tools/br/report.xml" />
 	<property name="git.project" value="Tangram-base" />
