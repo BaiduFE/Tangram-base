@@ -69,12 +69,13 @@ $dom = new DOMDocument('1.0', 'utf-8');
 $testsuites = $dom->appendChild($dom->createElement('testsuites'));
 foreach (Config::$BROWSERS as $key=>$value){
 	$file = "report/$key.xml";
-	if(!file_exists($file))
-	continue;
+	if(!file_exists($file)){
+		return;
+	}
 	$xmlDoc = new DOMDocument('1.0', 'utf-8');
 	$xmlDoc->load($file);
 	$testsuite = $xmlDoc->documentElement;
-	$testsuites->appendChild($testsuite); 
+	$testsuites->appendChild($testsuite);
 }
 $dom->save("report.xml");
 ?>
