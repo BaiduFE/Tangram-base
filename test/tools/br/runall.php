@@ -20,8 +20,9 @@ function run($b, $release=false, $debug = false){
 	$path = $debug ? 'C:\\Users\\yangbo\\AppData\\Local\\Google\\Chrome\\Application\\chrome.exe' : $browser[1];
 
 	$url = "http://".$_SERVER['SERVER_ADDR'].($debug ? "" : ":8000")
-	.substr($_SERVER['PHP_SELF'], 0, -11)."/list.php?batchrun=true";
-	$url .= "^&browser=$b^&mail=true";
+	.substr($_SERVER['PHP_SELF'], 0, -11)."/list.php?batchrun=true^&browser=$b";
+	if(!array_key_exists("ci", $_GET))
+	$url .= "^&mail=true";
 
 	if($release)
 	$url .= "^&release=true";
