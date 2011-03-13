@@ -68,12 +68,14 @@ $testsuites = $dom->appendChild($dom->createElement('testsuites'));
 foreach (Config::$BROWSERS as $key=>$value){
 	$file = "report/$key.xml";
 	if(!file_exists($file)){
+		echo "wait for report : $file\r\n<br />";
 		return;
 	}
 	$xmlDoc = new DOMDocument('1.0', 'utf-8');
 	$xmlDoc->load($file);
-	$testsuite = $xmlDoc->documentElement;
-	$testsuites->appendChild($testsuite);
+	$xmlDom = $xmlDoc->documentElement;
+	echo $xmlDom->nodeName;
+	$testsuites->appendChild($dom->importNode($xmlDom, true));
 }
 $dom->save("report.xml");
 ?>
