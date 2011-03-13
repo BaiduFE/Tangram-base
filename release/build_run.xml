@@ -2,7 +2,8 @@
 <project name="project" default="execute" basedir="../">
 	<!-- 配置信息 10.32.34.115:8000-->
 	<property name="serverip" value="localhost" />
-	<property name="report" value="test/tools/br/report" />
+	<property name="report.path" value="test/tools/br/report" />
+	<property name="report.file" value="test/tools/br/report.xml" />
 	<property name="git.project" value="Tangram-base" />
 	<property name="git.user" value="" />
 	<path id="ext.classpath">
@@ -16,15 +17,16 @@
 
 	<target name="init">
 		<gitext />
-		<delete dir="${report}" />
+		<delete dir="${report.path}" />
+		<delete file="${report.file}" />
 	</target>
 
 	<target name="execute" depends="init">
-		<get src="http://${serverip}/${git.user}/${git.project}/test/tools/br/runall.php?browser=chrome" dest="/tmp/${git.user}_${git.project}.php" />
+		<get src="http://${serverip}/${git.user}/${git.project}/test/tools/br/runall.php" dest="/tmp/${git.user}_${git.project}.php" />
 	</target>
 	<target name="getreport" depends="execute">
-		<waitfor maxwait="5" maxwaitunit="second">
-			<available file="test/tools/br/report/chrome.xml" />
+		<waitfor maxwait="300" maxwaitunit="second">
+			<available file="${report.file}" />
 		</waitfor>
 	</target>
 </project>
