@@ -74,8 +74,10 @@ foreach (Config::$BROWSERS as $key=>$value){
 	$xmlDoc = new DOMDocument('1.0', 'utf-8');
 	$xmlDoc->load($file);
 	$xmlDom = $xmlDoc->documentElement;
-	echo $xmlDom->nodeName;
+	//echo $xmlDom->nodeName;
 	$testsuites->appendChild($dom->importNode($xmlDom, true));
 }
 $dom->save("report.xml");
+
+Config::StopAll();
 ?>
