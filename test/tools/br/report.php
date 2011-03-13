@@ -6,8 +6,6 @@ function report(){
 	 */
 	$dom = new DOMDocument('1.0', 'utf-8');
 	$suite = $dom->appendChild($dom->createElement('testsuite'));
-
-	require_once 'config.php';
 	$cfg = preg_split('/[&=]/', $_POST['config']);
 	$config = array();
 	for($i = 0; $i < sizeof($cfg); $i+=2){
