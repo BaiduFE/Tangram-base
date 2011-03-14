@@ -37,7 +37,7 @@ baidu.dom.addClass = function (element, className) {
 
     for (; i < l; i++){
          if ( classMatch.indexOf( " " + classArray[i] + " " ) < 0 ) {
-             result += ' ' + classArray[i];
+             result += (result ? ' ' : '') + classArray[i];
          }
     }
 
