@@ -15,8 +15,8 @@
 ///import baidu.lang.isString;
 
 /**
- * 自定义的事件对象。
- * @function
+ * 
+ * @class   自定义的事件对象。
  * @name 	baidu.lang.Event
  * @grammar baidu.lang.Event(type[, target])
  * @param 	{string} type	 事件类型名称。为了方便区分事件和一个普通的方法，事件类型名称必须以"on"(小写)开头。
