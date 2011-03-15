@@ -109,9 +109,7 @@ test('relatedTarget', function() {
 			'width', '100px').css('background-color', 'green');
 	function callback() {
 		ok(true, "mouseenter is trigged");// 应该只触发一次
-		console.log('1');
 	}
-	;
 	baidu.event.on(div1, "mouseenter", callback);
 	if (ua.browser.ie) {
 		ua.simulateMouseEvent(div1, 'mouseenter', 0, 0, window, 1, 0, 0, 0, 0,
