@@ -32,7 +32,7 @@ test('on and un', function() {
 	ua.importsrc('baidu.event.on,baidu.event.un', function() {
 		var me = baidu.event._eventFilter.mouseenter;
 		var type = 'mouseenter';
-		if (window.attachEvent) {
+		if (ua.browser.ie) {
 			equals(me, null, 'return null if ie');
 			start();
 			return;
