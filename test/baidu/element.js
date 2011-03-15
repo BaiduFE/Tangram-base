@@ -21,7 +21,7 @@ test('封装基础 - 输入字符串', function() {
 		var div = document.body.appendChild(document.createElement('div'));
 		div.id = 'aaa';
 		chainMe(baidu.element("aaa"));
-		equals(baidu.g('aaa').className, ' aaa', 'check class name');
+		equals(baidu.g('aaa').className, 'aaa', 'check class name');
 		equals(baidu.dom.query('.gaga').length, 0, 'check sub');
 		equals(baidu.dom.query('.berg').length, 1, 'check sub');
 		document.body.removeChild(div.nextSibling);
@@ -160,8 +160,7 @@ test('返回值是第一个参数的包装 draggable droppable', function() {
 	}, 30);
 	setTimeout(function() {
 		UserAction.mouseup(drag);
-		equal(drag.className, " berg", "check draggable extend function");
-//		equal(drop.className, " berg", "check droppable extend function");
+		equal(drag.className, "berg", "check draggable extend function");
 		equal(baidu.dom.getStyle(drag, 'left'), '50px', '');
 		equal(baidu.dom.getStyle(drag, 'top'), '50px');
 		document.body.removeChild(drag);
@@ -249,4 +248,10 @@ test('封装基础 - 构造函数', function(){
   deepEqual(b._dom, baidu.lang.toArray(childs), "passed test");
   
   document.body.removeChild(div);
+});
+test('漏测了关于event的封装', function(){
+    ok(baidu.e("*").on);
+    // 请QA补充下相关用例
+    ok(baidu.e("*").click);
+    ok(false);
 });
