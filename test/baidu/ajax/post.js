@@ -43,8 +43,10 @@ test("输入不存在url以及设定onsuccess事件", function() {
 		fail('success should not be call');
 	});
 	ua.delayhelper(function() {
-		return xhr.readState == 4 && xhr.responseText
+		try{
+		return xhr.responseText
 				&& xhr.responseText.length > 0;
+		}catch(e){alert(e);return false;};
 	}, function() {
 		ok(xhr.responseText.indexOf('404') >= 0, 'response text contain 404!');
 		start();
