@@ -1,13 +1,17 @@
 module("baidu.dom.getComputedStyle");
 
 test("get style from style", function() {
+	if (ua.browser.ie) {
+		ok(true, "IE not supportted");
+		return;
+	}
 	expect(7);
 	var div = document.createElement('div');
 	var img = document.createElement('img');
 	document.body.appendChild(div);
 	div.appendChild(img);
 	div.id = 'div_id';
-	div.style.cssFloat = div.style.float = 'left';//opera下cssFloat生效
+	div.style.cssFloat = div.style.float = 'left';// opera下cssFloat生效
 	div.style.width = '100px';
 	div.style.height = '150px';
 	div.style.background = "#FFCC80";
@@ -30,6 +34,10 @@ test("get style from style", function() {
 
 /** css加载也需要时间 * */
 test("get style from css file", function() {
+	if (ua.browser.ie) {
+		ok(true, "IE not supportted");
+		return;
+	}
 	expect(9);
 	stop();
 	var div = document.createElement('div');
@@ -69,6 +77,10 @@ test("get style from css file", function() {
 });
 
 test("get style from fixer", function() {
+	if (ua.browser.ie) {
+		ok(true, "IE not supportted");
+		return;
+	}
 	stop();
 	ua.importsrc('baidu.dom._styleFixer.opacity', function() {
 		var div = document.createElement('div');
