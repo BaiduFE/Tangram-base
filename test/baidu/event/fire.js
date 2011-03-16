@@ -151,7 +151,7 @@ module('baidu.event.fire');
 			callback : function() {
                 ok(true,"from div move to div1");
 			}	
-		}
+		};
 		baidu.event.fire(div, "mouseout",options);
 
 	});
