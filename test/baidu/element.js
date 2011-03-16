@@ -105,7 +105,7 @@ test('function list', function() {
 			if (p && typeof p == 'function')
 				count++;
 			else {
-				if ('ready drag ddManager create resizable'.indexOf(f) >= 0)
+				if ('ready drag ddManager create resizable getComputedStyle'.indexOf(f) >= 0)
 					continue;
 				ok(false, '[' + f + '] not in function list');
 			}
