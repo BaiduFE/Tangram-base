@@ -67,6 +67,12 @@ test("异常case", function(){
 	equals(baidu.string.subByte(undefstr, 5), "undef"); // undefined is 9 characters
 });
 
+test("尾部追加字符串功能", function(){
+	var str1 = "appending";
+	equals(baidu.string.subByte(str1, 6, '...'), "append...");
+	equals(baidu.string.subByte(str1, 100, '...'), "appending..."); // undefined is 9 characters
+});
+
 
 ////subByte的测试
 //describe("baidu.String.subByte测试",{

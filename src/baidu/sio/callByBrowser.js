@@ -48,6 +48,7 @@ baidu.sio.callByBrowser = function (url, opt_callback, opt_options) {
             try {
                 callback();
             } finally {
+                scr.onload = scr.onreadystatechange = null;
                 baidu.sio._removeScriptTag(scr);
             }
         }
