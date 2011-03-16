@@ -8,8 +8,7 @@
 ///import baidu.browser.ie;
 
 /**
- * 获取目标元素的computed style值
- * 如果元素的样式值不能被浏览器计算，则会返回空字符串（IE）
+ * 获取目标元素的computed style值。如果元素的样式值不能被浏览器计算，则会返回空字符串（IE）
  *
  * @author berg
  * @name baidu.dom.getComputedStyle

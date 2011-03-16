@@ -12,11 +12,7 @@
 ///import baidu.browser.ie;
 
 /**
- * 按照border-box模型设置元素的height和width值
- * 只支持元素的padding/border/height/width使用同一种计量单位的情况。
- * 不支持：
- * 1. 非数字值(medium)
- * 2. em/px在不同的属性中混用
+* 按照border-box模型设置元素的height和width值。只支持元素的padding/border/height/width使用同一种计量单位的情况。<br/> 不支持：<br/> 1. 非数字值(medium)<br/> 2. em/px在不同的属性中混用
  * @name baidu.dom.setBorderBoxSize
  * @author berg
  * @function
