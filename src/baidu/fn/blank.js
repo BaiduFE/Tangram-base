@@ -11,6 +11,7 @@
  * @name baidu.fn.blank
  * @function
  * @grammar baidu.fn.blank()
+ * @meta standard
  * @version 1.3.3
  */
 baidu.fn.blank = function () {};

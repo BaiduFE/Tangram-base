@@ -18,6 +18,7 @@
  * @param {Array} source 需要移除项的数组
  * @param {number} index 要移除项的索引位置
  * @see baidu.array.remove
+ * @meta standard
  * @returns {Any} 被移除的数组项
  */
 baidu.array.removeAt = function (source, index) {

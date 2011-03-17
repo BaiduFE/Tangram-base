@@ -16,6 +16,7 @@
  * @function
  * @grammar baidu.event.preventDefault(event)
  * @param {Event} event 事件对象
+ * @meta standard
  * @see baidu.event.stop,baidu.event.stopPropagation
  */
 baidu.event.preventDefault = function (event) {

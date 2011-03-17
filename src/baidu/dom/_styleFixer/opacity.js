@@ -13,6 +13,7 @@
 
 /**
  * 提供给setStyle与getStyle使用
+ * @meta standard
  */
 baidu.dom._styleFixer.opacity = baidu.browser.ie ? {
     get: function (element) {

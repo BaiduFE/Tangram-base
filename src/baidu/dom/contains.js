@@ -17,6 +17,7 @@
  * @grammar baidu.dom.contains(container, contained)
  * @param {HTMLElement|string} container 包含元素或元素的id
  * @param {HTMLElement|string} contained 被包含元素或元素的id
+ * @meta standard
  * @see baidu.dom.intersect
  *             
  * @returns {boolean} contained元素是否被包含于container元素的DOM节点上

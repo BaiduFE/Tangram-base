@@ -14,33 +14,25 @@
  * 查询数组中指定元素的索引位置
  * @name baidu.array.indexOf
  * @function
- * @grammar baidu.array.indexOf(source, condition[, position])
+ * @grammar baidu.array.indexOf(source, match[, fromIndex])
  * @param {Array} source 需要查询的数组
- * @param {Any|Function} condition 查询项或查询函数，查询函数有两个参数，第一个参数为数组元素，第二个参数为数组索引值，function (item, position)。
- * @param {number} [position] 查询的起始位索引位置
+ * @param {Any|Function} match 查询项
+ * @param {number} [fromIndex] 查询的起始位索引位置，如果为负数，则从source.length+fromIndex往后开始查找
  * @see baidu.array.find,baidu.array.lastIndexOf
  *             
  * @returns {number} 指定元素的索引位置，查询不到时返回-1
  */
-baidu.array.indexOf = function (source, condition, position) {
+baidu.array.indexOf = function (source, match, fromIndex) {
     var len = source.length,
-        iterator = condition;
+        iterator = match;
         
-    // 参考ecma262的String.prototype.indexOf实现
-    // 为undefined时归0，否则进行ToInteger(参见ecma262 3rd 9.4)
-    position = Number(position) || 0;
-    position = position < 0 ? Math.ceil(position) : Math.floor(position); 
-    position = Math.min(Math.max(position, 0), len);
-    
-    if ('function' != typeof condition) {
-        iterator = function (item) {
-            return condition === item;
-        };
+    fromIndex = fromIndex | 0;
+    if(fromIndex < 0){//小于0
+        fromIndex = Math.max(0, len + fromIndex)
     }
-    
-    for ( ; position < len; position++) {
-        if (true === iterator.call(source, source[position], position)) {
-            return position;
+    for ( ; fromIndex < len; fromIndex++) {
+        if(fromIndex in source && source[fromIndex] === match) {
+            return fromIndex;
         }
     }
     

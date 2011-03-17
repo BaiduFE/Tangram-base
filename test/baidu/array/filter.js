@@ -11,6 +11,15 @@ test("返回数组不为空",function(){
 	}
 })
 
+test("测试this指针",function(){
+
+	var aArray = [1,2,3], thisObject = {a:'b'};
+	baidu.array.filter(aArray, function(iVal, iIndex){  equal(this.a, 'b', '传了this指针的情况')}, thisObject);
+
+	var aArray = [1,2,3];
+	baidu.array.filter(aArray, function(iVal, iIndex){  equal(this[0], 1, '没传this指针的情况')});
+});
+
 test("返回空数组",function(){
 	{
 		expect(1);

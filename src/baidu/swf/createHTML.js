@@ -43,7 +43,7 @@
  * @param {Object} 	options.vars 				要传递给flash的参数，支持JSON或string类型。
  * 
  * @see baidu.swf.create
- *             
+ * @meta standard
  * @returns {string} flash对象的html字符串
  */
 baidu.swf.createHTML = function (options) {
