@@ -51,6 +51,12 @@ test("输入为null", function(){
 	equals(s, null);
 }); // 4
 
+test("json前面有换行", function(){
+	var n = "\r{a:'b'}";
+	var s = baidu.json.parse(n);
+	equals(s.a, 'b');
+}); // 4
+
 //test("输入为undefined", function(){
 //	var n = "undefined";
 //	var s = baidu.json.parse(n);
