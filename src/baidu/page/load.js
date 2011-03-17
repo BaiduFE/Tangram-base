@@ -12,6 +12,8 @@
 ///import baidu.page;
 ///import baidu.array.each;
 ///import baidu.ajax.get;
+///import baidu.event.on;
+///import baidu.event.un;
 
 /**
  * 
@@ -72,6 +74,7 @@ baidu.page.load = function(resources, options){
 	options = options || {};
 	var self = baidu.page.load,
 		cache = self._cache = self._cache || {},
+		loadingCache = self._loadingCache = self._loadingCache || {},
 		parallel = options.parallel;
 	
 	function allLoadedChecker(){
@@ -84,7 +87,7 @@ baidu.page.load = function(resources, options){
 	};
 	
 	function loadByDom(res, callback){
-		var node, loaded;
+		var node, loaded, onready;
 		switch (res.type) {
 			case "css" :
 				node = document.createElement("link");
@@ -94,7 +97,7 @@ baidu.page.load = function(resources, options){
 			case "js" :
 				node = document.createElement("script");
 				node.setAttribute('type', 'text/javascript');
-				node.charset = res.charset || 'UTF8';
+				node.setAttribute('charset',res.charset || 'UTF8');
 				break;
 			case "html" :
 				node = document.createElement("iframe");
@@ -103,16 +106,21 @@ baidu.page.load = function(resources, options){
 			default :
 				return;
 		};
+
     	// HTML,JS works on all browsers, CSS works only on IE.
-		node.onload = node.onreadystatechange = function() {
+		onready = function() {
 			if ( !loaded && (!this.readyState ||
 					this.readyState === "loaded" || this.readyState === "complete") ) {
 				loaded = true;
 				// 防止内存泄露
-				node.onload = node.onreadystatechange = null;
+				baidu.un(node, 'load', onready);
+				baidu.un(node, 'readystatechange', onready);
+				//node.onload = node.onreadystatechange = null;
 				callback.call(window, node);
 			}
 		};
+		baidu.on(node, 'load', onready);
+		baidu.on(node, 'readystatechange', onready);
 		//CSS has no onload event on firefox and webkit platform, so hack it.
 		if(res.type == 'css'){
 			(function(){
@@ -130,7 +138,7 @@ baidu.page.load = function(resources, options){
 		}
 		
 		node.href = node.src = res.url;
-		document.body.appendChild(node);
+		document.getElementsByTagName('head')[0].appendChild(node);
 	}
 	
 	//兼容第一个参数直接是资源地址.
@@ -139,7 +147,7 @@ baidu.page.load = function(resources, options){
 	//避免递归出错,添加容错.
 	if(! (resources && resources.length)) return;
 	
-	baidu.each(resources,function(res){
+	function loadResources(res){
 		var url = res.url,
 			shouldContinue = !!parallel,
 			cacheData,
@@ -147,10 +155,11 @@ baidu.page.load = function(resources, options){
 				var next;
 				//ajax存入responseText,dom存入节点,用于保证onload的正确执行.
 				cache[res.url] = textOrNode;
+				delete loadingCache[res.url];
 				typeof res.onload == 'function' && (next = res.onload.call(window,textOrNode));
 				if(next === false) return;
-				//串行时递归执行,options在递归的时候,现有的两个可选参数都不需要,所以不传第二个参数.
-				!parallel && self(resources.slice(1));
+				//串行时递归执行
+				!parallel && self(resources.slice(1), options);
 				typeof options.onload == 'function' && allLoadedChecker();
 			};
 		//默认用后缀名, 并防止后缀名大写
@@ -162,7 +171,12 @@ baidu.page.load = function(resources, options){
 			callback.call(window, cacheData);
 			return shouldContinue;
 		}
-		
+		if(!options.refresh && loadingCache[res.url]){
+			//var thisFn = arguments.callee;
+			setTimeout(function(){loadResources(res);}, 10);
+			return shouldContinue;
+		}
+		loadingCache[res.url] = true;
 		if(res.requestType.toLowerCase() == "dom"){
 			loadByDom(res, callback);
 		}else{//ajax
@@ -170,5 +184,7 @@ baidu.page.load = function(resources, options){
 		}
 		//串行模式,通过callback方法执行后续
 		return shouldContinue;
-	});
+	};
+
+	baidu.each(resources, loadResources);
 };
