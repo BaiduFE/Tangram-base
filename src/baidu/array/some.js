@@ -12,15 +12,15 @@
  * @grammar baidu.array.some(source, iterator)
  * @param {Array} source 需要判断的数组.
  * @param {Function} iterator 判断函数.
+ * @param {Object} [thisObject] 函数调用时的this指针，如果没有此参数，默认是当前遍历的数组
  * @return {boolean} 判断结果.
  * @see baidu.array.every
- * @author berg
  */
-baidu.array.some = function(source, iterator) {
+baidu.array.some = function(source, iterator, thisObject) {
     var i = 0,
         len = source.length;
     for (; i < len; i++) {
-        if (iterator.call(source, source[i], i)) {
+        if (i in source && iterator.call(thisObject || source, source[i], i)) {
             return true;
         }
     }
