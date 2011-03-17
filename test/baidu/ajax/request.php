@@ -3,7 +3,6 @@
  * check get or post
  *
  */
-
 if($_SERVER['REQUEST_METHOD'] == 'GET'){
 	if(array_key_exists('type',$_GET)){
 		$type = $_GET['type'];
@@ -24,11 +23,11 @@ if($_SERVER['REQUEST_METHOD'] == 'GET'){
 					header("Location:notexist.php");
 					break;
 				case 500:
-				    echo $status;
+					echo $status;
 					header("HTTP/1.1 500 Internal Server Error");
 					break;
 				default:
-					
+
 					break;
 			}
 		}
