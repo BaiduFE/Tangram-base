@@ -14,6 +14,7 @@
  * 验证字符串是否合法的cookie键名
  * 
  * @param {string} source 需要遍历的数组
+ * @meta standard
  * @return {boolean} 是否合法的cookie键名
  */
 baidu.cookie._isValidKey = function (key) {

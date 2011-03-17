@@ -17,7 +17,7 @@
  * @grammar baidu.dom.next(element)
  * @param {HTMLElement|string} element 目标元素或目标元素的id
  * @see baidu.dom.first,baidu.dom.last,baidu.dom.prev
- *             
+ * @meta standard
  * @returns {HTMLElement|null} 目标元素的下一个兄弟元素节点，查找不到时返回null
  */
 baidu.dom.next = function (element) {

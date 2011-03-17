@@ -16,7 +16,7 @@
  * @function
  * @grammar baidu.page.getViewHeight()
  * @see baidu.page.getViewWidth
- *             
+ * @meta standard
  * @returns {number} 页面视觉区域高度
  */
 baidu.page.getViewHeight = function () {

@@ -12,6 +12,7 @@
 
 /**
  * 提供给setStyle与getStyle使用
+ * @meta standard
  */
 baidu.dom._styleFilter[baidu.dom._styleFilter.length] = {
     set: function (key, value) {

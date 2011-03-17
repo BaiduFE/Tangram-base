@@ -16,7 +16,7 @@
  * @function
  * @grammar baidu.page.getWidth()
  * @see baidu.page.getHeight
- *             
+ * @meta standard
  * @returns {number} 页面宽度
  */
 baidu.page.getWidth = function () {
