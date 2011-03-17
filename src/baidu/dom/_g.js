@@ -16,6 +16,7 @@
  * **内部方法**
  * 
  * @param {string|HTMLElement} id 元素的id或DOM元素
+ * @meta standard
  * @return {HTMLElement} DOM元素，如果不存在，返回null，如果参数不合法，直接返回参数
  */
 baidu.dom._g = function (id) {

@@ -23,6 +23,7 @@
  * @remark
  * 1、与callByServer不同，callback参数只支持Function类型，不支持string。
  * 2、如果请求了一个不存在的页面，onsuccess函数也可能被调用（在IE/opera下），因此使用者需要在onsuccess函数中判断数据是否正确加载。
+ * @meta standard
  * @see baidu.sio.callByServer
  */
 baidu.sio.callByBrowser = function (url, opt_callback, opt_options) {

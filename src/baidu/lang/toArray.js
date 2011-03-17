@@ -19,7 +19,7 @@
  * @grammar baidu.lang.toArray(source)
  * @param {mix} source 需要转换成array的变量
  * @version 1.3
- *             
+ * @meta standard
  * @returns {array} 转换后的array
  */
 baidu.lang.toArray = function (source) {
