@@ -16,7 +16,7 @@
  * @function
  * @grammar baidu.event.getTarget(event)
  * @param {Event} event 事件对象
- *             
+ * @meta standard
  * @returns {HTMLElement} 事件的触发元素
  */
  

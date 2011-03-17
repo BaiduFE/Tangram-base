@@ -13,5 +13,6 @@
 /**
  * 事件监听器的存储表
  * @private
+ * @meta standard
  */
 baidu.event._listeners = baidu.event._listeners || [];

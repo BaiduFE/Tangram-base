@@ -23,6 +23,7 @@
  * @param 	{Object} [target]触发事件的对象
  * @meta standard
  * @remark 引入该模块，会自动为Class引入3个事件扩展方法：addEventListener、removeEventListener和dispatchEvent。
+ * @meta standard
  * @see baidu.lang.Class
  */
 baidu.lang.Event = function (type, target) {

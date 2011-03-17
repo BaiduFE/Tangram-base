@@ -85,7 +85,7 @@ module('baidu.event.fire');
 		var hList = [ 'abort', 'blur', 'change', 'focus', 'error','load','reset', 'select',
 				 'scroll', 'submit' ];
 		var wList = [ 'scroll', 'resize', 'reset', 'submit', 'change',
-				'select', 'error', 'abort', 'unload' ];
+				'select', 'error', 'abort', 'unload' ];//opera下，只有scroll、resize、error、unload能派发
 		for ( var e in eList) {
 			check(eList[e]);
 		}
@@ -103,7 +103,7 @@ module('baidu.event.fire');
 					obj : window
 				});
 			}
-			expect(eList.length + hList.length + wList.length);
+			expect(eList.length + hList.length + wList.length + (ua.browser.opera ? -5 : 0));
 		} else{
 			for ( var e in hList) {
 				if(hList[e]!='load'&&hList[e]!='unload'){
@@ -151,7 +151,7 @@ module('baidu.event.fire');
 			callback : function() {
                 ok(true,"from div move to div1");
 			}	
-		}
+		};
 		baidu.event.fire(div, "mouseout",options);
 
 	});

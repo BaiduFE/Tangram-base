@@ -16,7 +16,7 @@
  * @function
  * @grammar baidu.page.getScrollTop()
  * @see baidu.page.getScrollLeft
- *             
+ * @meta standard
  * @returns {number} 纵向滚动量
  */
 baidu.page.getScrollTop = function () {

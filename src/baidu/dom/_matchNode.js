@@ -17,6 +17,7 @@
  * @param {HTMLElement|string} element   目标元素或目标元素的id
  * @param {string}             direction 遍历的方向名称，取值为previousSibling,nextSibling
  * @param {string}             start     遍历的开始位置，取值为firstChild,lastChild,previousSibling,nextSibling
+ * @meta standard
  * @return {HTMLElement} 搜索到的元素，如果没有找到，返回 null
  */
 baidu.dom._matchNode = function (element, direction, start) {

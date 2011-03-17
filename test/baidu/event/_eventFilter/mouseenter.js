@@ -27,13 +27,13 @@ module('baidu.event._eventFilter.mouseenter');
  * 
  * 对于其他类型的事件来说，这个属性没有用。
  */
-test('on and un', function() {
+test('on and un', function() {	
 	stop();
 	ua.importsrc('baidu.event.on,baidu.event.un', function() {
 		var me = baidu.event._eventFilter.mouseenter;
 		var type = 'mouseenter';
-		if (window.attachEvent) {
-			equals(me, null, 'return null if ie');
+		if (ua.browser.ie || ua.browser.opera) {
+			equals(me, null, 'return null if ie or opera');
 			start();
 			return;
 		}
@@ -109,11 +109,9 @@ test('relatedTarget', function() {
 			'width', '100px').css('background-color', 'green');
 	function callback() {
 		ok(true, "mouseenter is trigged");// 应该只触发一次
-		console.log('1');
 	}
-	;
 	baidu.event.on(div1, "mouseenter", callback);
-	if (ua.browser.ie) {
+	if (ua.browser.ie || ua.browser.opera) {
 		ua.simulateMouseEvent(div1, 'mouseenter', 0, 0, window, 1, 0, 0, 0, 0,
 				false, false, false, false, 0, div);
 	} else {

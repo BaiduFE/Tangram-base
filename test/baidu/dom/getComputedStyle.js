@@ -1,13 +1,17 @@
 module("baidu.dom.getComputedStyle");
 
 test("get style from style", function() {
+	if (ua.browser.ie) {
+		ok(true, "IE not supportted");
+		return;
+	}
 	expect(7);
 	var div = document.createElement('div');
 	var img = document.createElement('img');
 	document.body.appendChild(div);
 	div.appendChild(img);
 	div.id = 'div_id';
-	div.style.float = 'left';
+	div.style.cssFloat = div.style.float = 'left';// opera下cssFloat生效
 	div.style.width = '100px';
 	div.style.height = '150px';
 	div.style.background = "#FFCC80";
@@ -19,7 +23,8 @@ test("get style from style", function() {
 	equal(baidu.dom.getComputedStyle(div, 'width'), '100px');
 	equal(baidu.dom.getComputedStyle(div, 'height'), '150px');
 	var color = baidu.dom.getComputedStyle(div, 'color').toLowerCase();
-	ok(color == '#ff0000' || color == 'red' || (/rgb\(255,\s?0,\s?0\)/.test(color)), 'color red');
+	ok(color == '#ff0000' || color == 'red'
+			|| (/rgb\(255,\s?0,\s?0\)/.test(color)), 'color red');
 	equal(baidu.dom.getComputedStyle(img, 'display'), 'block');
 	equal(baidu.dom.getComputedStyle(img, 'width'), '10px');
 	equal(baidu.dom.getComputedStyle(img, 'height'), '15px');
@@ -29,6 +34,10 @@ test("get style from style", function() {
 
 /** css加载也需要时间 * */
 test("get style from css file", function() {
+	if (ua.browser.ie) {
+		ok(true, "IE not supportted");
+		return;
+	}
 	expect(9);
 	stop();
 	var div = document.createElement('div');
@@ -38,20 +47,15 @@ test("get style from css file", function() {
 	var link = document.createElement('link');
 	document.body.appendChild(div);
 	document.body.appendChild(div1);
-	var head = document.getElementsByTagName("head").item(0);
+
 	div.appendChild(p);
 	div.appendChild(img);
-	$(link).attr('href', upath + 'style.css');
-	$(link).attr('type', 'text/css');
-	$(link).attr('rel', 'stylesheet');
-	$(link).attr('media', 'screen');
 	$(div).attr('className', "content");
 	$(div1).attr('className', 'content');
 	$(img).attr('className', 'content');
 	$(p).attr('className', 'pid');
-	head.appendChild(link);
 
-	var handle = setTimeout(function() {
+	ua.loadcss(upath + 'style.css', function() {
 		/** IE的float属性叫styleFloat，firefox则是cssFloat * */
 		equal(baidu.dom.getComputedStyle(div, 'float'), 'left');
 		equal(baidu.dom.getComputedStyle(div, 'width'), '200px');
@@ -69,11 +73,14 @@ test("get style from css file", function() {
 		document.body.removeChild(div);
 		document.body.removeChild(div1);
 		start();
-	}, 100);
-
+	}, "pid", "font-size", "14px");
 });
 
 test("get style from fixer", function() {
+	if (ua.browser.ie) {
+		ok(true, "IE not supportted");
+		return;
+	}
 	stop();
 	ua.importsrc('baidu.dom._styleFixer.opacity', function() {
 		var div = document.createElement('div');
