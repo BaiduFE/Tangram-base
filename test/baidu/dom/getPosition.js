@@ -18,28 +18,27 @@ function go(/* Integer */left, /* Integer */top, /* Function */
 run, /* Boolean */abs) {
 	/* 提供调试模式，调试模式下添加的iframe不会删除 */
 	var debug = true;
-	ua
-			.frameExt({
-				ontest : function(w) {
-					var p = run(w.document) || w.document.body, div = abs ? p
-							: p.appendChild(w.document.createElement('div')), pos = w.baidu.dom
-							.getPosition(div);
-					w.$(div).css('width', 20).css('height', 20).css(
-							'backgroundColor', '#ABC');
-					equals(pos.left, left, 'check left');
-					equals(pos.top, top, 'check top');
-					if (debug) {//追加一个用于调试定位的div，该div位置为absolute
-						var d1 = w.document.body.appendChild(w.document
-								.createElement('div'));
-						w.$(d1).css('position', 'absolute').css('left', 0).css(
-								'top', 0).css('height', 10).css('width', 10)
-								.css('backgroundColor', 'red');
-					//	console.log(w.baidu.dom.getPosition(d1).left);
-					}					
-					this.finish();
-				},
-				id : debug ? fid++ : 'f'
-			});
+	ua.frameExt({
+		ontest : function(w) {
+			var p = run(w.document) || w.document.body;
+			var div = abs ? p : p.appendChild(w.document.createElement('div'));
+			var pos = w.baidu.dom.getPosition(div);
+			w.$(div).css('width', 20).css('height', 20).css('backgroundColor',
+					'#ABC');
+			equals(pos.left, left, 'check left');
+			equals(pos.top, top, 'check top');
+			if (debug) {
+				// 追加一个用于调试定位的div，该div位置为absolute
+				var d1 = w.document.body.appendChild(w.document
+						.createElement('div'));
+				w.$(d1).css('position', 'absolute').css('left', 0)
+						.css('top', 0).css('height', 10).css('width', 10).css(
+								'backgroundColor', 'red');
+			}
+			this.finish();
+		},
+		id : debug ? fid++ : 'f'
+	});
 };
 
 /**

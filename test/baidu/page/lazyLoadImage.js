@@ -1,15 +1,18 @@
 module("baidu.page.lazyLoadImage");
 
 test("base", function() {
-	if(ua.browser.ie){
-		ok(true, "IE下不干活……");
-	};
+//	if(ua.browser.ie){
+//		ok(true, "IE下不干活……");
+//		return;
+//	};
 	expect(4);
+	
 	var iframe = document.createElement('iframe');
 	document.body.appendChild(iframe);
 	$(iframe).css('height', 200).css('width', 200);
 	stop();
 	iframe.src = upath + 'lli.php';
+	
 	setTimeout(function() {
 		equals(frames[0].document.getElementById("test_img").src, "",
 				"图片链接被替换为空");
