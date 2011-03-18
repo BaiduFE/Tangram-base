@@ -13,7 +13,7 @@ test("default async and get", function() {
 
 test("async get", function() {
 	baidu.ajax.request(ajax_request_baseurl, {
-			onsuccess : function(xhr) {
+		onsuccess : function(xhr) {
 			equals(xhr.responseText, "Hello World!", "xhr return");
 			start();
 		},
@@ -105,7 +105,7 @@ test("no cache async", function() {
 test("cache sync", function() {
 	stop();
 	baidu.ajax.request(ajax_request_baseurl + "?type=cache", {
-		method :'get',
+		method : 'get',
 		noCache : false,
 		onsuccess : function(xhr, text) {
 			equals(text, "dog");
@@ -133,7 +133,7 @@ test('on', function() {
 			ok(true, 'on' + status);
 		};
 	};
-	 200 
+	// 200
 	baidu.ajax.request(ajax_request_baseurl + "?type=on&status=200", {
 		onsuccess : function(xhr, text) {
 			equals(xhr.status, 200);
@@ -142,7 +142,7 @@ test('on', function() {
 		async : false
 	});
 
-	 320 
+	// 320
 	baidu.ajax.request(ajax_request_baseurl + "?type=on&status=320", {
 		onsuccess : function(xhr, text) {
 			equals(xhr.status, 200);
@@ -151,7 +151,7 @@ test('on', function() {
 		async : false
 	});
 
-	 404 
+	// 404
 	baidu.ajax.request(ajax_request_baseurl + "?type=on&status=404", {
 		onfailure : function(xhr, text) {
 			equals(xhr.status, 404);
@@ -160,7 +160,7 @@ test('on', function() {
 		async : false
 	});
 
-	 500 
+	// 500
 	baidu.ajax.request(ajax_request_baseurl + "?type=on&status=500", {
 		onfailure : function(xhr, text) {
 			equals(xhr.status, 500);
@@ -168,20 +168,22 @@ test('on', function() {
 		on500 : onhandle(500),
 		async : false
 	});
-	
 });
 
 test("test beforerequest by user created ", function() {
-    
-	baidu.ajax.onbeforerequest = function(xhr){
-		ok(true,'beforerequest handled');
-	},
+	baidu.ajax.onbeforerequest = function(xhr, text) {
+		ok(true, 'beforerequest handled');
+		equals(text, undefined, 'text is undefined before request');
+	};
 	baidu.ajax.request(ajax_request_baseurl, {
+		method : 'get',
+		noCache : 123,
 		onsuccess : function(xhr) {
 			equals(xhr.responseText, "Hello World!", "xhr return");
-			start();
-		}
+		},
+		onfailure : function(){
+			ok(false, '貌似是个404');
+		},
+		async : false
 	});
-	stop();
 });
-
