@@ -50,6 +50,10 @@ test("输入不存在url以及设定onsuccess事件", function() {
 	});
 });
 
+test('测试失败处理情况',function(){
+	ok(false,'baidu.ajax.onfailure');
+});
+
 //参数错误引发的服务器端异常，设计用例无意义
 //test("输入正确url以及错误data，设定onsuccess事件", function() {
 //	stop();
