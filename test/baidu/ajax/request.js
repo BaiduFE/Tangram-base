@@ -181,9 +181,31 @@ test("test beforerequest by user created ", function() {
 		onsuccess : function(xhr) {
 			equals(xhr.responseText, "Hello World!", "xhr return");
 		},
-		onfailure : function(){
+		onfailure : function() {
 			ok(false, '貌似是个404');
 		},
 		async : false
+	});
+});
+
+/**
+ * 之前的校验方式采用超时，更新为使用全局的失败函数，貌似重复注册会有覆盖情况，暂不考虑
+ */
+test("输入不存在url以及设定onsuccess事件", function() {
+	stop();
+	var urlstring = upath + "notexsistpage.php";
+	var arg = "var1=baidu&var2=tangram";
+	// 注册一个全局fail
+	baidu.ajax.onfailure = function() {
+		// 这是个全局函数，实际上，post本身并不提供这个接口，而，全局返回失败时
+		ok(true, '失败时应该调用这个函数');
+		start();
+	};
+	var xhr = baidu.ajax.request(urlstring, {
+		'onsuccess' : function() {
+			failure('调到这个函数就是bug');
+		},
+		'method' : 'POST',
+		'data' : arg
 	});
 });
