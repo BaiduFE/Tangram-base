@@ -34,6 +34,7 @@ test('charset gbk', function() {
 
 /**
  * 由于不存在网页不会触发回调，设置半秒超时，用例可能会有问题……
+ * FIXME:to QA:用例有啥问题？
  */
 test('js not exist', function() {
 	stop();
@@ -43,6 +44,29 @@ test('js not exist', function() {
 		start();
 	};
 	baidu.sio.callByBrowser("notexist.js", check1);
+	h = setTimeout(function() {
+		ok(true, 'call back not call');
+		start();
+	}, 500);
+});
+
+
+test('page not exist with timeOut', function() {
+    if($.browser.msie || $.browser.opera) expect(1);
+    else expect(2);
+
+	stop();
+	var h, check1 = function() {
+		clearTimeout(h);		
+		ok($.browser.msie || false, 'call back will not call');
+		start();
+	};
+	baidu.sio.callByBrowser("notexist.js", check1, {
+        timeOut : 200,
+        onfailure : function(){
+            ok(true, 'onfailure will call @ !IE && !opera');
+        }
+    });
 	h = setTimeout(function() {
 		ok(true, 'call back not call');
 		start();
