@@ -65,6 +65,7 @@ class Analysis{
 	static function get_src_cnt($domain){
 		new Analysis();
 		if(!array_key_exists($domain, self::$_cache)){
+			$cnt = '';
 			$path = join('/', explode('.', $domain)).'.js';
 			//文件在当前项目存在则取当前项目，否则取tangram项目
 			if(self::$DEBUG)var_dump(self::$projpath);
@@ -76,7 +77,7 @@ class Analysis{
 					break;
 				}
 			}
-			if($cnt == null){
+			if($cnt == ''){
 				if(self::$DEBUG)
 				print "fail read file : ".$path;
 				return '';
