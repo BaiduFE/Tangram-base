@@ -88,12 +88,12 @@ class Kiss{
 	}
 
 	public function print_js($cov=false, $release=false){
-		print '<script type="text/javascript" src="js/jquery-1.3.2.js"></script>'."\n";
-		print '<script type="text/javascript" src="js/testrunner.js"></script>'."\n";
+		print '<script type="text/javascript" src="js/jquery-1.5.1.js"></script>'."\n";
+		print '<script type="text/javascript" src="js/qunit.js"></script>'."\n";
 		print '<script type="text/javascript" src="js/ext_qunit.js"></script>'."\n";
 		print '<script type="text/javascript" src="js/UserAction.js"></script>'."\n";
 
-		print '<link media="screen" href="css/testsuite.css" type="text/css" rel="stylesheet" />'."\n";
+		print '<link media="screen" href="css/qunit.css" type="text/css" rel="stylesheet" />'."\n";
 
 		if($release == 0){
 			/* load case source*/
@@ -185,5 +185,4 @@ class Kiss{
 		return $srcList;
 	}
 }
-
 ?>

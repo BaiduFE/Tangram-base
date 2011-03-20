@@ -2,7 +2,7 @@
 class Config{
 	public static $BROWSERS = array(
 	'ie6'=>array('10.81.23.218', "C:\\Program Files\\Internet Explorer\\iexplore.exe")
-	,'maxthon'=>array('10.81.23.218', "C:\\Program Files\\Maxthon2\\Maxthon.exe")
+	,'maxthon'=>array('10.81.23.218', "C:\\Program Files\\Maxthon3\\Bin\\Maxthon.exe")
 	,'firefox'=>array('10.81.23.218', "C:\\Program Files\\mozilla firefox\\firefox.exe")
 	,'ie7'=>array('10.81.23.219', "C:\\Program Files\\Internet Explorer\\iexplore.exe")
 	,'chrome'=>array('10.81.23.219', "C:\\Documents and Settings\\Administrator\\Local Settings\\Application Data\\Google\\Chrome\\Application\\chrome.exe")
