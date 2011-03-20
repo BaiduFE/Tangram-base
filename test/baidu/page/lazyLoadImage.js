@@ -24,7 +24,7 @@ test("base", function() {
 		frames[0].scroll(0, 200);
 		setTimeout(function(){
 			ok(frames[0].document.getElementById("test_img").src
-					.indexOf("test.png") >= 0, "图片显示时链接更新");
+					.indexOf("test.jpg") >= 0, "图片显示时链接更新");
 			start();
 		}, 10);
 	}, 1000);
