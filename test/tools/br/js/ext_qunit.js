@@ -20,10 +20,8 @@
 			if (!!window._$jscoverage)//如果参数里有cov=true
 				KissCov = window._$jscoverage[kissPath];
 			parent.$(wbkiss).trigger('done',
-					[ new Date().getTime(), args, KissCov ]);
+					[ new Date().getTime(), args[0], KissCov ]);
 		}
-		//来自berg的需求，希望执行完毕时自动展开失败用例 11/3/20
-		$('li.fail ol').toggle();
 	}
 
 	var s = QUnit.testStart, e = QUnit.testDone, ms = QUnit.moduleStart, me = QUnit.moduleEnd, d = QUnit.done;
