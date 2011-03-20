@@ -13,7 +13,7 @@ print '<html>
 	</script>
 <body>
 <div style="width: 250px; height: 250px;"></div>
-<div><img id="test_img" src="test.png" style="width: 1920px; height: 1200px;" /></div>
+<div><img id="test_img" src="test.jpg" style="width: 1920px; height: 1200px;" /></div>
 </body>
 </html>';
 ?>
