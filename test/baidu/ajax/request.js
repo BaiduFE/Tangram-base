@@ -209,3 +209,14 @@ test("输入不存在url以及设定onsuccess事件", function() {
 		'data' : arg
 	});
 });
+
+test('尝试通过图片获取服务器时间戳', function() {
+	stop();
+	baidu.ajax.request(upath + 'img.jpg', {
+		noCache : true,
+		'onsuccess' : function() {
+			ok(true, '事件应该被触发');
+			start();
+		}
+	});
+});
