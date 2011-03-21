@@ -186,6 +186,7 @@ test("test beforerequest by user created ", function() {
 		},
 		async : false
 	});
+	delete baidu.ajax.onbeforerequest;
 });
 
 /**
@@ -199,6 +200,7 @@ test("输入不存在url以及设定onsuccess事件", function() {
 	baidu.ajax.onfailure = function() {
 		// 这是个全局函数，实际上，post本身并不提供这个接口，而，全局返回失败时
 		ok(true, '失败时应该调用这个函数');
+		delete baidu.ajax.onfailure;
 		start();
 	};
 	var xhr = baidu.ajax.request(urlstring, {
