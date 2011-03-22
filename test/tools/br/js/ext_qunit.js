@@ -1,4 +1,3 @@
-
 /**
  * 重载QUnit部分接口实现批量执行控制功能
  */
@@ -15,12 +14,14 @@
 		if (parent && parent.brtest) {
 			var pKiss = parent.brtest.kiss;
 			var wbkiss = parent.brtest.kisses[pKiss];
-			var kissPath = pKiss.split('.').join('/') + '.js';
-			var KissCov = [0];
-			if (!!window._$jscoverage)//如果参数里有cov=true
-				KissCov = window._$jscoverage[kissPath];
-			parent.$(wbkiss).trigger('done',
-					[ new Date().getTime(), args[0], KissCov ]);
+			// var kissPath = pKiss.split('.').join('/') + '.js';
+			// var KissCov = [0];
+			// if (!!window._$jscoverage)//如果参数里有cov=true
+			// KissCov = window._$jscoverage;
+			parent.$(parent.brtest).trigger(
+					'done',
+					[ new Date().getTime(), args[0],
+							window._$jscoverage || null ]);
 		}
 	}
 
@@ -43,8 +44,9 @@
 				clearInterval(h);
 
 				_ms(arguments);
-				ms.apply(this, arguments);;
-				
+				ms.apply(this, arguments);
+				;
+
 				start();
 			}
 		}, 20);
