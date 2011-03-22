@@ -8,9 +8,12 @@ test("base", function() {
 			for ( var style in styles) {
 				$(div).css(style, styles[style]);
 			}
-			baidu.dom.setBorderBoxHeight(div, styles['height']);
+			baidu.dom.setBorderBoxHeight
+					&& baidu.dom.setBorderBoxHeight(div, styles['height']);
+			baidu.dom.setBorderBoxWidth
+					&& baidu.dom.setBorderBoxWidth(div, styles['width']);
 			for ( var expect in expects) {
-				equals(parseInt($(div).css(expect)), expects[expect], "check "
+				equals(parseInt(div.style[expect]), expects[expect], "check "
 						+ expect);
 			}
 			$(div).remove();
@@ -43,6 +46,7 @@ test("base", function() {
 
 	check({
 		height : 50,
+		margin : 0,
 		padding : 0,
 		border : 10
 	}, {
@@ -51,15 +55,17 @@ test("base", function() {
 
 	check({
 		height : 50,
+		margin : 0,
 		paddingTop : 10,
-		paddingBottom : 0,
 		border : 0
 	}, {
 		height : 40
 	});
+
 	check({
 		height : 50,
 		padding : 0,
+		margin : 0,
 		borderTopWidth : 10
 	}, {
 		height : 40

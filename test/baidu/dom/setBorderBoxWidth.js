@@ -10,7 +10,7 @@ test("base", function() {
 			}
 			baidu.dom.setBorderBoxWidth(div, styles["width"]);
 			for ( var expect in expects) {
-				equals(parseInt($(div).css(expect)), expects[expect], "check "
+				equals(parseInt(div.style[expect]), expects[expect], "check "
 						+ expect);
 			}
 			$(div).remove();
@@ -56,6 +56,7 @@ test("base", function() {
 	}, {
 		width : 40
 	});
+	
 	check({
 		width : 50,
 		padding : 0,
