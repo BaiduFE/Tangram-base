@@ -57,12 +57,12 @@ test('page not exist with timeOut', function() {
 
 	stop();
 	var h, check1 = function() {
-		clearTimeout(h);		
+		clearTimeout(h);	
 		ok($.browser.msie || false, 'call back will not call');
 		start();
 	};
 	baidu.sio.callByBrowser("notexist.js", check1, {
-        timeOut : 200,
+        timeout : 200,
         onfailure : function(){
             ok(true, 'onfailure will call @ !IE && !opera');
         }
