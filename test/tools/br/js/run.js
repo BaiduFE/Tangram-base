@@ -9,7 +9,7 @@ function run(kiss, runnext) {
 		return;
 	}
 
-	wb.timeout = wb.timeout || 20000;
+	wb.timeout = wb.timeout || 8;
 	wb.breakOnError = /breakonerror=true/gi.test(location.search)
 			|| $('input#id_control_breakonerror').attr('checked');
 	wb.runnext = /batchrun=true/gi.test(location.search) || runnext
@@ -32,7 +32,11 @@ function run(kiss, runnext) {
 	var toh, tohf = function() {
 		if (!window.brtest.breakOnError)
 			$(window.brtest.kisses[window.brtest.kiss]).trigger('done',
-					[ new Date().getTime(), [ 1, 1, 'timeout' ], [ 0 ] ]);
+					[ new Date().getTime(), {
+						fialed : 1,
+						passed : 1,
+						info : 'timeout'
+					}, [ 0 ] ]);
 	};
 
 	/**
@@ -43,8 +47,10 @@ function run(kiss, runnext) {
 					'done',
 					function(event, a, b, cov) {
 						clearTimeout(toh);
-					    //田丽丽修改  原本此处参数b中只有两个元素，但是为了标识有test超时，传入config.testTimeoutFlag作为b[2]，如果config.testTimeoutFlag为true，将module标记为fail_case
-						var wb = window.brtest, errornum = b.failed, allnum = b.failed+b.passed, testTimeOutFlag = b[2];
+						// 田丽丽修改
+						// 原本此处参数b中只有两个元素，但是为了标识有test超时，传入config.testTimeoutFlag作为b[2]，如果config.testTimeoutFlag为true，将module标记为fail_case
+						var wb = window.brtest, errornum = b.failed, allnum = b.failed
+								+ b.passed;// , testTimeOutFlag = b[2];
 						wb.kissend = new Date().getTime();
 						var kissPerc;
 						if (!!cov)// 如果支持覆盖率
@@ -105,24 +111,9 @@ function run(kiss, runnext) {
 	/**
 	 * 初始化执行区并通过嵌入iframe启动用例执行
 	 */
-	var url = 'run.php?case=' + kiss;
+	var url = 'run.php?case=' + kiss + '&' + location.search.substring(1);
 	// + (location.search.length > 0 ? '&' + location.search.substring(1)
 	// : '');
-
-	/**
-	 * 覆盖率支持的处理，暂时使用jscoverage框架运行
-	 */
-	// var cov = false;
-	if (top.document.title == 'JSCoverage') {
-		url += (url.indexOf("?") > 0 ? '&' : '?') + 'cov=true';
-	}
-
-	/**
-	 * 为发布版本提供支持，在需要执行发布版本时，release=true即可
-	 */
-	if (location.search.indexOf("release=true") > 0) {
-		url += (url.indexOf("?") > 0 ? '&' : '?') + 'release=true';
-	}
 
 	var fdiv = 'id_div_frame_' + kiss.split('.').join('_');
 	var fid = 'id_frame_' + kiss.split('.').join('_');

@@ -16,7 +16,7 @@
 			var pKiss = parent.brtest.kiss;
 			var wbkiss = parent.brtest.kisses[pKiss];
 			var kissPath = pKiss.split('.').join('/') + '.js';
-			var KissCov;
+			var KissCov = [0];
 			if (!!window._$jscoverage)//如果参数里有cov=true
 				KissCov = window._$jscoverage[kissPath];
 			parent.$(wbkiss).trigger('done',

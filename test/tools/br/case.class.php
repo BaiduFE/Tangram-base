@@ -97,7 +97,7 @@ class Kiss{
 
 		if($release == 0){
 			/* load case source*/
-			$importurl = "$this->projroot/test/tools/br/import.php?f=$this->name\n";
+			$importurl = "{$this->projroot}test/tools/br/import.php?f=$this->name";
 			if($cov) $importurl.='&cov=true';
 			print "<script type='text/javascript' src='$importurl' ></script>\n";
 		}else{

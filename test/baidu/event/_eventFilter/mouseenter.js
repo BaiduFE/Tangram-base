@@ -133,6 +133,7 @@ test('增加一个related为空或prefix为null的情况', function() {
 	expect(2);
 	baidu.event.on(document.body, "mouseenter", function(e) {
 		ok(true, 'related target is ' + e.relatedTarget);
+		console.log(e.relatedTarget);
 	});
 	if (ua.browser.ie || ua.browser.opera) {
 		ua.simulateMouseEvent(document.body, 'mouseenter', 0, 0, window, 1, 0, 0, 0, 0,
