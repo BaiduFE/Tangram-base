@@ -329,7 +329,7 @@ UserAction = {
 			case "click":
 			case "dblclick":
 			case "mousemove":
-			case "mouseenter"://非标准支持，仅为测试提供，该项仅IE下work
+			case "mouseenter":// 非标准支持，仅为测试提供，该项仅IE下work
 			case "mouseleave":
 				break;
 			default:
@@ -733,7 +733,7 @@ UserAction = {
 	},
 
 	/**
-	 * 提供iframe扩展支持，用例测试需要独立场景的用例，由于异步支持，需要触发事件finish方法来完成
+	 * 提供iframe扩展支持，用例测试需要独立场景的用例，由于异步支持，通过finish方法触发start
 	 * <li>事件绑定在frame上，包括afterfinish和jsloaded
 	 * 
 	 * @param op.win
@@ -752,11 +752,11 @@ UserAction = {
 		op = typeof op == 'function' ? {
 			ontest : op
 		} : op;
-		var pw = op.win || window, w, f, url = '', id = op.id || 'f', fid = 'iframe#'
-				+ id;
+		var pw = op.win || window, w, f, url = '', id = typeof op.id == 'undefined' ? 'f'
+				: op.id, fid = 'iframe#' + id;
 
 		op.finish = function() {
-			pw.$(fid).unbind();
+			// pw.$(fid).unbind();
 			// pw.$('div#d').remove();
 			start();
 		};
@@ -772,15 +772,16 @@ UserAction = {
 				url = this.src.split('import.php')[1];
 			}
 		});
-		pw.$(fid).attr('src', cpath + 'frame.php' + url).load(function() {
+		pw.$(fid).one('load', function(e) {
+			var w = e.target.contentWindow;
 			var h = setInterval(function() {
-				w = pw.frames[pw.frames.length - 1];
 				if (w.baidu) {// 等待加载完成，IE6下这地方总出问题
 					clearInterval(h);
 					op.ontest(w, w.frameElement);
 				}
-			}, 50);
-		});
+			}, 20);
+			// 找到当前操作的iframe，然后call ontest
+		}).attr('src', cpath + 'frame.php' + url);
 	},
 
 	/**
@@ -874,7 +875,7 @@ UserAction = {
 			var p = win;
 			for ( var i = 0; i < mm.length; i++) {
 				if (typeof (p[mm[i]]) == 'undefined') {
-//					console.log(mm[i]);
+					// console.log(mm[i]);
 					return;
 				}
 				p = p[mm[i]];
@@ -884,33 +885,35 @@ UserAction = {
 				callback();
 		}, 20);
 	},
-	
-	/* 用于加载css文件，如果没有加载完毕则不执行回调函数*/
+
+	/* 用于加载css文件，如果没有加载完毕则不执行回调函数 */
 	loadcss : function(url, callback, classname, style, value) {
-			var links = document.getElementsByTagName('link');
-			for ( var link in links) {
-				if (link.href == url) {
-					callback();
-					return;
-				}
+		var links = document.getElementsByTagName('link');
+		for ( var link in links) {
+			if (link.href == url) {
+				callback();
+				return;
 			}
-			var head = document.getElementsByTagName('head')[0];
-			var link = head.appendChild(document.createElement('link'));
-		    link.setAttribute("rel", "stylesheet");
-		    link.setAttribute("type", "text/css");
-		    link.setAttribute("href",url);
-		    var div = document.body.appendChild(document.createElement("div"));
-			$(document).ready(function() {
-				div.className = classname || 'cssloaded';
-				var h = setInterval(function() {
-						if ($(div).css(style||'width')==value||$(div).css(style||'width')=='20px') {
+		}
+		var head = document.getElementsByTagName('head')[0];
+		var link = head.appendChild(document.createElement('link'));
+		link.setAttribute("rel", "stylesheet");
+		link.setAttribute("type", "text/css");
+		link.setAttribute("href", url);
+		var div = document.body.appendChild(document.createElement("div"));
+		$(document).ready(
+				function() {
+					div.className = classname || 'cssloaded';
+					var h = setInterval(function() {
+						if ($(div).css(style || 'width') == value
+								|| $(div).css(style || 'width') == '20px') {
 							clearInterval(h);
 							document.body.removeChild(div);
 							setTimeout(callback, 20);
 						}
-				}, 20);
-			});
-		},
+					}, 20);
+				});
+	},
 
 	/**
 	 * options supported
