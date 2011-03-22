@@ -34,9 +34,9 @@ baidu.event._eventFilter._crossElementBoundary = function(listener, e){
        // Firefox有时会把XUL元素作为relatedTarget
        // 这些元素不能访问parentNode属性
        // thanks jquery & mootools
-       (related && related.prefix == 'xul') ||
+       (related && (related.prefix == 'xul' ||
        //如果current包含related，说明没有经过current的边界
-       baidu.dom.contains(current, related)
+       baidu.dom.contains(current, related)))
       ){
         return ;
     }
