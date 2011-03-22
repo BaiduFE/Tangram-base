@@ -185,7 +185,7 @@ test("clone函数输入的对象当中包含了Undefined", function(){
 	equals(o.n==otwin.o, true, "Undefined: o.n==otwin.o");
 });
 
-test('没有hasOwnProperty的情况', function(){
+test('dom的clone', function(){
 	ua.frameExt(function(w){
 		var data = {};
 		data.imgsrc = w.document.createElement("IMG");
@@ -200,6 +200,15 @@ test('没有hasOwnProperty的情况', function(){
 		clearTimeout(h);
 		ok(false, '貌似又超时了……');
 		start();
-	}, 2000);
+	}, 500);
 });
 
+test('没有hasOwnProperty的情况', function(){//这个貌似可以踩出来问题……
+	var b = baidu.object.clone(document.doctype);
+	equals(b.prefix, document.doctype.prefix);
+	var h = setTimeout(function(){
+		clearTimeout(h);
+		ok(false, '貌似又超时了……');
+		start();
+	}, 500);
+});

@@ -16,7 +16,7 @@ header("Content-type: text/javascript; charset=utf-8");
  */
 
 $DEBUG = false;
-$cov = $_GET['cov'];
+$cov = array_key_exists('cov', $_GET) ? $_GET['cov'] : false;
 $f = explode(',', $_GET['f']);//explode() 函数把字符串分割为数组,此处$f=baidu.ajax.form
 $e = (array_key_exists('e', $_GET) && $_GET['e']!='') ? explode(",", $_GET['e']) : array();
 require_once 'analysis.php';
