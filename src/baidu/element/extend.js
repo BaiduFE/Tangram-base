@@ -12,7 +12,7 @@
 ///import baidu.element;
 
 ///import baidu.object.each;
-///import baidu.element._wrapFunction;
+///import baidu.fn.wrapReturnValue;
 
 
  /**
@@ -29,6 +29,6 @@
 baidu.element.extend = function(json){
     var e = baidu.element;
     baidu.object.each(json, function(item, key){
-        e.Element.prototype[key] = e._wrapFunction(item, -1);
+        e.Element.prototype[key] = baidu.fn.wrapReturnValue(item, -1);
     });
 };
