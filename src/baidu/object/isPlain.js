@@ -8,17 +8,16 @@
 ///import baidu.lang.isObject;
 
 /**
- * 判断一个对象是不是字面量对象，也就是说判断这个对象是不是由{}或者new Object类似方式创建的对象
+ * 判断一个对象是不是字面量对象，即判断这个对象是不是由{}或者new Object类似方式创建
  * 
- * @name baidu.object.clone
+ * @name baidu.object.isPlain
  * @function
- * @grammar baidu.object.clone(source)
- * @param {Object} source 需要进行拷贝的对象
+ * @grammar baidu.object.isPlain(source)
+ * @param {Object} source 需要检查的对象
  * @remark
  * 事实上来说，在Javascript语言中，任何判断都一定会有漏洞，因此本方法只针对一些最常用的情况进行了判断
- * @meta standard
  *             
- * @returns {Object} 拷贝后的新对象
+ * @returns {Boolean} 检查结果
  */
 baidu.object.isPlain  = function(obj){
     var hasOwnProperty = Object.prototype.hasOwnProperty,
