@@ -39,51 +39,38 @@ test("加载资源", function() {
 
 test("类型参数的有效性", function() {
 	stop();
-	expect(3);
+	expect(4);
 	var ops = [ {
 		url : path + "a.php?file=a.css&type=css&opt=0",
 		type : 'css',
 		onload : function() {
-			setTimeout(function() {
-				equals(step++, 2, "css loaded 1st");
-				start();
-			}, 100);
+				step++;
+				ok(true, 'css loaded');
 		}
 	}, {
 		url : path + "a.js",//"a.php?file=a.js&type=js&opt=1",//opera支持的php下面js读取貌似有问题，改成js文件
 		type : 'js',
 		onload : function() {
-			equals(step++, 0, "js loaded 2nd");
+			step++;
+			ok(true, 'js loaded');
 		}
 	}, {
 		url : path + "a.php?file=a.html&type=html&opt=2",
 		type : 'html',
 		onload : function() {
-			equals(step++, 1, "html loaded 3rd");
-//			start();
+			step++;
+			ok(true, 'html loaded');
 		}
 	} ];
 	var old = {
 		onload : function() {
 			equals(step, 3, '最后调用这个步骤');
+			start();
 		}
 	};
 	var step = 0;
 	baidu.page.load(ops, old || {});
 });
-
-//
-// test("不存在的资源", function() {
-// stop();
-// baidu.page.load([ {
-// url : path + "notexist.js",
-// requestType : 'ajax',
-// onload : function(reponse) {
-//			
-// start();
-// }
-// } ]);
-// });
 
 test("js支持charset设置", function() {
 	stop();
