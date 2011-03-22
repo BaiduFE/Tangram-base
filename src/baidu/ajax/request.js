@@ -178,7 +178,7 @@ baidu.ajax.request = function (url, options) {
                 data = null;
             }
             if(options['noCache'])
-                url += '&b' + (new Date()).getTime() + '=1';
+                url += (url.indexOf('?') >= 0 ? '&' : '?') + 'b' + (+ new Date) + '=1';
         }
         
         if (username) {
