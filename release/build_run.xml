@@ -21,8 +21,16 @@
 		<delete file="${report.file}" />
 	</target>
 
-	<target name="execute" depends="init">
-		<get src="http://${serverip}/${git.user}/${git.project}/test/tools/br/runall.php?ci=true" dest="/tmp/${git.user}_${git.project}.php" />
+	<target name="coverage">
+		<exec executable="jscoverage">
+			<arg value="--encoding=UTF-8" />
+			<arg value="src" />
+			<arg value="test/coverage" />
+		</exec>
+	</target>
+
+	<target name="execute" depends="init,coverage">
+		<get src="http://${serverip}/${git.user}/${git.project}/test/tools/br/runall.php?ci=true&amp;cov=true" dest="/tmp/${git.user}_${git.project}.php" />
 	</target>
 	<target name="getreport" depends="execute">
 		<waitfor maxwait="300" maxwaitunit="second">
