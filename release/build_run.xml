@@ -3,6 +3,7 @@
 	<!-- 配置信息 10.32.34.115:8000-->
 	<property name="serverip" value="10.32.34.115:8000" />
 	<property name="report.path" value="test/tools/br/report" />
+	<property name="coverage.path" value="test/coverage" />
 	<property name="report.file" value="test/tools/br/report.xml" />
 	<property name="git.project" value="Tangram-base" />
 	<property name="git.user" value="" />
@@ -22,10 +23,11 @@
 	</target>
 
 	<target name="coverage">
+		<delete dir="${coverage.path}" />
 		<exec executable="jscoverage">
 			<arg value="--encoding=UTF-8" />
 			<arg value="src" />
-			<arg value="test/coverage" />
+			<arg value="${coverage.path}" />
 		</exec>
 	</target>
 
