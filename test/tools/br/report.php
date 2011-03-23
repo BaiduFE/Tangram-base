@@ -42,13 +42,12 @@ function report(){
 		$case->setAttribute("name", $key);
 		$case->setAttribute("time", $casetime);
 		$case->setAttribute("cov", $info[2]);
-		if($failure > 0){
-			$failures++;
-			$failinfo = $case->appendChild($dom->createElement('failure'));
-			$failinfo->setAttribute('type', 'junit.framework.AssertionFailedError');
-			//FROM php.net, You cannot simply overwrite $textContent, to replace the text content of a DOMNode, as the missing readonly flag suggests.
-			$failinfo->appendChild(new DOMText($value));
-		//}
+		if($failure > 0)$failures++;
+		$failinfo = $case->appendChild($dom->createElement('failure'));
+		$failinfo->setAttribute('type', 'junit.framework.AssertionFailedError');
+		//FROM php.net, You cannot simply overwrite $textContent, to replace the text content of a DOMNode, as the missing readonly flag suggests.
+		$failinfo->appendChild(new DOMText($value));
+
 		//TODO add more case info in xml
 	}
 
