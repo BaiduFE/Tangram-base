@@ -9,7 +9,7 @@ if(!$quirk){?>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Tangram Test Index Page</title>
-<script type="text/javascript" src="js/jquery-1.3.2.js"></script>
+<script type="text/javascript" src="js/jquery-1.5.1.js"></script>
 <script type="text/javascript" src="js/run.js"></script>
 <link media="screen" href="css/tangramtest.css" type="text/css"
 	rel="stylesheet" />

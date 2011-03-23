@@ -3,8 +3,8 @@ function sendmail($body, $debug = false){
 	include('Mail.php');
 	$headers['From']    = 'yangbo@baidu.com';
 	$headers['To']      = 'yangbo <yangbo@baidu.com>';
-	$headers['Cc']      = 'liujinlong <liujinlong@baidu.com>, '
-		.'berg <leizhixing@baidu.com>, huangtiantian <huangtiantian@baidu.com>';
+	//$headers['Cc']      = 'liujinlong <liujinlong@baidu.com>, '
+		//.'berg <leizhixing@baidu.com>, huangtiantian <huangtiantian@baidu.com>';
 //		.'wangpengcheng <wangpengcheng@baidu.com>, lixiaopeng<lixiaopeng@baidu.com>';
 	$headers['Subject'] = '批量运行结果——tangram base';
 	$params['host'] = 'hotswap-c.baidu.com';//email.baidu.com';
