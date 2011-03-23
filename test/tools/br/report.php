@@ -48,7 +48,7 @@ function report(){
 			$failinfo->setAttribute('type', 'junit.framework.AssertionFailedError');
 			//FROM php.net, You cannot simply overwrite $textContent, to replace the text content of a DOMNode, as the missing readonly flag suggests.
 			$failinfo->appendChild(new DOMText($value));
-		}
+		//}
 		//TODO add more case info in xml
 	}
 
