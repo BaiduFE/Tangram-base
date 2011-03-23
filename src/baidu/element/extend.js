@@ -13,6 +13,7 @@
 
 ///import baidu.object.each;
 ///import baidu.fn.wrapReturnValue;
+///import baidu.fn.methodize;
 
 
  /**
@@ -29,6 +30,6 @@
 baidu.element.extend = function(json){
     var e = baidu.element;
     baidu.object.each(json, function(item, key){
-        e.Element.prototype[key] = baidu.fn.wrapReturnValue(item, -1);
+    	e.Element.prototype[key] = baidu.element._toChainFunction(item, -1);
     });
 };
