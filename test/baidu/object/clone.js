@@ -205,7 +205,7 @@ test('dom的clone', function(){
 
 test('没有hasOwnProperty的情况', function(){//这个貌似可以踩出来问题……
 	var b = baidu.object.clone(document.doctype);
-	equals(b.prefix, document.doctype.prefix);
+	equals(b, document.doctype);
 	var h = setTimeout(function(){
 		clearTimeout(h);
 		ok(false, '貌似又超时了……');
