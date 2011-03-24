@@ -28,6 +28,8 @@ function run($b, $release=false, $debug = false){
 	$url .= "^&release=true";
 	if(array_key_exists("filter", $_GET))
 	$url .= "^&filter={$_GET['filter']}";
+	if(array_key_exists('cov', $_GET))
+	$url .="^&cov={$_GET['cov']}";
 	//	else
 	//	$url .= "^&cov=true";
 
@@ -59,7 +61,7 @@ function delDirAndFile( $dirName )
 
 if(array_key_exists('clear', $_GET)){
 	print 'debug - clear report';
-	Config::StopAll();
+	//Config::StopAll();
 	if(file_exists('report'))
 	delDirAndFile('report');
 }
