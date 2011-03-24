@@ -201,7 +201,7 @@ function covcalc() {
 		var percentage = (num_statements === 0 ? 0 : parseInt(100
 				* num_executed / num_statements));
 		var kiss = file.replace('.js', '').split('/').join('.');
-		var info = brkisses[kiss].split(',_,');
+		var info = brkisses[kiss]&&brkisses[kiss].split(',_,');
 		brkisses[kiss] = info[0] + ',' + percentage + ',' + info[1];
 	}
 }
