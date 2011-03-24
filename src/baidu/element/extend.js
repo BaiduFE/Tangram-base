@@ -13,6 +13,8 @@
 
 ///import baidu.object.each;
 ///import baidu.fn.wrapReturnValue;
+///import baidu.fn.methodize;
+///import baidu.fn.multize;
 
 
  /**
@@ -29,6 +31,6 @@
 baidu.element.extend = function(json){
     var e = baidu.element;
     baidu.object.each(json, function(item, key){
-        e.Element.prototype[key] = baidu.fn.wrapReturnValue(item, -1);
+        e.Element.prototype[key] = baidu.fn.methodize(baidu.fn.wrapReturnValue(baidu.fn.multize(item), baidu.element.Element, -1), '_dom');
     });
 };
