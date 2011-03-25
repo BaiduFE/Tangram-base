@@ -36,8 +36,9 @@
 	};
 	QUnit.moduleStart = function() {
 
-		if (window && window['baidu'])
-			return;
+		//这行代码会导致某些浏览器出现处理上的异常……
+//		if (window && window['baidu'])
+//			return;
 		/* 为批量执行等待import.php正确返回 */
 		var h = setInterval(function() {
 			if (window && window['baidu']) {
@@ -45,7 +46,6 @@
 
 				_ms(arguments);
 				ms.apply(this, arguments);
-				;
 
 				start();
 			}

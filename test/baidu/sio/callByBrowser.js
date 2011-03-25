@@ -72,3 +72,10 @@ test('page not exist with timeOut', function() {
 		start();
 	}, 500);
 });
+
+test('测试闭包',function(){
+	baidu.sio.callByBrowser(upath+'tangram.js', function(){
+		equals(window.TT.version, '1.3.5', 'check version in package');
+		equals(baidu.version, '1.3.4', 'check version normal');
+	});
+});

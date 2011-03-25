@@ -15,7 +15,6 @@
 ///import baidu.fn.wrapReturnValue;
 ///import baidu.fn.methodize;
 
-
  /**
  * 为element对象扩展一个方法。
  * @name baidu.element.extend
@@ -30,6 +29,6 @@
 baidu.element.extend = function(json){
     var e = baidu.element;
     baidu.object.each(json, function(item, key){
-    	e.Element.prototype[key] = baidu.element._toChainFunction(item, -1);
+        e.Element.prototype[key] = baidu.element._toChainFunction(item, -1);
     });
 };
