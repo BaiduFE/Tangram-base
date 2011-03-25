@@ -3,12 +3,6 @@ function run(kiss, runnext) {
 	window.document.title = kiss;
 	var wb = window.brtest = window.brtest || {};
 
-	if (wb.kisses && wb.kisses[kiss + '_error']) {
-		$('div#id_runningarea').empty().css('display', 'block').append(
-				wb.kisses[kiss + 'error']);
-		return;
-	}
-
 	wb.timeout = wb.timeout || 8000;
 	wb.breakOnError = /breakonerror=true/gi.test(location.search)
 			|| $('input#id_control_breakonerror').attr('checked');
@@ -81,7 +75,8 @@ function run(kiss, runnext) {
 										.split(',')[0]) == 0)) {
 							var nextA = wb.kissnode.next()[0];
 							if (nextA.tagName == 'A') {
-								run(nextA.title, wb.runnext);
+								if (wb.kisses[nextA.title] === undefined)
+									run(nextA.title, wb.runnext);
 							} else {
 								/* 隐藏执行区 */
 								$('div#id_runningarea').toggle();
@@ -201,11 +196,12 @@ function covcalc() {
 		var percentage = (num_statements === 0 ? 0 : parseInt(100
 				* num_executed / num_statements));
 		var kiss = file.replace('.js', '').split('/').join('.');
-		//统计所有用例的覆盖率信息和测试结果
-		if(brkisses[kiss]){
-			var info = brkisses[kiss].split(',_,');
-			brkisses[kiss] = info[0] + ',' + percentage + ',' + info[1];
-		}
+		// 统计所有用例的覆盖率信息和测试结果
+
+		if (brkisses[kiss] == undefined)
+			brkisses[kiss] = '0,0,_,0,0';
+		var info = brkisses[kiss].split(',_,');// 覆盖率的处理在最后环节加入到用例的测试结果中
+		brkisses[kiss] = info[0] + ',' + percentage + ',' + info[1];
 	}
 }
 
