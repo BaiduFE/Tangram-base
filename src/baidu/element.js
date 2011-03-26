@@ -69,6 +69,22 @@ baidu.element.Element.prototype.each = function(iterator) {
     });
 };
 
+/*
+ * 包装静态方法，使其变成一个链条方法。
+ * 先把静态方法multize化，让其支持接受数组参数，
+ * 然后包装返回值，返回值是一个包装类
+ * 最后把静态方法methodize化，让其变成一个对象方法。
+ *
+ * @param {Function}    func    要包装的静态方法
+ * @param {number}      index   包装函数的第几个返回值
+ *
+ * @return {function}   包装后的方法，能直接挂到Element的prototype上。
+ * @private
+ */
+baidu.element._toChainFunction = function(func, index){
+    return baidu.fn.methodize(baidu.fn.wrapReturnValue(baidu.fn.multize(func), baidu.element.Element, index), '_dom');
+};
+
 /**
  * element对象包装了dom包下的除了drag和ready,create,ddManager之外的大部分方法。这样做的目的是提供更为方便的链式调用操作。其中doms代指dom包下的方法名。
  * @name baidu.element.doms
@@ -81,20 +97,7 @@ baidu.element.Element.prototype.each = function(iterator) {
  */
 baidu.element._makeChain = function(){ //将dom/event包下的东西挂到prototype里面
     var proto = baidu.element.Element.prototype,
-        /*
-         * 包装静态方法，使其变成一个链条方法。
-         * 先把静态方法multize化，让其支持接受数组参数，
-         * 然后包装返回值，返回值是一个包装类
-         * 最后把静态方法methodize化，让其变成一个对象方法。
-         *
-         * @param {Function} 	func	要包装的静态方法
-         * @param {number} 		index	包装函数的第几个返回值
-         *
-         * @return {function} 	包装后的方法，能直接挂到Element的prototype上。
-         */
-        fnTransformer = function(func, index){
-            return baidu.fn.methodize(baidu.fn.wrapReturnValue(baidu.fn.multize(func), baidu.element.Element, index), '_dom');
-        };
+        fnTransformer = baidu.element._toChainFunction;
 
     //返回值是第一个参数的包装
     baidu.each(("draggable droppable resizable").split(' '),

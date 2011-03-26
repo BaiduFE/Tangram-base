@@ -1,5 +1,6 @@
 module("baidu.page.load");
 var path = (upath || "");
+
 test("加载资源", function() {
 	stop();
 	var div = document.body.appendChild(document.createElement('div'));
@@ -24,7 +25,7 @@ test("加载资源", function() {
 	}, {
 		url : path + "test.html",
 		onload : function(text) {
-			/* load html by ajax */
+			// load html by ajax 
 			ok(text.indexOf('<title>test</title>') > 0, 'load html');
 			arr[2] = 1;
 		}
@@ -39,7 +40,7 @@ test("加载资源", function() {
 
 test("类型参数的有效性", function() {
 	stop();
-	expect(4);
+	expect(5);
 	var ops = [ {
 		url : path + "a.php?file=a.css&type=css&opt=0",
 		type : 'css',
@@ -55,6 +56,12 @@ test("类型参数的有效性", function() {
 			ok(true, 'js loaded');
 		}
 	}, {
+		url : path + "toload2.js",
+		onload : function(){
+			step++;
+			ok(true, 'js loaded, 2');
+		}
+	}, {
 		url : path + "a.php?file=a.html&type=html&opt=2",
 		type : 'html',
 		onload : function() {
@@ -64,7 +71,7 @@ test("类型参数的有效性", function() {
 	} ];
 	var old = {
 		onload : function() {
-			equals(step, 3, '最后调用这个步骤');
+			equals(step, 4, '最后调用这个步骤');
 			start();
 		}
 	};
