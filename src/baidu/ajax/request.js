@@ -165,8 +165,7 @@ baidu.ajax.request = function (url, options) {
         eventHandlers[key] = options[key];
     }
     
-    //2010/11/26: 修改X-Request-By = 'baidu.ajax'成下面一句，与业界（jquery, yui, sencha, mootools）接轨。
-    headers['X-Request-With'] = 'XMLHttpRequest';
+    headers['X-Requested-With'] = 'XMLHttpRequest';
     
     
     try {
