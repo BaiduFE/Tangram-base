@@ -22,7 +22,7 @@
  * @author: allstar, erik, meizz, berg
  */
 var T,
-    baidu = T = baidu || {version: "1.3.4"}; 
+    baidu = T = baidu || {version: "1.3.5"}; 
 
 //提出guid，防止在与老版本Tangram混用时
 //在下一行错误的修改window[undefined]
