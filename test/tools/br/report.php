@@ -1,5 +1,11 @@
 <?php
 
+//TODO add php info in xml
+if(substr_count($_POST['config'], "browser")==0){
+	echo "report only create if browser is set\n\r<br />";
+	return;
+}
+
 function report(){
 	/**
 	 * for junit report
@@ -15,13 +21,6 @@ function report(){
 		$p->setAttribute('name', $cfg[$i]);
 		$p->setAttribute('value', $cfg[$i+1]);
 	}
-	//TODO add php info in xml
-
-	if(!array_key_exists("browser", $config)){
-		echo "report only create if browser is set\n\r<br />";
-		return;
-	}
-
 	$suite->setAttribute("name", $config['browser']);
 	$errors = 0;
 	$failures = 0;
