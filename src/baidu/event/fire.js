@@ -14,7 +14,7 @@
 ///import baidu.object.values;
 ///import baidu.lang.isNumber;
 /**
- * 触发已经注册的事件
+ * 触发已经注册的事件。注：在ie下不支持load和unload事件
  * @name baidu.event.fire
  * @function
  * @grammar baidu.event.fire(element, type, options)

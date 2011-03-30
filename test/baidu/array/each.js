@@ -8,7 +8,16 @@ test("遍历array元素",function(){
 	equal(aArray.toString(),"1,3,5","遍历array元素");
     baidu.each(aArray, function(iVal, iIndex){ aArray[iIndex]+=iIndex; });//快捷方式
 	equal(aArray.toString(),"1,4,7","遍历array元素");
-})
+});
+
+test("测试this指针",function(){
+
+	var aArray = [1,2,3], thisObject = {a:'b'};
+	baidu.array.each(aArray, function(iVal, iIndex){  equal(this.a, 'b', '传了this指针的情况')}, thisObject);
+
+	var aArray = [1,2,3];
+	baidu.array.each(aArray, function(iVal, iIndex){  equal(this[0], 1, '没传this指针的情况')});
+});
 
 test("调用回调函数的测试",function(){
 	expect(1);

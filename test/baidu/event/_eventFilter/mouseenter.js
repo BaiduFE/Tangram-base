@@ -32,8 +32,8 @@ test('on and un', function() {
 	ua.importsrc('baidu.event.on,baidu.event.un', function() {
 		var me = baidu.event._eventFilter.mouseenter;
 		var type = 'mouseenter';
-		if (window.attachEvent) {
-			equals(me, null, 'return null if ie');
+		if (ua.browser.ie || ua.browser.opera) {
+			equals(me, null, 'return null if ie or opera');
 			start();
 			return;
 		}
@@ -107,13 +107,12 @@ test('relatedTarget', function() {
 			'width', '150px').css('background-color', 'red');
 	$(div2).css('left', '0').css('top', '0').css('height', '100px').css(
 			'width', '100px').css('background-color', 'green');
-	function callback() {
+	function callback(e) {
 		ok(true, "mouseenter is trigged");// 应该只触发一次
-		console.log('1');
 	}
-	;
+
 	baidu.event.on(div1, "mouseenter", callback);
-	if (ua.browser.ie) {
+	if (ua.browser.ie || ua.browser.opera) {
 		ua.simulateMouseEvent(div1, 'mouseenter', 0, 0, window, 1, 0, 0, 0, 0,
 				false, false, false, false, 0, div);
 	} else {
@@ -125,6 +124,29 @@ test('relatedTarget', function() {
 		});
 		ua.mouseover(div2, {
 			relatedTarget : div1
+		});
+	}
+});
+
+test('增加一个related为空或prefix为null的情况', function() {
+
+	expect(2);
+	baidu.event.on(document.body, "mouseenter", function(e) {
+		ok(true, 'related target is ' + e.relatedTarget);
+	});
+	if (ua.browser.ie || ua.browser.opera) {
+		ua.simulateMouseEvent(document.body, 'mouseenter', 0, 0, window, 1, 0, 0, 0, 0,
+				false, false, false, false, 0, document.documentElement);
+		ua.simulateMouseEvent(document.body, 'mouseenter', 0, 0, window, 1, 0, 0, 0, 0,
+				false, false, false, false, 0, null);
+	} else {
+		ua.mouseover(document.body, {
+			relatedTarget : document.documentElement
+		// 从窗口外慢速划入
+		});
+		ua.mouseover(document.body, {
+			relatedTarget : null
+		// 从窗口外快速滑入
 		});
 	}
 });

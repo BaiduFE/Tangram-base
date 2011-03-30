@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="project" default="getreport" basedir="../">
+	<!-- 配置信息 10.32.34.115:8000-->
+	<property name="serverip" value="10.32.34.115:8000" />
+	<property name="report.path" value="test/tools/br/report" />
+	<property name="coverage.path" value="test/coverage" />
+	<property name="report.file" value="test/tools/br/report.xml" />
+	<property name="git.project" value="Tangram-base" />
+	<property name="git.user" value="" />
+	<path id="ext.classpath">
+		<fileset dir="test/tools/lib">
+			<include name="**/*.jar" />
+		</fileset>
+	</path>
+
+	<!--为hudson做的扩展，用于支持多用户运行环境，会直接提取当前项目的父目录名称作为user-->
+	<taskdef name="gitext" classname="com.baidu.tangram.GitExt" classpathref="ext.classpath" />
+
+	<target name="init">
+		<gitext />
+		<delete dir="${report.path}" />
+		<delete file="${report.file}" />
+	</target>
+
+	<target name="coverage">
+		<delete dir="${coverage.path}" />
+		<exec executable="jscoverage">
+			<arg value="--encoding=UTF-8" />
+			<arg value="src" />
+			<arg value="${coverage.path}" />
+		</exec>
+	</target>
+
+	<target name="execute" depends="init,coverage">
+		<get src="http://${serverip}/${git.user}/${git.project}/test/tools/br/runall.php?ci=true&amp;cov=true" dest="/tmp/${git.user}_${git.project}.php" />
+	</target>
+	<target name="getreport" depends="execute">
+		<waitfor maxwait="300" maxwaitunit="second">
+			<available file="${report.file}" />
+		</waitfor>
+	</target>
+</project>

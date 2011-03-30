@@ -21,7 +21,7 @@ test('封装基础 - 输入字符串', function() {
 		var div = document.body.appendChild(document.createElement('div'));
 		div.id = 'aaa';
 		chainMe(baidu.element("aaa"));
-		equals(baidu.g('aaa').className, ' aaa', 'check class name');
+		equals(baidu.g('aaa').className, 'aaa', 'check class name');
 		equals(baidu.dom.query('.gaga').length, 0, 'check sub');
 		equals(baidu.dom.query('.berg').length, 1, 'check sub');
 		document.body.removeChild(div.nextSibling);
@@ -105,7 +105,8 @@ test('function list', function() {
 			if (p && typeof p == 'function')
 				count++;
 			else {
-				if ('ready drag ddManager create resizable'.indexOf(f) >= 0)
+				if ('ready drag ddManager create resizable getComputedStyle'
+						.indexOf(f) >= 0)
 					continue;
 				ok(false, '[' + f + '] not in function list');
 			}
@@ -150,7 +151,7 @@ test('返回值是第一个参数的包装 draggable droppable', function() {
 				ok(true, "droppable ondropout");
 			}
 		};
-//		baidu.e(drop).droppable(op).addClass("berg");
+		// baidu.e(drop).droppable(op).addClass("berg");
 	}, 15);
 	setTimeout(function() {
 		UserAction.mousemove(drag, {
@@ -160,8 +161,7 @@ test('返回值是第一个参数的包装 draggable droppable', function() {
 	}, 30);
 	setTimeout(function() {
 		UserAction.mouseup(drag);
-		equal(drag.className, " berg", "check draggable extend function");
-//		equal(drop.className, " berg", "check droppable extend function");
+		equal(drag.className, "berg", "check draggable extend function");
 		equal(baidu.dom.getStyle(drag, 'left'), '50px', '');
 		equal(baidu.dom.getStyle(drag, 'top'), '50px');
 		document.body.removeChild(drag);
@@ -224,7 +224,8 @@ test('直接返回返回值 ', function() {
 	equal(baidu.e(div).contains(div1), 'true', 'check contains : ');
 	equal(baidu.e(div).getAttr('id'), 'div', 'check getAttr : ');
 	equal(baidu.e(div).getPosition()[0].left, 0, 'check getPosition : ');
-  equal(parseInt(baidu.e(div).getStyle('left')[0], 10), 0, 'check getStyle : ');
+	equal(parseInt(baidu.e(div).getStyle('left')[0], 10), 0,
+			'check getStyle : ');
 	equal(baidu.e(div).hasClass('berg'), 'true', 'check hasClass : ');
 	equal(baidu.e(div).intersect(div1), 'true', 'check intersect : ');
 	equal(baidu.e(div).hasAttr('id'), 'true', 'check hasAttr : ');
@@ -233,20 +234,30 @@ test('直接返回返回值 ', function() {
 	equal(d, null, 'check remove : ');
 });
 
+test(
+		'封装基础 - 构造函数',
+		function() {
+			var div = document.body.appendChild(document.createElement('DIV'));
+			div.innerHTML = new Array(10).join('<span>hello</span>');
 
-test('封装基础 - 构造函数', function(){
-  var div = document.body.appendChild(
-      document.createElement('DIV'));
-  div.innerHTML = new Array(10).join('<span>hello</span>');
+			var a = new baidu.element.Element(div);
+			equal(a._dom.length, 1, "passed test");
+			deepEqual(a._dom, [ div ], "passed test");
 
-  var a = new baidu.element.Element(div);
-  equal(a._dom.length, 1, "passed test");
-  deepEqual(a._dom, [div], "passed test");
+			var childs = div.getElementsByTagName('span'), b = new baidu.element.Element(
+					childs);
+			equal(b._dom.length, 9, "passed test");
+			deepEqual(b._dom, baidu.lang.toArray(childs), "passed test");
+			var childs = div.getElementsByTagName('span'), b = new baidu.element.Element(
+					childs);
+			equal(b._dom.length, 9, "passed test");
+			deepEqual(b._dom, baidu.lang.toArray(childs), "passed test");
 
-  var childs = div.getElementsByTagName('span'),
-      b = new baidu.element.Element(childs);
-  equal(b._dom.length, 9, "passed test");
-  deepEqual(b._dom, baidu.lang.toArray(childs), "passed test");
-  
-  document.body.removeChild(div);
-});
+			document.body.removeChild(div);
+		});
+//test('漏测了关于event的封装', function() {
+//	ok(baidu.e("*").on);
+//	// 请QA补充下相关用例
+//	ok(baidu.e("*").click);
+//	ok(false);
+//});

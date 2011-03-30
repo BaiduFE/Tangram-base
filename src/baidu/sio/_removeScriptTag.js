@@ -1,12 +1,6 @@
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
- * 
- * path: baidu/sio/_removeScriptTag.js
- * author: berg
- * thanks: kexin, xuejian
- * version: 1.0.0
- * date: 20100527
  */
 
 ///import baidu.sio;

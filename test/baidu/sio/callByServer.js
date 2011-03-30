@@ -81,6 +81,25 @@ test('page not exist', function() {
 	}, 500);
 });
 
+test('page not exist with timeOut', function() {
+	stop();
+	var h, check = function(text) {
+		clearTimeout(h);
+		ok(false, 'call back will not call');
+		start();
+	};
+	baidu.sio.callByServer("notexist.php", check, {
+        timeOut : 200,
+        onfailure : function(){
+            ok(true, 'onfailure will call');
+        }
+    });
+	h = setTimeout(function() {
+		ok(true, 'call back not call');
+		start();
+	}, 500);
+});
+
 //用例移除，暂不考虑该异常情况，IE下该用例一定不通过
 //test(
 //		'html with none head',

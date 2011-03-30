@@ -8,19 +8,18 @@
 ///import baidu.browser.ie;
 
 /**
- * »ñÈ¡Ä¿±êÔªËØµÄcomputed styleÖµ
- * Èç¹ûÔªËØµÄÑùÊ½Öµ²»ÄÜ±»ä¯ÀÀÆ÷¼ÆËã£¬Ôò»á·µ»Ø¿Õ×Ö·û´®£¨IE£©
+ * è·å–ç›®æ ‡å…ƒç´ çš„computed styleå€¼ã€‚å¦‚æœå…ƒç´ çš„æ ·å¼å€¼ä¸èƒ½è¢«æµè§ˆå™¨è®¡ç®—ï¼Œåˆ™ä¼šè¿”å›ç©ºå­—ç¬¦ä¸²ï¼ˆIEï¼‰
  *
  * @author berg
  * @name baidu.dom.getComputedStyle
  * @function
  * @grammar baidu.dom.getComputedStyle(element, key)
- * @param {HTMLElement|string} element Ä¿±êÔªËØ»òÄ¿±êÔªËØµÄid
- * @param {string} key Òª»ñÈ¡µÄÑùÊ½Ãû
+ * @param {HTMLElement|string} element ç›®æ ‡å…ƒç´ æˆ–ç›®æ ‡å…ƒç´ çš„id
+ * @param {string} key è¦è·å–çš„æ ·å¼å
  *
  * @see baidu.dom.getStyle
  *             
- * @returns {string} Ä¿±êÔªËØµÄcomputed styleÖµ
+ * @returns {string} ç›®æ ‡å…ƒç´ çš„computed styleå€¼
  */
 
 baidu.dom.getComputedStyle = function(element, key){

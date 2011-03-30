@@ -11,7 +11,7 @@
 ///import baidu.json;
 
 /**
- * 将字符串解析成json对象
+ * 将字符串解析成json对象。注：不会自动祛除空格
  * @name baidu.json.parse
  * @function
  * @grammar baidu.json.parse(data)
@@ -25,5 +25,5 @@
  */
 baidu.json.parse = function (data) {
     //2010/12/09：更新至不使用原生parse，不检测用户输入是否正确
-    return (new Function("return " + data))();
+    return (new Function("return (" + data + ")"))();
 };

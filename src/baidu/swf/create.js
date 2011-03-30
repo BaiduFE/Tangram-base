@@ -42,7 +42,7 @@
  * @param {Object} 	options.vars 				要传递给flash的参数，支持JSON或string类型。
  * 
  * @param {HTMLElement|string} [container] 		flash对象的父容器元素，不传递该参数时在当前代码位置创建flash对象。
- * 
+ * @meta standard
  * @see baidu.swf.createHTML,baidu.swf.getMovie
  */
 baidu.swf.create = function (options, target) {

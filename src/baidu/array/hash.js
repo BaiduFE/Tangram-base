@@ -1,11 +1,6 @@
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
- * 
- * path: baidu/array/hash.js
- * author: berg
- * version: 1.0.0
- * date: 2010/10/12 
  */
 
 ///import baidu.array;

@@ -37,13 +37,13 @@ baidu.dom.getStyle = function (element, key) {
     key = baidu.string.toCamelCase(key);
     //computed style, then cascaded style, then explicitly set style.
     var value = element.style[key] ||
-                (element.currentStyle ? element.currentStyle[style] : "") || 
+                (element.currentStyle ? element.currentStyle[key] : "") || 
                 dom.getComputedStyle(element, key);
 
     // 在取不到值的时候，用fixer进行修正
     if (!value) {
         var fixer = dom._styleFixer[key];
-        value = fixer && fixer.get ? fixer.get(element) : style[fixer || key];
+        value = fixer && fixer.get ? fixer.get(element) : baidu.dom.getStyle(element, fixer);
     }
     
     /* 检查结果过滤器 */

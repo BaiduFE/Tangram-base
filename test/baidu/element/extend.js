@@ -6,8 +6,8 @@ test('封装扩展 - function', function() {
 		var p = document.body.appendChild(document.createElement('div'));
 		p.className = 'berg';
 		baidu.element.extend( {
-			"myFn" : function(element, id) {
-			    element.id = id;
+			"myFn" : function(dom,id) {
+			    dom.id = id;
 			    equals(baidu.lang.isArray(this._dom),true,'check this ');//测试this是否指向的baidu.e()
 			}
 		});

@@ -13,7 +13,7 @@
  * @param {string} tagName 标签名称.
  * @param {Object=} opt_attributes 元素创建时拥有的属性，如style和className.
  * @version 1.3
- *
+ * @meta standard
  * @return {HTMLElement} 创建的 Element 对象
  */
 baidu.dom.create = function(tagName, opt_attributes) {

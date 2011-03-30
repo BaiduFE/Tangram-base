@@ -19,7 +19,7 @@
  * @grammar baidu.swf.getMovie(name)
  * @param {string} name flash对象的名称
  * @see baidu.swf.create
- *             
+ * @meta standard
  * @returns {HTMLElement} flash对象的实例
  */
 baidu.swf.getMovie = function (name) {

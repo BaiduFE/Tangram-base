@@ -15,14 +15,15 @@
 ///import baidu.lang.isString;
 
 /**
- * 自定义的事件对象。
- * @function
+ * 
+ * @class   自定义的事件对象。
  * @name 	baidu.lang.Event
  * @grammar baidu.lang.Event(type[, target])
  * @param 	{string} type	 事件类型名称。为了方便区分事件和一个普通的方法，事件类型名称必须以"on"(小写)开头。
  * @param 	{Object} [target]触发事件的对象
  * @meta standard
  * @remark 引入该模块，会自动为Class引入3个事件扩展方法：addEventListener、removeEventListener和dispatchEvent。
+ * @meta standard
  * @see baidu.lang.Class
  */
 baidu.lang.Event = function (type, target) {
@@ -43,7 +44,6 @@ baidu.lang.Event = function (type, target) {
 baidu.lang.Class.prototype.addEventListener = function (type, handler, key) {
     if (!baidu.lang.isFunction(handler)) {
         return;
-        // throw("addEventListener:" + handler + " is not a function");
     }
 
     !this.__listeners && (this.__listeners = {});
