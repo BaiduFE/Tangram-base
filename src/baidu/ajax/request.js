@@ -144,6 +144,12 @@ baidu.ajax.request = function (url, options) {
             if (type != 'onsuccess') {
                 handler(xhr);
             } else {
+                //处理获取xhr.responseText导致出错的情况,比如请求图片地址.
+                try {
+                    xhr.responseText;
+                } catch(error) {
+                    return handler(xhr);
+                }
                 handler(xhr, xhr.responseText);
             }
         } else if (globelHandler) {
