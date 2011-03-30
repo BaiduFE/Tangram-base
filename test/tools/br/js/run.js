@@ -79,8 +79,7 @@ function run(kiss, runnext) {
 									run(nextA.title, wb.runnext);
 							} else {
 								/* 隐藏执行区 */
-								$('div#id_runningarea').toggle();
-
+								// $('div#id_runningarea').toggle();
 								/* ending 提交数据到后台 */
 								wb.kisses['config'] = location.search
 										.substring(1);
