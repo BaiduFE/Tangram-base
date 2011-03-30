@@ -7,6 +7,8 @@
 	var ms = QUnit.moduleStart, d = QUnit.done;
 
 	function _d(args /* failures, total */) {
+		//默认展开失败用例
+		$('li.fail ol').toggle();
 		if (parent && parent.brtest) {
 			parent.$(parent.brtest).trigger(
 					'done',
