@@ -56,7 +56,7 @@ test("类型参数的有效性", function() {
 			ok(true, 'js loaded');
 		}
 	}, {
-		url : path + "toload2.js",
+		url : path + "b.js",
 		onload : function(){
 			step++;
 			ok(true, 'js loaded, 2');

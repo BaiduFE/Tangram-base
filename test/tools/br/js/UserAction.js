@@ -921,7 +921,7 @@ UserAction = {
 	delayhelper : function(oncheck, onsuccess, onfail, timeout) {
 		onsuccess = onsuccess || oncheck.onsuccess;
 		onfail = onfail || oncheck.onfail || function() {
-			fail('timeout wait for timeout : ' + timeout + 'ms');
+			window.QUnit.fail('timeout wait for timeout : ' + timeout + 'ms');
 			start();
 		};
 		timeout = timeout || oncheck.timeout || 10000;

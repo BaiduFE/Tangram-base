@@ -74,6 +74,7 @@ class Analysis{
 				var_dump($d.$path);
 				if(file_exists($d.$path)){
 					$cnt = file_get_contents($d.$path);
+					$cnt.= "\n";
 					break;
 				}
 			}
