@@ -5,15 +5,9 @@
 	if (!QUnit)
 		return;
 	var ms = QUnit.moduleStart, d = QUnit.done;
-	function _ms(args /* name, testEnvironment */) {
-		if (parent && parent.brtest)
-			parent.brtest.starttime = new Date().getTime();
-	}
 
 	function _d(args /* failures, total */) {
 		if (parent && parent.brtest) {
-			var pKiss = parent.brtest.kiss;
-			var wbkiss = parent.brtest.kisses[pKiss];
 			parent.$(parent.brtest).trigger(
 					'done',
 					[ new Date().getTime(), args[0],
@@ -26,10 +20,7 @@
 		var h = setInterval(function() {
 			if (window && window['baidu']) {
 				clearInterval(h);
-
-				_ms(arguments);
 				ms.apply(this, arguments);
-
 				start();
 			}
 		}, 20);
