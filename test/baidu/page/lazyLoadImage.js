@@ -17,7 +17,7 @@ test("base", function() {
 		equals(frames[0].document.getElementById("test_img").src, "",
 				"图片链接被替换为空");
 		frames[0].scroll(0, 20);
-	}, 500);
+	}, 200);
 	setTimeout(function() {
 		equals(frames[0].document.getElementById("test_img").src, "",
 				"图片不显示时链接依然为空");
@@ -26,6 +26,6 @@ test("base", function() {
 			ok(frames[0].document.getElementById("test_img").src
 					.indexOf("test.jpg") >= 0, "图片显示时链接更新");
 			start();
-		}, 10);
-	}, 1000);
+		}, 200);
+	}, 500);
 });
