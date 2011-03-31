@@ -199,7 +199,6 @@
 ///import baidu.dom.getParent;
 
 ///import baidu.dom.setPosition;
-///import baidu.element._wrapFunction;
 ///import baidu.element.extend;
 ///import baidu.event._eventFilter._crossElementBoundary;
 ///import baidu.number.randomInt;

@@ -22,8 +22,24 @@ if(!Config::$DEBUG){
  * IE下，get请求不能超过2083字节，请注意。
  */
 $cov = array_key_exists('cov', $_GET) ? $_GET['cov'] : false;
+$path = array_key_exists('path', $_GET) ? $_GET['path'] : null;
+
+
 $f = explode(',', $_GET['f']);//explode() 函数把字符串分割为数组,此处$f=baidu.ajax.form
 $e = (array_key_exists('e', $_GET) && $_GET['e']!='') ? explode(",", $_GET['e']) : array();
+
+if($path != null) {
+	$filepath = "$path{$_GET['f']}.js";
+
+	if(Config::$DEBUG) echo $filepath;
+	$f = array();
+	$cnt = file_get_contents($filepath);
+	preg_match_all('/\/\/\/import\s+([^;]+);?/ies', $cnt, $is);
+
+	$f = $is[1];
+	if(Config::$DEBUG)	var_dump($f);
+}
+
 require_once 'analysis.php';
 $analysis = new Analysis();
 $IGNORE = array();
@@ -40,6 +56,7 @@ function importSrc($d, $cov=false){
 	return "";
 	array_push($IGNORE, $d);
 	$ccnt = Analysis::get_src_cnt($d, $cov);
+	if(!array_key_exists('c', $ccnt)){echo "====$d-===";return "";}
 	return preg_replace("/\/\/\/import\s+([\w\-\$]+(\.[\w\-\$]+)*);?/ies", "importSrc('\\1')", $ccnt['c']);
 }
 //update by bell 2011-03-25, 更新覆盖率相关逻辑
