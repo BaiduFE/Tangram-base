@@ -41,6 +41,7 @@
 	</target>
 
 	<target name="release" depends="init">
+		<gitext />
 		<!-- delete release file-->
 		<delete file="release/all_release_src.js" />
 		<delete file="release/core_release_src.js" />
@@ -74,7 +75,6 @@
 	</target>
 
 	<target name="releaserun" depends="release">
-		<gitext />
 		<get src="http://${serverip}/${git.user}/${git.project}/test/tools/br/runall.php?ci=true&amp;release=true" dest="/tmp/${git.user}_${git.project}.php" />
 		<waitfor maxwait="300" maxwaitunit="second">
 			<available file="${report.file}" />
