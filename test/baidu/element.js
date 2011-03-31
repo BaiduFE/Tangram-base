@@ -53,13 +53,12 @@ test('封装基础 - 输入数组', function() {
 test('封装基础 - 含有get的函数', function() {
 	var p = document.body.appendChild(document.createElement('div'));
 	p.id = 'first';
-	baidu.dom.setAttr(p, 'rel', 'i-m-first');
+	baidu.e(p).setAttr('rel', 'i-m-first');// FIXME 貌似无法直接使用attr，难道是问题？
 	var c = p.parentNode.appendChild(document.createElement('div'));
-	c.id = 'next';
-	c.innerHTML = 'next';
-	equals(baidu.element("next").prev().attr("rel"), 'i-m-first',
+	equals(baidu.element(c).prev().attr("rel"), 'i-m-first',
 			'check attr in chain');
-	document.body.removeChild(p);
+	baidu.e(p).remove();
+	baidu.e(c).remove();
 });
 
 test('封装基础 - each', function() {
@@ -78,14 +77,15 @@ test('封装基础 - each', function() {
 
 test('封装基础 - event封装', function() {
 	var p = document.body.appendChild(document.createElement('div'));
-	p.className = 'berg';
 	var c = p.appendChild(document.createElement('div'));
-	c.className = 'berg';
-	baidu.element(baidu.dom.query('.berg')).on('click', function() {
+	baidu.e(p).addClass('berg').attr('id', 'p');
+	baidu.e(c).addClass('berg').attr('id', 'c');
+	baidu.e(baidu.dom.query('.berg')).on('click', function(e) {
 		ok(true, 'item clicked');
 	});
 	expect(2);
-	UserAction.click(c);
+	ua.click(c);
+	baidu.e(p).remove();
 });
 
 /**
@@ -99,6 +99,7 @@ test('function list', function() {
 	stop();
 	$.get(upath + 'element.php', function(data) {
 		var funs = data.split(" "), count = 0;
+		var countlose = 0;
 		for ( var i = 0; i < funs.length; i++) {
 			var f = funs[i];
 			var p = ele[f];
@@ -109,8 +110,10 @@ test('function list', function() {
 						.indexOf(f) >= 0)
 					continue;
 				ok(false, '[' + f + '] not in function list');
+				countlose++;
 			}
 		}
+		equals(countlose, 0, '没有函数被遗漏');
 		start();
 	});
 
@@ -120,90 +123,19 @@ test('function list', function() {
  * 返回值是第一个参数的包装 draggable droppable resizable
  */
 test('返回值是第一个参数的包装 draggable droppable', function() {
-	stop();
 	var drag = document.body.appendChild(document.createElement('div'));
-	var drop = document.body.appendChild(document.createElement('div'));
-	drag.id = "drag";
-	drop.id = "drop";
-	$('#drag').css('width', 20).css('height', 20).css('left', 20)
-			.css('top', 20).css('backgroundColor', '#0f0').css('border',
-					'solid').css('position', 'absolute');
-	$('#drop').css('width', 50).css('height', 50).css('left', 50)
-			.css('top', 50).css('border', 'solid').css('position', 'absolute');
-	baidu.e(drag).draggable().addClass("berg");
-	UserAction.mousemove(document, {
-		clientX : 0,
-		clientY : 0
-	});
-	UserAction.mousedown(drag, {
-		clientX : 0,
-		clientY : 0
-	});
-	setTimeout(function() {
-		var op = {
-			ondropover : function() {
-				ok(true, "droppable ondropover");
-			},
-			ondrop : function() {
-				ok(true, "droppable ondrop");
-			},
-			ondropout : function() {
-				ok(true, "droppable ondropout");
-			}
-		};
-		// baidu.e(drop).droppable(op).addClass("berg");
-	}, 15);
-	setTimeout(function() {
-		UserAction.mousemove(drag, {
-			clientX : 30,
-			clientY : 30
-		});
-	}, 30);
-	setTimeout(function() {
-		UserAction.mouseup(drag);
-		equal(drag.className, "berg", "check draggable extend function");
-		equal(baidu.dom.getStyle(drag, 'left'), '50px', '');
-		equal(baidu.dom.getStyle(drag, 'top'), '50px');
-		document.body.removeChild(drag);
-		document.body.removeChild(drop);
-		start();
-	}, 60)
-
+	var e = baidu.e(drag);
+	e.attr('id', 'drag');// 无返回
+	e.draggable().addClass("berg");
+	ok(e.hasClass('berg'), "check draggable extend function");
+	e.remove();
 });
 
-// test('返回值是第一个参数的包装 resizable', function() {
-// var div1 = document.body.appendChild(document.createElement('div'));
-// div1.id = "div1";
-// $(div1).css('position', 'absolute').css('left', '0').css('top', '0').css(
-// 'height', '100px').css('width', '100px').css('backgroundColor','red');
-// var options = {
-// onresizestart : function(){
-// ok(true,"element extend resizeable success");
-// }
-// };
-// baidu.e(div1).resizable().addClass("berg");
-// UserAction.mousemove(document, {
-// clientX : 100,
-// clientY : 50
-// });
-// UserAction.mousedown(div1, {
-// clientX : 100,
-// clientY : 50
-// });
-// setTimeout(function() {
-// UserAction.mousemove(div1, {
-// clientX : 150,
-// clientY : 50
-// });
-// }, 30);
-// setTimeout(function() {
-// UserAction.mouseup(div1);
-// equal(div1.className," berg","check resizeable extend function");
-// equal(baidu.dom.getStyle(div1,"left"),'150px',"div left change to : ");
-// document.body.removeChild(div1);
-// },60);
-//
-// });
+test('返回值是第一个参数的包装 resizable', function() {
+	var div1 = document.body.appendChild(document.createElement('div'));
+	baidu.e(div1).resizable().addClass("berg").attr('id', 'berg');
+	ok(baidu.e(div1).hasClass('berg'), 'has class');
+});
 
 /**
  * 直接返回返回值
@@ -255,9 +187,9 @@ test(
 
 			document.body.removeChild(div);
 		});
-//test('漏测了关于event的封装', function() {
-//	ok(baidu.e("*").on);
-//	// 请QA补充下相关用例
-//	ok(baidu.e("*").click);
-//	ok(false);
-//});
+// test('漏测了关于event的封装', function() {
+// ok(baidu.e("*").on);
+// // 请QA补充下相关用例
+// ok(baidu.e("*").click);
+// ok(false);
+// });

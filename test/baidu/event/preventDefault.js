@@ -13,11 +13,11 @@ test("阻止默认行为", function() {
 	document.body.appendChild(a);
 	window.scrollTo(0, document.body.scrollHeight);
 
-	UserAction.beforedispatch = function(e){
+	ua.beforedispatch = function(e){
 		e = e || window.event;
 		baidu.event.preventDefault(e);	
 	};
-	UserAction.click(a);
+	ua.click(a);
 	var top = window.pageYOffset 
     || document.documentElement.scrollTop 
     || document.body.scrollTop 

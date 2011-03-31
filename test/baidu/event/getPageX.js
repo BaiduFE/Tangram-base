@@ -13,8 +13,8 @@ var checkX = function(x, offset, type) {// 不直接调用这个方法，防止�
 	} else if (document.body.attachEvent) {
 		element.attachEvent('on' + type, fn);
 	}
-	if (UserAction[type] && typeof UserAction[type] == 'function') {
-		UserAction[type](element, {
+	if (ua[type] && typeof ua[type] == 'function') {
+		ua[type](element, {
 			clientX : x,
 			clientY : 0
 		});

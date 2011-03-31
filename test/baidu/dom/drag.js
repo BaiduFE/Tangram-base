@@ -7,7 +7,7 @@ test('drag with update', function() {
 	document.body.appendChild(div);
 	$(div).css('position', 'absolute').css('left', '0').css('top', '0').css(
 			'height', '100px').css('width', '100px').css('backgroundColor','red');
-	UserAction.mousemove(document, {
+	ua.mousemove(document, {
 		clientX : 0,
 		clientY : 0
 	});
@@ -30,16 +30,16 @@ test('drag with update', function() {
 					start();
 			    }, 1);
 		    }
-		}
+		};
 	d.update(options);
 	setTimeout(function() {
-		UserAction.mousemove(document, {
+		ua.mousemove(document, {
 			clientX : 150,
 			clientY : 100
 		});
 	}, 50);
 	setTimeout(function() {
-		UserAction.mouseup(document);
+		ua.mouseup(document);
 	}, 100);
 });
 
@@ -54,7 +54,7 @@ test('drag', function() {
 	$(div).css('position', 'absolute').css('left', '0').css('top', '0').css(
 			'height', '100px').css('width', '100px').css('backgroundColor',
 			'red');
-	UserAction.mousemove(document, {
+	ua.mousemove(document, {
 		clientX : 0,
 		clientY : 0
 	});
@@ -73,14 +73,14 @@ test('drag', function() {
 	});
 	
 	setTimeout(function() {
-		UserAction.mousemove(document, {
+		ua.mousemove(document, {
 			clientX : 100,
 			clientY : 50
 		});
 
 	}, 50);
 	setTimeout(function() {
-		UserAction.mouseup(document);
+		ua.mouseup(document);
 	}, 100);
 });
 
@@ -89,7 +89,7 @@ test('drag within range from outside to edge', function() {
 	expect(4);
 	var div = document.createElement('div');
 	document.body.appendChild(div);
-	UserAction.mousemove(document, {
+	ua.mousemove(document, {
 		clientX : 0,
 		clientY : 0
 	});
@@ -107,19 +107,19 @@ test('drag within range from outside to edge', function() {
 				equal(parseInt($(ele).css('top')), 30, 'stop top');
 				document.body.removeChild(div);
 				start();
-			}, 1)
+			}, 1);
 		},
 		range : [ 20, 130, 130, 30 ]//上右下左
 	});
 	// move(div, 0, 0);
 	setTimeout(function() {
-		UserAction.mousemove(document, {
+		ua.mousemove(document, {
 			clientX : 50,
 			clientY : 50
 		});
 	}, 50);
 	setTimeout(function() {
-		UserAction.mouseup(div);
+		ua.mouseup(div);
 	}, 100);
 });
 
@@ -128,7 +128,7 @@ test('drag within range from inside to edge', function() {
 	expect(4);
 	var div = document.createElement('div');
 	document.body.appendChild(div);
-	UserAction.mousemove(document, {
+	ua.mousemove(document, {
 		clientX : 0,
 		clientY : 0
 	});
@@ -146,18 +146,18 @@ test('drag within range from inside to edge', function() {
 				equal(parseInt($(ele).css('top')), 80, 'stop top');
 				document.body.removeChild(div);
 				start();
-			}, 1)
+			}, 1);
 		},
 		range : [ 0, 130, 130, 0 ]//上右下左
 	});
 	setTimeout(function() {
-		UserAction.mousemove(document, {
+		ua.mousemove(document, {
 			clientX : 80,
 			clientY : 80
 		});
 	}, 50);
 	setTimeout(function() {
-		UserAction.mouseup(div);
+		ua.mouseup(div);
 	}, 100);
 });
 
@@ -166,7 +166,7 @@ test('drag within range from inside to outside', function() {
 	expect(4);
 	var div = document.createElement('div');
 	document.body.appendChild(div);
-	UserAction.mousemove(document, {
+	ua.mousemove(document, {
 		clientX : 0,
 		clientY : 0
 	});
@@ -184,17 +184,17 @@ test('drag within range from inside to outside', function() {
 				equal(parseInt($(ele).css('top')), 80, 'stop top');
 				document.body.removeChild(div);
 				start();
-			}, 1)
+			}, 1);
 		},
 		range : [ 0, 130, 130, 0 ]//上右下左
 	});
 	setTimeout(function() {
-		UserAction.mousemove(document, {
+		ua.mousemove(document, {
 			clientX : 150,
 			clientY : 150
 		});
 	}, 50);
 	setTimeout(function() {
-		UserAction.mouseup(div);
+		ua.mouseup(div);
 	}, 100);
 });

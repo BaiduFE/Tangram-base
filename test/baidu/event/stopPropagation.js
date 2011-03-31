@@ -42,8 +42,8 @@ test("停止冒泡",function(){
 	div.appendChild(button);
 	div.appendChild(text);
 	
-	UserAction.click(button,"click");//点击按钮，事件不会被冒泡到document.body
-	UserAction.click(text,"click");//点击文本框，事件会被冒泡到document.body
+	ua.click(button,"click");//点击按钮，事件不会被冒泡到document.body
+	ua.click(text,"click");//点击文本框，事件会被冒泡到document.body
 	document.body.removeChild(div);
 	un(document.body,"click",propaFromSrcElem);//unload掉body的click事件
 });

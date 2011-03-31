@@ -1,22 +1,25 @@
+var UserAction =
 /**
- * 测试用例库文件，提供如event mock、iframe封装等各种常用功能 部分方法来源于YUI测试框架
+ * This is an API that can be mixed into other objects
+ * 
+ * @author bellcliff
  */
-UserAction = {
+{
 	beforedispatch : null,
 	isf /* is function ? */: function(value) {
-		return value && (typeof value == 'function')
+		return value && (typeof value == 'function');
 	},
 	isb /* is boolean? */: function(value) {
-		return value && (typeof value == 'boolean')
+		return value && (typeof value == 'boolean');
 	},
 	iso /* is object? */: function(value) {
-		return value && (typeof value == 'object')
+		return value && (typeof value == 'object');
 	},
 	iss /* is string? */: function(value) {
-		return value && (typeof value == 'string')
+		return value && (typeof value == 'string');
 	},
 	isn /* is number? */: function(value) {
-		return value && (typeof value == 'number')
+		return value && (typeof value == 'number');
 	},
 	// --------------------------------------------------------------------------
 	// Generic event methods
@@ -945,6 +948,9 @@ UserAction = {
 		}, timeout);
 	},
 
+	/**
+	 * @constructor
+	 */
 	browser : (function() {
 		var win = window;
 

@@ -41,11 +41,11 @@ test("stop事件--结合stopPropagation和preventDefault",function(){
 	document.body.appendChild(a);
 	window.scroll(0, document.body.scrollHeight);
       /*获得鼠标点击事件*/
-	UserAction.beforedispatch = function(e){
+	ua.beforedispatch = function(e){
 		e = e || window.event;
 		baidu.event.preventDefault(e);	
 	};
-	UserAction.click(a, "click");
+	ua.click(a, "click");
 	var top = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
 	ok(top != 0, "preventDefault");//a标签跳转到页首的功能被禁用
 	un(document.body,"click",propaFromSrcElem);//恢复环境，去除事件
