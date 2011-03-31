@@ -5,7 +5,7 @@
 	<property name="report.path" value="test/tools/br/report" />
 	<property name="coverage.path" value="test/coverage" />
 	<property name="report.file" value="test/tools/br/report.xml" />
-	<property name="git.project" value="Tangram-base" />
+	<property name="git.project" value="Tangram-base-release" />
 	<property name="git.user" value="" />
 	<path id="ext.classpath">
 		<fileset dir="test/tools/lib">
@@ -41,7 +41,6 @@
 	</target>
 
 	<target name="release" depends="init">
-		<property name="git.project" value="Tangram-base-release" />
 		<!-- delete release file-->
 		<delete file="release/all_release_src.js" />
 		<delete file="release/core_release_src.js" />
