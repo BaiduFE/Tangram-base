@@ -22,6 +22,9 @@
  * @param {String} options.url css文件的URL
  * @param {Number} options.index 在文档里的排序索引（注意，仅IE下有效）
  * @version 1.2
+ * @remark
+ *  ie 下返回值styleSheet的addRule方法不支持添加逗号分隔的css rule.
+ * 
  * @see baidu.page.createStyleSheet.StyleSheet
  *             
  * @returns {baidu.page.createStyleSheet.StyleSheet} styleSheet对象(注意: 仅IE下,其他浏览器均返回null)
