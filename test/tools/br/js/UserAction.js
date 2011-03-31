@@ -1,8 +1,8 @@
 var UserAction =
 /**
- * This is an API that can be mixed into other objects
- * 
+ * 用例中常用方法的集合
  * @author bellcliff
+ * @type UserAction
  */
 {
 	beforedispatch : null,
@@ -1097,7 +1097,7 @@ var UserAction =
 
 		},
 
-		ua = nav && nav.userAgent,
+		_ua = nav && nav.userAgent,
 
 		loc = win && win.location,
 
@@ -1107,30 +1107,30 @@ var UserAction =
 
 		o.secure = href && (href.toLowerCase().indexOf("https") === 0);
 
-		if (ua) {
+		if (_ua) {
 
-			if ((/windows|win32/i).test(ua)) {
+			if ((/windows|win32/i).test(_ua)) {
 				o.os = 'windows';
-			} else if ((/macintosh/i).test(ua)) {
+			} else if ((/macintosh/i).test(_ua)) {
 				o.os = 'macintosh';
-			} else if ((/rhino/i).test(ua)) {
+			} else if ((/rhino/i).test(_ua)) {
 				o.os = 'rhino';
 			}
 
 			// Modern KHTML browsers should qualify as Safari X-Grade
-			if ((/KHTML/).test(ua)) {
+			if ((/KHTML/).test(_ua)) {
 				o.webkit = 1;
 			}
 			// Modern WebKit browsers are at least X-Grade
-			m = ua.match(/AppleWebKit\/([^\s]*)/);
+			m = _ua.match(/AppleWebKit\/([^\s]*)/);
 			if (m && m[1]) {
 				o.webkit = numberify(m[1]);
 
 				// Mobile browser check
-				if (/ Mobile\//.test(ua)) {
+				if (/ Mobile\//.test(_ua)) {
 					o.mobile = "Apple"; // iPhone or iPod Touch
 				} else {
-					m = ua.match(/NokiaN[^\/]*|Android \d\.\d|webOS\/\d\.\d/);
+					m = _ua.match(/NokiaN[^\/]*|Android \d\.\d|webOS\/\d\.\d/);
 					if (m) {
 						o.mobile = m[0]; // Nokia N-series, Android, webOS,
 						// ex:
@@ -1138,14 +1138,14 @@ var UserAction =
 					}
 				}
 
-				var m1 = ua.match(/Safari\/([^\s]*)/);
+				var m1 = _ua.match(/Safari\/([^\s]*)/);
 				if (m1 && m1[1]) // Safari
 					o.safari = numberify(m1[1]);
-				m = ua.match(/Chrome\/([^\s]*)/);
+				m = _ua.match(/Chrome\/([^\s]*)/);
 				if (o.safari && m && m[1]) {
 					o.chrome = numberify(m[1]); // Chrome
 				} else {
-					m = ua.match(/AdobeAIR\/([^\s]*)/);
+					m = _ua.match(/AdobeAIR\/([^\s]*)/);
 					if (m) {
 						o.air = m[0]; // Adobe AIR 1.0 or better
 					}
@@ -1157,26 +1157,28 @@ var UserAction =
 				// fi; U;
 				// try get firefox and it's ver
 				// ssr)
-				m = ua.match(/Opera[\s\/]([^\s]*)/);
+				m = _ua.match(/Opera[\s\/]([^\s]*)/);
 				if (m && m[1]) {
 					o.opera = numberify(m[1]);
-					m = ua.match(/Opera Mini[^;]*/);
+					m = _ua.match(/Opera Mini[^;]*/);
 					if (m) {
 						o.mobile = m[0]; // ex: Opera Mini/2.0.4509/1316
 					}
 				} else { // not opera or webkit
-					m = ua.match(/MSIE\s([^;]*)/);
+					m = _ua.match(/MSIE\s([^;]*)/);
 					if (m && m[1]) {
 						o.ie = numberify(m[1]);
 					} else { // not opera, webkit, or ie
-						m = ua.match(/Gecko\/([^\s]*)/);
+						m = _ua.match(/Gecko\/([^\s]*)/);
 						if (m) {
 							o.gecko = 1; // Gecko detected, look for revision
-							m = ua.match(/rv:([^\s\)]*)/);
+							m = _ua.match(/rv:([^\s\)]*)/);
 							if (m && m[1]) {
 								o.gecko = numberify(m[1]);
 							}
 						}
+						m = _ua.match("Firefox/([^\s]*)");
+						o.firefox = numberify(m[1]);
 					}
 				}
 			}
