@@ -218,3 +218,13 @@
 ///import baidu.dom.setBorderBoxSize;
 ///import baidu.dom.setBorderBoxHeight;
 ///import baidu.dom.setBorderBoxWidth;
+
+///import baidu.dom.getComputedStyle;
+///import baidu.fn.wrapReturnValue;
+///import baidu.object.isPlain;
+///import baidu.platform.isAndroid;
+///import baidu.platform.isIpad;
+///import baidu.platform.isIphone;
+///import baidu.platform.isMacintosh;
+///import baidu.platform.isWindows;
+///import baidu.platform.isX11;
