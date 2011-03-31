@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="project" default="getreport" basedir="../">
 	<!-- 配置信息 10.32.34.115:8000-->
-	<property name="serverip" value="10.32.34.115:8000" />
+	<property name="serverip" value="localhost" />
 	<property name="report.path" value="test/tools/br/report" />
 	<property name="coverage.path" value="test/coverage" />
 	<property name="report.file" value="test/tools/br/report.xml" />
@@ -17,7 +17,6 @@
 	<taskdef name="gitext" classname="com.baidu.tangram.GitExt" classpathref="ext.classpath" />
 
 	<target name="init">
-		<gitext />
 		<delete dir="${report.path}" />
 		<delete file="${report.file}" />
 	</target>
@@ -32,9 +31,51 @@
 	</target>
 
 	<target name="execute" depends="init,coverage">
+		<gitext />
 		<get src="http://${serverip}/${git.user}/${git.project}/test/tools/br/runall.php?ci=true&amp;cov=true" dest="/tmp/${git.user}_${git.project}.php" />
 	</target>
-	<target name="getreport" depends="execute">
+	<target name="getreport" depends="init,coverage,execute">
+		<waitfor maxwait="300" maxwaitunit="second">
+			<available file="${report.file}" />
+		</waitfor>
+	</target>
+
+	<target name="release" depends="init">
+		<!-- delete release file-->
+		<delete file="release/all_release_src.js" />
+		<delete file="release/core_release_src.js" />
+		<delete file="release/all_release.js" />
+		<delete file="release/core_release.js" />
+		<!--import.php-->
+		<get src="http://${serverip}/${git.user}/${git.project}/test/tools/br/import.php?f=all&amp;path=..%2F..%2F..%2Frelease%2F" dest="release/all_release_src.js" />
+		<get src="http://${serverip}/${git.user}/${git.project}/test/tools/br/import.php?f=core&amp;path=..%2F..%2F..%2Frelease%2F" dest="release/core_release_src.js" />
+
+		<!--YUI-->
+		<exec executable="java">
+			<arg value="-jar" />
+			<arg value="release/yuicompressor-2.4.2.jar" />
+			<arg value="--charset" />
+			<arg value="utf-8" />
+			<arg value="-v" />
+			<arg value="-o" />
+			<arg value="release/all_release.js" />
+			<arg value="release/all_release_src.js" />
+		</exec>
+		<exec executable="java">
+			<arg value="-jar" />
+			<arg value="release/yuicompressor-2.4.2.jar" />
+			<arg value="--charset" />
+			<arg value="utf-8" />
+			<arg value="-v" />
+			<arg value="-o" />
+			<arg value="release/all_release.js" />
+			<arg value="release/all_release_src.js" />
+		</exec>
+	</target>
+
+	<target name="releaserun" depends="release">
+		<gitext />
+		<get src="http://${serverip}/${git.user}/${git.project}/test/tools/br/runall.php?ci=true&amp;release=true" dest="/tmp/${git.user}_${git.project}.php" />
 		<waitfor maxwait="300" maxwaitunit="second">
 			<available file="${report.file}" />
 		</waitfor>
