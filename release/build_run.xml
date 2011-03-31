@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="project" default="getreport" basedir="../">
 	<!-- 配置信息 10.32.34.115:8000-->
-	<property name="serverip" value="localhost" />
+	<property name="serverip" value="10.32.34.115:8000" />
 	<property name="report.path" value="test/tools/br/report" />
 	<property name="coverage.path" value="test/coverage" />
 	<property name="report.file" value="test/tools/br/report.xml" />
@@ -41,6 +41,7 @@
 	</target>
 
 	<target name="release" depends="init">
+		<property name="git.project" value="Tangram-base-release" />
 		<!-- delete release file-->
 		<delete file="release/all_release_src.js" />
 		<delete file="release/core_release_src.js" />
