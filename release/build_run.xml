@@ -69,8 +69,8 @@
 			<arg value="utf-8" />
 			<arg value="-v" />
 			<arg value="-o" />
-			<arg value="release/all_release.js" />
-			<arg value="release/all_release_src.js" />
+			<arg value="release/core_release.js" />
+			<arg value="release/core_release_src.js" />
 		</exec>
 	</target>
 
