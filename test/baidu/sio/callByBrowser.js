@@ -78,7 +78,7 @@ test('测试闭包', function() {
 	stop();
 	baidu.sio.callByBrowser(upath + 'tangram.js', function() {
 		equals(window.TT.version, '1.3.0', 'check version in package');
-		equals(baidu.version, '1.3.4', 'check version normal');
+		equals(baidu.version, '1.3.5', 'check version normal');
 		start();
 	});
 });
