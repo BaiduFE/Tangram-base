@@ -1,7 +1,7 @@
 module("baidu.browser.maxthon");
 
 test("maxthon", function() {
-	if (baidu.browser.maxthon >= 3){
+	if (baidu.browser.maxthon >= 3) {
 		ok(true, '傲游3居然也抛异常……');
 		return;
 	}
@@ -10,6 +10,6 @@ test("maxthon", function() {
 		window.external.max_invoke("GetHotKey");
 		ok(baidu.browser.maxthon, 'is maxthon');
 	} catch (ex) {
-			equals(baidu.browser.maxthon, undefined, 'not maxthon');
+		equals(baidu.browser.maxthon, undefined, 'not maxthon');
 	}
 });
