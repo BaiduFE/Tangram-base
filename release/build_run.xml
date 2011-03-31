@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="project" default="getreport" basedir="../">
 	<!-- 配置信息 10.32.34.115:8000-->
-	<property name="serverip" value=" 10.32.34.115:8000" />
+	<property name="serverip" value="10.32.34.115:8000" />
 	<property name="report.path" value="test/tools/br/report" />
 	<property name="coverage.path" value="test/coverage" />
 	<property name="report.file" value="test/tools/br/report.xml" />
