@@ -7,11 +7,13 @@
 	var ms = QUnit.moduleStart, d = QUnit.done;
 
 	function _d(args /* failures, total */) {
+		//默认展开失败用例
+		$('li.fail ol').toggle();
 		if (parent && parent.brtest) {
-			parent.$(parent.brtest).trigger(
-					'done',
-					[ new Date().getTime(), args[0],
-							window._$jscoverage || null ]);
+			parent.$(parent.brtest).trigger('done', [ new Date().getTime(), {
+				failed : args[0],
+				passed : args[1]
+			}, window._$jscoverage || null ]);
 		}
 	}
 	QUnit.moduleStart = function() {

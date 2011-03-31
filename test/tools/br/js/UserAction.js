@@ -756,9 +756,11 @@ UserAction = {
 				: op.id, fid = 'iframe#' + id;
 
 		op.finish = function() {
-			// pw.$(fid).unbind();
-			// pw.$('div#d').remove();
-			start();
+			pw.$(fid).unbind();
+			setTimeout(function() {
+				pw.$('div#d').remove();
+				start();
+			}, 20);
 		};
 
 		if (pw.$(fid).length == 0) {
