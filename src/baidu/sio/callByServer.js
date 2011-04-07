@@ -34,7 +34,15 @@ baidu.sio.callByServer = function(url, callback, opt_options) {
         charset = options['charset'],
         queryField = options['queryField'] || 'callback',
         timeOut = options['timeOut'] || 0,
-        timer;
+        timer,reg;
+
+    if(!callback){
+        if(reg = new RegExp('(\\?|&)callback=([^&]*)', 'gi').exec(url)){
+            callback = reg[2];
+        }else{
+            callback = new Function();
+        }
+    }
 
     if (baidu.lang.isFunction(callback)) {
         callbackName = prefix + Math.floor(Math.random() * 2147483648).toString(36);
