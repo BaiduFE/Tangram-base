@@ -7,7 +7,7 @@ print '<html>
 	baidu.page.lazyLoadImage({	
 		onlazyload : function(){
 			parent.ok(true, "onload dispatch");
-			parent.start();
+			window.onLoadImage = true;
 		}
 	});
 	</script>

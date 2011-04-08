@@ -1,14 +1,7 @@
-module("baidu.browser.opera")
+module("baidu.browser.opera");
 
 test("opera", function() {
-	expect(1);
-	var browser = navigator.userAgent;
-	if (baidu.browser.opera) {
-		if (/opera\/(\d+\.\d)/i.test(browser))
-			ok(true, "this browser is opera");
-	} else {
-		if (!/opera\/(\d+\.\d)/i.test(browser))
-			ok(true, "this borwser is not opera");
-	}
-
-})
+	var b = 'opera';
+	ua.browser[b] ? ok(baidu.browser[b], 'should be ' + b) : ok(
+			!baidu.browser[b], 'should not be ' + b);
+});

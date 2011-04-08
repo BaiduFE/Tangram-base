@@ -23,7 +23,7 @@ module('baidu.event.getTarget');
 		var div = document.createElement('div');
 		document.body.appendChild(div);
 		on(div, 'click', callback);
-		UserAction.click(div);
+		ua.click(div);
 		un(div, 'click', callback);
 		document.body.removeChild(div);
 	});
@@ -41,7 +41,7 @@ module('baidu.event.getTarget');
 							'target is document');
 				};
 				on(document, 'click', callback);
-				UserAction.click(document.body);
+				ua.click(document.body);
 				un(document, 'click', callback);
 			});
 
@@ -54,11 +54,11 @@ module('baidu.event.getTarget');
 							'target is document');
 				};
 				on(document, 'keypress', handle);
-				UserAction.fireKeyEvent('keypress', document.body, {
+				ua.fireKeyEvent('keypress', document.body, {
 					'keyCode' : 8
 				});// backspace
 			un(document, 'keypress', handle);
-			UserAction.fireKeyEvent('keypress', document.body, {
+			ua.fireKeyEvent('keypress', document.body, {
 				'keyCode' : 8
 			});// backspace
 		});

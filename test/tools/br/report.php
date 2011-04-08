@@ -1,5 +1,5 @@
 <?php
-
+//经常碰到傲游和IE6同时完成的情况，如何处理比较合适？
 //TODO add php info in xml
 if(substr_count($_POST['config'], "browser")==0){
 	echo "report only create if browser is set\n\r<br />";
@@ -41,6 +41,7 @@ function report(){
 		$case->setAttribute("name", $key);
 		$case->setAttribute("time", $casetime);
 		$case->setAttribute("cov", $info[2]);
+		covHtml($config['browser'].'/'.$key,$info[2]);
 		if($failure > 0){
 			$failures++;
 			$failinfo = $case->appendChild($dom->createElement('failure'));
@@ -59,6 +60,27 @@ function report(){
 	mkdir("report");
 	$dom->save("report/{$config['browser']}.xml");
 }
+
+require_once 'simple_html_dom.php';
+$htmlstr = "<html><head><meta http-equiv='Content-Type' content='text/html; charset=utf-8' />
+<style>td, th {border: 1px solid white;}</style></head><body><div>
+<h2 align='center'>覆盖率结果</h2>
+<table id='table' cellspacing='0' style='border: 1px solid black; color: #fff; background-color: #0d3349; text-shadow: rgba(0, 0, 0, 0.5) 2px 2px 1px; text-align: center;'>
+<thead><tr><th rowspan='2'>用例名称</th><th rowspan='2'>总覆盖率</th></tr></thead></table></div></body></html>";
+
+if(file_exists("covreport.html")){
+	$html = file_get_html("covreport.html");
+}
+else $html = str_get_html($htmlstr);
+function covHtml($name,$cov){
+	global $html;
+	$table = $html->find('table',0);
+	$tableInner = $table->innertext();
+	$color = '#710909';
+	$trs = $tableInner."<tr><td>$name</td><td style='background-color:$color'>$cov%</td></tr>";
+	$table->setAttribute('innertext',$trs);
+	$html->save('covreport.html');
+};
 
 report();
 include 'config.php';

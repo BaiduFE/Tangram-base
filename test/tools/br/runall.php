@@ -75,6 +75,10 @@ if(file_exists('report')){
 	mkdir('report');
 }
 
+if(file_exists("covreport.html")){
+	if( unlink( "covreport.html" ) )echo "成功删除覆盖率报告文件： covreport.html<br />\n";
+}
+
 /*记录运行时信息*/
 $b = array_key_exists('browser', $_GET) ? $_GET['browser'] : 'all';
 if($b !='all'){

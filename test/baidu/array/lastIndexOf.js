@@ -10,7 +10,7 @@ test("正常用例",function(){
     equal(r,-1,"查询不存在的数组元素");
     r = baidu.array.lastIndexOf(arraytest,5, -2);
     equal(r,1,"负数的情况");
-})
+});
 
 test("特殊数组",function(){
 	expect(3);
@@ -23,7 +23,7 @@ test("特殊数组",function(){
     equal(r,7,"查询数组项");
     r = baidu.array.lastIndexOf(arraytest,'help');
     equal(r,-1,"查询不存在的数组项");
-})
+});
 
 
 test("异常用例",function(){
@@ -34,4 +34,4 @@ test("异常用例",function(){
     var fn = function (x) { return x>15;};
     r = baidu.array.lastIndexOf(arraytest,fn);
     equal(r,-1,"空数组查询函数");
-})
+});

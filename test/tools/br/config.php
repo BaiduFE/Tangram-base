@@ -21,7 +21,7 @@ class Config{
 		$hostarr = array();
 		foreach (Config::$BROWSERS as $b=>$h){
 			$host = $h[0];
-			if(in_array($host, $hostar))
+			if(array_search($host, $hostar))
 			continue;
 			array_push($hostarr, $host);
 			require_once 'lib/Staf.php';
