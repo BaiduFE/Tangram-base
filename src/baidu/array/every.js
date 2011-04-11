@@ -9,7 +9,7 @@
  * 判断一个数组中是否所有元素都满足给定条件
  * @name baidu.array.every
  * @function
- * @grammar baidu.array.every(source, iterator)
+ * @grammar baidu.array.every(source, iterator[,thisObject])
  * @param {Array} source 需要判断的数组.
  * @param {Function} iterator 判断函数.
  * @param {Object} [thisObject] 函数调用时的this指针，如果没有此参数，默认是当前遍历的数组
