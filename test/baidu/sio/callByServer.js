@@ -1,21 +1,25 @@
 module('baidu.sio.callByServer');
 
-test('callback is function', function() {
-	stop();
-	var check = function(text) {
-		equals(text, 'i am from server');
-		start();
-	};
-	baidu.sio.callByServer(upath + "callByServer.php", check);
+test('queryField is input manually and callback is a function',function(){
+stop();
+var check=function(text){
+equals(text,'i am from server');
+start();
+};
+baidu.sio.callByServer(upath+"callByServer.php",check,{
+queryField : "callback"
+});
 });
 
-test('callback is string', function() {
-	stop();
-	window.check_string = function(text) {
-		equals(text, 'i am from server');
-		start();
-	};
-	baidu.sio.callByServer(upath + "callByServer.php", "check_string");
+test('queryField is input manually and callback is a string',function(){
+  stop();
+window.check_string=function(text){
+	equals(text,'i am from server');
+	start();
+};
+baidu.sio.callByServer(upath+"callByServer.php","check_string",{
+	queryField : "callback"
+});
 });
 
 test('charset utf-8', function() {
