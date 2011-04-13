@@ -41,7 +41,7 @@ baidu.dom.getStyle = function (element, key) {
                 dom.getComputedStyle(element, key);
 
     // 在取不到值的时候，用fixer进行修正
-    if (typeof value === 'undefined' || typeof value === null) {
+    if (typeof value === 'undefined' || value === null) {
         var fixer = dom._styleFixer[key];
         value = fixer && fixer.get ? fixer.get(element) : baidu.dom.getStyle(element, fixer);
     }
