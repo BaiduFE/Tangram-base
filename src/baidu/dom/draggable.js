@@ -20,27 +20,22 @@
  * 让一个DOM元素可拖拽
  * @name baidu.dom.draggable
  * @function
- * @grammar baidu.dom.draggable(element, options)
- * @param {string|HTMLElement} element 		元素或者元素的ID.
- * @param {Object} 		options 			选项.
- * @param {Array} 		options.range 		限制drag的拖拽范围，数组中必须包含四个值，分别是上、右、下、左边缘相对上方或左方的像素距离。默认无限制.
- * @param {Number} 		options.interval 	拖曳行为的触发频度（时间：毫秒）.
- * @param {Boolean} 	options.capture 	鼠标拖曳粘滞.
- * @param {Object} 		options.mouseEvent 	键名为clientX和clientY的object，若不设置此项，默认会获取当前鼠标位置.
- * @param {Function} 	options.onbeforedragstart drag开始前触发（即鼠标按下时）.
- * @param {Function} 	options.ondragstart drag开始时触发.
- * @param {Function} 	options.ondrag 		drag进行中触发.
- * @param {Function} 	options.ondragend 	drag结束时触发.
- * @param {HTMLElement} options.handler 	用于拖拽的手柄，比如dialog的title.
- * @param {Function} 	options.toggle 		在每次ondrag的时候，会调用这个方法判断是否应该停止拖拽。如果此函数返回值为false，则停止拖拽.
+ * @grammar baidu.dom.draggable(element[, options])
+ * @param  {string|HTMLElement}   element 		        元素或者元素的ID.
+ * @param  {Object} 		      [options] 			选项.
+ * @config {Array} 		          [range] 		        限制drag的拖拽范围，数组中必须包含四个值，分别是上、右、下、左边缘相对上方或左方的像素距离。默认无限制.
+ * @config {Number} 	          [interval] 	        拖曳行为的触发频度（时间：毫秒）.
+ * @config {Boolean} 	          [capture] 	        鼠标拖曳粘滞.
+ * @config {Object} 	          [mouseEvent] 	        键名为clientX和clientY的object，若不设置此项，默认会获取当前鼠标位置.
+ * @config {Function} 	          [onbeforedragstart]   drag开始前触发（即鼠标按下时）.
+ * @config {Function} 	          [ondragstart]         drag开始时触发.
+ * @config {Function} 	          [ondrag] 		        drag进行中触发.
+ * @config {Function} 	          [ondragend] 	        drag结束时触发.
+ * @config {HTMLElement}          [handler] 	        用于拖拽的手柄，比如dialog的title.
+ * @config {Function} 	          [toggle] 		        在每次ondrag的时候，会调用这个方法判断是否应该停止拖拽。如果此函数返回值为false，则停止拖拽.
  * @version 1.2
- * @remark
- *
-            要拖拽的元素必须事先设定样式的postion值，如果postion为absloute，并且没有设定top和left，拖拽开始时，无法取得元素的top和left值，这时会从[0,0]点开始拖拽
-            如果要拖拽的元素是static定位，会被改成relative定位方式。
-
+ * @remark    要拖拽的元素必须事先设定样式的postion值，如果postion为absloute，并且没有设定top和left，拖拽开始时，无法取得元素的top和left值，这时会从[0,0]点开始拖拽<br>如果要拖拽的元素是static定位，会被改成relative定位方式。
  * @see baidu.dom.drag
- *
  * @return {Draggable Instance} 拖拽实例，包含cancel方法，可以停止拖拽.
  */
 

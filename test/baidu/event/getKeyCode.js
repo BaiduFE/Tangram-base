@@ -13,7 +13,7 @@ test('getKeyCode', function() {
 	} else if (document.body.attachEvent) {
 		document.body.attachEvent('on' + type, fn);
 	}
-	UserAction.fireKeyEvent('keypress', document.body, {
+	ua.fireKeyEvent('keypress', document.body, {
 		'keyCode' : 50
 	});
 	if (element.removeEventListener) {
@@ -37,7 +37,7 @@ test('document', function() {
 	} else if (document.body.attachEvent) {
 		element.attachEvent('on' + type, fn);
 	}
-	UserAction.fireKeyEvent('keypress', document, {
+	ua.fireKeyEvent('keypress', document, {
 		'keyCode' : 8
 	});
 	if (element.removeEventListener) {
@@ -45,7 +45,7 @@ test('document', function() {
 	} else if (element.detachEvent) {
 		element.detachEvent('on' + type, fn);
 	}
-	UserAction.fireKeyEvent('keypress', document, {
+	ua.fireKeyEvent('keypress', document, {
 		'keyCode' : 8
 	});
 	equal(i, 1, 'i count once');
@@ -64,7 +64,7 @@ test('Esc', function() {
 	} else if (document.body.attachEvent) {
 		element.attachEvent('on' + type, fn);
 	}
-	UserAction.fireKeyEvent('keypress', document, {
+	ua.fireKeyEvent('keypress', document, {
 		'keyCode' : 27
 	});
 	if (element.removeEventListener) {

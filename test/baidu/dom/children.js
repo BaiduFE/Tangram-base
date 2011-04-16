@@ -16,9 +16,9 @@ test("Element or id ", function() {
 		div.appendChild(p);
 		div.appendChild(text);
 		var childs = baidu.dom.children(div);
-		ok(UserAction.isEqualArray(childs, [ img, a, p ]), "get all childs");
+		ok(ua.isEqualArray(childs, [ img, a, p ]), "get all childs");
 		childs = baidu.dom.children("div_id");
-		ok(UserAction.isEqualArray(childs, [ img, a, p ]),
+		ok(ua.isEqualArray(childs, [ img, a, p ]),
 				"get all childs by id");
 		document.body.removeChild(div);
 	});
@@ -40,7 +40,7 @@ test("body", function() {
 		doc.body.appendChild(a);
 		doc.body.appendChild(p);
 		var childs = baidu.dom.children(doc.body);
-		ok(UserAction.isEqualArray(childs, [ div, a, p ]),
+		ok(ua.isEqualArray(childs, [ div, a, p ]),
 				"get all childs of body");
 		$('iframe#test_frame').remove();
 		start();

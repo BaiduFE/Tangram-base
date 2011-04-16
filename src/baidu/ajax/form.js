@@ -104,7 +104,7 @@ baidu.ajax.form = function (form, options) {
     
     // 完善发送请求的参数选项
     sendOptions.data = data.join('&');
-    sendOptions.method = form.getAttribute('method') || 'POST';
+    sendOptions.method = form.getAttribute('method') || 'GET';
     
     // 发送请求
     return baidu.ajax.request(url, sendOptions);

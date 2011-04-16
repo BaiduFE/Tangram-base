@@ -27,8 +27,14 @@ if(!$quirk){?>
 			id="id_control_clearstatus" type="button" value="清除用例状态"
 			onclick="$('.testlist a').removeClass('running_case pass_case fail_case');" />
 	</div>
-	<a id="id_testlist_status" class="button"><span
-		onclick="$('div#id_testlist').slideToggle('slow');">折叠用例</span> </a>
+	<div>
+		<a id="id_testlist_status" class="button"> <span
+			onclick="$('div#id_testlist').slideToggle('slow');"> 折叠用例 </span> </a>
+		<a id="id_srconly" class="button"><span
+			onclick="$('#id_showSrcOnly').slideToggle('slow');">折叠缺失</span> </a>
+		<a id="id_srconly" class="button"><span
+			onclick="$('#id_runningarea').slideToggle('slow');">折叠执行</span> </a>
+	</div>
 	<div id="id_rerun" onclick="run($('#id_rerun').html());return false;"></div>
 	<div style="clear: both"></div>
 	<div id="id_testlist" class="testlist">
@@ -41,12 +47,9 @@ if(!$quirk){?>
 	</div>
 	<div id="id_runningarea" class="runningarea"
 		style="border: solid; display: none"></div>
-	<div id="id_reportarea" class="reportarea" style="display: none"></div>
-
-	<a id="id_srconly" class="button"><span
-		onclick="$('#id_showSrcOnly').slideToggle('slow');">遗漏用例</span> </a>
+	<div id="id_reportarea" class="reportarea" style="display: none;"></div>
 	<div class='clear'></div>
-	<div id="id_showSrcOnly" class="testlist">
+	<div id="id_showSrcOnly" class="testlist" style="display: none;">
 	<?php
 	require_once "case.class.php";
 	//if(array_key_exists("showsrconly", $_GET))

@@ -16,7 +16,7 @@ test('dom ready for none ie', function() {
 		var iframe = document.createElement('iframe');
 		document.body.appendChild(iframe);
 		stop();
-		iframe.src = UserAction.commonData['datadir'] + 'testReady.html';// 文件位置在test/tools/data下
+		iframe.src = ua.commonData['datadir'] + 'testReady.html';// 文件位置在test/tools/data下
 		var clear = function(handle) {
 			clearInterval(handle);
 			// delete window.iframeReady;

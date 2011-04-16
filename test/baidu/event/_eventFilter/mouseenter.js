@@ -92,7 +92,7 @@ test('on and un', function() {
 });
 
 /**
- * mouseover事件，UserAction.mouseover模拟mouseover不能产生relatedTarget，需要手动提供relatedTarget；
+ * mouseover事件，ua.mouseover模拟mouseover不能产生relatedTarget，需要手动提供relatedTarget；
  * 鼠标移动到子元素后也会触发mouseover事件，本用例还验证了mouseover到子元素时触发情况，正确的结果是mouseover到子元素时不能执行监听函数
  */
 

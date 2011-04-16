@@ -8,7 +8,7 @@ test("取消注册unload事件", function() {
 		};
 		var div = document.body.appendChild(document.createElement('div'));
 		baidu.on(div, "onclick", handle_a);
-		/* 直接调用UserAction提供的接口跨浏览器接口，屏蔽浏览器之间的差异 */
+		/* 直接调用ua提供的接口跨浏览器接口，屏蔽浏览器之间的差异 */
 		ua.click(div);
 		baidu.un(div, "click", handle_a);
 		ua.click(div);

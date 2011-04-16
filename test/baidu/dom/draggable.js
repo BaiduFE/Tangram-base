@@ -28,23 +28,23 @@ test('drag,no options', function() {
 			'backgroundColor', 'red').css('width', '100px').css('height',
 			'100px');
 	var div1 = baidu.dom.draggable(div);// 注册onmousedown事件
-	UserAction.mousemove(div, {
+	ua.mousemove(div, {
 		clientX : 0,
 		clientY : 0
 	});
-	UserAction.mousedown(div, {
+	ua.mousedown(div, {
 		clientX : 0,
 		clientY : 0
 	});
 
 	var move = function(ele, x, y) {
 		if (x >= 100) {
-			UserAction.mouseup(ele);
+			ua.mouseup(ele);
 			equal(parseInt($(ele).css('left')), 100);
 			equal(parseInt($(ele).css('top')), 50);
 			clear(div, div1, true);
 		} else {
-			UserAction.mousemove(document, {
+			ua.mousemove(document, {
 				clientX : x + 10,
 				clientY : y + 5
 			});
@@ -82,23 +82,23 @@ test('options', function() {
 		},
 		range : [ 20, 130, 120, 30 ]
 	});
-	UserAction.mousemove(document, {
+	ua.mousemove(document, {
 		clientX : 0,
 		clientY : 0
 	});
 
-	UserAction.mousedown(div, {
+	ua.mousedown(div, {
 		clientX : 0,
 		clientY : 0
 	});
 	setTimeout(function() {
-		UserAction.mousemove(document, {
+		ua.mousemove(document, {
 			clientX : 50,
 			clientY : 50
 		});
 	}, 50);
 	setTimeout(function() {
-		UserAction.mouseup(div);
+		ua.mouseup(div);
 	}, 100);
 });
 
@@ -162,22 +162,22 @@ test('ddManager', function() {
 	manager.addEventListener("ondrag", dragging);
 	manager.addEventListener("ondragend", dragend);
 
-	UserAction.mousemove(document, {
+	ua.mousemove(document, {
 		clientX : 0,
 		clientY : 0
 	});
-	UserAction.mousedown(div, {
+	ua.mousedown(div, {
 		clientX : 0,
 		clientY : 0
 	});
 	setTimeout(function() {
-		UserAction.mousemove(div, {
+		ua.mousemove(div, {
 			clientX : 100,
 			clientY : 50
 		});
 	}, 20);
 	setTimeout(function() {
-		UserAction.mouseup(div);
+		ua.mouseup(div);
 		clear(div, div1, true);
 	}, 60);
 });

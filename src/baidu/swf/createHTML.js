@@ -94,9 +94,7 @@ baidu.swf.createHTML = function (options) {
         var fvars = [];
         for (k in vars) {
             item = vars[k];
-            if (item) {
-                fvars.push(k + "=" + encodeURIComponent(item));
-            }
+            fvars.push(k + "=" + encodeURIComponent(item));
         }
         options['flashvars'] = fvars.join('&');
     }
