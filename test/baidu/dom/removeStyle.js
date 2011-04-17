@@ -1,4 +1,4 @@
-module('baidu.dom.removeStyle')
+module('baidu.dom.removeStyle');
 
 /**
  * 删除属性，基本用例
@@ -10,4 +10,4 @@ test('remove Style base testcases', function(){
 	ok(div.style.width=='100px', "property before remove");
     baidu.dom.removeStyle(div, "width");
 	ok(parseInt($(div).css('width')) != 100, "property after remove");
-})
+});
