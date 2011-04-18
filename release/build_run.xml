@@ -41,17 +41,21 @@
 		</waitfor>
 	</target>
 
-	<target name="release" depends="init">
-		<gitext />
+	<taskdef name='taskImport' classname="com.baidu.tangram.TaskImport" classpath="release/import.jar">
+	</taskdef>
+
+	<target name="importSrc">
 		<!-- delete release file-->
 		<delete file="release/all_release_src.js" />
 		<delete file="release/core_release_src.js" />
 		<delete file="release/all_release.js" />
 		<delete file="release/core_release.js" />
 		<!--import.php-->
-		<get src="http://${serverip}/${git.user}/${project-release}/test/tools/br/import.php?f=all&amp;path=..%2F..%2F..%2Frelease%2F" dest="release/all_release_src.js" />
-		<get src="http://${serverip}/${git.user}/${project-release}/test/tools/br/import.php?f=core&amp;path=..%2F..%2F..%2Frelease%2F" dest="release/core_release_src.js" />
+		<taskImport />
 
+	</target>
+
+	<target name="release" depends="importSrc">
 		<!--YUI-->
 		<exec executable="java">
 			<arg value="-jar" />

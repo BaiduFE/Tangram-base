@@ -47,7 +47,7 @@ function report(){
 			$failinfo = $case->appendChild($dom->createElement('failure'));
 			$failinfo->setAttribute('type', 'junit.framework.AssertionFailedError');
 			//FROM php.net, You cannot simply overwrite $textContent, to replace the text content of a DOMNode, as the missing readonly flag suggests.
-			$failinfo->appendChild(new DOMText($value));
+			$failinfo->appendChild(new DOMText($value."&lt;iframe&nbsp;src='10.32.34.115:8000/BaiduFE/test/tools/br/run.php?case=$key'&gt;"));
 		}
 		//TODO add more case info in xml
 	}
