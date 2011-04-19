@@ -1,107 +1,70 @@
 module("baidu.dom.getStyle");
 
-test("get style from attribute",
-		function() {
-			// 载入float fixer
-			baidu.dom._styleFixer["float"] = baidu.browser.ie ? "styleFloat"
-					: "cssFloat";
-			expect(3);
-			var div = document.createElement('div');
-			var div1 = document.createElement('div');
-			var img = document.createElement('img');
-			document.body.appendChild(div);
-			div.appendChild(img);
-			img.style.height = '10px';
-			img.style.width = '20px';
-			img.style.src = null;
-			img.id = 'img_id';
-			img.style.zIndex = 0;
+var check = function(dom, options) {
 
-			equal(baidu.dom.getStyle(img, 'src'), '',
-					'get img  src style by attribute');
-			equal(baidu.dom.getStyle(img, 'height'), '10px',
-					'get img height style by attribute');
-			equal(baidu.dom.getStyle(img, 'width'), '20px',
-					'get img width style by attribute');
-			document.body.removeChild(div);
-		});
+	options = options || {};
+	typeof options.beforestart == 'function' && options.beforestart();
+	if (baidu.lang.isString(dom)) {
+		dom = document.getElementById(dom);
+	} else
+		dom = dom
+				|| document.body.appendChild(document.createElement(dom
+						.toString()));
+	var style = options.style;
+	var value = options.value || 0;
 
-test("get style from attribute",
-		function() {
-			// 载入float fixer
-			baidu.dom._styleFixer["float"] = baidu.browser.ie ? "styleFloat"
-					: "cssFloat";
-			expect(3);
-			var div = document.createElement('div');
-			var img = document.createElement('img');
-			document.body.appendChild(div);
-			div.appendChild(img);
-			img.style.height = '10px';
-			img.style.width = '20px';
-			img.id = 'img_id';
-			img.style.zIndex = 0;
-
-			equal(baidu.dom.getStyle(img, 'height'), '10px',
-					"get img height style by attribute");
-			equal(baidu.dom.getStyle(img, 'width'), '20px',
-					'get img width style by attribute');
-			equal(baidu.dom.getStyle(img, 'zIndex'), '0',
-					'get img zIndex by attribute');
-			document.body.removeChild(div);
-		});
-
-test("get style from attribute", function() {
-	// 载入float fixer
-	baidu.dom._styleFixer["float"] = baidu.browser.ie ? "styleFloat"
-			: "cssFloat";
-	expect(3);
-	var div = document.createElement('div');
+	dom.style[style] = value;
+	equal(baidu.dom.getStyle(dom, style), value);
+	options.remove && document.body.removeChild(dom);
+	typeof options.callback == 'function' && options.callback();
+};
+// 1
+test("style src null", function() {
 	var img = document.createElement('img');
-	document.body.appendChild(div);
-	div.appendChild(img);
-	// img.style.height ='10px';
-	img.style.width = '20px';
-	img.id = 'img_id';
-	img.style.zIndex = 0;
-	// img.style.display=null;
+	document.body.appendChild(img);
+	check(img, {
+		style : 'src',
+		value : ''
+	});
 
-	equal(baidu.dom.getStyle(img, 'background'), '',
-			"get img background style by attribute");
+});
+// 2
+test("img height、float", function() {
+	var img = document.createElement('img');
+	document.body.appendChild(img);
 	if (ua.browser['firefox'] || ua.browser['ie']) {
-		equal(baidu.dom.getStyle(img, 'height'), 'auto',
-				'get img height style by attribute');
-	} else {
-		equal(baidu.dom.getStyle(img, 'height'), '0px',
-				'get img height style by attribute');
-	}
-	equal(baidu.dom.getStyle(div, 'float'), 'none',
-			'get div float by attribute');
-	document.body.removeChild(div);
+		check(img, {
+			style : 'height',
+			value : 'auto'
+		});
+	} else
+		check(img, {
+			style : 'height',
+			value : '0px'
+		});
+	check(img, {
+		style : 'float',
+		value : 'none'
+	});
 });
-
-test("get style from attribute", function() {
-	// 载入float fixer
-	baidu.dom._styleFixer["float"] = baidu.browser.ie ? "styleFloat"
-			: "cssFloat";
-	expect(3);
-	var div = document.createElement('div');
+// 3
+test("img height,width by id", function() {
 	var img = document.createElement('img');
-	document.body.appendChild(div);
-	div.appendChild(img);
-	img.style.height = '10px';
-	img.style.width = '20px';
 	img.id = 'img_id';
-	equal(baidu.dom.getStyle(img, 'height'), '10px',
-			"get img height style by attribute");
-	equal(baidu.dom.getStyle(img, 'width'), '20px',
-			'get img width style by attribute');
-	equal(baidu.dom.getStyle('img_id', 'height'), '10px',
-			'get img height by id');
-	document.body.removeChild(div);
-});
+	document.body.appendChild(img);
+	check('img_id', {
+		style : 'height',
+		value : '10px'
+	});
+	check('img_id', {
+		style : 'width',
+		value : '20px'
+	});
 
-test("get style from style", function() {
-	expect(8);
+});
+// 4
+test("float,color,display", function() {
+	stop();
 	var div = document.createElement('div');
 	var a = document.createElement('a');
 	var img = document.createElement('img');
@@ -110,31 +73,24 @@ test("get style from style", function() {
 	div.appendChild(img);
 	div.id = 'div_id';
 	a.id = 'a_id';
-	div.style.float = 'left';
-	div.style.width = '10%';
-	div.style.height = '15%';
-	div.style.background = "#FFCC80";
-	div.style.color = "red";
-	img.style.display = 'block';
-	img.style.width = '16px';
-	img.style.height = '12px';
-	a.style.top = '5px';
-	equal(baidu.dom.getStyle(div, 'float'), 'left');
-	equal(baidu.dom.getStyle(div, 'width'), '10%');
-	equal(baidu.dom.getStyle(div, 'height'), '15%');
+	div.style.color = 'red';
+	check(div, {
+		style : 'float',
+		value : 'left'
+	});
 	var color = baidu.dom.getStyle(div, 'color').toLowerCase();
 	ok(color == '#ff0000' || color == 'red' || color == 'rgb(255,0,0)',
 			'color red');
-	equal(baidu.dom.getStyle(img, 'display'), 'block');
-	equal(baidu.dom.getStyle(img, 'width'), '16px');
-	equal(baidu.dom.getStyle(img, 'height'), '12px');
-	equal(baidu.dom.getStyle(a, 'top'), '5px');
+	check(img, {
+		style : 'display',
+		value : 'block'
+	});
+	start();
 	document.body.removeChild(div);
 });
-
+// 5
 /** css加载也需要时间 * */
 test("get style from css file", function() {
-	expect(9);
 	stop();
 	var div = document.createElement('div');
 	var div1 = document.createElement('div');
@@ -153,36 +109,46 @@ test("get style from css file", function() {
 
 	var handle = function() {
 		/** IE的float属性叫styleFloat，firefox则是cssFloat * */
-		equal(baidu.dom.getStyle(div, 'float'), 'left');
-		equal(baidu.dom.getStyle(div, 'width'), '200px');
+		check(div, {
+			style : 'float',
+			value : 'left'
+		});
+		check(div, {
+			style : 'width',
+			value : '200px'
+		});
 		var color = baidu.dom.getStyle(div, 'color').toLowerCase();
 		ok(color == '#00ff00' || color == 'rgb(0,255,0)'
 				|| color == 'rgb(0, 255, 0)', 'color');
-		equal(baidu.dom.getStyle(div, 'position'), 'relative');
+		check(div, {
+			style : 'position',
+			value : 'relative'
+		});
 		/** IE的float属性叫styleFloat，firefox则是cssFloat */
-		equal(baidu.dom.getStyle(img, 'float'), 'left');
-		equal(baidu.dom.getStyle(img, 'display'), 'block');
-		equal(baidu.dom.getStyle(img, 'left'), '50px');
-		equal(baidu.dom.getStyle(img, 'width'), '200px');
-		equal(baidu.dom.getStyle(p, 'font-size'), '14px');
-
+		check(img, {
+			style : 'float',
+			value : 'left'
+		});
+		check(img, {
+			style : 'display',
+			value : 'block'
+		});
+		check(img, {
+			style : 'left',
+			value : '50px'
+		});
+		check(img, {
+			style : 'width',
+			value : '200px'
+		});
+		check(p, {
+			style : 'font-size',
+			value : '14px'
+		});
 		document.body.removeChild(div);
 		document.body.removeChild(div1);
 		start();
 	};
 
 	ua.loadcss(upath + 'style.css', handle, 'content', 'width', '200px');
-});
-
-test("get opacity from fixer", function() {
-	stop();
-	ua.importsrc('baidu.dom._styleFixer.opacity', function() {
-		var div = document.createElement('div');
-		document.body.appendChild(div);
-		var img = document.createElement('img');
-		div.appendChild(img);
-		equal(baidu.dom.getStyle(img, 'opacity'), '1');
-		document.body.removeChild(div);
-		start();
-	}, 'baidu.dom._styleFixer.opacity', 'baidu.dom.getStyle');
 });
