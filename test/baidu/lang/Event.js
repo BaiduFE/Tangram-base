@@ -77,7 +77,7 @@ module("baidu.lang.Event");
 		}
 
 		_inherits(myClass, baidu.lang.Class);// 通过继承baidu.lang.Class来获取它的dispatchEvent方法
-		   expect(3);
+		   expect(5);
 			var obj = new myClass();
 			function listner1(){ok(true, "listner1 is added");}
 			function listner2(){ok(true, "listner2 is added");}
@@ -85,6 +85,8 @@ module("baidu.lang.Event");
 			var myEventWithoutOn = new (baidu.lang.Event)("onMyEvent", obj);
 			obj.addEventListener("onMyEvent",listner1);
 			obj.addEventListener("onMyEvent",listner2);
+			obj.dispatchEvent(myEventWithoutOn);
+			obj.removeEventListener("onMyEvent", function(){});
 			obj.dispatchEvent(myEventWithoutOn);
 			obj.removeEventListener("onMyEvent");
 			obj.dispatchEvent(myEventWithoutOn);
