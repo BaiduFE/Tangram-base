@@ -11,10 +11,10 @@
 /**
  * baidu.swf.Proxy
  * @name baidu.swf.Proxy
- * @constructor
+ * @grammar new baidu.swf.Proxy(id, property, [, loadedHandler])
  * @param {string} id Flash的元素id.object标签id, embed标签name.
  * @param {string} property Flash的方法或者属性名称，用来检测Flash是否初始化好了.
- * @param {Function} opt_loadedHandler 初始化之后的回调函数.
+ * @param {Function} loadedHandler 初始化之后的回调函数.
  * @remark Flash对应的DOM元素必须已经存在, 否则抛错. 可以使用baidu.swf.create预先创建Flash对应的DOM元素.
  * @author liyubei@baidu.com (leeight)
  */
@@ -23,16 +23,17 @@ baidu.swf.Proxy = function(id, property, loadedHandler) {
      * 页面上的Flash对象
      * @type {HTMLElement}
      */
-    var flash = this._flash = baidu.swf.getMovie(id),
+    var me = this,
+        flash = this._flash = baidu.swf.getMovie(id),
         timer;
-    if(! property) {
+    if (! property) {
         return this;
     }
     timer = setInterval(function() {
         try {
             /** @preserveTry */
             if (flash[property]) {
-                this._initialized = true;
+                me._initialized = true;
                 clearInterval(timer);
                 if (loadedHandler) {
                     loadedHandler();
@@ -52,8 +53,8 @@ baidu.swf.Proxy.prototype.getFlash = function() {
 /**
  * 判断Flash是否初始化完成,可以与js进行交互.
  */
-baidu.swf.Proxy.prototype.isReady = function(){
-    return this._initialized;
+baidu.swf.Proxy.prototype.isReady = function() {
+    return !! this._initialized;
 };
 /**
  * 调用Flash中的某个方法
