@@ -7,9 +7,7 @@ var check = function(dom, options) {
 	if (baidu.lang.isString(dom)) {
 		dom = document.getElementById(dom);
 	} else
-		dom = dom
-				|| document.body.appendChild(document.createElement(dom
-						.toString()));
+		dom = dom||document.body.appendChild(document.createElement('div'));
 	var style = options.style;
 	var value = options.value || 0;
 
@@ -18,6 +16,15 @@ var check = function(dom, options) {
 	options.remove && document.body.removeChild(dom);
 	typeof options.callback == 'function' && options.callback();
 };
+test("null height ", function() {
+	var img = document.createElement('img');
+	document.body.appendChild(img);
+	check(null, {
+		style : 'height',
+		value : '10px'
+	});
+
+});
 // 1
 test("style src null", function() {
 	var img = document.createElement('img');
