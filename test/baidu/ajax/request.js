@@ -222,3 +222,14 @@ test('尝试通过图片获取服务器时间戳', function() {
 		}
 	});
 });
+
+test("ontimeout", function(){
+  stop();
+  baidu.ajax.request(upath + 'sleep.php?time=30', {
+    'timeout' : 10000,
+    'ontimeout' : function(){
+      ok(true, 'timeout');
+      start();
+    }
+  });
+});
