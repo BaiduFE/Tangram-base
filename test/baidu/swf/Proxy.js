@@ -15,9 +15,9 @@
  *  
  **/
 
-module("测试proxy");
+module("baidu.swf.Proxy");
 
-test("baidu.swf.proxy", function(){
+test("baidu.swf.Proxy", function(){
   expect(1);
 
   stop();
@@ -45,28 +45,7 @@ test("baidu.swf.proxy", function(){
       }); 
     }
 
-    var proxy = new baidu.swf.proxy("Line", "setFlashLineData", flashLoaded);
-    proxy.init();
+    var proxy = new baidu.swf.Proxy("Line", "setFlashLineData", flashLoaded);
+    //proxy.init();
   });
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* vim: set ts=4 sw=4 sts=4 tw=100 noet: */
