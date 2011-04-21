@@ -41,6 +41,10 @@ test("URL中存在相同的参数的情况，多值合并数组", function(){
 test("URL中存在數組", function(){
 	same(baidu.url.queryToJson("http://baidu.com?1=3&1=2&1=1&2=6&2=5&2=4&3=9&3=8&3=7"), {"1" : [ '3','2','1' ],"2" :[ '6','5','4' ],"3" : [ '9','8','7' ]}, '');
 })
+test("两个异常case", function(){
+	same(baidu.url.queryToJson(""), {},  '');
+	same(baidu.url.queryToJson("&a=1"), {a:"1"},  '');
+})
 
 //describe("baidu.url.queryToJson测试",{
 //    "URL中没有参数的情况":function(){
