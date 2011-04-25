@@ -34,7 +34,7 @@ test("loop menu play wmode", function() {
 	ok(true, "flash对象创建成功");
 	start();
 });
-//error3  align='middle'达不到应有的效果
+////error3  align='middle'达不到应有的效果
 test("loop menu play wmode", function() {
 	stop();
 	var div = document.body.appendChild(document.createElement('div'));
@@ -48,8 +48,8 @@ test("loop menu play wmode", function() {
 	ok(true, "flash对象创建成功");
 	start();
 });
-//1、options.ver needed lower than existed flash version
-test("ver errorMessage", function() {
+////1、options.ver needed lower than existed flash version
+test("test ver", function() {
 	stop();
 	var div = document.body.appendChild(document.createElement('div'));
 	div.id = "div_id";
@@ -63,7 +63,7 @@ test("ver errorMessage", function() {
 	ok(true, "flash对象创建成功");
 	start();
 });
-//2、 There is no flash player or the version of existed flash is lower than needed&&errorMessage
+////2、 There is no flash player or the version of existed flash is lower than needed&&errorMessage
 test("ver errorMessage", function() {
 	stop();
 	var div = document.body.appendChild(document.createElement('div'));
@@ -71,12 +71,13 @@ test("ver errorMessage", function() {
 		id : 'test1',
 		url : "short1.swf",
 		ver:'11.0.0',
-		errorMessage:"flash player 没安装或者版本低于需要的版本 "
-	}, "div_id");
+		errorMessage:"There is no flash player or the version is too low"
+	}, div);
+	equal(div.innerHTML,"There is no flash player or the version is too low","test option errorMessage successfully");
 	start();
 });
-//3、There is no flash player or the version of existed flash is lower than needed&&!errorMessage
-test("ver errorMessage", function() {
+////3、There is no flash player or the version of existed flash is lower than needed&&!errorMessage
+test("ver no errorMessage", function() {
 	stop();
 	var div = document.body.appendChild(document.createElement('div'));
 	baidu.swf.create({
@@ -87,7 +88,7 @@ test("ver errorMessage", function() {
 	equal(div.innerHTML,'',"flash 对象没有创建成功");
 	start();
 });
-//4、width height
+////4、width height
 test("ver errorMessage", function() {
 	stop();
 	var div = document.body.appendChild(document.createElement('div'));
