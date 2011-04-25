@@ -25,8 +25,11 @@ test(
 					.importsrc(
 							"baidu.swf.create,baidu.ajax.get,baidu.json.decode",
 							function() {
-								$(document.body).append(
-										"<div id='FlashContainer'></div>");
+								var div=document.createElement('div');
+								div.id='FlashContainer';
+								document.body.appendChild(div);
+//								$(document.body).append(
+//										"<div id='FlashContainer'></div>");
 								baidu.swf.create({
 									id : "Line",
 									url : upath + "line.swf",
@@ -59,11 +62,16 @@ test(
 															ok(true,
 																	"test call() and getFlash() successfully");
 														}
+														setTimeout(function(){
+															document.body.removeChild(div);
+														},2000);
+														
 														start();
 													});
 								}
 
 								var proxy = new baidu.swf.Proxy("Line",
 										"setFlashLineData", flashLoaded);
+								
 							});
 		});
