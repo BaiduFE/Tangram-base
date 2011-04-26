@@ -9,7 +9,7 @@
 ///import baidu.lang.createClass;
 
 /**
- * baidu.swf.Proxy
+ * Js 调用 Flash方法的代理类.
  * @name baidu.swf.Proxy
  * @grammar new baidu.swf.Proxy(id, property, [, loadedHandler])
  * @param {string} id Flash的元素id.object标签id, embed标签name.
