@@ -101,7 +101,7 @@ baidu.page.load = function(resources, options, ignoreAllLoaded) {
             case 'js' :
                 node = document.createElement('script');
                 node.setAttribute('type', 'text/javascript');
-                node.setAttribute('charset', res.charset || 'UTF8');
+                node.setAttribute('charset', res.charset || self.charset);
                 break;
             case 'html' :
                 node = document.createElement('iframe');
@@ -198,3 +198,5 @@ baidu.page.load = function(resources, options, ignoreAllLoaded) {
 
     baidu.each(resources, loadResources);
 };
+//默认编码设置为UTF8
+baidu.page.load.charset = 'UTF8';
