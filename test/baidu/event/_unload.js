@@ -42,4 +42,3 @@ test("window unload", function() {
 		}, 500);
 	})
 });
-
