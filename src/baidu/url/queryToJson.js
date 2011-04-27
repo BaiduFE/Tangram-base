@@ -30,6 +30,9 @@ baidu.url.queryToJson = function (url) {
         key, value, item, param;
     
     for (; i < len; i++) {
+        if(!params[i]){
+            continue;
+        }
         param   = params[i].split('=');
         key     = param[0];
         value   = param[1];

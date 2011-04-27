@@ -74,9 +74,9 @@ baidu.lang.Class.prototype.addEventListener = function (type, handler, key) {
  */
 baidu.lang.Class.prototype.removeEventListener = function (type, handler) {
     if (typeof handler != "undefined") {
-        if (baidu.lang.isFunction(handler)) {
-            handler = handler.hashCode;
-        } else if (!baidu.lang.isString(handler)) {
+        if ( (baidu.lang.isFunction(handler) && ! (handler = handler.hashCode))
+            || (! baidu.lang.isString(handler))
+        ){
             return;
         }
     }

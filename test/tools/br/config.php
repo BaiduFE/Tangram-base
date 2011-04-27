@@ -33,8 +33,9 @@ class Config{
 	 * 源码路径配置，会在所有位置寻找源码
 	 * @var ArrayIterator::String
 	 */
-	public static $SOURCE_PATH = array("../../../../Tangram-base/src/",
-		"../../../src/","../../../../tangram/src/"
+	public static $SOURCE_PATH = array("../../../src/",
+		"../../../../Tangram-base/src/",
+		"../../../../tangram/src/"
 		);
 
 		/**

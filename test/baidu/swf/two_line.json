@@ -1,0 +1,151 @@
+{
+    "errno": 0, 
+    "data": [
+        {
+            "x": "00:00", 
+            "over": "<font size='14' color='#ffffff'>00:00 - 00:59  \u6d4f\u89c8\u91cf(PV)\n2011-01-22\uff1a28\n2011-01-21\uff1a39\n</font>", 
+            "value2": "39", 
+            "value": "28"
+        }, 
+        {
+            "x": "01:00", 
+            "over": "<font size='14' color='#ffffff'>01:00 - 01:59  \u6d4f\u89c8\u91cf(PV)\n2011-01-22\uff1a18\n2011-01-21\uff1a30\n</font>", 
+            "value2": "30", 
+            "value": "18"
+        }, 
+        {
+            "x": "02:00", 
+            "over": "<font size='14' color='#ffffff'>02:00 - 02:59  \u6d4f\u89c8\u91cf(PV)\n2011-01-22\uff1a13\n2011-01-21\uff1a24\n</font>", 
+            "value2": "24", 
+            "value": "13"
+        }, 
+        {
+            "x": "03:00", 
+            "over": "<font size='14' color='#ffffff'>03:00 - 03:59  \u6d4f\u89c8\u91cf(PV)\n2011-01-22\uff1a15\n2011-01-21\uff1a28\n</font>", 
+            "value2": "28", 
+            "value": "15"
+        }, 
+        {
+            "x": "04:00", 
+            "over": "<font size='14' color='#ffffff'>04:00 - 04:59  \u6d4f\u89c8\u91cf(PV)\n2011-01-22\uff1a18\n2011-01-21\uff1a45\n</font>", 
+            "value2": "45", 
+            "value": "18"
+        }, 
+        {
+            "x": "05:00", 
+            "over": "<font size='14' color='#ffffff'>05:00 - 05:59  \u6d4f\u89c8\u91cf(PV)\n2011-01-22\uff1a9\n2011-01-21\uff1a28\n</font>", 
+            "value2": "28", 
+            "value": "9"
+        }, 
+        {
+            "x": "06:00", 
+            "over": "<font size='14' color='#ffffff'>06:00 - 06:59  \u6d4f\u89c8\u91cf(PV)\n2011-01-22\uff1a9\n2011-01-21\uff1a47\n</font>", 
+            "value2": "47", 
+            "value": "9"
+        }, 
+        {
+            "x": "07:00", 
+            "over": "<font size='14' color='#ffffff'>07:00 - 07:59  \u6d4f\u89c8\u91cf(PV)\n2011-01-22\uff1a5\n2011-01-21\uff1a7\n</font>", 
+            "value2": "7", 
+            "value": "5"
+        }, 
+        {
+            "x": "08:00", 
+            "over": "<font size='14' color='#ffffff'>08:00 - 08:59  \u6d4f\u89c8\u91cf(PV)\n2011-01-22\uff1a18\n2011-01-21\uff1a21\n</font>", 
+            "value2": "21", 
+            "value": "18"
+        }, 
+        {
+            "x": "09:00", 
+            "over": "<font size='14' color='#ffffff'>09:00 - 09:59  \u6d4f\u89c8\u91cf(PV)\n2011-01-22\uff1a23\n2011-01-21\uff1a26\n</font>", 
+            "value2": "26", 
+            "value": "23"
+        }, 
+        {
+            "x": "10:00", 
+            "over": "<font size='14' color='#ffffff'>10:00 - 10:59  \u6d4f\u89c8\u91cf(PV)\n2011-01-22\uff1a32\n2011-01-21\uff1a29\n</font>", 
+            "value2": "29", 
+            "value": "32"
+        }, 
+        {
+            "x": "11:00", 
+            "over": "<font size='14' color='#ffffff'>11:00 - 11:59  \u6d4f\u89c8\u91cf(PV)\n2011-01-22\uff1a23\n2011-01-21\uff1a42\n</font>", 
+            "value2": "42", 
+            "value": "23"
+        }, 
+        {
+            "x": "12:00", 
+            "over": "<font size='14' color='#ffffff'>12:00 - 12:59  \u6d4f\u89c8\u91cf(PV)\n2011-01-22\uff1a24\n2011-01-21\uff1a26\n</font>", 
+            "value2": "26", 
+            "value": "24"
+        }, 
+        {
+            "x": "13:00", 
+            "over": "<font size='14' color='#ffffff'>13:00 - 13:59  \u6d4f\u89c8\u91cf(PV)\n2011-01-22\uff1a39\n2011-01-21\uff1a53\n</font>", 
+            "value2": "53", 
+            "value": "39"
+        }, 
+        {
+            "x": "14:00", 
+            "over": "<font size='14' color='#ffffff'>14:00 - 14:59  \u6d4f\u89c8\u91cf(PV)\n2011-01-22\uff1a32\n2011-01-21\uff1a46\n</font>", 
+            "value2": "46", 
+            "value": "32"
+        }, 
+        {
+            "x": "15:00", 
+            "over": "<font size='14' color='#ffffff'>15:00 - 15:59  \u6d4f\u89c8\u91cf(PV)\n2011-01-22\uff1a42\n2011-01-21\uff1a35\n</font>", 
+            "value2": "35", 
+            "value": "42"
+        }, 
+        {
+            "x": "16:00", 
+            "over": "<font size='14' color='#ffffff'>16:00 - 16:59  \u6d4f\u89c8\u91cf(PV)\n2011-01-22\uff1a47\n2011-01-21\uff1a40\n</font>", 
+            "value2": "40", 
+            "value": "47"
+        }, 
+        {
+            "x": "17:00", 
+            "over": "<font size='14' color='#ffffff'>17:00 - 17:59  \u6d4f\u89c8\u91cf(PV)\n2011-01-22\uff1a32\n2011-01-21\uff1a51\n</font>", 
+            "value2": "51", 
+            "value": "32"
+        }, 
+        {
+            "x": "18:00", 
+            "over": "<font size='14' color='#ffffff'>18:00 - 18:59  \u6d4f\u89c8\u91cf(PV)\n2011-01-22\uff1a43\n2011-01-21\uff1a39\n</font>", 
+            "value2": "39", 
+            "value": "43"
+        }, 
+        {
+            "x": "19:00", 
+            "over": "<font size='14' color='#ffffff'>19:00 - 19:59  \u6d4f\u89c8\u91cf(PV)\n2011-01-22\uff1a46\n2011-01-21\uff1a50\n</font>", 
+            "value2": "50", 
+            "value": "46"
+        }, 
+        {
+            "x": "20:00", 
+            "over": "<font size='14' color='#ffffff'>20:00 - 20:59  \u6d4f\u89c8\u91cf(PV)\n2011-01-22\uff1a50\n2011-01-21\uff1a55\n</font>", 
+            "value2": "55", 
+            "value": "50"
+        }, 
+        {
+            "x": "21:00", 
+            "over": "<font size='14' color='#ffffff'>21:00 - 21:59  \u6d4f\u89c8\u91cf(PV)\n2011-01-22\uff1a44\n2011-01-21\uff1a49\n</font>", 
+            "value2": "49", 
+            "value": "44"
+        }, 
+        {
+            "x": "22:00", 
+            "over": "<font size='14' color='#ffffff'>22:00 - 22:59  \u6d4f\u89c8\u91cf(PV)\n2011-01-22\uff1a29\n2011-01-21\uff1a51\n</font>", 
+            "value2": "51", 
+            "value": "29"
+        }, 
+        {
+            "x": "23:00", 
+            "over": "<font size='14' color='#ffffff'>23:00 - 23:59  \u6d4f\u89c8\u91cf(PV)\n2011-01-22\uff1a0 \n2011-01-21\uff1a55\n</font>", 
+            "value2": "55", 
+            "value": 0
+        }
+    ], 
+    "unit": "\u6b21", 
+    "errorMsg": ""
+}
