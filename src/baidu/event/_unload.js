@@ -9,6 +9,7 @@
  */
 
 ///import baidu.event;
+///import baidu.event._listeners;
 
 /**
  * 卸载所有事件监听器
