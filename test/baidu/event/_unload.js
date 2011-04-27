@@ -37,7 +37,7 @@ test("window unload", function() {
 			w.addEventListener('unload', fn, false);
 		}
 		setTimeout(function() {
-			$(f)[0].src = 'http://www.baidu.com';
+			$(f)[0].src = 'http://10.32.34.115:8000/houhaixian/Tangram-base/test/tools/br/list.php';
 			$(f).remove();
 		}, 500);
 	})
