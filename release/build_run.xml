@@ -15,8 +15,7 @@
 	</path>
 
 	<!--为hudson做的扩展，用于支持多用户运行环境，会直接提取当前项目的父目录名称作为user -->
-	<taskdef name="gitext" classname="com.baidu.tangram.GitExt"
-		classpathref="ext.classpath" />
+	<taskdef name="gitext" classname="com.baidu.tangram.GitExt" classpathref="ext.classpath" />
 
 	<target name="init">
 		<delete dir="${report.path}" />
@@ -34,9 +33,7 @@
 
 	<target name="execute" depends="init,coverage">
 		<gitext />
-		<get
-			src="http://${serverip}/${git.user}/${git.project}/test/tools/br/runall.php?ci=true&amp;cov=true"
-			dest="/tmp/${git.user}_${git.project}.php" />
+		<get src="http://${serverip}/${git.user}/${git.project}/test/tools/br/runall.php?ci=true&amp;cov=true" dest="/tmp/${git.user}_${git.project}.php" />
 	</target>
 	<target name="getreport" depends="init,coverage,execute">
 		<waitfor maxwait="300" maxwaitunit="second">
@@ -44,8 +41,7 @@
 		</waitfor>
 	</target>
 
-	<taskdef name='taskImport' classname="com.baidu.tangram.TaskImport"
-		classpath="release/import.jar">
+	<taskdef name='taskImport' classname="com.baidu.tangram.TaskImport" classpath="release/import.jar">
 	</taskdef>
 
 	<target name="importSrc">
@@ -54,6 +50,8 @@
 		<delete file="release/core_release_src.js" />
 		<delete file="release/all_release.js" />
 		<delete file="release/core_release.js" />
+		<delete file="release/tangram_all.js" />
+		<delete file="release/tangram_all_src.js" />
 	</target>
 
 	<target name="release" depends="importSrc">
@@ -86,6 +84,7 @@
 		<!--import.php 支持定制路径，和base同级即可，主要是为了支持0.2的检测 -->
 		<taskImport ui="Tangram-component" />
 		<!--YUI -->
+
 		<exec executable="java">
 			<arg value="-jar" />
 			<arg value="release/yuicompressor-2.4.2.jar" />
@@ -119,9 +118,7 @@
 	</target>
 
 	<target name="releaserun" depends="release">
-		<get
-			src="http://${serverip}/${git.user}/${project-release}/test/tools/br/runall.php?ci=true&amp;release=true"
-			dest="/tmp/${git.user}_${git.project}.php" />
+		<get src="http://${serverip}/${git.user}/${project-release}/test/tools/br/runall.php?ci=true&amp;release=true" dest="/tmp/${git.user}_${git.project}.php" />
 		<waitfor maxwait="300" maxwaitunit="second">
 			<available file="${report.file}" />
 		</waitfor>
