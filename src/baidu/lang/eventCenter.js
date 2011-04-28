@@ -6,9 +6,8 @@
 ///import baidu.lang.createSingle;
 
 /**
- * 事件中心
+ * @namespace 事件中心
  * @name baidu.lang.eventCenter
- * @namespace
  * @author rocy
  */
 baidu.lang.eventCenter = baidu.lang.eventCenter || baidu.lang.createSingle();
