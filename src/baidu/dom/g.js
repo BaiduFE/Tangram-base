@@ -16,7 +16,7 @@
  * @function
  * @grammar baidu.dom.g(id)
  * @param {string|HTMLElement} id 元素的id或DOM元素
- * @shortcut g,G
+ * @shortcut g,T.G
  * @meta standard
  * @see baidu.dom.q
  *             
