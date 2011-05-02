@@ -12,7 +12,7 @@ test("test ver", function() {
 		height:'100',
 		ver:'6.0.0'
 	}, div);
-	ok(true, "flash对象创建成功");
+	ok(true, "flash对象创建成功");//这个貌似也没有校验。。回头确认，确认完毕请移除此处的说明
 	setTimeout(function(){
 		document.body.removeChild(div);
 	},2000);
@@ -50,7 +50,7 @@ test("ver no errorMessage", function() {
 		url : "short1.swf",
 		width:'100',
 		height:'100',
-		ver:'11.0.0',
+		ver:'11.0.0'//,杨搏处理，此处多一个,，麻烦海先注意
 	}, 'div_id');
 	equal(div.innerHTML,'',"flash 对象没有创建成功");
 	setTimeout(function(){
