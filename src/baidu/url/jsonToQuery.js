@@ -21,7 +21,7 @@
  * @param {Function=} replacer_opt 对值进行特殊处理的函数，function (value, key)
  * @see baidu.url.queryToJson,baidu.url.getQueryValue
  *             
- * @return {string} 解析结果字符串
+ * @return {string} - 解析结果字符串，其中值将被URI编码，{a:'&1 '} ==> "a=%261%20"。
  */
 baidu.url.jsonToQuery = function (json, replacer_opt) {
     var result = [], 
