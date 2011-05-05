@@ -17,8 +17,8 @@
  * 示例三:同步接异步的调用: baidu.async.when(sync(), onSuccess, onFail).then(asyncSuccess, asyncFail).then(afterAllSuccess, afterAllFail);
  * @return {baidu.async.Deferred} deferred.
  */
-baidu.async.when = function(deferredOrValue, onSuccess, onFail){
-    if(baidu.async._isDeferred(deferredOrValue)) {
+baidu.async.when = function(deferredOrValue, onSuccess, onFail) {
+    if (baidu.async._isDeferred(deferredOrValue)) {
         deferredOrValue.then(onSuccess, onFail);
         return deferredOrValue;
     }

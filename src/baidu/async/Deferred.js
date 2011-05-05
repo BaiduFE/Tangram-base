@@ -5,12 +5,13 @@
 
 ///import baidu.async;
 ///import baidu.object.extend;
+///import baidu.async._isDeferred;
 /**
  * 用于支持异步处理, 使同步异步的调用风格统一.
  * @class
  * @grammar new baidu.async.Deferred()
  * @remark
- * 示例: 
+ * 示例:
     function someAsync(){
         var deferred = new baidu.async.Deferred();
         setTimeout(function(){
@@ -29,31 +30,44 @@
 
  * @author rocy
  */
-baidu.async.Deferred = function(){
+baidu.async.Deferred = function() {
     var me = this;
-    baidu.extend(me,{
-        _fired : 0,
-        _firing : 0,
-        _cancelled : 0,
-        _successChain : [],
-        _failChain : [],
-        _result : [],
-        _isError : 0
+    baidu.extend(me, {
+        _fired: 0,
+        _firing: 0,
+        _cancelled: 0,
+        _successChain: [],
+        _failChain: [],
+        _result: [],
+        _isError: 0
     });
 
-    function fire(){
-        if(me._cancelled || me._firing){
+    function fire() {
+        if (me._cancelled || me._firing) {
+            return;
+        }
+        //如果已有nextDeferred对象,则转移到nextDeferred上.
+        if (me._nextDeferred) {
+            me._nextDeferred.then(me._successChain[0], me._failChain[0]);
             return;
         }
         me._firing = 1;
         var chain = me._isError ? me._failChain : me._successChain,
-            result = me._result[ me._isError ? 1 : 0];
+            result = me._result[me._isError ? 1 : 0];
         // 此处使用while而非for循环,是为了避免firing时插入新函数.
-        while(chain[0]) {
+        while (chain[0]) {
             //所有函数仅调用一次.
             //TODO: 支持传入 this 和 arguments, 而不是仅仅一个值.
             try {
-                chain.shift().call(me, result);
+                var chainResult = chain.shift().call(me, result);
+                //若方法返回Deferred,则将剩余方法延至Deferred中执行
+                if (baidu.async._isDeferred(chainResult)) {
+                    me._nextDeferred = chainResult;
+                    [].push.apply(chainResult._successChain, me._successChain);
+                    [].push.apply(chainResult._failChain, me._failChain);
+                    chain = me._successChain = [];
+                    me._failChain = [];
+                }
             } catch (error) {
                 throw error;
             } finally {
@@ -62,14 +76,14 @@ baidu.async.Deferred = function(){
             }
         }
     }
-    
+
 
     /**
      * 调用onSuccess链.使用给定的value作为函数参数.
      * @param {*} value 成功结果.
      * @return {baidu.async.Deferred} this.
      */
-    me.success = function(value){
+    me.success = function(value) {
         me._result[0] = value;
         fire();
         return me;
@@ -80,7 +94,7 @@ baidu.async.Deferred = function(){
      * @param {Error} error 失败原因.
      * @return {baidu.async.Deferred} this.
      */
-    me.fail = function(error){
+    me.fail = function(error) {
         me._result[1] = error;
         me._isError = 1;
         fire();
@@ -93,10 +107,10 @@ baidu.async.Deferred = function(){
      * @param {Function} onFail 该deferred失败时的回调函数.第一个形参为失败时结果.
      * @return {baidu.async.Deferred} this.
      */
-    me.then = function(onSuccess, onFail){
+    me.then = function(onSuccess, onFail) {
         me._successChain.push(onSuccess);
         me._failChain.push(onFail);
-        if(me._fired){
+        if (me._fired) {
             fire();
         }
         return me;
@@ -105,7 +119,7 @@ baidu.async.Deferred = function(){
     /**
      * 中断该deferred, 使其失效.
      */
-    me.cancel = function(){
+    me.cancel = function() {
         me._cancelled = 1;
     };
 };
