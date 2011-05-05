@@ -60,7 +60,6 @@ baidu.element.Element = function(node){
  * @grammar baidu.element(node).each(iterator)
  * @param {Function} iterator 遍历Dom时调用的方法
  * @version 1.3
- * @shortcut e
  */
 baidu.element.Element.prototype.each = function(iterator) {
     // 每一个iterator接受到的都是封装好的node
@@ -92,7 +91,6 @@ baidu.element._toChainFunction = function(func, index){
  * @grammar baidu.element(node).doms
  * @param 详见dom包下相应方法的参数。
  * @version 1.3
- * @shortcut e
  * @private
  */
 baidu.element._makeChain = function(){ //将dom/event包下的东西挂到prototype里面
@@ -134,7 +132,6 @@ baidu.element._makeChain = function(){ //将dom/event包下的东西挂到protot
      * @param {Function} fn 事件触发时要调用的方法
      * @version 1.3
      * @remark 包装event的快捷方式具体包括blur、focus、focusin、focusout、load 、resize 、scroll 、unload 、click、 dblclick、mousedown 、mouseup 、mousemove、 mouseover 、mouseout 、mouseenter、 mouseleave、change 、select 、submit 、keydown、 keypress 、keyup、 error。
-     * @shortcut e
      * @returns {baidu.element} Element对象
      */
     //包装event的快捷方式
