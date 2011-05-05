@@ -15,7 +15,7 @@
 	</path>
 
 	<!--为hudson做的扩展，用于支持多用户运行环境，会直接提取当前项目的父目录名称作为user -->
-	<taskdef name="gitext" classname="com.baidu.tangram.GitExt" classpathref="ext.classpath" />
+	<taskdef name="gitext" classname="com.baidu.tangram.GitExt" classpath="release/import.jar" />
 
 	<target name="init">
 		<delete dir="${report.path}" />

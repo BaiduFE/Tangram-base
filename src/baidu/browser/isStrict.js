@@ -11,7 +11,8 @@
 ///import baidu.browser;
 
 /**
- * @property isStrict 判断是否严格标准的渲染模式
+ * 判断是否严格标准的渲染模式
+ * @property isStrict 
  * @grammar baidu.browser.isStrict
  * @meta standard
  */

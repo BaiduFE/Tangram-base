@@ -11,7 +11,8 @@
 ///import baidu.browser;
 
 /**
- * @property isWebkit 判断是否为webkit内核
+ * 判断是否为webkit内核
+ * @property isWebkit 
  * @grammar baidu.browser.isWebkit
  * @meta standard
  * @see baidu.browser.isGecko

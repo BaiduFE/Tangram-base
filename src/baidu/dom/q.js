@@ -21,7 +21,7 @@
  * @param {string|HTMLElement} [element] 开始搜索的元素，默认是document。
  * @param {string} [tagName] 要获取元素的标签名，如果没有值或者值为空字符串或者纯空白的字符串，表示不限制标签名。
  * @remark 不保证返回数组中DOM节点的顺序和文档中DOM节点的顺序一致。
- * @shortcut q,Q
+ * @shortcut q,T.Q
  * @meta standard
  * @see baidu.dom.g
  *             
