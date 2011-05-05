@@ -61,6 +61,7 @@ test("when中onSuccess是Defer对象的情况", function() {
 	}, 100);
 });
 (function() {
+	window.te  = window.te ||  {};
 	te.onSuccess1 = function onSuccess1(value) {
 		QUnit.equal("onSuccess1",value,"return value");
 		te.testqueue.push("onSuccess1");
@@ -90,7 +91,6 @@ test("when中onSuccess是Defer对象的情况", function() {
 		var defer = new baidu.async.Deferred();
 		setTimeout(function() {
 			testqueue.push("antherAsnyc");
-//			defer.success("antherAsnyc");
 		}, 50);
 		return defer;
 	};
