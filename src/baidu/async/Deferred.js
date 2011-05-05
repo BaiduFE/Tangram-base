@@ -55,7 +55,7 @@ baidu.async.Deferred = function() {
         var chain = me._isError ? me._failChain : me._successChain,
             result = me._result[me._isError ? 1 : 0];
         // 此处使用while而非for循环,是为了避免firing时插入新函数.
-        while (chain[0]) {
+        while (chain[0] && (! me._cancelled)) {
             //所有函数仅调用一次.
             //TODO: 支持传入 this 和 arguments, 而不是仅仅一个值.
             try {
