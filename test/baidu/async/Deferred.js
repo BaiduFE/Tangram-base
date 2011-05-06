@@ -1,15 +1,11 @@
 module("baidu.async.Deferred");
 
 (function() {
-	 window.te  = window.te ||  {};
+	window.te = window.te || {};
 	/**
-	 * @param options
-	 *            JSON, [arg(期望校验的值), complex(是否复杂校验)]
+	 * @param options JSON, [arg(期望校验的值), complex(是否复杂校验)]
 	 */
 	te.check = function(options, expect) {
-		// QUnit.expect(expect);
-		// te.expect += expect;
-		// ;
 		stop();
 		var index = options.index || 0,
 		// 是否循环校验一组参数
@@ -42,6 +38,55 @@ module("baidu.async.Deferred");
 		target == 'success' ? async().then(onCheck, unCheck) : async().then(
 				unCheck, onCheck);
 	};
+
+	te.validate = function(value) {
+		// 记录调用index
+		var _index = 0;
+		return {
+			/**
+			 * 对测试初始化
+			 * 
+			 * @returns
+			 */
+			init : function() {
+				QUnit.stop();
+				_index = 0;
+			},
+			/**
+			 * @param expIdx 期望Index
+			 * @param timeout 超时时间
+			 * @returns 返回一个Function对象
+			 */
+			getFn : function(expIdx, timeout) {
+				var fn = expIdx || expIdx === 0 ? function() {
+					equals(_index++, expIdx, expIdx + 'st call');
+				} : function() {
+				};
+				return (timeout && timeout > 0) ? setTimeout(fn, timeout) : fn;
+			},
+			/**
+			 * @param expIdx 期望的Index
+			 * @param isFail 是否调用OnFail链
+			 * @returns 返回Deferred对象
+			 */
+			getDef : function(expIdx, isFail) {
+				equals(_index++, expIdx, expIdx + 'st call');
+				var def = new baidu.async.Deferred();
+				setTimeout(isFail ? def.fail : def.success, 30);
+				return def;
+			},
+			/**
+			 * 对测试调用结束
+			 * 
+			 * @returns
+			 */
+			teardown : function(timeout) {
+				delete _index;
+				timeout && timeout != 0 ? timeout : 300;
+				setTimeout(QUnit.start, 300);
+			}
+		};
+	};
 })();
 
 test("async success", function() {
@@ -61,52 +106,43 @@ test("async fail", function() {
 	});
 });
 test("async cancel 同步调用cancel success ", function() {
-	stop();
-	var h,asyn;
-	function async() {
-		var defer = new baidu.async.Deferred();
-		setTimeout(function() {
-			defer.success("test");
-		}, 50);
-		return defer;
-	}
-	asyn = async().then(unExpect, unExpect);
-	asyn.cancel();
-	function unExpect(value) {
-		QUnit.ok(false, value + ' unExpect');
-		clearTimeout(h);
-		start();
-	}
-	h = setTimeout(function() {
-		QUnit.ok(true, 'canceled');
-		start();
-	}, 100);
+	QUnit.expect(1);
+	var tv = te.validate();
+	tv.init();
+	tv.getDef(0).then(tv.getFn(-1)).cancel();
+	tv.teardown();
 });
 test("async cancel 异步调用cancel success ", function() {
-	stop();
-	var h,asyn;
-	function async() {
-		var defer = new baidu.async.Deferred();
-		setTimeout(function() {
-			defer.success("test");
-		}, 50);
-		return defer;
-	}
-	asyn = async().then(unExpect, unExpect);
-	setTimeout(asyn.cancel(), 40);
-	function unExpect(value) {
-		QUnit.ok(false, value + ' unExpect');
-		clearTimeout(h);
-		start();
-	}
-	h = setTimeout(function() {
-		QUnit.ok(true, 'canceled');
-		start();
-	}, 100);
+	QUnit.expect(1);
+	var tv = te.validate();
+	tv.init();
+	tv.getDef(0).then(setTimeout(tv.getFn(-1), 30)).cancel();
+	tv.teardown();
 });
-test("async cancel 异步调用切断第二个then", function() {
+// 该用例当内部defer对象cancel掉后不应该影响外部def对象的then？还是直接全部cancel
+test("async cancel 切断内部defer对象", function() {
+	expect(3);
+	var tv = te.validate();
+	tv.init();
+	tv.getDef(0).then(function() {
+		return tv.getDef(1).then(tv.getFn(-1)).cancel();
+	}).then(2);
+	tv.teardown();
+});
+//
+test("async cancel 切断外部defer对象", function() {
+	expect(1);
+	var tv = te.validate();
+	tv.init();
+	tv.getDef(0).then(function() {
+		return tv.getDef(-1).then(tv.getFn(-1));
+	}).then(-1).cancel();
+	tv.teardown();
+});
+//
+test("async cancel 异步调用切断第二个then 有问题", function() {
 	stop();
-	var h,asyn;
+	var h, asyn;
 	function async() {
 		var defer = new baidu.async.Deferred();
 		setTimeout(function() {
@@ -115,108 +151,52 @@ test("async cancel 异步调用切断第二个then", function() {
 		return defer;
 	}
 	function expect(value) {
-		QUnit.ok(true, 'expect first then');
-		setTimeout(50);
+		setTimeout(function() {
+			QUnit.ok(true, 'expect first then');
+		}, 50);
 	}
 	function unExpect(value) {
 		QUnit.ok(false, 'unexpect second then');
+		setTimeout(50);
 		clearTimeout(h);
 		start();
 	}
-	asyn = async().then(expect, expect).then(unExpect, unExpect);
-	setTimeout(asyn.cancel(), 60);
-	
+	asyn = async().then(expect, expect).then(unExpect, unExpect).cancel();
+
 	h = setTimeout(function() {
-		QUnit.ok(true, 'first execute and second cancel');
+		QUnit.ok(false, ' why first execute and second cancel?');
 		start();
-	}, 120);
+	}, 400);
 });
 test("async cancel 超时调用cancel fail", function() {
-	stop();
-	var h,asyn;
-	function async() {
-		var defer = new baidu.async.Deferred();
-		setTimeout(function() {
-			defer.success("test");
-		}, 50);
-		return defer;
-	}
-	asyn = async().then(expect, expect);
-	setTimeout(function() {
-		asyn.cancel();
-	}, 80);
-	function expect(value) {
-		QUnit.ok(true, 'do expect success');
-	}
-	setTimeout(start, 100);
+	QUnit.expect(3);
+	var tv = te.validate();
+	tv.init();
+	var def = tv.getDef(0).then(tv.getFn(1)).then(tv.getFn(2));
+	setTimeout(def.cancel, 100);
+	tv.teardown(500);
 });
 test("async then链测试", function() {
-	expect(2);
-	stop();
-	function async() {
-		var defer = new baidu.async.Deferred();
-		setTimeout(function() {
-			defer.success("test");
-		}, 50);
-		return defer;
-	}
-	async().then(expect1, expect1).then(expect2, expect2);
-	function expect1(value) {
-		QUnit.ok(true, 'expect1 do success');
-	}
-	function expect2(value) {
-		QUnit.ok(true, 'expect2 do success');
-	}
-	setTimeout(start, 100);
+	QUnit.expect(3);
+	var tv = te.validate();
+	tv.init();
+	tv.getDef(0, true).then(tv.getFn(-1), tv.getFn(1)).then(tv.getFn(-1),
+			tv.getFn(2));
+	tv.teardown();
 });
 test("async then 参数测试只有onSuccess", function() {
-	stop();
-	function async() {
-		var defer = new baidu.async.Deferred();
-		setTimeout(function() {
-			defer.success("test");
-		}, 50);
-		return defer;
-	}
-	async().then(expect);
-	function expect(value) {
-		QUnit.ok(true, 'expect do success');
-	}
-	setTimeout(start, 100);
+	QUnit.expect(3);
+	var tv = te.validate();
+	tv.init();
+	tv.getDef(0).then(tv.getFn(1)).then(tv.getFn(2));
+	tv.teardown();
 });
 test("async then参数中async链情况 01", function() {
-	var testResult = [];
-	stop();
-	function oldAsync() {
-		var defer = new baidu.async.Deferred();
-		setTimeout(function() {
-			testResult.push("oldAsync");
-			defer.success("old");
-		}, 50);
-		return defer;
-	}
-	function newAsync(options) {
-		var defer = new baidu.async.Deferred();
-		setTimeout(function() {
-			testResult.push("newAsync");
-			defer.success("new," + options);
-		}, 50);
-		return defer;
-	}
-
-	function oldExpect(value) {
-		testResult.push("oldExpect");
-	}
-	function newExpect(value) {
-		testResult.push("newExpect");
-	}
-	// 做链操作
-	oldAsync().then(newAsync().then(newExpect)).then(oldExpect);
-	
-	// 校验结果
-	setTimeout(function() {
-		QUnit.same(testResult, [ "oldAsync", "newAsync", "newExpect", "oldExpect" ]
-				);
-		start();
-	}, 120);
+	QUnit.expect(4);
+	var tv = te.validate();
+	tv.init();
+	tv.getDef(0).then(function() {
+		return tv.getDef(1).then(tv.getFn(2));
+	}).then(tv.getFn(3));
+	tv.teardown();
 });

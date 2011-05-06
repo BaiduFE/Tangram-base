@@ -1,110 +1,104 @@
-module("baidu.async.Deferred");
-
+module("baidu.async.when");
+(function() {
+	window.tt = window.tt || {};
+	tt.check = function(value) {
+		// 记录调用index
+		var _index = 0;
+		return {
+			/**
+			 * 对测试初始化
+			 * 
+			 * @returns
+			 */
+			init : function() {
+				QUnit.stop();
+				_index = 0;
+			},
+			/**
+			 * @param expIdx 期望Index
+			 * @returns 返回一个Function对象
+			 */
+			getFn : function(expIdx) {
+				return expIdx || expIdx === 0 ? function() {
+					equals(_index++, expIdx, expIdx + 'st call');
+				} : function() {
+				};
+			},
+			/**
+			 * @param expIdx 期望的Index
+			 * @param isFail 是否调用OnFail链
+			 * @returns 返回Deferred对象
+			 */
+			getDef : function(expIdx, isFail) {
+				equals(_index++, expIdx, expIdx + 'st call');
+				var def = new baidu.async.Deferred();
+				setTimeout(isFail ? def.fail : def.success, 10);
+				return def;
+			},
+			/**
+			 * 对测试调用结束
+			 * 
+			 * @returns
+			 */
+			teardown : function(time) {
+				delete _index;
+				time && time != 0 ? time : 200;
+				setTimeout(QUnit.start, 200);
+			}
+		};
+	};
+})();
+//
 test("when第一个参数async方法", function() {
-	testqueue = te.testqueue = [];
-	stop();
-	var when = baidu.async.when(te.async(), te.onSuccess1, te.onFail1).then(te.onSuccess2,
-			te.onFail2);
-	setTimeout(function() {
-		QUnit.same(testqueue , [ "async", "onSuccess1", "onSuccess2" ], "call sequence");
-		start();
-	}, 100);
+	QUnit.expect(3);
+	var te = tt.check();
+	te.init();
+	baidu.async.when(te.getDef(0), te.getFn(1)).then(te.getFn(2));
+	te.teardown();
 });
+//
 test("when第一个参数async方法,回调onFail", function() {
-	testqueue = te.testqueue = [];
-	stop();
-	baidu.async.when(te.failAsync(), te.onSuccess1, te.onFail1).then(te.onSuccess2,
-			te.onFail2);
-	setTimeout(function() {
-		QUnit.same(testqueue, [ "failAsnyc", "onFail1", "onFail2" ], "call sequence");
-		start();
-	}, 100);
+	QUnit.expect(3);
+	var te = tt.check();
+	te.init();
+	baidu.async.when(te.getDef(0, true), te.getFn(-1), te.getFn(1)).then(
+			te.getFn(-1), te.getFn(2));
+	te.teardown();
 });
-test("when第一个参数sync方法", function() {
-	testqueue = te.testqueue = [];
-	stop();
-	baidu.async.when(te.sync(), te.onSuccess1, te.onFail1).then(te.onSuccess2,
-			te.onFail2);
-	setTimeout(function() {
-		QUnit.same(testqueue , [ "sync", "onSuccess1", "onSuccess2" ] ,"call sequence");
-		start();
-	}, 100);
 
+test("when第一个参数sync方法", function() {
+	QUnit.expect(3);
+	var te = tt.check();
+	te.init();
+	baidu.async.when(te.getFn(0)(), te.getFn(1), te.getFn(-1)).then(te.getFn(2),
+			te.getFn(-1));
+	te.teardown();
 });
+//
 test("when第一个参数是形参", function() {
-	testqueue = te.testqueue = [];
-	stop();
-	baidu.async.when("onSuccess1",te.onSuccess1, te.onFail1).then(te.onSuccess2,
-			te.onFail2);
-	setTimeout(function() {
-		QUnit.same(testqueue, ["onSuccess1", "onSuccess2" ],"call sequence");
-		start();
-	}, 100);
+	QUnit.expect(2);
+	var te = tt.check();
+	te.init();
+	baidu.async.when('test', te.getFn(0), te.getFn(-1)).then(te.getFn(1),
+			te.getFn(-1));
+	te.teardown();
 });
-test("when中只有一个Success函数", function() {
-	testqueue = te.testqueue = [];
-	stop();
-	baidu.async.when(te.sync(), te.onSuccess1).then(te.onSuccess2);
-	setTimeout(function() {
-		QUnit.same(testqueue , [ "sync", "onSuccess1", "onSuccess2" ],"call sequence");
-		start();
-	}, 100);
+//
+test("when中onSuccess是函数，then中调用defer", function() {
+	QUnit.expect(5);
+	var te = tt.check();
+	te.init();
+	baidu.async.when(te.getDef(0), te.getFn(1), te.getFn(-1)).then(function() {
+		return	te.getDef(2).then(te.getFn(3));
+	}).then(te.getFn(4));
+	te.teardown();
 });
 test("when中onSuccess是Defer对象的情况", function() {
-	testqueue = te.testqueue = [];
-	stop();
-	baidu.async.when(te.sync(), te.antherAsync).then(te.onSuccess2);
-	te.antherAsync().then(te.onSuccess3);
-	setTimeout(function() {
-		QUnit.same(testqueue, [ "sync", "antherAsync", "onSuccess3", "onSuccess2" ],"call sequence");
-		start();
-	}, 100);
+	QUnit.expect(5);
+	var te = tt.check();
+	te.init();
+	baidu.async.when(te.getDef(0), function() {
+		return te.getDef(1).then(te.getFn(2));
+	}).then(te.getFn(3)).then(te.getFn(4));
+	te.teardown();
 });
-(function() {
-	window.te  = window.te ||  {};
-	te.onSuccess1 = function onSuccess1(value) {
-		QUnit.equal("onSuccess1",value,"return value");
-		te.testqueue.push("onSuccess1");
-	};
-	te.onFail1 = function onFail1(value) {
-		QUnit.equal("onFail1" , value);
-		te.testqueue.push("onFail1");
-	};
-	te.onSuccess2 = function onSuccess2(value) {
-		te.testqueue.push("onSuccess2");
-	};
-	te.onSuccess3 = function onSuccess3(value) {
-		te.testqueue.push("onSuccess3");
-	};
-	te.onFail2 = function onFail2(value) {
-		te.testqueue.push("onFail2");
-	};
-	te.async = function async(value) {
-		var defer = new baidu.async.Deferred();
-		setTimeout(function() {
-			testqueue.push("async");
-			defer.success("onSuccess1");
-		}, 50);
-		return defer;
-	};
-	te.antherAsync = function antherAsync(value) {
-		var defer = new baidu.async.Deferred();
-		setTimeout(function() {
-			testqueue.push("antherAsnyc");
-		}, 50);
-		return defer;
-	};
-	te.failAsync = function failAsync(value) {
-		var defer = new baidu.async.Deferred();
-		setTimeout(function() {
-			testqueue.push("failAsnyc");
-			defer.fail("onFail1");
-		}, 50);
-		return defer;
-	};
-	te.sync = function sync() {
-		testqueue.push("sync");
-		return "onSuccess1";
-	};
-
-})();
