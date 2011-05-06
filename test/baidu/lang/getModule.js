@@ -8,6 +8,7 @@ test("getModule", function(){
   var b = {
     a : 20
   };
+
   equals(baidu.lang.getModule('a', b), 20);
   equals(baidu.lang.getModule('nosuchvar', b), null);
 
@@ -25,6 +26,7 @@ test("getModule", function(){
   equals(baidu.lang.getModule('baidu.lang.getModule'), baidu.lang.getModule);
   equals(baidu.lang.getModule('baidu.lang'), baidu.lang);
   equals(baidu.lang.getModule('baidu'), baidu);
+  equals(baidu.lang.getModule('baidu.object.isEmpty'), null);
 });
 
 test("performance", function(){
