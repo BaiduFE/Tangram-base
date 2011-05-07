@@ -16,7 +16,7 @@
 baidu.ajax.log = function(url) {
   // 以下代码来自立理的邮件，这里仅仅是整理了格式和稍微的调整
   var img = new Image(),
-      key = 'app_log_img_' + Math.floor(Math.random() *
+      key = 'tangram_ajax_log_' + Math.floor(Math.random() *
             2147483648).toString(36);
 
   // 这里一定要挂在window下
@@ -45,23 +45,3 @@ baidu.ajax.log = function(url) {
   // 同时服务器也配合一下传递Cache-Control: no-cache;
   img.src = url;
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* vim: set ts=4 sw=4 sts=4 tw=100 noet: */

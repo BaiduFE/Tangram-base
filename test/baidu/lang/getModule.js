@@ -1,15 +1,15 @@
-module("baidu.lang.getObjectByName");
+module("baidu.lang.getModule");
 
 var a = 10;
-test("getObjectByName", function(){
-  equals(baidu.lang.getObjectByName('a'), 10);
-  equals(baidu.lang.getObjectByName('nosuchvar'), null);
+test("getModule", function(){
+  equals(baidu.lang.getModule('a'), 10);
+  equals(baidu.lang.getModule('nosuchvar'), null);
 
   var b = {
     a : 20
   };
-  equals(baidu.lang.getObjectByName('a', b), 20);
-  equals(baidu.lang.getObjectByName('nosuchvar', b), null);
+  equals(baidu.lang.getModule('a', b), 20);
+  equals(baidu.lang.getModule('nosuchvar', b), null);
 
   var a = {
     b : {
@@ -20,11 +20,11 @@ test("getObjectByName", function(){
       }
     }
   };
-  equals(baidu.lang.getObjectByName('b.c.d.e', a), 'hello');
+  equals(baidu.lang.getModule('b.c.d.e', a), 'hello');
   
-  equals(baidu.lang.getObjectByName('baidu.lang.getObjectByName'), baidu.lang.getObjectByName);
-  equals(baidu.lang.getObjectByName('baidu.lang'), baidu.lang);
-  equals(baidu.lang.getObjectByName('baidu'), baidu);
+  equals(baidu.lang.getModule('baidu.lang.getModule'), baidu.lang.getModule);
+  equals(baidu.lang.getModule('baidu.lang'), baidu.lang);
+  equals(baidu.lang.getModule('baidu'), baidu);
 });
 
 test("performance", function(){
@@ -51,13 +51,13 @@ function impl2(name, opt_obj) {
 
 var now = Date.now();
 for(var i = 0; i < 10000; i ++) {
-  impl1('baidu.lang.getObjectByName');
+  impl1('baidu.lang.getModule');
 }
 ok(true, 'impl1 take ' + (Date.now() - now) + 'ms');
 
 now = Date.now();
 for(var i = 0; i < 10000; i ++) {
-  impl2('baidu.lang.getObjectByName');
+  impl2('baidu.lang.getModule');
 }
 ok(true, 'impl2 take ' + (Date.now() - now) + 'ms');
 });
