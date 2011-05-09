@@ -1,22 +1,18 @@
 /*
  * Tangram
  * Copyright 2011 Baidu Inc. All rights reserved.
- *
- * path: baidu/ajax/log.js
- * author: int08h,leeight
- * version: 1.1.0
- * date: 2011/04/29
  */
 
-///import baidu.ajax;
+///import baidu.sio;
 
 /**
+ * 通过请求一个图片的方式令服务器存储一条日志
+ * author: int08h,leeight
  * @param {string} url 要发送的地址.
  */
-baidu.ajax.log = function(url) {
-  // 以下代码来自立理的邮件，这里仅仅是整理了格式和稍微的调整
+baidu.sio.log = function(url) {
   var img = new Image(),
-      key = 'tangram_ajax_log_' + Math.floor(Math.random() *
+      key = 'tangram_sio_log_' + Math.floor(Math.random() *
             2147483648).toString(36);
 
   // 这里一定要挂在window下

@@ -1,4 +1,4 @@
-module("baidu.ajax.log");
+module("baidu.sio.log");
 
 test("onsuccess",
 		function() {
@@ -9,10 +9,10 @@ test("onsuccess",
 				var arg = "loginfo=test" + "&file=" + filename;
 				var urlstring = upath + 'log.php?' + arg;
 				//
-				baidu.ajax.log(urlstring);
+				baidu.sio.log(urlstring);
 				setTimeout(function() {
 					var urlstring = upath + "logcheck.php";
-					var xhr = baidu.ajax.post(urlstring, arg, successAction);
+					var xhr = baidu.sio.post(urlstring, arg, successAction);
 					function successAction(xhr, text) {
 						 equals(text, "test", "get log info 'test' true");
 						 equals(xhr.responseText, "test", "get log info 'test' true");
@@ -21,6 +21,6 @@ test("onsuccess",
 				}, 1000);
 
 			};
-			ua.importsrc('baidu.ajax.post', check, 'baidu.ajax.post',
-					'baidu.ajax.log');
+			ua.importsrc('baidu.sio.post', check, 'baidu.sio.post',
+					'baidu.sio.log');
 		});
