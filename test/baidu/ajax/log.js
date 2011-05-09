@@ -5,18 +5,19 @@ test("onsuccess",
 			stop();
 			var check = function() {
 				var now = Date.now();
-				var arg = "info=test" + now;
+				var filename = Math.random() +'.txt'; 
+				var arg = "loginfo=test" + "&file=" + filename;
 				var urlstring = upath + 'log.php?' + arg;
 				//
 				baidu.ajax.log(urlstring);
 				setTimeout(function() {
 					var urlstring = upath + "logcheck.php";
-					var xhr = baidu.ajax.post(urlstring, successAction);
+					var xhr = baidu.ajax.post(urlstring, arg, successAction);
 					function successAction(xhr, text) {
-//						equals(text, "true", "true");
-//						equals(xhr.responseText, "true", "true");
-						start();
-					}
+						 equals(text, "test", "get log info 'test' true");
+						 equals(xhr.responseText, "test", "get log info 'test' true");
+						start();	
+					}	
 				}, 1000);
 
 			};
