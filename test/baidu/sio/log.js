@@ -3,7 +3,7 @@ module("baidu.sio.log");
 test("onsuccess", function() {
 	stop();
 	var check = function() {
-		var now = Date.now();
+		var now = new Date();
 		var filename = Math.random() + '.txt';
 		var arg = "loginfo=test" + "&file=" + filename;
 		var urlstring = upath + 'log.php?' + arg;
