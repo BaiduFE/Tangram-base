@@ -48,7 +48,6 @@
 			failonerror="false">
 			<to address="${report.mailto}" />
 			<from address="${report.mailfrom}" />
-			<cc address="${report.mailcc}"/>
 			<message>${report.html}</message>
 		</mail>
 	</target>
