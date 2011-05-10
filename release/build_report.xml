@@ -40,10 +40,14 @@
          - - - - - - - - - - - - - - - - - -->
 	<target name="mail" description="send mail" depends="report">
 		<loadfile property="report.html" srcFile="${report.output.path}/junit-noframes.html" />
-		<mail mailhost="hotswap-c.baidu.com" charset="UTF-8" messagemimetype="text/html" subject="批量运行结果——tangram base" failonerror="false">
+		<mail mailhost="hotswap-c.baidu.com" 
+			charset="UTF-8" 
+			messagemimetype="text/html" 
+			subject="批量运行结果——tangram base"
+			cclist="${report.mailcc}"
+			failonerror="false">
 			<to address="${report.mailto}" />
 			<from address="${report.mailfrom}" />
-			<cc address="${report.mailcc}"/>
 			<message>${report.html}</message>
 		</mail>
 	</target>

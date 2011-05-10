@@ -124,7 +124,7 @@
 	</target>
 
 	<target name="releaserun" depends="release">
-		<get src="http://${serverip}/${git.user}/${project-release}/test/tools/br/runall.php?ci=true&amp;release=true" dest="/tmp/${git.user}_${git.project}.php" />
+		<get src="http://${serverip}/bellcliff/${project-release}/test/tools/br/runall.php?ci=true&amp;release=true" dest="/tmp/${git.user}_${git.project}.php" />
 		<waitfor maxwait="300" maxwaitunit="second">
 			<available file="${report.file}" />
 		</waitfor>
