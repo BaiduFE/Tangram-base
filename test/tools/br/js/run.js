@@ -273,7 +273,7 @@ function jscoverage_recalculateSummary(cc) {//生成summary数据的主要方法
     getSourceFunc = 'get_'+getSourceFunc.substring(0,getSourceFunc.length-3);
     //-------------------------------------------------
     caseinfostr += "<tr class="+className+" >";
-    caseinfostr += "<td class=leftColumn><a href=# onclick=setSourceHtml(&#39"+getSourceFunc+"&#39)>"+file+"</a></td>";
+    caseinfostr += "<td class=leftColumn><a href=# onclick='setSourceHtml(\""+getSourceFunc+"\")'>"+file+"</a></td>";
     caseinfostr += "<td class=numeric>"+num_statements+"</td>";
     caseinfostr += "<td class=numeric>"+num_executed+"</td>";  
     // new coverage td containing a bar graph
