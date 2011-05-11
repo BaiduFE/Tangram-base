@@ -100,7 +100,8 @@ function covsourceinfotojs($browser,$info){//每个源码文件对应的html写�
 			$title = substr($a,1,strpos($a,':')-4);
 			$title = str_replace('/','1',$title);
 			$content = substr($a,strpos($a,':')+1,strlen($a));
-			$js_content .= "function get_".$title."(){ \n return "."\"".$content."\""." ; \n}\r\n" ;
+			$content = str_replace('"','\"',$content);
+			$js_content .= "function get_".$title."(){ \n return '".$content."' ; \n}\r\n" ;
 		}
 	};
 	file_put_contents($filepath, $js_content);
