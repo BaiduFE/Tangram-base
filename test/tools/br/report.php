@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 //经常碰到傲游和IE6同时完成的情况，如何处理比较合适？
 //TODO add php info in xml
 if(substr_count($_POST['config'], "browser")==0){
@@ -78,8 +78,6 @@ if(file_exists("coveragereport/jscoverage.html")){
 }
 function covsummaryinfohtml($browser,$info){//生成jscoverage summary 页面的静态页面
 	global $html;
-	$html->save('coveragereport/browser/'.$browser.'/'.$browser.'.html');
-	$html = file_get_html('coveragereport/browser/'.$browser.'/'.$browser.'.html');
 	$totals = substr($info[0],1,strlen($info[0])-2);
 	$caseinfo = substr($info[1],1,strlen($info[1])-2);
 	$summaryTotals = $html->getElementById('summaryTotals');
