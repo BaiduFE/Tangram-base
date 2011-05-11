@@ -158,7 +158,11 @@ test("异常case11", function(){
 	equals(sRet, " false 100 123 1,2 [object Object]");
 });  // 15
 
-
+test("异常case12",function () {
+	sPattern = "#error #test";
+	sRet = baidu.string.format(sPattern);
+	equals(sRet, "#error #test", "无格式自动返回当前源");
+});
 
 //describe('baidu.string.format测试', {
 //	'默认分隔符Json数据格式化字符串': function() {
