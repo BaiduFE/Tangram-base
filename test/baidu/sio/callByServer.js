@@ -44,14 +44,14 @@ test('charset gbk', function() {
 	});
 });
 
-test('check no callback params ',function() {
-	stop();
-	baidu.sio.callByServer(upath + "callByServer.php?callback=test", undefined);
-	ok(true,true,"just for check no callback params.");
-	setTimeout(function() {
-		start();
-	}, 100);
-});
+//test('check no callback params ',function() {
+//	stop();
+//	baidu.sio.callByServer(upath + "callByServer.php?callback=test");
+//	ok(true,true,"just for check no callback params.");	
+//	setTimeout(function() {
+//		start();
+//	}, 100);
+//});
 
 // modify by bell, 貌似短期没有修改计划，尚未实现
 //test('确保所有动态创建的script都被删除了', function() {
