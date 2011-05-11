@@ -100,24 +100,11 @@ function covsourceinfotojs($browser,$info){//每个源码文件对应的html写�
 			$title = substr($a,1,strpos($a,':')-4);
 			$title = str_replace('/','1',$title);
 			$content = substr($a,strpos($a,':')+1,strlen($a));
-			$js_content .= "function get_".$title."(){ \n return '".$content."' ; \n}\r\n" ;
+			$js_content .= "function get_".$title."(){ \n return "."\"".$content."\""." ; \n}\r\n" ;
 		}
 	};
 	file_put_contents($filepath, $js_content);
 };
-
-//function covsourceinfohtml($browser,$info){//生成jscoverage 的source 静态html，
-//	$array = explode("},", $info);
-//	foreach($array as $a){
-//		if(!empty($a)&&$a!=''){
-//			$title = substr($a,1,strpos($a,':')-1);
-//			$title = str_replace('/','_',$title);
-//			$content = substr($a,strpos($a,':')+1,strlen($a));
-//			$filepath = 'coveragereport/browser/'.$browser.'/'.$title.'.txt';
-//		    if($filepath!=='') file_put_contents($filepath, $content);
-//		}
-//	};
-//};
 
 report();
 include 'config.php';
