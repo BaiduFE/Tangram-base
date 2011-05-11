@@ -91,16 +91,19 @@ function covsummaryinfohtml($browser,$info){//生成jscoverage summary 页面的
 };
 
 function covsourceinfotojs($browser,$info){//每个源码文件对应的html写入到js文件中，封装成一个方法 如get_baidu1ajax1form
+    $filepath = 'coveragereport/browser/'.$browser.'/'.'source.js';
+	if(is_dir('coveragereport/browser/'.$browser)){
+	    if(file_exists($filepath))unlink($filepath);
+	}
+	else mkdir('coveragereport/browser/'.$browser);
 	$array = explode("},a", $info);
-	$filepath = 'coveragereport/browser/'.$browser.'/'.'source.js';
-	if(file_exists($filepath))unlink($filepath);
 	$js_content = '';
 	foreach($array as $a){
 		if(!empty($a)&&$a!=''){
 			$title = substr($a,1,strpos($a,':')-4);
 			$title = str_replace('/','1',$title);
 			$content = substr($a,strpos($a,':')+1,strlen($a));
-			$content = str_replace('"','\"',$content);
+			$content = str_replace("'","\'",$content);
 			$js_content .= "function get_".$title."(){ \n return '".$content."' ; \n}\r\n" ;
 		}
 	};

@@ -347,7 +347,11 @@ function jscoverage_recalculateSummary(cc) {//生成summary数据的主要方法
  */
  function getSourceStrs(covinfo){
       var sourceStrs = '';
-      var coverage = covinfo['baidu.ajax.form'];
+      var coverage = {};
+      for ( var key in covinfo) {
+      	coverage = covinfo[key];
+      	break;
+      }
       for ( var key in coverage) {
           sourceStrs += "{"+key+":"+jscoverage_makeTable(coverage[key])+"},a";
       }
