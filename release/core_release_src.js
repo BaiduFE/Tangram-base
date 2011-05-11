@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2009, Baidu Inc. All rights reserved.
+// Copyright (c) 2009, Baidu Inc. All rights reserved.
 //
 // Licensed under the BSD License
 // you may not use this file except in compliance with the License.
@@ -22,7 +22,7 @@
  * @author: allstar, erik, meizz, berg
  */
 var T,
-    baidu = T = baidu || {version: "1.3.5"}; 
+    baidu = T = baidu || {version: "1.3.8"}; 
 
 //提出guid，防止在与老版本Tangram混用时
 //在下一行错误的修改window[undefined]
@@ -44,34 +44,8 @@ window[baidu.guid] = window[baidu.guid] || {};
 
 /**
  * @namespace baidu.ajax 对XMLHttpRequest请求的封装。
- * @property onfailure 请求失败的全局事件，function(XMLHttpRequest xhr)
- * @property onbeforerequest 请求发送前触发的全局事件，function(XMLHttpRequest xhr)
- * @property onStatusCode 状态码触发的全局事件，function(XMLHttpRequest xhr),注意：onStatusCode中的StatusCode需用404,320等状态码替换。如on404
 */
 baidu.ajax = baidu.ajax || {};
-
-/*
- * Tangram
- * Copyright 2009 Baidu Inc. All rights reserved.
- * 
- * path: baidu/ajax/get.js
- * author: allstar, erik
- * version: 1.1.0
- * date: 2009/12/02
- */
-
-
-/*
- * Tangram
- * Copyright 2009 Baidu Inc. All rights reserved.
- */
-
-
-/*
- * Tangram
- * Copyright 2011 Baidu Inc. All rights reserved.
- */
-
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
@@ -87,6 +61,10 @@ baidu.ajax = baidu.ajax || {};
  * @namespace baidu.fn 对方法的操作，解决内存泄露问题。
  */
 baidu.fn = baidu.fn || {};
+/*
+ * Tangram
+ * Copyright 2011 Baidu Inc. All rights reserved.
+ */
 
 
 
@@ -100,6 +78,11 @@ baidu.fn = baidu.fn || {};
  * @version 1.3.3
  */
 baidu.fn.blank = function () {};
+/*
+ * Tangram
+ * Copyright 2009 Baidu Inc. All rights reserved.
+ */
+
 
 
 
@@ -113,16 +96,17 @@ baidu.fn.blank = function () {};
  * @param {Object} 	[options] 发送请求的选项参数
 				
  * @config {String} 	[method] 			请求发送的类型。默认为GET
- * @config {Boolean} [async] 			是否异步请求。默认为true（异步）
+ * @config {Boolean}  [async] 			是否异步请求。默认为true（异步）
  * @config {String} 	[data] 				需要发送的数据。如果是GET请求的话，不需要这个属性
  * @config {Object} 	[headers] 			要设置的http request header
+ * @config {number}   [timeout]       超时时间，单位ms
  * @config {String} 	[username] 			用户名
  * @config {String} 	[password] 			密码
  * @config {Function} [onsuccess] 		请求成功时触发，function(XMLHttpRequest xhr, string responseText)。
  * @config {Function} [onfailure] 		请求失败时触发，function(XMLHttpRequest xhr)。
  * @config {Function} [onbeforerequest]	发送请求之前触发，function(XMLHttpRequest xhr)。
  * @config {Function} [on{STATUS_CODE}] 	当请求为相应状态码时触发的事件，如on302、on404、on500，function(XMLHttpRequest xhr)。3XX的状态码浏览器无法获取，4xx的，可能因为未知问题导致获取失败。
- * @config {Boolean} [noCache] 			是否需要缓存，默认为false（缓存），1.1.1起支持。
+ * @config {Boolean}  [noCache] 			是否需要缓存，默认为false（缓存），1.1.1起支持。
  * 
  * @meta standard
  * @see baidu.ajax.get,baidu.ajax.post,baidu.ajax.form
@@ -137,8 +121,11 @@ baidu.ajax.request = function (url, options) {
         password    = options.password || "",
         method      = (options.method || "GET").toUpperCase(),
         headers     = options.headers || {},
+        // 基本的逻辑来自lili同学提供的patch
+        timeout     = options.timeout || 0,
         eventHandlers = {},
-        key, xhr;
+        tick, key, xhr;
+
     /**
      * readyState发生变更时调用
      * 
@@ -238,6 +225,10 @@ baidu.ajax.request = function (url, options) {
         
         // 不对事件类型进行验证
         if (handler) {
+            if (tick) {
+              clearTimeout(tick);
+            }
+
             if (type != 'onsuccess') {
                 handler(xhr);
             } else {
@@ -258,8 +249,6 @@ baidu.ajax.request = function (url, options) {
         }
     }
     
-    
-   
     
     for (key in options) {
         // 将options参数中的事件参数复制到eventHandlers对象中
@@ -294,6 +283,7 @@ baidu.ajax.request = function (url, options) {
         }
         
         // 在open之后再进行http请求头设定
+        // FIXME 是否需要添加; charset=UTF-8呢
         if (method == 'POST') {
             xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
         }
@@ -305,6 +295,14 @@ baidu.ajax.request = function (url, options) {
         }
         
         fire('beforerequest');
+
+        if (timeout) {
+          tick = setTimeout(function(){
+            xhr.onreadystatechange = baidu.fn.blank;
+            xhr.abort();
+            fire("timeout");
+          }, timeout);
+        }
         xhr.send(data);
         
         if (!async) {
@@ -316,6 +314,16 @@ baidu.ajax.request = function (url, options) {
     
     return xhr;
 };
+/*
+ * Tangram
+ * Copyright 2009 Baidu Inc. All rights reserved.
+ * 
+ * path: baidu/ajax/get.js
+ * author: allstar, erik
+ * version: 1.1.0
+ * date: 2009/12/02
+ */
+
 
 
 
@@ -334,7 +342,6 @@ baidu.ajax.request = function (url, options) {
 baidu.ajax.get = function (url, onsuccess) {
     return baidu.ajax.request(url, {'onsuccess': onsuccess});
 };
-
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
@@ -371,7 +378,6 @@ baidu.ajax.post = function (url, data, onsuccess) {
         }
     );
 };
-
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
@@ -389,7 +395,6 @@ baidu.ajax.post = function (url, data, onsuccess) {
  */
 
 baidu.array = baidu.array || {};
-
 
 /*
  * Tangram
@@ -437,7 +442,6 @@ baidu.each = baidu.array.forEach = baidu.array.each = function (source, iterator
     }
     return source;
 };
-
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
@@ -480,7 +484,6 @@ baidu.array.filter = function (source, iterator, thisObject) {
     
     return result;
 };
-
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
@@ -515,7 +518,6 @@ baidu.array.remove = function (source, match) {
     }
     return source;
 };
-
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
@@ -542,7 +544,6 @@ baidu.array.remove = function (source, match) {
 baidu.array.removeAt = function (source, index) {
     return source.splice(index, 1)[0];
 };
-
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
@@ -559,7 +560,6 @@ baidu.array.removeAt = function (source, index) {
  * @namespace baidu.browser 判断浏览器类型和特性的属性。
  */
 baidu.browser = baidu.browser || {};
-
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
@@ -582,7 +582,6 @@ if (/firefox\/(\d+\.\d)/i.test(navigator.userAgent)) {
  */
     baidu.browser.firefox = + RegExp['\x241'];
 }
-
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
@@ -607,7 +606,6 @@ if (/msie (\d+\.\d)/i.test(navigator.userAgent)) {
  */
    baidu.browser.ie = baidu.ie = document.documentMode || + RegExp['\x241'];
 }
-
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
@@ -621,13 +619,13 @@ if (/msie (\d+\.\d)/i.test(navigator.userAgent)) {
 
 
 /**
- * @property isGecko 判断是否为gecko内核
+ * 判断是否为gecko内核
+ * @property isGecko 
  * @grammar baidu.browser.isGecko
  * @meta standard
  * @see baidu.browser.isWebkit
  */
 baidu.browser.isGecko = /gecko/i.test(navigator.userAgent) && !/like gecko/i.test(navigator.userAgent);
-
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
@@ -641,12 +639,12 @@ baidu.browser.isGecko = /gecko/i.test(navigator.userAgent) && !/like gecko/i.tes
 
 
 /**
- * @property isStrict 判断是否严格标准的渲染模式
+ * 判断是否严格标准的渲染模式
+ * @property isStrict 
  * @grammar baidu.browser.isStrict
  * @meta standard
  */
 baidu.browser.isStrict = document.compatMode == "CSS1Compat";
-
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
@@ -660,13 +658,13 @@ baidu.browser.isStrict = document.compatMode == "CSS1Compat";
 
 
 /**
- * @property isWebkit 判断是否为webkit内核
+ * 判断是否为webkit内核
+ * @property isWebkit 
  * @grammar baidu.browser.isWebkit
  * @meta standard
  * @see baidu.browser.isGecko
  */
 baidu.browser.isWebkit = /webkit/i.test(navigator.userAgent);
-
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
@@ -689,7 +687,6 @@ if (/opera\/(\d+\.\d)/i.test(navigator.userAgent)) {
  */
     baidu.browser.opera = + RegExp['\x241'];
 }
-
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
@@ -719,7 +716,6 @@ if (/opera\/(\d+\.\d)/i.test(navigator.userAgent)) {
     	baidu.browser.safari = + (RegExp['\x241'] || RegExp['\x242']);
     }
 })();
-
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
@@ -735,7 +731,6 @@ if (/opera\/(\d+\.\d)/i.test(navigator.userAgent)) {
  * @namespace baidu.cookie 操作cookie的方法。
  */
 baidu.cookie = baidu.cookie || {};
-
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
@@ -784,17 +779,6 @@ baidu.cookie._isValidKey = function (key) {
         
     return (new RegExp("^[^\\x00-\\x20\\x7f\\(\\)<>@,;:\\\\\\\"\\[\\]\\?=\\{\\}\\/\\u0080-\\uffff]+\x24")).test(key);
 };
-
-/*
- * Tangram
- * Copyright 2009 Baidu Inc. All rights reserved.
- * 
- * path: baidu/cookie/get.js
- * author: erik
- * version: 1.1.0
- * date: 2009/11/15
- */
-
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
@@ -830,6 +814,15 @@ baidu.cookie.getRaw = function (key) {
 
     return null;
 };
+/*
+ * Tangram
+ * Copyright 2009 Baidu Inc. All rights reserved.
+ * 
+ * path: baidu/cookie/get.js
+ * author: erik
+ * version: 1.1.0
+ * date: 2009/11/15
+ */
 
 
 
@@ -854,17 +847,6 @@ baidu.cookie.get = function (key) {
     }
     return null;
 };
-
-/*
- * Tangram
- * Copyright 2009 Baidu Inc. All rights reserved.
- * 
- * path: baidu/cookie/remove.js
- * author: erik
- * version: 1.1.0
- * date: 2009/11/15
- */
-
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
@@ -923,6 +905,15 @@ baidu.cookie.setRaw = function (key, value, options) {
         + (options.domain ? "; domain=" + options.domain : "")
         + (options.secure ? "; secure" : ''); 
 };
+/*
+ * Tangram
+ * Copyright 2009 Baidu Inc. All rights reserved.
+ * 
+ * path: baidu/cookie/remove.js
+ * author: erik
+ * version: 1.1.0
+ * date: 2009/11/15
+ */
 
 
 
@@ -940,7 +931,6 @@ baidu.cookie.remove = function (key, options) {
     options.expires = new Date(0);
     baidu.cookie.setRaw(key, '', options);
 };
-
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
@@ -980,7 +970,6 @@ secure:cookie是否安全传输
 baidu.cookie.set = function (key, value, options) {
     baidu.cookie.setRaw(key, encodeURIComponent(value), options);
 };
-
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
@@ -996,7 +985,6 @@ baidu.cookie.set = function (key, value, options) {
  * @namespace baidu.dom 操作dom的方法。
  */
 baidu.dom = baidu.dom || {};
-
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
@@ -1037,28 +1025,6 @@ baidu.dom._NAME_ATTRS = (function () {
     
     return result;
 })();
-
-/*
- * Tangram
- * Copyright 2009 Baidu Inc. All rights reserved.
- * 
- * path: baidu/dom/g.js
- * author: allstar, erik, berg
- * version: 1.3
- * date: 2010-07-07
- */
-
-
-/*
- * Tangram
- * Copyright 2009 Baidu Inc. All rights reserved.
- * 
- * path: baidu/lang/isString.js
- * author: erik
- * version: 1.1.0
- * date: 2009/12/30
- */
-
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
@@ -1074,6 +1040,15 @@ baidu.dom._NAME_ATTRS = (function () {
  * @namespace baidu.lang 对语言层面的封装，包括类型判断、模块扩展、继承基类以及对象自定义事件的支持。
 */
 baidu.lang = baidu.lang || {};
+/*
+ * Tangram
+ * Copyright 2009 Baidu Inc. All rights reserved.
+ * 
+ * path: baidu/lang/isString.js
+ * author: erik
+ * version: 1.1.0
+ * date: 2009/12/30
+ */
 
 
 
@@ -1095,6 +1070,16 @@ baidu.lang.isString = function (source) {
 
 // 声明快捷方法
 baidu.isString = baidu.lang.isString;
+/*
+ * Tangram
+ * Copyright 2009 Baidu Inc. All rights reserved.
+ * 
+ * path: baidu/dom/g.js
+ * author: allstar, erik, berg
+ * version: 1.3
+ * date: 2010-07-07
+ */
+
 
 
 
@@ -1115,18 +1100,6 @@ baidu.dom._g = function (id) {
 
 // 声明快捷方法
 baidu._g = baidu.dom._g;
-
-/*
- * Tangram
- * Copyright 2009 Baidu Inc. All rights reserved.
- * 
- * path: baidu/dom/_matchNode.js
- * author: allstar
- * version: 1.1.0
- * date: 2009/11/18
- */
-
-
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
@@ -1145,7 +1118,7 @@ baidu._g = baidu.dom._g;
  * @function
  * @grammar baidu.dom.g(id)
  * @param {string|HTMLElement} id 元素的id或DOM元素
- * @shortcut g,G
+ * @shortcut g,T.G
  * @meta standard
  * @see baidu.dom.q
  *             
@@ -1162,6 +1135,16 @@ baidu.dom.g = function (id) {
 
 // 声明快捷方法
 baidu.g = baidu.G = baidu.dom.g;
+/*
+ * Tangram
+ * Copyright 2009 Baidu Inc. All rights reserved.
+ * 
+ * path: baidu/dom/_matchNode.js
+ * author: allstar
+ * version: 1.1.0
+ * date: 2009/11/18
+ */
+
 
 
 
@@ -1185,7 +1168,6 @@ baidu.dom._matchNode = function (element, direction, start) {
 
     return null;
 };
-
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
@@ -1202,7 +1184,6 @@ baidu.dom._matchNode = function (element, direction, start) {
  * 提供给setStyle与getStyle使用
  */
 baidu.dom._styleFilter = baidu.dom._styleFilter || [];
-
 
 /*
  * Tangram
@@ -1237,7 +1218,6 @@ baidu.dom._styleFilter[baidu.dom._styleFilter.length] = {
         return value;
     }
 };
-
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
@@ -1264,7 +1244,6 @@ baidu.dom._styleFilter.filter = function (key, value, method) {
 
     return value;
 };
-
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
@@ -1291,7 +1270,6 @@ baidu.dom._styleFilter[baidu.dom._styleFilter.length] = {
         return value;
     }
 };
-
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
@@ -1308,7 +1286,6 @@ baidu.dom._styleFilter[baidu.dom._styleFilter.length] = {
  * 提供给setStyle与getStyle使用
  */
 baidu.dom._styleFixer = baidu.dom._styleFixer || {};
-
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
@@ -1342,7 +1319,6 @@ baidu.dom._styleFixer.display = baidu.browser.ie && baidu.browser.ie < 8 ? { // 
         element.style.display = value == 'inline-block' ? '-moz-inline-box' : value;
     }
 } : null;
-
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All right reserved.
@@ -1360,7 +1336,6 @@ baidu.dom._styleFixer.display = baidu.browser.ie && baidu.browser.ie < 8 ? { // 
  * @meta standard
  */
 baidu.dom._styleFixer["float"] = baidu.browser.ie ? "styleFloat" : "cssFloat";
-
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
@@ -1392,28 +1367,6 @@ baidu.dom._styleFixer.opacity = baidu.browser.ie ? {
         style.zoom = 1;
     }
 } : null;
-
-/*
- * Tangram
- * Copyright 2009 Baidu Inc. All right reserved.
- * 
- * path: baidu/dom/addClass.js
- * author: allstar, erik
- * version: 1.1.0
- * date: 2009/12/2
- */
-
-
-/*
- * Tangram
- * Copyright 2009 Baidu Inc. All rights reserved.
- * 
- * path: baidu/string/trim.js
- * author: dron, erik
- * version: 1.1.0
- * date: 2009/11/15
- */
-
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
@@ -1429,6 +1382,15 @@ baidu.dom._styleFixer.opacity = baidu.browser.ie ? {
  * @namespace baidu.string 操作字符串的方法。
  */
 baidu.string = baidu.string || {};
+/*
+ * Tangram
+ * Copyright 2009 Baidu Inc. All rights reserved.
+ * 
+ * path: baidu/string/trim.js
+ * author: dron, erik
+ * version: 1.1.0
+ * date: 2009/11/15
+ */
 
 
 
@@ -1457,6 +1419,17 @@ baidu.string = baidu.string || {};
 
 // 声明快捷方法
 baidu.trim = baidu.string.trim;
+/*
+ * Tangram
+ * Copyright 2009 Baidu Inc. All right reserved.
+ * 
+ * path: baidu/dom/addClass.js
+ * author: allstar, erik
+ * version: 1.1.0
+ * date: 2009/12/2
+ */
+
+
 
 
 /**
@@ -1495,7 +1468,6 @@ baidu.dom.addClass = function (element, className) {
 
 // 声明快捷方法
 baidu.addClass = baidu.dom.addClass;
-
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
@@ -1530,7 +1502,6 @@ baidu.dom.children = function (element) {
     
     return children;    
 };
-
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
@@ -1566,22 +1537,6 @@ baidu.dom.contains = function (container, contained) {
         ? container != contained && container.contains(contained)
         : !!(container.compareDocumentPosition(contained) & 16);
 };
-
-/*
- * Tangram
- * Copyright 2009 Baidu Inc. All right reserved.
- */
-/*
- * Tangram
- * Copyright 2009 Baidu Inc. All rights reserved.
- * 
- * path: baidu/dom/setAttrs.js
- * author: allstar
- * version: 1.1.0
- * date: 2009/11/17
- */
-
-
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
@@ -1628,6 +1583,17 @@ baidu.dom.setAttr = function (element, key, value) {
 
 // 声明快捷方法
 baidu.setAttr = baidu.dom.setAttr;
+/*
+ * Tangram
+ * Copyright 2009 Baidu Inc. All rights reserved.
+ * 
+ * path: baidu/dom/setAttrs.js
+ * author: allstar
+ * version: 1.1.0
+ * date: 2009/11/17
+ */
+
+
 
 
 /**
@@ -1655,6 +1621,10 @@ baidu.dom.setAttrs = function (element, attributes) {
 
 // 声明快捷方法
 baidu.setAttrs = baidu.dom.setAttrs;
+/*
+ * Tangram
+ * Copyright 2009 Baidu Inc. All right reserved.
+ */
 
 
 /**
@@ -1664,7 +1634,7 @@ baidu.setAttrs = baidu.dom.setAttrs;
  * @function
  * @grammar baidu.dom.create(tagName[, options])
  * @param {string} tagName 标签名称.
- * @param {Object=} opt_attributes 元素创建时拥有的属性，如style和className.
+ * @param {Object} opt_attributes 元素创建时拥有的属性，如style和className.
  * @version 1.3
  * @meta standard
  * @return {HTMLElement} 创建的 Element 对象
@@ -1674,7 +1644,6 @@ baidu.dom.create = function(tagName, opt_attributes) {
         attributes = opt_attributes || {};
     return baidu.dom.setAttrs(el, attributes);
 };
-
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
@@ -1700,7 +1669,6 @@ baidu.dom.create = function(tagName, opt_attributes) {
 baidu.dom.first = function (element) {
     return baidu.dom._matchNode(element, 'nextSibling', 'firstChild');
 };
-
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
@@ -1740,7 +1708,6 @@ baidu.dom.getAttr = function (element, key) {
 
 // 声明快捷方法
 baidu.getAttr = baidu.dom.getAttr;
-
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
@@ -1768,28 +1735,6 @@ baidu.dom.getDocument = function (element) {
     element = baidu.dom.g(element);
     return element.nodeType == 9 ? element : element.ownerDocument || element.document;
 };
-
-/*
- * Tangram
- * Copyright 2009 Baidu Inc. All rights reserved.
- * 
- * path: baidu/dom/getPosition.js
- * author: berg
- * version: 1.2.0
- * date: 2010/12/16
- *
- * thanks google closure & jquery
- * 本函数部分思想来自：http://code.google.com/p/doctype/wiki/ArticlePageOffset
- */
-
-
-
-/*
- * Tangram
- * Copyright 2009 Baidu Inc. All rights reserved.
- */
-
-
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
@@ -1826,10 +1771,6 @@ baidu.dom.getComputedStyle = function(element, key){
     }
     return ''; 
 };
-
-
-
-
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
@@ -1865,6 +1806,14 @@ baidu.string.toCamelCase = function (source) {
         return match.charAt(1).toUpperCase();
     });
 };
+/*
+ * Tangram
+ * Copyright 2009 Baidu Inc. All rights reserved.
+ */
+
+
+
+
 
 
 
@@ -1902,7 +1851,9 @@ baidu.dom.getStyle = function (element, key) {
     // 在取不到值的时候，用fixer进行修正
     if (!value) {
         var fixer = dom._styleFixer[key];
-        value = fixer && fixer.get ? fixer.get(element) : baidu.dom.getStyle(element, fixer);
+        if(fixer){
+            value = fixer.get ? fixer.get(element) : baidu.dom.getStyle(element, fixer);
+        }
     }
     
     /* 检查结果过滤器 */
@@ -1915,6 +1866,20 @@ baidu.dom.getStyle = function (element, key) {
 
 // 声明快捷方法
 baidu.getStyle = baidu.dom.getStyle;
+/*
+ * Tangram
+ * Copyright 2009 Baidu Inc. All rights reserved.
+ * 
+ * path: baidu/dom/getPosition.js
+ * author: berg
+ * version: 1.2.0
+ * date: 2010/12/16
+ *
+ * thanks google closure & jquery
+ * 本函数部分思想来自：http://code.google.com/p/doctype/wiki/ArticlePageOffset
+ */
+
+
 
 
 
@@ -2032,7 +1997,6 @@ baidu.dom.getPosition = function (element) {
 
     return pos;
 };
-
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
@@ -2076,7 +2040,6 @@ baidu.dom.hasClass = function (element, className) {
     }
     return true;
 };
-
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
@@ -2110,7 +2073,6 @@ baidu.dom.hide = function (element) {
 
 // 声明快捷方法
 baidu.hide = baidu.dom.hide;
-
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
@@ -2147,7 +2109,6 @@ baidu.dom.insertAfter = function (newElement, existElement) {
     }
     return newElement;
 };
-
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
@@ -2185,7 +2146,6 @@ baidu.dom.insertBefore = function (newElement, existElement) {
 
     return newElement;
 };
-
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
@@ -2244,7 +2204,6 @@ baidu.dom.insertHTML = function (element, position, html) {
 };
 
 baidu.insertHTML = baidu.dom.insertHTML;
-
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
@@ -2270,19 +2229,6 @@ baidu.insertHTML = baidu.dom.insertHTML;
 baidu.dom.next = function (element) {
     return baidu.dom._matchNode(element, 'nextSibling', 'nextSibling');
 };
-
-/*
- * Tangram
- * Copyright 2009 Baidu Inc. All rights reserved.
- * 
- * path: baidu/dom/q.js
- * author: allstar, erik
- * version: 1.1.0
- * date: 2009/12/02
- */
-
-
-
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
@@ -2311,6 +2257,17 @@ baidu.string.escapeReg = function (source) {
     return String(source)
             .replace(new RegExp("([.*+?^=!:\x24{}()|[\\]\/\\\\])", "g"), '\\\x241');
 };
+/*
+ * Tangram
+ * Copyright 2009 Baidu Inc. All rights reserved.
+ * 
+ * path: baidu/dom/q.js
+ * author: allstar, erik
+ * version: 1.1.0
+ * date: 2009/12/02
+ */
+
+
 
 
 
@@ -2323,7 +2280,7 @@ baidu.string.escapeReg = function (source) {
  * @param {string|HTMLElement} [element] 开始搜索的元素，默认是document。
  * @param {string} [tagName] 要获取元素的标签名，如果没有值或者值为空字符串或者纯空白的字符串，表示不限制标签名。
  * @remark 不保证返回数组中DOM节点的顺序和文档中DOM节点的顺序一致。
- * @shortcut q,Q
+ * @shortcut q,T.Q
  * @meta standard
  * @see baidu.dom.g
  *             
@@ -2382,7 +2339,6 @@ baidu.dom.q = function (className, element, tagName) {
 
 // 声明快捷方法
 baidu.q = baidu.Q = baidu.dom.q;
-
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
@@ -2511,7 +2467,6 @@ baidu.q = baidu.Q = baidu.dom.q;
 
     ready.isReady = false;
 })();
-
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
@@ -2541,7 +2496,6 @@ baidu.dom.remove = function (element) {
     //去掉了对ie下的特殊处理：创建一个div，appendChild，然后div.innerHTML = ""
     tmpEl && tmpEl.removeChild(element);
 };
-
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
@@ -2595,7 +2549,6 @@ baidu.dom.removeClass = function (element, className) {
 
 // 声明快捷方法
 baidu.removeClass = baidu.dom.removeClass;
-
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
@@ -2650,7 +2603,6 @@ baidu.dom.setStyle = function (element, key, value) {
 
 // 声明快捷方法
 baidu.setStyle = baidu.dom.setStyle;
-
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
@@ -2727,7 +2679,6 @@ baidu.dom.show = function (element) {
 
 // 声明快捷方法
 baidu.show = baidu.dom.show;
-
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
@@ -2757,7 +2708,6 @@ baidu.dom.toggle = function (element) {
 
     return element;
 };
-
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
@@ -2778,7 +2728,6 @@ baidu.dom.toggle = function (element) {
  * @property keyCode 	键盘事件的键值
  */
 baidu.event = baidu.event || {};
-
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
@@ -2868,7 +2817,6 @@ baidu.event.EventArg.prototype.stopPropagation = function () {
 baidu.event.EventArg.prototype.stop = function () {
     return this.stopPropagation().preventDefault();
 };
-
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
@@ -2887,7 +2835,6 @@ baidu.event.EventArg.prototype.stop = function () {
  * @meta standard
  */
 baidu.event._listeners = baidu.event._listeners || [];
-
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
@@ -2915,7 +2862,6 @@ baidu.event._listeners = baidu.event._listeners || [];
 baidu.event.get = function (event, win) {
     return new baidu.event.EventArg(event, win);
 };
-
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
@@ -2941,7 +2887,6 @@ baidu.event.get = function (event, win) {
 baidu.event.getTarget = function (event) {
     return event.target || event.srcElement;
 };
-
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
@@ -3009,7 +2954,6 @@ baidu.event.on = function (element, type, listener) {
 
 // 声明快捷方法
 baidu.on = baidu.event.on;
-
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
@@ -3038,7 +2982,6 @@ baidu.event.preventDefault = function (event) {
        event.returnValue = false;
    }
 };
-
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
@@ -3105,7 +3048,6 @@ baidu.event.un = function (element, type, listener) {
 
 // 声明快捷方法
 baidu.un = baidu.event.un;
-
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
@@ -3121,7 +3063,6 @@ baidu.un = baidu.event.un;
  * @namespace baidu.json 操作json对象的方法。
  */
 baidu.json = baidu.json || {};
-
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
@@ -3151,7 +3092,6 @@ baidu.json.parse = function (data) {
     //2010/12/09：更新至不使用原生parse，不检测用户输入是否正确
     return (new Function("return (" + data + ")"))();
 };
-
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
@@ -3314,17 +3254,6 @@ baidu.json.stringify = (function () {
         }
     };
 })();
-
-/*
- * Tangram
- * Copyright 2009 Baidu Inc. All rights reserved.
- * 
- * path: baidu/lang/Class.js
- * author: meizz, erik
- * version: 1.1.0
- * date: 2009/12/1
- */
-
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
@@ -3356,8 +3285,6 @@ baidu.json.stringify = (function () {
 
     guid._counter = guid._counter || 1;
 })();
-
-
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
@@ -3378,8 +3305,6 @@ baidu.json.stringify = (function () {
  */
 
 window[baidu.guid]._instances = window[baidu.guid]._instances || {};
-
-
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
@@ -3407,6 +3332,17 @@ baidu.lang.isFunction = function (source) {
     // chrome下,'function' == typeof /a/ 为true.
     return '[object Function]' == Object.prototype.toString.call(source);
 };
+/*
+ * Tangram
+ * Copyright 2009 Baidu Inc. All rights reserved.
+ * 
+ * path: baidu/lang/Class.js
+ * author: meizz, erik
+ * version: 1.1.0
+ * date: 2009/12/1
+ */
+
+
 
 
 
@@ -3451,7 +3387,6 @@ baidu.lang.Class.prototype.dispose = function(){
 baidu.lang.Class.prototype.toString = function(){
     return "[object " + (this._className || "Object" ) + "]";
 };
-
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
@@ -3528,9 +3463,9 @@ baidu.lang.Class.prototype.addEventListener = function (type, handler, key) {
  */
 baidu.lang.Class.prototype.removeEventListener = function (type, handler) {
     if (typeof handler != "undefined") {
-        if (baidu.lang.isFunction(handler)) {
-            handler = handler.hashCode;
-        } else if (!baidu.lang.isString(handler)) {
+        if ( (baidu.lang.isFunction(handler) && ! (handler = handler.hashCode))
+            || (! baidu.lang.isString(handler))
+        ){
             return;
         }
     }
@@ -3588,7 +3523,6 @@ baidu.lang.Class.prototype.dispatchEvent = function (event, options) {
     }
     return event.returnValue;
 };
-
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
@@ -3640,7 +3574,6 @@ baidu.lang.inherits = function (subClass, superClass, className) {
 
 // 声明快捷方法
 baidu.inherits = baidu.lang.inherits;
-
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
@@ -3666,7 +3599,6 @@ baidu.inherits = baidu.lang.inherits;
 baidu.lang.instance = function (guid) {
     return window[baidu.guid]._instances[guid] || null;
 };
-
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
@@ -3693,7 +3625,6 @@ baidu.lang.instance = function (guid) {
 baidu.lang.isArray = function (source) {
     return '[object Array]' == Object.prototype.toString.call(source);
 };
-
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
@@ -3721,7 +3652,6 @@ baidu.lang.isElement = function (source) {
     return !!(source && source.nodeName && source.nodeType == 1);
 };
 
-
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
@@ -3744,7 +3674,6 @@ baidu.lang.isElement = function (source) {
 baidu.lang.isNumber = function (source) {
     return '[object Number]' == Object.prototype.toString.call(source) && isFinite(source);
 };
-
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
@@ -3828,7 +3757,6 @@ baidu.lang.module = function(name, module, owner) {
         owner[packages[len]] = module;
     }
 };
-
 /*
  * Tangram
  * Copyright 2010 Baidu Inc. All rights reserved.
@@ -3874,7 +3802,6 @@ baidu.lang.toArray = function (source) {
 
     return [].slice.call(source);
 };
-
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
@@ -3890,14 +3817,6 @@ baidu.lang.toArray = function (source) {
  * @namespace baidu.object 操作原生对象的方法。
  */
 baidu.object = baidu.object || {};
-
-/*
- * Tangram
- * Copyright 2009 Baidu Inc. All rights reserved.
- */
-
-
-
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
@@ -3947,6 +3866,12 @@ baidu.object.isPlain  = function(obj){
     for ( key in obj ) {}
     return key === undefined || hasOwnProperty.call( obj, key );
 };
+/*
+ * Tangram
+ * Copyright 2009 Baidu Inc. All rights reserved.
+ */
+
+
 
 
 
@@ -3987,7 +3912,6 @@ baidu.object.clone  = function (source) {
     }
     return result;
 };
-
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
@@ -4024,7 +3948,6 @@ baidu.object.extend = function (target, source) {
     
     return target;
 };
-
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
@@ -4038,10 +3961,8 @@ baidu.object.extend = function (target, source) {
 
 /**
  * @namespace baidu.page 对页面层面的封装，包括页面的高宽属性、以及外部css和js的动态添加。
- * @property rules 当前对象的规则列表
-*/
+ */
 baidu.page = baidu.page || {};
-
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
@@ -4067,7 +3988,6 @@ baidu.page.getScrollTop = function () {
     var d = document;
     return window.pageYOffset || d.documentElement.scrollTop || d.body.scrollTop;
 };
-
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
@@ -4095,7 +4015,6 @@ baidu.page.getViewHeight = function () {
 
     return client.clientHeight;
 };
-
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
@@ -4123,7 +4042,6 @@ baidu.page.getViewWidth = function () {
 
     return client.clientWidth;
 };
-
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
@@ -4139,7 +4057,6 @@ baidu.page.getViewWidth = function () {
  * @namespace baidu.sio 使用动态script标签请求服务器资源，包括由服务器端的回调和浏览器端的回调。
  */
 baidu.sio = baidu.sio || {};
-
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
@@ -4167,13 +4084,6 @@ baidu.sio._removeScriptTag = function(scr){
     }
     scr = null;
 };
-
-/*
- * Tangram
- * Copyright 2009 Baidu Inc. All rights reserved.
- */
-
-
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
@@ -4193,6 +4103,11 @@ baidu.sio._createScriptTag = function(scr, url, charset){
     scr.setAttribute('src', url);
     document.getElementsByTagName('head')[0].appendChild(scr);
 };
+/*
+ * Tangram
+ * Copyright 2009 Baidu Inc. All rights reserved.
+ */
+
 
 
 
@@ -4206,7 +4121,7 @@ baidu.sio._createScriptTag = function(scr, url, charset){
  * @param {Function=} opt_callback 数据加载结束时调用的函数
  * @param {Object=} opt_options 其他可选项
  * @config {String} [charset] script的字符集
- * @config {Integar} [timeOut] 超时时间，超过这个时间将不再响应本请求，并触发onfailure函数
+ * @config {Integer} [timeOut] 超时时间，超过这个时间将不再响应本请求，并触发onfailure函数
  * @config {Function} [onfailure] timeOut设定后才生效，到达超时时间时触发本函数
  * @remark
  * 1、与callByServer不同，callback参数只支持Function类型，不支持string。
@@ -4256,7 +4171,6 @@ baidu.sio.callByBrowser = function (url, opt_callback, opt_options) {
     
     baidu.sio._createScriptTag(scr, url, charset);
 };
-
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
@@ -4267,20 +4181,21 @@ baidu.sio.callByBrowser = function (url, opt_callback, opt_options) {
 
 
 
+
 /**
  * 通过script标签加载数据，加载完成由服务器端触发回调
  * @name baidu.sio.callByServer
  * @function
- * @grammar baidu.sio.callByServer(url, callback, opt_options)
+ * @grammar baidu.sio.callByServer(url, callback[, opt_options])
  * @param {string} url 加载数据的url.
- * @param {Function|string} callback 服务器端调用的函数或函数名.
- * @param {Object=} opt_options 加载数据时的选项.
+ * @param {Function|string} callback 服务器端调用的函数或函数名。如果没有指定本参数，将在URL中寻找options['queryField']做为callback的方法名.
+ * @param {Object} opt_options 加载数据时的选项.
  * @config {string} [charset] script的字符集
  * @config {string} [queryField] 服务器端callback请求字段名，默认为callback
- * @config {Integar} [timeOut] 超时时间(单位：ms)，超过这个时间将不再响应本请求，并触发onfailure函数
+ * @config {Integer} [timeOut] 超时时间(单位：ms)，超过这个时间将不再响应本请求，并触发onfailure函数
  * @config {Function} [onfailure] timeOut设定后才生效，到达超时时间时触发本函数
  * @remark
- * 如果url中已经包含key为“callback”的query项，将会被替换成callback中参数传递或自动生成的函数名。
+ * 如果url中已经包含key为“options['queryField']”的query项，将会被替换成callback中参数传递或自动生成的函数名。
  * @meta standard
  * @see baidu.sio.callByBrowser
  */
@@ -4293,23 +4208,37 @@ baidu.sio.callByServer = function(url, callback, opt_options) {
         charset = options['charset'],
         queryField = options['queryField'] || 'callback',
         timeOut = options['timeOut'] || 0,
-        timer;
+        timer,
+        reg = new RegExp('(\\?|&)' + queryField + '=([^&]*)'),
+        matches;
 
     if (baidu.lang.isFunction(callback)) {
         callbackName = prefix + Math.floor(Math.random() * 2147483648).toString(36);
         window[callbackName] = getCallBack(0);
-    } else {
-        // XXX 如果callback是一个字符串的话，就需要保证url是唯一的，不要去改变它
+    } else if(baidu.lang.isString(callback)){
+        // 如果callback是一个字符串的话，就需要保证url是唯一的，不要去改变它
         // TODO 当调用了callback之后，无法删除动态创建的script标签
         callbackName = callback;
+    } else {
+        if (matches = reg.exec(url)) {
+            callbackName = matches[2];
+        }
     }
 
     if( timeOut ){
         timer = setTimeout(getCallBack(1), timeOut);
     }
 
+    //如果用户在URL中已有callback，用参数传入的callback替换之
+    url = url.replace(reg, '\x241' + queryField + '=' + callbackName);
+    
+    if (url.search(reg) < 0) {
+        url += (url.indexOf('?') < 0 ? '?' : '&') + queryField + '=' + callbackName;
+    }
+    baidu.sio._createScriptTag(scr, url, charset);
+
     /*
-     * 返回一个函数，用于正常（挂在window上）或者超时（挂在setTimeout中）时执行
+     * 返回一个函数，用于立即（挂在window上）或者超时（挂在setTimeout中）时执行
      */
     function getCallBack(onTimeOut){
         /*global callbackName, callback, scr, options;*/
@@ -4330,15 +4259,7 @@ baidu.sio.callByServer = function(url, callback, opt_options) {
             }
         }
     }
-
-
-    url = url.replace((new RegExp('(\\?|&)callback=[^&]*')), '\x241' + queryField + '=' + callbackName);
-    if (url.search(new RegExp('(\\?|&)' + queryField + '=/')) < 0) {
-        url += (url.indexOf('?') < 0 ? '?' : '&') + queryField + '=' + callbackName;
-    }
-    baidu.sio._createScriptTag(scr, url, charset);
 };
-
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
@@ -4376,7 +4297,6 @@ baidu.string.decodeHTML = function (source) {
 };
 
 baidu.decodeHTML = baidu.string.decodeHTML;
-
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
@@ -4464,7 +4384,6 @@ baidu.string.format = function (source, opts) {
 
 // 声明快捷方法
 baidu.format = baidu.string.format;
-
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
@@ -4493,7 +4412,6 @@ baidu.format = baidu.string.format;
 baidu.string.getByteLength = function (source) {
     return String(source).replace(/[^\x00-\xff]/g, "ci").length;
 };
-
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
@@ -4507,30 +4425,8 @@ baidu.string.getByteLength = function (source) {
 
 /**
  * @namespace baidu.swf 操作flash对象的方法，包括创建flash对象、获取flash对象以及判断flash插件的版本号。
- * @property version 浏览器支持的flash插件版本
 */
 baidu.swf = baidu.swf || {};
-
-/*
- * Tangram
- * Copyright 2009 Baidu Inc. All rights reserved.
- * 
- * path: baidu/swf/create.js
- * author: erik
- * version: 1.1.0
- * date: 2009/11/17
- */
-
-/*
- * Tangram
- * Copyright 2009 Baidu Inc. All rights reserved.
- * 
- * path: baidu/swf/createHTML.js
- * author: erik
- * version: 1.1.0
- * date: 2009/11/17
- */
-
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
@@ -4544,6 +4440,7 @@ baidu.swf = baidu.swf || {};
 
 
 /**
+ * 浏览器支持的flash插件版本
  * @property version 浏览器支持的flash插件版本
  * @grammar baidu.swf.version 
  * @meta standard
@@ -4569,6 +4466,16 @@ baidu.swf.version = (function () {
         }
     }
 })();
+/*
+ * Tangram
+ * Copyright 2009 Baidu Inc. All rights reserved.
+ * 
+ * path: baidu/swf/createHTML.js
+ * author: erik
+ * version: 1.1.0
+ * date: 2009/11/17
+ */
+
 
 
 
@@ -4655,9 +4562,7 @@ baidu.swf.createHTML = function (options) {
         var fvars = [];
         for (k in vars) {
             item = vars[k];
-            if (item) {
-                fvars.push(k + "=" + encodeURIComponent(item));
-            }
+            fvars.push(k + "=" + encodeURIComponent(item));
         }
         options['flashvars'] = fvars.join('&');
     }
@@ -4732,6 +4637,15 @@ baidu.swf.createHTML = function (options) {
     
     return str.join('');
 };
+/*
+ * Tangram
+ * Copyright 2009 Baidu Inc. All rights reserved.
+ * 
+ * path: baidu/swf/create.js
+ * author: erik
+ * version: 1.1.0
+ * date: 2009/11/17
+ */
 
 
 
@@ -4786,7 +4700,6 @@ baidu.swf.create = function (options, target) {
         document.write(html);
     }
 };
-
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
@@ -4823,7 +4736,6 @@ baidu.swf.getMovie = function (name) {
     		: movie
     	: movie || window[name];
 };
-
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
@@ -4839,7 +4751,6 @@ baidu.swf.getMovie = function (name) {
  * @namespace baidu.url 操作url的方法。
  */
 baidu.url = baidu.url || {};
-
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
@@ -4863,7 +4774,7 @@ baidu.url = baidu.url || {};
  * @meta standard
  * @see baidu.url.jsonToQuery
  *             
- * @returns {string|null} 获取的参数值，获取不到时返回null
+ * @returns {string|null} - 获取的参数值，其中URI编码后的字符不会被解码，获取不到时返回null
  */
 baidu.url.getQueryValue = function (url, key) {
     var reg = new RegExp(
@@ -4878,4 +4789,3 @@ baidu.url.getQueryValue = function (url, key) {
     
     return null;
 };
-
