@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 //经常碰到傲游和IE6同时完成的情况，如何处理比较合适？
 //TODO add php info in xml
 if(substr_count($_POST['config'], "browser")==0){
@@ -25,7 +25,7 @@ function report(){
 	$errors = 0;
 	$failures = 0;
 	$tests = 0;
-	$time = 0;
+	$time = 0; 
 	foreach($_POST as $key=>$value){
 		if($key == 'config')
 		continue;
@@ -56,8 +56,7 @@ function report(){
 			$failinfo = $case->appendChild($dom->createElement('failure'));
 			$failinfo->setAttribute('type', 'junit.framework.AssertionFailedError');
 			//FROM php.net, You cannot simply overwrite $textContent, to replace the text content of a DOMNode, as the missing readonly flag suggests.
-			$kiss = join(".", split("_", $key));
-			$failinfo->appendChild(new DOMText("<a href=\"http://10.32.34.115:8000/BaiduFE/Tangram-base/test/tools/br/run.php?case=$kiss\">run</a>"));
+			$failinfo->appendChild(new DOMText($value));
 		}
 		//TODO add more case info in xml
 	}
@@ -91,7 +90,7 @@ function covsummaryinfohtml($browser,$info){//生成jscoverage summary 页面的
 	$html->save('coveragereport/browser/'.$browser.'/'.$browser.'.html');
 };
 
-function covsourceinfotojs($browser,$info){//每个源码文件对应的html写入到js文件中，封装成一个方法 如get_baidu_ajax_form，
+function covsourceinfotojs($browser,$info){//每个源码文件对应的html写入到js文件中，封装成一个方法 如get_baidu1ajax1form
 	$array = explode("},a", $info);
 	$filepath = 'coveragereport/browser/'.$browser.'/'.'source.js';
 	if(file_exists($filepath))unlink($filepath);
@@ -101,11 +100,24 @@ function covsourceinfotojs($browser,$info){//每个源码文件对应的html写�
 			$title = substr($a,1,strpos($a,':')-4);
 			$title = str_replace('/','1',$title);
 			$content = substr($a,strpos($a,':')+1,strlen($a));
-			$js_content .= "function get_".$title."(){ \n return '".$content."' \n}\r\n" ;
+			$js_content .= "function get_".$title."(){ \n return '".$content."' ; \n}\r\n" ;
 		}
 	};
 	file_put_contents($filepath, $js_content);
 };
+
+//function covsourceinfohtml($browser,$info){//生成jscoverage 的source 静态html，
+//	$array = explode("},", $info);
+//	foreach($array as $a){
+//		if(!empty($a)&&$a!=''){
+//			$title = substr($a,1,strpos($a,':')-1);
+//			$title = str_replace('/','_',$title);
+//			$content = substr($a,strpos($a,':')+1,strlen($a));
+//			$filepath = 'coveragereport/browser/'.$browser.'/'.$title.'.txt';
+//		    if($filepath!=='') file_put_contents($filepath, $content);
+//		}
+//	};
+//};
 
 report();
 include 'config.php';
