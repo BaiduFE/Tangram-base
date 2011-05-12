@@ -11,7 +11,7 @@ test("采用斜线分隔",function(){
 	equal(date.getFullYear(),1998);
 	equal(date.getMonth(),9);
 	equal(date.getDate(),25);
-})
+});
 
 test("采用短横分隔",function(){
 	expect(6);
@@ -64,7 +64,7 @@ test("采用空格分隔",function(){
             equal(d2.getFullYear(),1992);
             
         }
-})
+});
 
 test("逗号分隔",function(){
 	var d;
@@ -107,7 +107,7 @@ test("逗号分隔",function(){
         equal(d.getMonth(),11);
         equal(d.getDate(),8);
 	}
-})
+});
 
 test("用空格分隔，但是年月日顺序改变",function(){
 	var d;
@@ -146,7 +146,8 @@ test("用空格分隔，但是年月日顺序改变",function(){
             equal(d.getDate(),20);
             equal(d.getFullYear(),2003);
 	 }
-})
+});
+
 test("Ju解释为7月",function(){
 	var d;
 	if (!ua.browser.webkit && !ua.browser.opera) {
@@ -156,14 +157,14 @@ test("Ju解释为7月",function(){
             d = baidu.date.parse("2008 1 Ju"); //Ju解释成为7月
             equal(d.getMonth(),6);
         }
-})
+});
 
 test("错误的星期",function(){
 	expect(2);
 	   var d = baidu.date.parse("Fri 31 Aug 2010"); //星期输入错误
         equal(d.getDay(),2);//星期二
         equal(d.getMonth(),7);
-})
+});
 
 test("输入完整的年月日时分秒",function(){
 	var d;
@@ -175,7 +176,7 @@ test("输入完整的年月日时分秒",function(){
     equal(d.getHours(),1);
     equal(d.getMinutes(),10);
     equal(d.getSeconds(),9);
-})
+});
 
 test("输入的小时信息带pm",function(){
 	var d;
@@ -191,7 +192,7 @@ test("输入的小时信息带pm",function(){
         equal(d.getMinutes(),34);
         equal(d.getSeconds(),0);
     }
-})
+});
 
 test("输入的小时信息带am",function(){
 	var d;
@@ -207,4 +208,14 @@ test("输入的小时信息带am",function(){
          equal(d.getMinutes(),34);
          equal(d.getSeconds(),0);
 	 }
-})
+});
+
+test("无参，返回当前时间", function() {
+	var d;
+	expect(4);
+	d = baidu.date.parse();
+	ok(typeof d == 'object');
+	equal(d.getDate(), new Date().getDate());
+	equal(d.getMonth(), new Date().getMonth());
+	equal(d.getFullYear(),new Date().getFullYear());
+});

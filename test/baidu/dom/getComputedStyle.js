@@ -92,3 +92,12 @@ test("get style from fixer", function() {
 		start();
 	}, 'baidu.dom._styleFixer.opacity', 'baidu.dom.getComputedStyle');
 });
+test("get empty style in IE", function() {
+	if (ua.browser.ie) {
+		stop();
+		var div = document.createElement('div');
+		div.style.width = '100px';
+		equal(baidu.dom.getComputedStyle(div, 'width'), '','empty style');
+		start();
+	}
+});
