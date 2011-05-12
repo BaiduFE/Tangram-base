@@ -2,10 +2,10 @@
 	<head>
 		<meta http-equiv='Content-Type' content='text/html; charset=utf-8' />
 		<script type="text/javascript">
+		var url = document.location.href;
 		function getUrl(browser){
-			var url = document.location.href;
-			url = url.substring(0,url.length-13)+'browser/'+browser+'/'+browser+'.html'; 
-	                    return url;
+			var urlbrowser = url.substring(0,url.length-13)+'browser/'+browser+'/'+browser+'.html'; 
+	                    return urlbrowser;
 		}
 	
 		</script>
