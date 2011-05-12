@@ -1,0 +1,74 @@
+<html>
+    <head>
+        <script type="text/javascript">
+            var isReady = false;
+            
+            if ( document.addEventListener ) {
+                DOMContentLoaded = function() {
+                    document.removeEventListener( "DOMContentLoaded", DOMContentLoaded, false );
+                    //if(isReady) return;
+                    //isReady = true;
+                    alert('DOMContentLoaded');
+                };
+
+            } else if ( document.attachEvent ) {
+                DOMContentLoaded = function() {
+                    if ( document.readyState === "complete" ) {
+                        document.detachEvent( "onreadystatechange", DOMContentLoaded );
+                        //if(isReady) return;
+                        //isReady = true;
+                        alert('DOMContentLoaded');
+                    }
+                };
+            }
+
+        function ready(){
+            //if(isReady) return;
+            //isReady = true;
+            alert('onload');
+        }
+
+        function scroll_ready(){
+            if(isReady) return;
+            
+            isReady = true;
+            alert('onscroll');
+        }
+
+        function doScrollCheck(){
+            try {
+                document.documentElement.doScroll("left");
+            } catch(e) {
+                setTimeout( doScrollCheck, 1 );
+                return;
+            }   
+            scroll_ready();
+        } 
+
+        if ( document.addEventListener ) {                                                                        
+             document.addEventListener( "DOMContentLoaded", DOMContentLoaded, false );                             
+             window.addEventListener( "load", ready, false );                                               
+                                                                                                                   
+         } else if ( document.attachEvent ) {                                                                      
+             document.attachEvent("onreadystatechange", DOMContentLoaded);                                         
+                                                                                                                   
+             window.attachEvent( "onload", ready );                                                         
+                                                                                                                   
+             var toplevel = false;                                                                                 
+                                                                                                                   
+             try {                                                                                                 
+                 toplevel = window.frameElement == null;                                                           
+             } catch(e) {}                                                                                         
+                                                                                                                   
+             if ( document.documentElement.doScroll && toplevel ) {                                                
+                 doScrollCheck(); 
+             }                                                                                                     
+         }           
+        </script>
+    </head>
+    <body>
+        <img src='http://cnbeta.com/images/cnlogo.gif'/>
+        <img src='http://cnbeta.com/images/cnlogo.gif'/>
+        <img src='http://cnbeta.com/images/cnlogo.gif'/>
+    </body>
+</html>
