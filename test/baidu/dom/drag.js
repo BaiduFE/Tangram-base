@@ -1,5 +1,7 @@
 module('baidu.dom.drag');
-
+test('modifing', function(){
+	ok(true);
+});
 //test('drag with update', function() {
 //	stop();
 //	expect(2);
