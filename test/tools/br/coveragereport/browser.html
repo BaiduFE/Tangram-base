@@ -1,6 +1,14 @@
 <html>
 	<head>
 		<meta http-equiv='Content-Type' content='text/html; charset=utf-8' />
+		<script type="text/javascript">
+		function getUrl(browser){
+			var url = document.location.href;
+			url = url.substring(0,url.length-13)+'browser/'+browser+'/'+browser+'.html'; 
+	                    return url;
+		}
+	
+		</script>
 	</head>
 	<body>
 		<div style='width:60%'>
@@ -12,43 +20,50 @@
 				<thead>
 					<tr>
 						<th rowspan='1'>
-							<a href='http://10.32.34.115:8000/liujinlong/Tangram-base/test/tools/br/coveragereport/browser/chrome/chrome.html' >chrome report</a>
+							<a href="#" onclick="location.href=getUrl('chrome');">chrome report</a>
 						</th>
 
 					</tr>
 					<tr>
 						<th rowspan='1'>
-							<a href='http://10.32.34.115:8000/liujinlong/Tangram-base/test/tools/br/coveragereport/browser/ie8/ie8.html' >ie8 report</a>
+						          <a href="#" onclick="location.href=getUrl('ie6');" >ie6 report</a>
 						</th>
 
 					</tr>
 					<tr>
 						<th rowspan='1'>
-							<a href='http://10.32.34.115:8000/liujinlong/Tangram-base/test/tools/br/coveragereport/browser/ie6/ie6.html' >ie6 report</a>
+							<a href="#" onclick="location.href=getUrl('ie7');" >ie7 report</a>
 						</th>
 
 					</tr>
 					<tr>
 						<th rowspan='1'>
-							<a href='http://10.32.34.115:8000/liujinlong/Tangram-base/test/tools/br/coveragereport/browser/ie7/ie7.html' >ie7 report</a>
+							
+							<a href="#" onclick="location.href=getUrl('ie8');" >ie8 report</a>
 						</th>
 
 					</tr>
 					<tr>
 						<th rowspan='1'>
-							<a href='http://10.32.34.115:8000/liujinlong/Tangram-base/test/tools/br/coveragereport/browser/firefox/firefox.html' >firefox report</a>
+							<a href="#" onclick="location.href=getUrl('firefox');" >firefox report</a>
 						</th>
 
 					</tr>
 					<tr>
 						<th rowspan='1'>
-							<a href='http://10.32.34.115:8000/liujinlong/Tangram-base/test/tools/br/coveragereport/browser/maxthon/maxthon.html' >maxthon report</a>
+							<a href="#" onclick="location.href=getUrl('maxthon');" >maxthon report</a>
 						</th>
 
 					</tr>
 					<tr>
 						<th rowspan='1'>
-							<a href='http://10.32.34.115:8000/liujinlong/Tangram-base/test/tools/br/coveragereport/browser/opera/opera.html' >opera report</a>
+							<a href="#" onclick="location.href=getUrl('opera');" >opera report</a>
+						</th>
+
+					</tr>
+					<tr>
+						<th rowspan='1'>
+							<a href="#" onclick="location.href=getUrl('Safari');" >Safari report</a>
 						</th>
 
 					</tr>
