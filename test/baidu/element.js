@@ -1,10 +1,11 @@
+module('baidu.element');
+
 function chainMe(domObj) {
 	domObj.addClass("aaa").insertHTML("afterEnd",
 			"<p class='gaga'>oh my lady gaga</p><p class='berg'>berg</p>")
 			.next().setStyle("font-weight", "bold").remove();
 }
 
-module('baidu.element');
 /**
  * 载入依赖包
  */
@@ -24,8 +25,8 @@ test('封装基础 - 输入字符串', function() {
 		equals(baidu.g('aaa').className, 'aaa', 'check class name');
 		equals(baidu.dom.query('.gaga').length, 0, 'check sub');
 		equals(baidu.dom.query('.berg').length, 1, 'check sub');
-		document.body.removeChild(div.nextSibling);
-		document.body.removeChild(div);
+		TT.e(div).next().remove();
+		TT.e(div).remove();
 		start();
 	}, 'baidu.event.on', 'baidu.element');
 });
@@ -44,17 +45,17 @@ test('封装基础 - 输入数组', function() {
 	baidu.array.each(spans, function(item) {
 		ok(baidu.dom.hasClass(item, 'aaa'), 'check class in array');
 	});
-	document.body.removeChild(sp1.nextSibling);
-	document.body.removeChild(sp1);
 	document.body.removeChild(sp2.nextSibling);
 	document.body.removeChild(sp2);
+	document.body.removeChild(sp1.nextSibling);
+	document.body.removeChild(sp1);
 });
 
 test('封装基础 - 含有get的函数', function() {
 	var p = document.body.appendChild(document.createElement('div'));
 	p.id = 'first';
-	baidu.e(p).setAttr('rel', 'i-m-first');// FIXME 貌似无法直接使用attr，难道是问题？
-	var c = p.parentNode.appendChild(document.createElement('div'));
+	baidu.e(p).setAttr('rel', 'i-m-first');
+	var c = document.body.appendChild(document.createElement('div'));
 	equals(baidu.element(c).prev().attr("rel"), 'i-m-first',
 			'check attr in chain');
 	baidu.e(p).remove();
@@ -62,30 +63,54 @@ test('封装基础 - 含有get的函数', function() {
 });
 
 test('封装基础 - each', function() {
-	var p = document.body.appendChild(document.createElement('div'));
-	p.className = 'berg';
-	baidu.dom.setAttr(p, 'rel', 'i-m-parent');
-	var c = p.appendChild(document.createElement('div'));
-	c.className = 'berg';
-	baidu.element(baidu.dom.query('.berg')).each(function(node) {
-		node.addClass('classAdded');
+	var a = document.body.appendChild(document.createElement('div'));
+	var b = a.appendChild(document.createElement('a'));
+	var c = a.appendChild(document.createElement('a'));
+	var count = 0;
+	baidu.e([ a, b, c ]).each(function() {
+		count++;
+		baidu.e(this).addClass('test'); // 问题1，这个this究竟应该是什么？
 	});
-	equals(baidu.dom.query(".classAdded").length, 2,
-			'check dom length with special class');
-	document.body.removeChild(p);
+	equals(count, 3);
+	var d = document.body.appendChild(document.createElement('a'));
+	baidu.e(d).addClass('test');
+	baidu.e(a).q('test').each(function() {
+		count++; // 问题2，q应该支持当前元素作为父元素的用法
+	});
+	equals(count, 5);// 究竟应该是5还是6
+
+	baidu.e(a).children().each(function() {
+		count++;// children传入到函数中的应该是每一个元素
+	});
+	equals(count, 7);
+	TT.e([ a, d ]).remove();
 });
 
-test('封装基础 - event封装', function() {
-	var p = document.body.appendChild(document.createElement('div'));
-	var c = p.appendChild(document.createElement('div'));
-	baidu.e(p).addClass('berg').attr('id', 'p');
-	baidu.e(c).addClass('berg').attr('id', 'c');
-	baidu.e(baidu.dom.query('.berg')).on('click', function(e) {
-		ok(true, 'item clicked');
+test('event + stop', function() {
+	expect(3);
+	stop();
+	ua.importsrc('baidu.event.stop', function() {
+		var p = document.body.appendChild(document.createElement('div'));
+		baidu.e(p).setAttr('id', 'test_div').click(function(e) {
+			//FIXME 这种方式绑定会被调用两次，明显有问题阿，麻烦修改完毕移除注释或者更新
+			equals(e.target.id, 'test_div', 'event bind by click'); 
+		});
+		baidu.e(p).on('click', function(e) {
+			equals(e.target.id, 'test_div', 'event bind by on');
+		});
+		baidu.e(document.body).click(function(e) {
+			equals(e.target.id, 'test_div', 'event propagation');
+			baidu.event.stop(e);
+		});
+		baidu.e(document).click(function() {
+			ok(false, 'event stopped');
+		});
+		ua.click(p);
+		baidu.e(p).un('click');
+		ua.click(p);
+		baidu.e(p).remove();
+		start();
 	});
-	expect(2);
-	ua.click(c);
-	baidu.e(p).remove();
 });
 
 /**
@@ -114,6 +139,7 @@ test('function list', function() {
 			}
 		}
 		equals(countlose, 0, '没有函数被遗漏');
+		TT.e(div).remove();
 		start();
 	});
 
@@ -128,13 +154,14 @@ test('返回值是第一个参数的包装 draggable droppable', function() {
 	e.attr('id', 'drag');// 无返回
 	e.draggable().addClass("berg");
 	ok(e.hasClass('berg'), "check draggable extend function");
-	e.remove();
+	TT.e(drag).remove();
 });
 
 test('返回值是第一个参数的包装 resizable', function() {
 	var div1 = document.body.appendChild(document.createElement('div'));
 	baidu.e(div1).resizable().addClass("berg").attr('id', 'berg');
 	ok(baidu.e(div1).hasClass('berg'), 'has class');
+	TT.e(div1).remove();
 });
 
 /**
@@ -187,9 +214,3 @@ test(
 
 			document.body.removeChild(div);
 		});
-// test('漏测了关于event的封装', function() {
-// ok(baidu.e("*").on);
-// // 请QA补充下相关用例
-// ok(baidu.e("*").click);
-// ok(false);
-// });
