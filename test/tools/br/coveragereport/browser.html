@@ -1,0 +1,75 @@
+<html>
+	<head>
+		<meta http-equiv='Content-Type' content='text/html; charset=utf-8' />
+		<script type="text/javascript">
+		function getUrl(browser){
+		          var url = location.href;
+			var urlbrowser = url.substring(0,url.lastIndexOf('/'))+'/browser/'+browser+'/'+browser+'.html'; 
+	                    return urlbrowser;
+		}
+	
+		</script>
+	</head>
+	<body>
+		<div style='width:60%'>
+			<h2 align='center'>
+				coverage report
+			</h2>
+			<table id='table' cellspacing='0' 
+				style='width:100%;border: 1px solid black; color: #000; background-color: #90EE90; '>
+				<thead>
+					<tr>
+						<th rowspan='1'>
+							<a href="#" onclick="location.href=getUrl('chrome');">chrome report</a>
+						</th>
+
+					</tr>
+					<tr>
+						<th rowspan='1'>
+						          <a href="#" onclick="location.href=getUrl('ie6');" >ie6 report</a>
+						</th>
+
+					</tr>
+					<tr>
+						<th rowspan='1'>
+							<a href="#" onclick="location.href=getUrl('ie7');" >ie7 report</a>
+						</th>
+
+					</tr>
+					<tr>
+						<th rowspan='1'>
+							
+							<a href="#" onclick="location.href=getUrl('ie8');" >ie8 report</a>
+						</th>
+
+					</tr>
+					<tr>
+						<th rowspan='1'>
+							<a href="#" onclick="location.href=getUrl('firefox');" >firefox report</a>
+						</th>
+
+					</tr>
+					<tr>
+						<th rowspan='1'>
+							<a href="#" onclick="location.href=getUrl('maxthon');" >maxthon report</a>
+						</th>
+
+					</tr>
+					<tr>
+						<th rowspan='1'>
+							<a href="#" onclick="location.href=getUrl('opera');" >opera report</a>
+						</th>
+
+					</tr>
+					<tr>
+						<th rowspan='1'>
+							<a href="#" onclick="location.href=getUrl('safari');" >safari report</a>
+						</th>
+
+					</tr>
+				</thead>
+			</table>
+		</div>
+	</body>
+
+</html>

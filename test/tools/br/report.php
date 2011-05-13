@@ -25,10 +25,19 @@ function report(){
 	$errors = 0;
 	$failures = 0;
 	$tests = 0;
-	$time = 0;
+	$time = 0; 
 	foreach($_POST as $key=>$value){
 		if($key == 'config')
 		continue;
+		if($key == 'covsummaryinfo'){//此方法生成summary页面
+		    $array = explode("、", $value);//preg_split('/[,]/', $value);
+			covsummaryinfohtml($config['browser'],$array);
+			continue;
+		};
+		if($key == 'covsourceinfo'){//此方法生成source 存储文件
+			covsourceinfotojs($config['browser'],$value);
+			continue;
+		};
 
 		$info = explode(",", $value);
 
@@ -41,14 +50,13 @@ function report(){
 		$case->setAttribute("name", $key);
 		$case->setAttribute("time", $casetime);
 		$case->setAttribute("cov", $info[2]);
-		covHtml($config['browser'].'/'.$key,$info[2]);
+//		covHtml($config['browser'].'/'.$key,$info[2]);
 		if($failure > 0){
 			$failures++;
 			$failinfo = $case->appendChild($dom->createElement('failure'));
 			$failinfo->setAttribute('type', 'junit.framework.AssertionFailedError');
 			//FROM php.net, You cannot simply overwrite $textContent, to replace the text content of a DOMNode, as the missing readonly flag suggests.
-			$kiss = join(".", split("_", $key));
-			$failinfo->appendChild(new DOMText("<a href=\"http://10.32.34.115:8000/BaiduFE/Tangram-base/test/tools/br/run.php?case=$kiss\">run</a>"));
+			$failinfo->appendChild(new DOMText($value));
 		}
 		//TODO add more case info in xml
 	}
@@ -62,25 +70,44 @@ function report(){
 	$dom->save("report/{$config['browser']}.xml");
 }
 
+//展示覆盖率报告
 require_once 'simple_html_dom.php';
-$htmlstr = "<html><head><meta http-equiv='Content-Type' content='text/html; charset=utf-8' />
-<style>td, th {border: 1px solid white;}</style></head><body><div>
-<h2 align='center'>覆盖率结果</h2>
-<table id='table' cellspacing='0' style='border: 1px solid black; color: #fff; background-color: #0d3349; text-shadow: rgba(0, 0, 0, 0.5) 2px 2px 1px; text-align: center;'>
-<thead><tr><th rowspan='2'>用例名称</th><th rowspan='2'>总覆盖率</th></tr></thead></table></div></body></html>";
-
-if(file_exists("covreport.html")){
-	$html = file_get_html("covreport.html");
+if(file_exists("coveragereport/jscoverage.html")){
+	$html = file_get_html("coveragereport/jscoverage.html");
 }
-else $html = str_get_html($htmlstr);
-function covHtml($name,$cov){
+function covsummaryinfohtml($browser,$info){//生成jscoverage summary 页面的静态页面
 	global $html;
-	$table = $html->find('table',0);
-	$tableInner = $table->innertext();
-	$color = '#710909';
-	$trs = $tableInner."<tr><td>$name</td><td style='background-color:$color'>$cov%</td></tr>";
-	$table->setAttribute('innertext',$trs);
-	$html->save('covreport.html');
+	$totals = substr($info[0],1,strlen($info[0])-2);
+	$caseinfo = substr($info[1],1,strlen($info[1])-2);
+	$summaryTotals = $html->getElementById('summaryTotals');
+	$summaryTotals->setAttribute('innertext',$totals);
+	$tbody = $html->getElementById('summaryTbody');
+	$tbody->setAttribute('innertext',$caseinfo);
+	if(is_dir('coveragereport/browser/'.$browser)){
+        unlink('coveragereport/browser/'.$browser.'/'.$browser.'.html');
+	}
+	else mkdir('coveragereport/browser/'.$browser);
+	$html->save('coveragereport/browser/'.$browser.'/'.$browser.'.html');
+};
+
+function covsourceinfotojs($browser,$info){//每个源码文件对应的html写入到js文件中，封装成一个方法 如get_baidu1ajax1form
+    $filepath = 'coveragereport/browser/'.$browser.'/'.'source.js';
+	if(is_dir('coveragereport/browser/'.$browser)){
+	    if(file_exists($filepath))unlink($filepath);
+	}
+	else mkdir('coveragereport/browser/'.$browser);
+	$array = explode("},a", $info);
+	$js_content = '';
+	foreach($array as $a){
+		if(!empty($a)&&$a!=''){
+			$title = substr($a,1,strpos($a,':')-4);
+			$title = str_replace('/','1',$title);
+			$content = substr($a,strpos($a,':')+1,strlen($a));
+			$content = str_replace("'","&#39",$content);//linux生成的引号不带 \,$content 中的 ' 会跟外层的' 形成对，所以加\
+			$js_content .= "function get_".$title."(){ \n return '".$content."' ; \n}\r\n" ;
+		}
+	};
+	file_put_contents($filepath, $js_content);
 };
 
 report();
