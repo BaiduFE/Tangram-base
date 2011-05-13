@@ -71,101 +71,50 @@ function fixedSourceHtml(func,line){//点缺失的行链接时执行此方法
   <div class="TabPage">
     <div id="summaryDiv">
     <div id="summaryErrorDiv"></div>
-    <table id="summaryTable">
-    <thead>
-    <tr id="headerRow">
-    <th class="leftColumn">File</th>
-    <th><abbr title="The total number of executable statements">Statements</abbr></th>
-    <th><abbr title="The number of statements actually executed">Executed</abbr></th>
-    <th><abbr title="Number of executed statements as a percentage of total number of statements">Coverage</abbr></th>
-    <th id='missingHeader'><abbr title="List of statements missed during execution">Missing</abbr></th>
-    </tr>
-    <tr id="summaryTotals">
-        <td class="leftColumn">
-            <span class="title">Total:</span>
-            <span>0</span>
-        </td>
-        <td class="numeric">0</td>
-        <td class="numeric">0</td>
-        <td class="coverage">
-            <div class="pctGraph">
-                <div class="covered"></div>
-            </div>
-            <span class="pct">0%</span>
-        </td>
-    </tr>
+						<table id="summaryTable">
+							<thead>
+								<tr id="headerRow">
+									<th class="leftColumn">
+										File
+									</th>
+									<th>
+										<abbr title="The total number of executable statements">Statements</abbr>
+									</th>
+									<th>
+										<abbr title="The number of statements actually executed">Executed</abbr>
+									</th>
+									<th>
+										<abbr
+											title="Number of executed statements as a percentage of total number of statements">Coverage</abbr>
+									</th>
+									<th id='missingHeader'>
+										<abbr title="List of statements missed during execution">Missing</abbr>
+									</th>
+								</tr>
+								<tr id="summaryTotals">
+									<td class="leftColumn">
+										<span class="title">Total:</span>
+										<span>0</span>
+									</td>
+									<td class="numeric">
+										0
+									</td>
+									<td class="numeric">
+										0
+									</td>
+									<td class="coverage">
+										<div class="pctGraph">
+											<div class="covered"></div>
+										</div>
+										<span class="pct">0%</span>
+									</td>
+								</tr>
 
-    </thead>
-    <tbody id="summaryTbody">
-
-    <tr class='odd' >
-        <td class='leftColumn'><a href='#'>baidu.js</a></td>
-        <td class='numeric'>3</td>
-        <td class='numeric'>3</td>
-        <td class='coverage'>
-           <div class='pctGraph'>
-              <div class='covered' style='width:100px;' ></div>
-           </div>
-           <span class='pct'>100%</span>
-        </td>
-        <td></td>
-    </tr>
-    <tr class='even' >
-        <td class='leftColumn'><a href='#'>baidu/ajax.js</a></td>
-        <td class='numeric'>1</td>
-        <td class='numeric'>1</td>
-        <td class='coverage'>
-             <div class='pctGraph'>
-               <div class='covered' style='width:100px;'></div>
-             </div>
-             <span class='pct'>100%</span>
-        </td>
-        <td></td>
-    </tr>
-    <tr class='odd' >
-        <td class='leftColumn'><a href='#'>baidu/ajax/form.js</a></td>
-        <td class='numeric'>30</td>
-        <td class='numeric'>30</td>
-        <td class='coverage'>
-           <div class='pctGraph'>
-               <div class='covered' style='width:100px;'></div>
-           </div>
-           <span class='pct'>100%</span>
-        </td>
-        <td></td>
-     </tr>
-     <tr class='even' >
-         <td class='leftColumn'><a href='#'>baidu/ajax/request.js</a></td>
-         <td class='numeric'>66</td>
-         <td class='numeric'>53</td>
-         <td class='coverage'>
-            <div class='pctGraph'>
-               <div class='covered' style='width:80px;'></div>
-            </div>
-            <span class='pct'>80%</span>
-         </td>
-         <td>
-            <a href='#'>56_57</a>, <a href='#'>77</a>, <a href='#'>118_122</a>, <a href='#'>151</a>, <a href='#'>157_160</a>, <a href='#'>186</a>, <a href='#'>217</a>
-         </td>
-      </tr>
-      <tr class='odd'>
-         <td class='leftColumn'>
-            <a href='#'>baidu/fn.js</a>
-         </td>
-         <td class='numeric'>1</td>
-         <td class='numeric'>1</td>
-         <td class='coverage'>
-            <div class='pctGraph'>
-               <div class='covered' style='width:100px;'></div>
-            </div>
-            <span class='pct'>100%</span>
-         </td>
-         <td></td>
-      </tr>
-
-    </tbody>
-    </table>
-    </div>
+							</thead>
+							<tbody id="summaryTbody">
+							</tbody>
+						</table>
+					</div>
   </div>
   <div class="TabPage">
     <div id="fileDiv"></div>
@@ -173,7 +122,7 @@ function fixedSourceHtml(func,line){//点缺失的行链接时执行此方法
   </div>
   <div class="TabPage" id="storeTabPage">
     <button id="storeButton" onclick="jscoverage_storeButton_click();">Store Report</button>
-    <img id="storeImg" src="jscoverage-throbber.gif" alt="loading...">
+    <img id="storeImg" src="../../jscoverage-throbber.gif" alt="loading...">
     <div id="storeDiv"></div>
   </div>
   <div class="TabPage">
