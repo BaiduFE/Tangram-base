@@ -22,7 +22,7 @@ test('dom ready for none ie', function() {
 			// delete window.iframeReady;
 			// document.body.removeChild(iframe);
 			start();
-		}
+		};
 		var count = 0;
 		/***********************************************************************
 		 * 加载的iframe会尝试更新当前窗口中的变量iframeReady，预计超时时间为5s
@@ -36,7 +36,17 @@ test('dom ready for none ie', function() {
 				clear(handle);
 			} else
 				count++;
-		}, 20)
+		}, 20);
 	} else
 		ok(true, 'IE下不支持子窗口');
-})
+});
+
+test('ready before onload', function(){
+	var f = document.createElement('iframe');
+	document.body.appendChild(f);
+	f.src = ua.cpath + 'test.html';//空页面
+	stop();
+	baidu.dom.ready(f, function(){
+		start();
+	});
+});
