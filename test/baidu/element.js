@@ -14,7 +14,8 @@ var jslist = "baidu.dom.draggable,baidu.dom.resizable,"
 		+ "baidu.dom.g,baidu.dom.addClass,baidu.dom.insertHTML,baidu.dom.next,"
 		+ "baidu.dom.setStyle,baidu.dom.remove,baidu.dom.query,baidu.dom.setAttr,"
 		+ "baidu.dom.prev,baidu.dom.getAttr,baidu.dom.hasClass,baidu.dom.intersect,"
-		+ "baidu.dom.getText,baidu.dom.contains,baidu.dom.hasAttr,baidu.event.on";
+		+ "baidu.dom.getText,baidu.dom.contains,baidu.dom.hasAttr,baidu.event.on,"
+		+ "baidu.event.un,baidu.event.stop";
 
 test('封装基础 - 输入字符串', function() {
 	stop();
@@ -86,32 +87,32 @@ test('封装基础 - each', function() {
 	TT.e([ a, d ]).remove();
 });
 
-test('event + stop', function() {
+test('event + on + un + stop', function() {
 	expect(3);
 	stop();
 	ua.importsrc('baidu.event.stop', function() {
 		var p = document.body.appendChild(document.createElement('div'));
-		baidu.e(p).setAttr('id', 'test_div').click(function(e) {
-			equals(e.target.id, 'test_div', 'event bind by click');
+		baidu.e(p).click(function(e) {
+			ok(true, 'bind click');
 		});
 		baidu.e(p).on('click', function(e) {
-			equals(e.target.id, 'test_div', 'event bind by on');
+			ok(true, 'bind on');
 		});
 		baidu.e(document.body).click(function(e) {
-			equals(e.target.id, 'test_div', 'event propagation');
+			ok(true, 'propagation');
 			baidu.event.stop(e);
 		});
 		baidu.e(document).click(function() {
 			ok(false, 'event stopped');
 		});
-		ua.click(p);
+		TT.event.fire(p, 'click');
 		baidu.e(p).un('click');
 		baidu.e(document.body).un('click');
 		baidu.e(document).un('click');
-		ua.click(p);
+		TT.event.fire(p, 'click');
 		baidu.e(p).remove();
 		start();
-	});
+	}, 'baidu.event.stop');
 });
 
 /**
