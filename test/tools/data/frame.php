@@ -2,6 +2,12 @@
 ?>
 <html>
 <head>
+<style type="text/css">
+* {
+	margin: 0;
+	padding: 0;
+}
+</style>
 <script type="text/javascript" src="../br/js/jquery-1.5.1.js"></script>
 <?php
 $release = preg_match('/release=true/i', $_SERVER['QUERY_STRING']);
@@ -10,6 +16,9 @@ print "<script type='text/javascript' src='../br/import.php?f={$_GET['f']}'></sc
 else
 print "<script type='text/javascript' src='../../../release/all_release.js'></script>";
 ?>
+<script type="text/javascript">
+	parent && parent.ua.onload && parent.ua.onload(window);
+</script>
 </head>
 <body>
 </body>

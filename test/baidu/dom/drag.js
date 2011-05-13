@@ -29,6 +29,7 @@ module('baidu.dom.drag');
 		});
 		TT.e(document.body)
 				.insertHTML('beforeend', '<div id="test_div"></div>');
+		TT.e(document.body).setStyle('margin', 0).setStyle('padding', 0);
 		var div = TT.e("test_div").setStyle('position', 'absolute').setStyle(
 				'height', 10).setStyle('width', 10).setStyle(
 				'background-color', 'red').setStyle('left', 0).setStyle('top',
@@ -134,13 +135,16 @@ test('range and update range', function() {
 			clientX : 100,
 			clientY : 100
 		});
-	}, 50).add(function() {
-		dc.check.left = 90;
-		dc.check();
-		dc.d.update({
-			range : [ 0, 200, 200, 0 ]
-		});
-	}, 50).add(function() {
+	}, 50).add(
+			function() {
+				ok(parseInt(TT.e(dc.dom).style('left')) < 100,
+						"check left after drag");
+				ok(parseInt(TT.e(dc.dom).style('top')) < 100,
+						"check top after drag");
+				dc.d.update({
+					range : [ 0, 200, 200, 0 ]
+				});
+			}, 50).add(function() {
 		dc.move({// out of range
 			clientX : 150,
 			clientY : 150
