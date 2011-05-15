@@ -43,7 +43,7 @@
 		<mail mailhost="hotswap-c.baidu.com" 
 			charset="UTF-8" 
 			messagemimetype="text/html" 
-			subject="report from ci——${git.user}.${git.project}"
+			subject="Report from ci——${git.user}.${git.project}"
 			cclist="${report.mailcc}"
 			failonerror="false">
 			<to address="${report.mailto}" />
