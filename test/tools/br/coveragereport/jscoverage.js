@@ -327,8 +327,8 @@ function jscoverage_initTabContents(queryString) {
     }
   }
 
-  var checkbox = document.getElementById('checkbox');
-  checkbox.checked = showMissingColumn;
+//  var checkbox = document.getElementById('checkbox');
+//  checkbox.checked = showMissingColumn;
   if (showMissingColumn) {
     jscoverage_appendMissingColumn();
   }
@@ -350,9 +350,9 @@ function jscoverage_initTabContents(queryString) {
   }
 
   // if the browser tab is absent, we have to initialize the summary tab
-  if (! document.getElementById('browserTab')) {
-    jscoverage_recalculateSummaryTab();
-  }
+//  if (! document.getElementById('browserTab')) {
+//    jscoverage_recalculateSummaryTab();
+//  }
 }
 
 function jscoverage_body_load() {
