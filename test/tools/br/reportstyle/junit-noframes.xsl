@@ -129,10 +129,9 @@
 				<xsl:call-template name="summary" />
 				<hr size="1" width="95%" align="left" />
 
-				<!-- Package List part
-				<xsl:call-template name="packagelist" />
-				<hr size="1" width="95%" align="left" />
- -->
+				<!-- Package List part <xsl:call-template name="packagelist" /> <hr size="1" 
+					width="95%" align="left" /> -->
+
 				<!-- For each package create its part -->
 				<xsl:call-template name="packages" />
 				<hr size="1" width="95%" align="left" />
@@ -255,14 +254,9 @@
 				<xsl:call-template name="testcase.test.header" />
 				<!-- test can even not be started at all (failure to load the class) 
 					so report the error directly -->
-				<xsl:if test="./error">
-					<tr class="Error">
-						<td colspan="4">
-							<xsl:apply-templates select="./error" />
-						</td>
-					</tr>
-				</xsl:if>
-				<xsl:apply-templates select="./testcase" mode="print.test" />
+				<!-- <xsl:if test="./error"> <tr class="Error"> <td colspan="4"> <xsl:apply-templates 
+					select="./error" /> </td> </tr> </xsl:if> <xsl:apply-templates select="./testcase" 
+					mode="print.test" /> -->
 			</table>
 			<div class="Properties">
 				<a>
@@ -402,10 +396,22 @@
 	<!-- method header -->
 	<xsl:template name="testcase.test.header">
 		<tr valign="top">
-			<th>Name</th>
-			<th>Status</th>
-			<th width="80%">Type</th>
-			<th nowrap="nowrap">Time(s)</th>
+			<th rowspan="2">Name</th>
+			<th rowspan="2">Status</th>
+			<xsl:for-each
+				select="/testsuites/testsuite">
+				<th colspan="3" width="30%">
+					<xsl:value-of select="@name" />
+				</th>
+			</xsl:for-each>
+		</tr>
+		<tr>
+			<xsl:for-each
+				select="/testsuites/testsuite">
+				<td>cov</td>
+				<td>fail</td>
+				<td>total</td>
+			</xsl:for-each>
 		</tr>
 	</xsl:template>
 
@@ -415,11 +421,11 @@
 		<tr valign="top">
 			<!-- set a nice color depending if there is an error/failure -->
 			<xsl:attribute name="class">
-            <xsl:choose>
-                <xsl:when test="@failures[.&gt; 0]">Failure</xsl:when>
-                <xsl:when test="@errors[.&gt; 0]">Error</xsl:when>
-            </xsl:choose>
-        </xsl:attribute>
+	            <xsl:choose>
+	                <xsl:when test="@failures[.&gt; 0]">Failure</xsl:when>
+	                <xsl:when test="@errors[.&gt; 0]">Error</xsl:when>
+	            </xsl:choose>
+	        </xsl:attribute>
 
 			<!-- print testsuite information -->
 			<td>
@@ -452,41 +458,41 @@
 
 	<xsl:template match="testcase" mode="print.test">
 
-		<xsl:if test="failure | error">
-			<tr valign="top">
-				<xsl:attribute name="class">
-            <xsl:choose>
-                <xsl:when test="failure | error">Error</xsl:when>
-            </xsl:choose>
-        </xsl:attribute>
-				<td>
-					<xsl:value-of select="@name" />
-				</td>
-				<xsl:choose>
-					<xsl:when test="failure">
-						<td>Failure</td>
-						<td>
-							<xsl:apply-templates select="failure" />
-						</td>
-					</xsl:when>
-					<xsl:when test="error">
-						<td>Error</td>
-						<td>
-							<xsl:apply-templates select="error" />
-						</td>
-					</xsl:when>
-					<xsl:otherwise>
-						<td>Success</td>
-						<td></td>
-					</xsl:otherwise>
-				</xsl:choose>
-				<td>
-					<xsl:call-template name="display-time">
-						<xsl:with-param name="value" select="@time" />
-					</xsl:call-template>
-				</td>
-			</tr>
-		</xsl:if>
+		<!-- <xsl:if test="failure | error"> -->
+		<tr valign="top">
+			<xsl:attribute name="class">
+		            <xsl:choose>
+		                <xsl:when test="failure | error">Error</xsl:when>
+	            </xsl:choose>
+        		</xsl:attribute>
+			<td>
+				<xsl:value-of select="@name" />
+			</td>
+			<xsl:choose>
+				<xsl:when test="failure">
+					<td>Failure</td>
+					<td>
+						<xsl:apply-templates select="failure" />
+					</td>
+				</xsl:when>
+				<xsl:when test="error">
+					<td>Error</td>
+					<td>
+						<xsl:apply-templates select="error" />
+					</td>
+				</xsl:when>
+				<xsl:otherwise>
+					<td>Success</td>
+					<td></td>
+				</xsl:otherwise>
+			</xsl:choose>
+			<td>
+				<xsl:call-template name="display-time">
+					<xsl:with-param name="value" select="@time" />
+				</xsl:call-template>
+			</td>
+		</tr>
+		<!-- </xsl:if> -->
 	</xsl:template>
 
 

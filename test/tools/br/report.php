@@ -51,6 +51,8 @@ function report(){
 		$case->setAttribute("name", $key);
 		$case->setAttribute("time", $casetime);
 		$case->setAttribute("cov", $info[2]);
+		$case->setAttribute("fail", $info[0]);
+		$case->setAttribute("total", $info[1]);
 		//		covHtml($config['browser'].'/'.$key,$info[2]);
 		if($failure > 0){
 			$failures++;
