@@ -28,6 +28,7 @@ function report(){
 	$tests = 0;
 	$time = 0;
 	foreach($_POST as $key=>$value){
+		echo "<a>$key</a><br />";
 		if($key == 'config')
 		continue;
 		if($key == 'covsummaryinfo'){//此方法生成summary页面
@@ -67,9 +68,10 @@ function report(){
 	$suite->setAttribute('time', $time);
 	$suite->setAttribute('failures', $failures);
 	$suite->setAttribute('tests', $tests);
-	$host = Config::$BROWSERS[$config['browser']][0];
-	$suite->setAttribute('hostname', $host);
-	
+	if(array_key_exists($config['browser'], Config::$BROWSERS)){
+		$host = Config::$BROWSERS[$config['browser']][0];
+		$suite->setAttribute('hostname', $host);
+	}
 	if(!is_dir("report"))
 	mkdir("report");
 	$dom->save("report/{$config['browser']}.xml");

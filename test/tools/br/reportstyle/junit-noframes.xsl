@@ -1,7 +1,8 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 	version="1.0" xmlns:lxslt="http://xml.apache.org/xslt"
 	xmlns:stringutils="xalan://org.apache.tools.ant.util.StringUtils">
+	<fo:root xmlns:fo="http://www.w3.org/1999/XSL/Format"></fo:root>
 	<xsl:output method="html" indent="yes" encoding="US-ASCII"
 		doctype-public="-//W3C//DTD HTML 4.01 Transitional//EN" />
 	<xsl:decimal-format decimal-separator="."
@@ -82,43 +83,9 @@
 					.Properties {
 					text-align:right;
 					}
-      </style>
-				<script type="text/javascript" language="JavaScript">
-					var TestCases = new Array();
-					var cur;
-					<xsl:for-each select="./testsuite">
-						<xsl:apply-templates select="properties" />
-					</xsl:for-each>
-
-				</script>
-				<script type="text/javascript" language="JavaScript"><![CDATA[
-        function displayProperties (name) {
-          var win = window.open('','JUnitSystemProperties','scrollbars=1,resizable=1');
-          var doc = win.document;
-          doc.open();
-          doc.write("<html><head><title>Properties of " + name + "</title>");
-          doc.write("<style>")
-          doc.write("body {font:normal 68% verdana,arial,helvetica; color:#000000; }");
-          doc.write("table tr td, table tr th { font-size: 68%; }");
-          doc.write("table.properties { border-collapse:collapse; border-left:solid 1 #cccccc; border-top:solid 1 #cccccc; padding:5px; }");
-          doc.write("table.properties th { text-align:left; border-right:solid 1 #cccccc; border-bottom:solid 1 #cccccc; background-color:#eeeeee; }");
-          doc.write("table.properties td { font:normal; text-align:left; border-right:solid 1 #cccccc; border-bottom:solid 1 #cccccc; background-color:#fffffff; }");
-          doc.write("h3 { margin-bottom: 0.5em; font: bold 115% verdana,arial,helvetica }");
-          doc.write("</style>");
-          doc.write("</head><body>");
-          doc.write("<h3>Properties of " + name + "</h3>");
-          doc.write("<div align=\"right\"><a href=\"javascript:window.close();\">Close</a></div>");
-          doc.write("<table class='properties'>");
-          doc.write("<tr><th>Name</th><th>Value</th></tr>");
-          for (prop in TestCases[name]) {
-            doc.write("<tr><th>" + prop + "</th><td>" + TestCases[name][prop] + "</td></tr>");
-          }
-          doc.write("</table>");
-          doc.write("</body></html>");
-          doc.close();
-          win.focus();
-        }
-      ]]>
+      			</style>
+				<script type="text/javascript">
+					
 				</script>
 			</head>
 			<body>
@@ -133,104 +100,31 @@
 					width="95%" align="left" /> -->
 
 				<!-- For each package create its part -->
-				<xsl:call-template name="packages" />
+				<xsl:call-template name="browsers" />
 				<hr size="1" width="95%" align="left" />
+
 				<!-- For each class create the part -->
-				<xsl:call-template name="classes" />
+				<xsl:call-template name="cases" />
 
 			</body>
 		</html>
 	</xsl:template>
-
-
-
-	<!-- ================================================================== -->
-	<!-- Write a list of all packages with an hyperlink to the anchor of -->
-	<!-- of the package name. -->
-	<!-- ================================================================== -->
-	<xsl:template name="packagelist">
-		<h2>Packages</h2>
-		Note: package statistics are not computed recursively, they only sum
-		up all of its testsuites numbers.
-		<table class="details" border="0" cellpadding="5" cellspacing="2"
-			width="95%">
-			<xsl:call-template name="testsuite.test.header" />
-			<!-- list all packages recursively -->
-			<xsl:for-each
-				select="./testsuite[not(./@package = preceding-sibling::testsuite/@package)]">
-				<xsl:sort select="@package" />
-				<xsl:variable name="testsuites-in-package"
-					select="/testsuites/testsuite[./@package = current()/@package]" />
-				<xsl:variable name="testCount" select="sum($testsuites-in-package/@tests)" />
-				<xsl:variable name="errorCount"
-					select="sum($testsuites-in-package/@errors)" />
-				<xsl:variable name="failureCount"
-					select="sum($testsuites-in-package/@failures)" />
-				<xsl:variable name="timeCount" select="sum($testsuites-in-package/@time)" />
-
-				<!-- write a summary for the package -->
-				<tr valign="top">
-					<!-- set a nice color depending if there is an error/failure -->
-					<xsl:attribute name="class">
-                        <xsl:choose>
-                            <xsl:when test="$failureCount &gt; 0">Failure</xsl:when>
-                            <xsl:when test="$errorCount &gt; 0">Error</xsl:when>
-                        </xsl:choose>
-                    </xsl:attribute>
-					<td>
-						<a href="#{@package}">
-							<xsl:value-of select="@package" />
-						</a>
-					</td>
-					<td>
-						<xsl:value-of select="$testCount" />
-					</td>
-					<td>
-						<xsl:value-of select="$errorCount" />
-					</td>
-					<td>
-						<xsl:value-of select="$failureCount" />
-					</td>
-					<td>
-						<xsl:call-template name="display-time">
-							<xsl:with-param name="value" select="$timeCount" />
-						</xsl:call-template>
-					</td>
-					<td>
-						<xsl:value-of select="$testsuites-in-package/@timestamp" />
-					</td>
-					<td>
-						<xsl:value-of select="$testsuites-in-package/@hostname" />
-					</td>
-				</tr>
-			</xsl:for-each>
-		</table>
-	</xsl:template>
-
 
 	<!-- ================================================================== -->
 	<!-- Write a package level report -->
 	<!-- It creates a table with values from the document: -->
 	<!-- Name | Tests | Errors | Failures | Time -->
 	<!-- ================================================================== -->
-	<xsl:template name="packages">
-		<!-- create an anchor to this package name -->
+	<xsl:template name="browsers">
 		<xsl:for-each
 			select="/testsuites/testsuite[not(./@package = preceding-sibling::testsuite/@package)]">
-			<xsl:sort select="@package" />
-			<a name="{@package}"></a>
-			<h3>
-				Browsers
-				<xsl:value-of select="@package" />
-			</h3>
-
+			<h3> Browsers</h3>
 			<table class="details" border="0" cellpadding="5" cellspacing="2"
 				width="95%">
 				<xsl:call-template name="testsuite.test.header" />
 
 				<!-- match the testsuites of this package -->
-				<xsl:apply-templates
-					select="/testsuites/testsuite[./@package = current()/@package]"
+				<xsl:apply-templates select="/testsuites/testsuite"
 					mode="print.test" />
 			</table>
 			<a href="#top">Back to top</a>
@@ -239,36 +133,56 @@
 		</xsl:for-each>
 	</xsl:template>
 
-	<xsl:template name="classes">
-		<xsl:for-each select="testsuite">
-			<xsl:sort select="@name" />
-			<!-- create an anchor to this class name -->
-			<a name="{@name}"></a>
-			<h3>
-				TestCase
-				<xsl:value-of select="@name" />
-			</h3>
+	<xsl:template name="cases">
+		<h3>Cases</h3>
+		<table class="details" border="0" cellpadding="5" cellspacing="2"
+			width="95%">
+			<xsl:call-template name="testcase.test.header" />
+			<xsl:for-each select="/testsuites/testsuite[1]/testcase">
+				<xsl:value-of select="@name"></xsl:value-of>
+				<xsl:sort select="@name" />
+				<xsl:call-template name="cases.printcase">
+					<xsl:with-param name="casename" select="@name"></xsl:with-param>
+				</xsl:call-template>
+			</xsl:for-each>
+		</table>
+	</xsl:template>
 
-			<table class="details" border="0" cellpadding="5" cellspacing="2"
-				width="95%">
-				<xsl:call-template name="testcase.test.header" />
-				<!-- test can even not be started at all (failure to load the class) 
-					so report the error directly -->
-				<!-- <xsl:if test="./error"> <tr class="Error"> <td colspan="4"> <xsl:apply-templates 
-					select="./error" /> </td> </tr> </xsl:if> <xsl:apply-templates select="./testcase" 
-					mode="print.test" /> -->
-			</table>
-			<div class="Properties">
-				<a>
-					<xsl:attribute name="href">javascript:displayProperties('<xsl:value-of
-						select="@package" />.<xsl:value-of select="@name" />');</xsl:attribute>
-					Properties &#187;
-				</a>
-			</div>
-			<p />
+	<xsl:template name="cases.printcase">
+		<xsl:param name="casename" />
+		<xsl:variable name="testCount"
+			select="sum(/testsuites/testsuite/testcase[@name=$casename]/@total)" />
+		<xsl:variable name="failureCount"
+			select="sum(/testsuites/testsuite/testcase[@name=$casename]/@fail)" />
+		<xsl:variable name="errorCount"
+			select="sum(/testsuites/testsuite/testcase[@name=$casename]/@error)" />
 
-			<a href="#top">Back to top</a>
+		<xsl:for-each select="/testsuites/testsuite/testcase[@name=$casename]">
+			<xsl:sort select="../@name" />
+
 		</xsl:for-each>
+		<xsl:if test="$failureCount &gt; 0">
+			<tr>
+				<xsl:attribute name="class">
+                        <xsl:choose>
+                            <xsl:when test="$failureCount &gt; 0">Failure</xsl:when>
+                            <xsl:when test="$errorCount &gt; 0">Error</xsl:when>
+                        </xsl:choose>
+                    </xsl:attribute>
+				<td>
+					<xsl:value-of select="$casename" />
+				</td>
+				<td>
+					<xsl:value-of select="$testCount" />
+				</td>
+				<td>
+					<xsl:value-of select="$failureCount" />
+				</td>
+				<td>
+					<xsl:value-of select="$errorCount" />
+				</td>
+			</tr>
+		</xsl:if>
 	</xsl:template>
 
 	<xsl:template name="summary">
@@ -330,26 +244,6 @@
 		</table>
 	</xsl:template>
 
-	<!-- Write properties into a JavaScript data structure. This is based on 
-		the original idea by Erik Hatcher (ehatcher@apache.org) -->
-	<xsl:template match="properties">
-		cur = TestCases['
-		<xsl:value-of select="../@package" />
-		.
-		<xsl:value-of select="../@name" />
-		'] = new Array();
-		<xsl:for-each select="property">
-			<xsl:sort select="@name" />
-			cur['
-			<xsl:value-of select="@name" />
-			'] = '
-			<xsl:call-template name="JS-escape">
-				<xsl:with-param name="string" select="@value" />
-			</xsl:call-template>
-			';
-		</xsl:for-each>
-	</xsl:template>
-
 	<!-- Page HEADER -->
 	<xsl:template name="pageHeader">
 		<h1>
@@ -395,22 +289,22 @@
 
 	<!-- method header -->
 	<xsl:template name="testcase.test.header">
-		<tr valign="top">
+		<tr>
 			<th rowspan="2">Name</th>
-			<th rowspan="2">Status</th>
-			<xsl:for-each
-				select="/testsuites/testsuite">
-				<th colspan="3" width="30%">
+			<th rowspan="2">Tests</th>
+			<th rowspan="2">Failures</th>
+			<th rowspan="2">Errors</th>
+			<th rowspan="2">Coverage</th>
+			<xsl:for-each select="/testsuites/testsuite">
+				<th colspan="2" width="10%">
 					<xsl:value-of select="@name" />
 				</th>
 			</xsl:for-each>
 		</tr>
 		<tr>
-			<xsl:for-each
-				select="/testsuites/testsuite">
-				<td>cov</td>
-				<td>fail</td>
-				<td>total</td>
+			<xsl:for-each select="/testsuites/testsuite">
+				<th>fail</th>
+				<th>total</th>
 			</xsl:for-each>
 		</tr>
 	</xsl:template>
@@ -429,9 +323,7 @@
 
 			<!-- print testsuite information -->
 			<td>
-				<a href="#{@name}">
-					<xsl:value-of select="@name" />
-				</a>
+				<xsl:value-of select="@name" />
 			</td>
 			<td>
 				<xsl:value-of select="@tests" />
