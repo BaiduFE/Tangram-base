@@ -15,6 +15,8 @@ var jslist = "baidu.dom.draggable,baidu.dom.resizable,"
 		+ "baidu.dom.setStyle,baidu.dom.remove,baidu.dom.query,baidu.dom.setAttr,"
 		+ "baidu.dom.prev,baidu.dom.getAttr,baidu.dom.hasClass,baidu.dom.intersect,"
 		+ "baidu.dom.getText,baidu.dom.contains,baidu.dom.hasAttr,baidu.event.on,"
+		+ "baidu.dom.children,"
+		+ "baidu.dom.q,"
 		+ "baidu.event.un,baidu.event.stop";
 
 test('封装基础 - 输入字符串', function() {
@@ -64,27 +66,34 @@ test('封装基础 - 含有get的函数', function() {
 });
 
 test('封装基础 - each', function() {
-	var a = document.body.appendChild(document.createElement('div'));
-	var b = a.appendChild(document.createElement('a'));
-	var c = a.appendChild(document.createElement('a'));
+	var div = document.body.appendChild(document.createElement('div'));
+	var b = div.appendChild(document.createElement('div'));
+	var c = div.appendChild(document.createElement('div'));
+
 	var count = 0;
-	baidu.e([ a, b, c ]).each(function() {
+	baidu.e([ div, b, c ]).each(function() {
 		count++;
 		baidu.e(this).addClass('test'); // 问题1，这个this究竟应该是什么？
 	});
 	equals(count, 3);
-	var d = document.body.appendChild(document.createElement('a'));
-	baidu.e(d).addClass('test');
-	baidu.e(a).q('test').each(function() {
+
+    count = 0;
+	var a_link = document.body.appendChild(document.createElement('a'));
+	baidu.e(a_link).addClass('test');
+    console.log(baidu.e(div));
+	baidu.e(div).q('test').each(function(item) {
+        console.log(item);
 		count++; // 问题2，q应该支持当前元素作为父元素的用法
 	});
-	equals(count, 5);// 究竟应该是5还是6
+    console.log(document.body.innerHTML);
+	equals(count, 2);
 
-	baidu.e(a).children().each(function() {
+    count = 0;
+	baidu.e(div).children().each(function(div) {
 		count++;// children传入到函数中的应该是每一个元素
 	});
-	equals(count, 7);
-	TT.e([ a, d ]).remove();
+	equals(count, 2);
+	TT.e([ div, a_link ]).remove();
 });
 
 test('event + on + un + stop', function() {
