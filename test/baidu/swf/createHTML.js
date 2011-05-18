@@ -56,7 +56,6 @@ test("given/ungiven args test", function() {
 		}
 	};
 	var flashstr = baidu.swf.createHTML(opt);
-	console.log(flashstr);
 	var prefix = '<param name="', midfix = '" value="', postfix = '" />';
 	for ( var key in opt) {
 		var reKey = new RegExp(prefix + (key == "url" ? "movie" : key) + midfix
