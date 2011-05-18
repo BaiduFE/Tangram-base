@@ -9,34 +9,26 @@ test('页面载入完毕后调用该方法？', function() {
 	});
 });
 
-test('dom ready for none ie', function() {
-	if (!ua.browser.ie) {
-		expect(1);
-		window.iframeReady = false;// 子窗口中通过baidu.dom.ready尝试改变这个值用于确认函数是否正确执行
-		var iframe = document.createElement('iframe');
-		document.body.appendChild(iframe);
-		stop();
-		iframe.src = ua.commonData['datadir'] + 'testReady.html';// 文件位置在test/tools/data下
-		var clear = function(handle) {
-			clearInterval(handle);
-			// delete window.iframeReady;
-			// document.body.removeChild(iframe);
-			start();
-		}
-		var count = 0;
-		/***********************************************************************
-		 * 加载的iframe会尝试更新当前窗口中的变量iframeReady，预计超时时间为5s
-		 **********************************************************************/
-		var handle = setInterval(function() {
-			if (window.iframeReady) {
-				ok(window.iframeReady, 'iframe is ready');
-				clear(handle);
-			} else if (count > 250) {
-				ok(window.iframeReady, 'time out wait for ready');
-				clear(handle);
-			} else
-				count++;
-		}, 20)
-	} else
-		ok(true, 'IE下不支持子窗口');
-})
+test('ready before onload', function() {
+	var f = document.createElement('iframe');
+	document.body.appendChild(f);
+	var step = 0;
+	stop();
+	ua.onload = function(w) {
+		w.baidu.dom.ready(function() {
+			equals(step++, 0, 'ready before onload');
+			TT.on(w, 'load', function(){
+				equals(step++, 2, 'onload after ready');
+			});
+		});
+		TT.on(w, 'load', function(){
+			equals(step++, 1, 'onload after ready');
+		});
+		debugger;
+	};
+	f.src = cpath + 'frame.php?f=baidu.dom.ready';// 空页面
+	setTimeout(function(){
+		TT.e(f).remove();
+		start();
+	}, 2000);
+});
