@@ -225,8 +225,8 @@ test('尝试通过图片获取服务器时间戳', function() {
 
 test("ontimeout", function() {
 	stop();
-	baidu.ajax.request(upath + 'sleep.php?time=6', {// 由于用例执行有8秒限时，此处调整等待数据
-		'timeout' : 4000,
+	baidu.ajax.request(upath + 'sleep.php?time=2', {// 由于用例执行有8秒限时，此处调整等待数据
+		'timeout' : 1000,
 		'ontimeout' : function() {
 			ok(true, 'timeout');
 			start();
