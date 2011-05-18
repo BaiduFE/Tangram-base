@@ -17,7 +17,7 @@ baidu.async.get = function(url){
         onsuccess: function(xhr, responseText) {
             deferred.resolve({xhr: xhr, responseText: responseText}); 
         },
-        onfailure: function() {
+        onfailure: function(xhr) {
             deferred.reject({xhr: xhr});
         }
     });
