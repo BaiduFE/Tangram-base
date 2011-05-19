@@ -7,7 +7,7 @@ class Config{
 	//,'ie7'=>array('10.81.23.219', "C:\\Program Files\\Internet Explorer\\iexplore.exe")
 	//,'chrome'=>array('10.81.23.219', "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe")//"C:\\Documents and Settings\\Administrator\\Local Settings\\Application Data\\Google\\Chrome\\Application\\chrome.exe")
 	//,'opera'=>array('10.81.23.219', "C:\\Program Files\\Opera\\opera.exe")
-	'chrome'=>array('10.81.58.64', "C:\\Documents and Settings\\geqa2\\Local Settings\\Application Data\\Google\\Chrome\\Application\\chrome.exe")
+	,'chrome'=>array('10.81.58.64', "C:\\Documents and Settings\\geqa2\\Local Settings\\Application Data\\Google\\Chrome\\Application\\chrome.exe")
 	,'opera'=>array('10.81.58.64', "C:\\Program Files\\Opera\\opera.exe")
 	,'ie8'=>array('10.81.58.64', "C:\\Program Files\\Internet Explorer\\iexplore.exe")
 	,'safari'=>array('10.81.58.64', "C:\\Program Files\\Safari\\Safari.exe")
