@@ -6,6 +6,7 @@ if(substr_count($_POST['config'], "browser")==0){
 	return;
 }
 
+include 'config.php';
 function report(){
 	/**
 	 * for junit report
@@ -25,12 +26,12 @@ function report(){
 	$errors = 0;
 	$failures = 0;
 	$tests = 0;
-	$time = 0; 
+	$time = 0;
 	foreach($_POST as $key=>$value){
 		if($key == 'config')
 		continue;
 		if($key == 'covsummaryinfo'){//此方法生成summary页面
-		    $array = explode("、", $value);//preg_split('/[,]/', $value);
+			$array = explode("、", $value);//preg_split('/[,]/', $value);
 			covsummaryinfohtml($config['browser'],$array);
 			continue;
 		};
@@ -50,7 +51,7 @@ function report(){
 		$case->setAttribute("name", $key);
 		$case->setAttribute("time", $casetime);
 		$case->setAttribute("cov", $info[2]);
-//		covHtml($config['browser'].'/'.$key,$info[2]);
+		//		covHtml($config['browser'].'/'.$key,$info[2]);
 		if($failure > 0){
 			$failures++;
 			$failinfo = $case->appendChild($dom->createElement('failure'));
@@ -64,7 +65,9 @@ function report(){
 	$suite->setAttribute('time', $time);
 	$suite->setAttribute('failures', $failures);
 	$suite->setAttribute('tests', $tests);
-
+	$host = Config::$BROWSERS[$config['browser']][0];
+	$suite->setAttribute('hostname', $host);
+	
 	if(!is_dir("report"))
 	mkdir("report");
 	$dom->save("report/{$config['browser']}.xml");
@@ -84,16 +87,16 @@ function covsummaryinfohtml($browser,$info){//生成jscoverage summary 页面的
 	$tbody = $html->getElementById('summaryTbody');
 	$tbody->setAttribute('innertext',$caseinfo);
 	if(is_dir('coveragereport/browser/'.$browser)){
-        unlink('coveragereport/browser/'.$browser.'/'.$browser.'.html');
+		unlink('coveragereport/browser/'.$browser.'/'.$browser.'.html');
 	}
 	else mkdir('coveragereport/browser/'.$browser);
 	$html->save('coveragereport/browser/'.$browser.'/'.$browser.'.html');
 };
 
 function covsourceinfotojs($browser,$info){//每个源码文件对应的html写入到js文件中，封装成一个方法 如get_baidu1ajax1form
-    $filepath = 'coveragereport/browser/'.$browser.'/'.'source.js';
+	$filepath = 'coveragereport/browser/'.$browser.'/'.'source.js';
 	if(is_dir('coveragereport/browser/'.$browser)){
-	    if(file_exists($filepath))unlink($filepath);
+		if(file_exists($filepath))unlink($filepath);
 	}
 	else mkdir('coveragereport/browser/'.$browser);
 	$array = explode("},a", $info);
@@ -111,7 +114,6 @@ function covsourceinfotojs($browser,$info){//每个源码文件对应的html写�
 };
 
 report();
-include 'config.php';
 $dom = new DOMDocument('1.0', 'utf-8');
 $testsuites = $dom->appendChild($dom->createElement('testsuites'));
 foreach (Config::$BROWSERS as $key=>$value){

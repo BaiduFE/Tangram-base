@@ -15,8 +15,7 @@ var jslist = "baidu.dom.draggable,baidu.dom.resizable,"
 		+ "baidu.dom.setStyle,baidu.dom.remove,baidu.dom.query,baidu.dom.setAttr,"
 		+ "baidu.dom.prev,baidu.dom.getAttr,baidu.dom.hasClass,baidu.dom.intersect,"
 		+ "baidu.dom.getText,baidu.dom.contains,baidu.dom.hasAttr,baidu.event.on,"
-		+ "baidu.dom.children,"
-		+ "baidu.dom.q,"
+		+ "baidu.dom.children," + "baidu.dom.q,"
 		+ "baidu.event.un,baidu.event.stop";
 
 test('封装基础 - 输入字符串', function() {
@@ -66,34 +65,53 @@ test('封装基础 - 含有get的函数', function() {
 });
 
 test('封装基础 - each', function() {
-	var div = document.body.appendChild(document.createElement('div'));
-	var b = div.appendChild(document.createElement('div'));
-	var c = div.appendChild(document.createElement('div'));
+	var parentNode = document.body.appendChild(document.createElement('div')),
+	//
+	childNode1 = parentNode.appendChild(document.createElement('div')),
+	//
+	childNode2 = parentNode.appendChild(document.createElement('p'));
 
 	var count = 0;
-	baidu.e([ div, b, c ]).each(function() {
+	baidu.e([ parentNode, childNode1, childNode2 ]).each(function(node) {
 		count++;
-		baidu.e(this).addClass('test'); // 问题1，这个this究竟应该是什么？
+		node.addClass('test');// 为每个元素添加class，为后续操作做准备，并检测参数
 	});
-	equals(count, 3);
+	equals(count, 3, '上面的回调函数应该执行3次');
 
-    count = 0;
+	count = 0;
 	var a_link = document.body.appendChild(document.createElement('a'));
 	baidu.e(a_link).addClass('test');
-    console.log(baidu.e(div));
-	baidu.e(div).q('test').each(function(item) {
-        console.log(item);
-		count++; // 问题2，q应该支持当前元素作为父元素的用法
+	baidu.e(parentNode).q('test').each(function(item) {
+		count++;
+		ok(this.hasClass('test'), '检测class之外同时检测this指针');
 	});
-    console.log(document.body.innerHTML);
+	equals(count, 2, '上述回调应该执行2次');
+
+	count = 0;
+	baidu.e(parentNode).children().each(function(div) {
+		count++;// children传入到函数中的应该是每一个元素
+		ok(this.hasClass('test'), '检测class之外同时检测this指针');
+	});
 	equals(count, 2);
 
-    count = 0;
-	baidu.e(div).children().each(function(div) {
-		count++;// children传入到函数中的应该是每一个元素
+	count = 0;
+	baidu.e(document).q('test').each(function() {
+		count++;
 	});
-	equals(count, 2);
-	TT.e([ div, a_link ]).remove();
+	equals(count, 4, '对document查找，应该是4个元素');
+	
+	count = 0;
+	baidu.e(document).q('test', 'div').each(function() {
+		count++;
+	});
+	equals(count, 2, '对document查找class是test的div，测试q的第二个参数');
+	
+	count = 0;
+	baidu.e(document).q('test', 'table').each(function() {
+		count++;
+	});
+	equals(count, 0, '对document查找class是test的table，测试q的第二个参数');
+	TT.e([ parentNode, a_link ]).remove();
 });
 
 test('event + on + un + stop', function() {
