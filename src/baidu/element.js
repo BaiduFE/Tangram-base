@@ -64,7 +64,7 @@ baidu.element.Element = function(node){
 baidu.element.Element.prototype.each = function(iterator) {
     // 每一个iterator接受到的都是封装好的node
     baidu.array.each(this._dom, function(node){
-        iterator.call(this, new baidu.element.Element(node));
+        iterator.call(node, new baidu.element.Element(node));
     });
 };
 
