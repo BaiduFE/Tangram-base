@@ -762,7 +762,7 @@ var UserAction =
 		op.finish = function() {
 			pw.$(fid).unbind();
 			setTimeout(function() {
-				pw.$('div#d').remove();
+				pw.$('div#div'+id).remove();
 				start();
 			}, 20);
 		};

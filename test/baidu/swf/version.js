@@ -19,12 +19,10 @@ var check=function(needVersion){
         return '未安装flash 插件'; // 未安装flash插件
     }
 	
-}
+};
 
 test("test version", function() {
-	stop();
 	equal(check('6.0.0'),"flash插件版本符合要求","flash插件版本符合要求");
-	equal(check('11.0.0'),"flash插件版本太低","flash插件版本太低");
+	equal(check('100.0.0'),"flash插件版本太低","flash插件版本太低");
 	//equal(check('6.0.0'),"未安装flash 插件","未安装flash 插件");//only work when there is no flash player
-	start();
 });
