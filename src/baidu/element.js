@@ -64,7 +64,7 @@ baidu.element.Element = function(node){
 baidu.element.Element.prototype.each = function(iterator) {
     // 每一个iterator接受到的都是封装好的node
     baidu.array.each(this._dom, function(node){
-        iterator.call(this, new baidu.element.Element(node));
+        iterator.call(node, new baidu.element.Element(node));
     });
 };
 
@@ -80,8 +80,8 @@ baidu.element.Element.prototype.each = function(iterator) {
  * @return {function}   包装后的方法，能直接挂到Element的prototype上。
  * @private
  */
-baidu.element._toChainFunction = function(func, index){
-    return baidu.fn.methodize(baidu.fn.wrapReturnValue(baidu.fn.multize(func), baidu.element.Element, index), '_dom');
+baidu.element._toChainFunction = function(func, index, joinArray){
+    return baidu.fn.methodize(baidu.fn.wrapReturnValue(baidu.fn.multize(func, 0, 1), baidu.element.Element, index), '_dom');
 };
 
 /**
@@ -110,14 +110,24 @@ baidu.element._makeChain = function(){ //将dom/event包下的东西挂到protot
               });
 
     //包装返回值
+    //包含
+    //1. methodize
+    //2. multize，结果如果是数组会被展平
+    //3. getXx == xx
     baidu.each(("addClass empty hide show insertAfter insertBefore insertHTML removeClass " + 
-              "setAttr setAttrs setStyle setStyles show toggleClass toggle children next first " + 
+              "setAttr setAttrs setStyle setStyles show toggleClass toggle next first " + 
               "getAncestorByClass getAncestorBy getAncestorByTag getDocument getParent getWindow " +
-              "last next prev g q query removeStyle setBorderBoxSize setOuterWidth setOuterHeight " +
-              "setBorderBoxWidth setBorderBoxHeight setPosition").split(' '),
+              "last next prev g removeStyle setBorderBoxSize setOuterWidth setOuterHeight " +
+              "setBorderBoxWidth setBorderBoxHeight setPosition children query").split(' '),
               function(fn){
                   proto[fn] = proto[fn.replace(/^get[A-Z]/g, stripGet)] = fnTransformer(baidu.dom[fn], 0);
               });
+
+    //对于baidu.dom.q这种特殊情况，将前两个参数调转
+    //TODO：需要将这种特殊情况归纳到之前的情况中
+    proto['q'] = proto['Q'] = fnTransformer(function(arg1, arg2){
+        return baidu.dom.q.apply(this, [arg2, arg1].concat([].slice.call(arguments, 2)));
+    }, 0);
 
     //包装event中的on 和 un
     baidu.each(("on un").split(' '), function(fn){

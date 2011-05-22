@@ -84,6 +84,7 @@ $b = array_key_exists('browser', $_GET) ? $_GET['browser'] : 'all';
 if($b !='all'){
 	run($b, $release, true);
 }else{
+	Config::StopAll();//批量执行启动前一定清理一次浏览器环境
 	foreach(Config::$BROWSERS as $b=>$i){
 		run($b, $release);
 	}

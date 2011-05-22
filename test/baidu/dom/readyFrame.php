@@ -8,18 +8,21 @@
 	padding: 0;
 }
 </style>
-<script type="text/javascript" src="../br/js/jquery-1.5.1.js"></script>
 <?php
 $release = preg_match('/release=true/i', $_SERVER['QUERY_STRING']);
 if($release == 0 && array_key_exists('f', $_GET))
-print "<script type='text/javascript' src='../br/import.php?f={$_GET['f']}'></script>";
+print "<script type='text/javascript' src='../../tools/br/import.php?f={$_GET['f']}'></script>";
 else
 print "<script type='text/javascript' src='../../../release/all_release.js'></script>";
 ?>
-<script type="text/javascript">
-	parent && parent.ua.onload && parent.ua.onload(window);
+<script>
+parent&&parent.frameload && parent.frameload(window);
 </script>
 </head>
 <body>
+	<div>
+		<img src="../page/test.jpg" /> <img src="../page/test.jpg" /> <img
+			src="../page/test.jpg" />
+	</div>
 </body>
 </html>
