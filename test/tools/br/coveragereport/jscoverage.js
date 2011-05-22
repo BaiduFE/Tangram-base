@@ -848,8 +848,10 @@ function jscoverage_get(file, line) {
   if (jscoverage_inLengthyOperation) {
     return;
   }
+  debugger
   jscoverage_beginLengthyOperation();
   setTimeout(function() {
+  	debugger
     var sourceDiv = document.getElementById('sourceDiv');
     sourceDiv.innerHTML = '';
     jscoverage_selectTab('sourceTab');
