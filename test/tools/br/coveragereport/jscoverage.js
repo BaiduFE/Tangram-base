@@ -845,13 +845,12 @@ function jscoverage_scrollToLine() {
 Loads the given file (and optional line) in the source tab.
 */
 function jscoverage_get(file, line) { 
+	alert('dd = '+jscoverage_inLengthyOperation);
   if (jscoverage_inLengthyOperation) {
     return;
   }
-  debugger
   jscoverage_beginLengthyOperation();
   setTimeout(function() {
-  	debugger
     var sourceDiv = document.getElementById('sourceDiv');
     sourceDiv.innerHTML = '';
     jscoverage_selectTab('sourceTab');
