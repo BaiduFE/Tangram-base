@@ -107,7 +107,7 @@ function covsourceinfotojs($browser,$info){//每个源码文件对应的html写�
 			$title = str_replace('/','1',$title);
 			$content = substr($a,strpos($a,':')+1,strlen($a));
 		    $content = str_replace("'","&#39",$content);//linux生成的引号不带 \,$content 中的 ' 会跟外层的' 形成对，所以加\
-			$content = str_replace("\x","\\x",$content);
+			$content = str_replace("\x<","\x0<",$content);
 			$js_content .= "function get_".$title."(){ \n return '".$content."' ; \n}\r\n" ;
 		}
 	};
