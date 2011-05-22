@@ -85,7 +85,7 @@
 					}
       			</style>
 				<script type="text/javascript">
-					
+
 				</script>
 			</head>
 			<body>
@@ -157,10 +157,6 @@
 		<xsl:variable name="errorCount"
 			select="sum(/testsuites/testsuite/testcase[@name=$casename]/@error)" />
 
-		<xsl:for-each select="/testsuites/testsuite/testcase[@name=$casename]">
-			<xsl:sort select="../@name" />
-
-		</xsl:for-each>
 		<xsl:if test="$failureCount &gt; 0">
 			<tr>
 				<xsl:attribute name="class">
@@ -181,6 +177,16 @@
 				<td>
 					<xsl:value-of select="$errorCount" />
 				</td>
+				<td>Developing</td>
+				<xsl:for-each select="/testsuites/testsuite/testcase[@name=$casename]">
+					<xsl:sort select="../@name" />
+					<td>
+						<xsl:value-of select="@fail" />
+					</td>
+					<td>
+						<xsl:value-of select="@total" />
+					</td>
+				</xsl:for-each>
 			</tr>
 		</xsl:if>
 	</xsl:template>
