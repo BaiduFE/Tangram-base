@@ -845,7 +845,6 @@ function jscoverage_scrollToLine() {
 Loads the given file (and optional line) in the source tab.
 */
 function jscoverage_get(file, line) { 
-	alert('dd = '+jscoverage_inLengthyOperation);
   if (jscoverage_inLengthyOperation) {
     return;
   }
