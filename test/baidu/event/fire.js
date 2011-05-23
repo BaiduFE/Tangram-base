@@ -103,7 +103,7 @@ module('baidu.event.fire');
 					obj : window
 				});
 			}
-			expect(eList.length + hList.length + wList.length + (ua.browser.opera ? -5 : 0));
+			expect(eList.length + hList.length + wList.length + (ua.browser.opera < 9 ? -5 : 0));
 		} else{
 			for ( var e in hList) {
 				if(hList[e]!='load'&&hList[e]!='unload'){
