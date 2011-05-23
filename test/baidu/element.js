@@ -73,9 +73,8 @@ test('封装基础 - each', function() {
 
 	var count = 0;
 	baidu.e([ parentNode, childNode1, childNode2 ]).each(function(dom, idx) {
-		count++;
 		baidu.e(this).addClass('test');// 为每个元素添加class，为后续操作做准备，并检测参数
-		equals(idx, count, 'check parameter index');
+		equals(idx, count++, 'check parameter index');
 		ok(baidu.e(dom).hasClass('test'), 'check parameter dom');
 	});
 	equals(count, 3, '上面的回调函数应该执行3次');
