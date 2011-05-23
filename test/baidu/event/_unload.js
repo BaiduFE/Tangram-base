@@ -22,23 +22,18 @@ test("normal on and unload all eventlistener", function() {
 		start();
 	}, 'baidu.event.on', 'baidu.event._unload');
 });
+
 // unload Event 
 test("window unload", function() {
+	expect(1);
 	ua.frameExt(function(w, f) {
-		var op = this;
-
-		var fn = function() {
-			equals(w.baidu.event._listeners.length, 0, "监听器应该被清空");
-			start();
-		};
-		if (w.attachEvent) {
-			w.attachEvent('onunload', fn);
-		} else {
-			w.addEventListener('unload', fn, false);
-		}
-		setTimeout(function() {
-			$(f)[0].src = 'http://10.32.34.115:8000/houhaixian/Tangram-base/test/tools/br/list.php';
-			$(f).remove();
-		}, 500);
-	})
+		var self = this;
+		w.baidu.on(w, 'unload', function(){
+			setTimeout(function(){
+				ok(true, 'user unload will fire');
+				self.finish();
+			}, 500);
+		});
+		f.src = "";
+	});
 });
