@@ -28,12 +28,12 @@ test("window unload", function() {
 	expect(1);
 	ua.frameExt(function(w, f) {
 		var self = this;
-		w.baidu.on(w, 'unload', function(){
+		baidu.on.apply(w, [w, 'unload', function(){
 			setTimeout(function(){
 				ok(true, 'user unload will fire');
 				self.finish();
 			}, 500);
-		});
-		f.src = "";
+		}]);
+		f.src = upath;
 	});
 });
