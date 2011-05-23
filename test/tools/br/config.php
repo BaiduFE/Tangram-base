@@ -4,7 +4,7 @@ class Config{
 	'ie6'=>array('10.81.58.63', "C:\\Program Files\\Internet Explorer\\iexplore.exe")
 	,'maxthon'=>array('10.81.58.63', "C:\\Program Files\\Maxthon3\\Bin\\Maxthon.exe")
 	,'firefox'=>array('10.81.58.63', "C:\\Program Files\\mozilla firefox\\firefox.exe")
-	,'ie7'=>array('10.81.23.86', "C:\\Program Files\\Internet Explorer\\iexplore.exe")
+	,'ie7'=>array('10.81.58.86', "C:\\Program Files\\Internet Explorer\\iexplore.exe")
 	,'chrome'=>array('10.81.58.86', "C:\\Documents and Settings\\geqa3\\Local Settings\\Application Data\\Google\\Chrome\\Application\\chrome.exe")
 	,'opera'=>array('10.81.58.86', "C:\\Program Files\\Opera\\opera.exe")
 	,'ie8'=>array('10.81.58.64', "C:\\Program Files\\Internet Explorer\\iexplore.exe")
