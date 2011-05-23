@@ -72,10 +72,11 @@ test('封装基础 - each', function() {
 	childNode2 = parentNode.appendChild(document.createElement('p'));
 
 	var count = 0;
-	baidu.e([ parentNode, childNode1, childNode2 ]).each(function(node) {
+	baidu.e([ parentNode, childNode1, childNode2 ]).each(function(dom, idx) {
 		count++;
 		baidu.e(this).addClass('test');// 为每个元素添加class，为后续操作做准备，并检测参数
-		ok(node.hasClass('test'), 'check parameter node');
+		equals(idx, count, 'check parameter index');
+		ok(baidu.e(dom).hasClass('test'), 'check parameter dom');
 	});
 	equals(count, 3, '上面的回调函数应该执行3次');
 
@@ -100,13 +101,13 @@ test('封装基础 - each', function() {
 		count++;
 	});
 	equals(count, 4, '对document查找，应该是4个元素');
-	
+
 	count = 0;
 	baidu.e(document).q('test', 'div').each(function() {
 		count++;
 	});
 	equals(count, 2, '对document查找class是test的div，测试q的第二个参数');
-	
+
 	count = 0;
 	baidu.e(document).q('test', 'table').each(function() {
 		count++;
