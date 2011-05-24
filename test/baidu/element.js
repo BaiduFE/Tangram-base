@@ -243,7 +243,7 @@ test('封装基础 - 构造函数', function() {
 	document.body.removeChild(div);
 });
 
-test('select', function() {
+test('element with select', function() {
 	var sel0 = document.createElement('select');
 	var sel1 = document.createElement('select');
 	sel0.name = "sel";
@@ -269,9 +269,24 @@ test('select', function() {
 
 	count = 0;
 	var typelist = [ 'select-one', 'select-multiple' ];
+	var selectlist = [2, 0];
 	baidu.e([ sel0, sel1 ]).each(function() {
+		equals(this.length, 3, 'check this length');
+		equals(this.selectedIndex, selectlist[count], 'check this selectIndex');
+		equals(this.type, typelist[count++], 'check this type');
+	});
+	equals(count, 2, 'check get select');
+	
+	var div = document.body.appendChild(document.createElement('div'));
+	div.appendChild(sel0);
+	div.appendChild(sel1);
+	
+	count = 0;
+	var typelist = [ 'select-one', 'select-multiple' ];	
+	baidu.e(div).children().each(function() {
 		equals(this.length, 3, 'check this length');
 		equals(this.type, typelist[count++], 'check this type');
 	});
 	equals(count, 2, 'check get select');
+	TT.e(div).remove();
 });
