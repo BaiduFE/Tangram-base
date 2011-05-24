@@ -129,7 +129,7 @@ baidu.swf.createHTML = function (options) {
     for (k in options) {
         item = options[k];
         k = k.toLowerCase();
-        if (params[k] && item) {
+        if (params[k] && (item || item === false || item === 0)) {
             str.push('<param name="' + k + '" value="' + encodeHTML(item) + '" />');
         }
     }
@@ -152,7 +152,7 @@ baidu.swf.createHTML = function (options) {
     var salign;
     for (k in options) {
         item = options[k];
-        if (item) {
+        if (item || item === false || item === 0) {
             if ((new RegExp("^salign\x24", "i")).test(k)) {
                 salign = item;
                 continue;

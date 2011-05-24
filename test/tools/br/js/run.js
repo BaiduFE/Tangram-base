@@ -107,7 +107,8 @@ function run(kiss, runnext) {
 	/**
 	 * 初始化执行区并通过嵌入iframe启动用例执行
 	 */
-	var url = 'run.php?case=' + kiss + '&' + location.search.substring(1);
+	var url = 'run.php?case=' + kiss + '&time=' + new Date().getTime() + "&"
+			+ location.search.substring(1);
 	// + (location.search.length > 0 ? '&' + location.search.substring(1)
 	// : '');
 
@@ -141,14 +142,16 @@ function covcalc() {
 	var brkisses = window.brtest.kisses;
 	for ( var key in window.brtest.kisscov)
 		covmerge(cc, window.brtest.kisscov[key]);
-	//--------------处理summary页面，用于生成静态summary页面，用于ci集成-------------------
-	var htmlarray = jscoverage_recalculateSummary(cc);//生成summary页面，下面的只是计算百分比
-	if(htmlarray&&htmlarray.length>0){
-	    brkisses['covsummaryinfo'] = "["+htmlarray[0]+"]、["+htmlarray[1]+"]";//{totals:htmlarray[0],caseinfo:htmlarray[1]};
-	};
-	brkisses['covsourceinfo'] = getSourceStrs(window.brtest.kisscov);//生成souce代码
-	//--------------------------------------------------------------------------------
-	
+	// --------------处理summary页面，用于生成静态summary页面，用于ci集成-------------------
+	var htmlarray = jscoverage_recalculateSummary(cc);// 生成summary页面，下面的只是计算百分比
+	if (htmlarray && htmlarray.length > 0) {
+		brkisses['covsummaryinfo'] = "[" + htmlarray[0] + "]、[" + htmlarray[1]
+				+ "]";// {totals:htmlarray[0],caseinfo:htmlarray[1]};
+	}
+	;
+	brkisses['covsourceinfo'] = getSourceStrs(window.brtest.kisscov);// 生成souce代码
+	// --------------------------------------------------------------------------------
+
 	var file;
 	var files = [];
 	for (file in cc) {
@@ -210,207 +213,224 @@ function covcalc() {
 	}
 }
 
-function jscoverage_recalculateSummary(cc) {//生成summary数据的主要方法
-  var totals = { files:0, statements:0, executed:0 };
-  var file;
-  var files = [];
-  for (file in cc) {
-    if (! cc.hasOwnProperty(file)) {
-      continue;
-    }
-    files.push(file);
-  }
-  files.sort();
-  var caseinfostr = '';
-  var rowCounter = 0;
-  for (var f = 0; f < files.length; f++) {
-    file = files[f];
-    var lineNumber;
-    var num_statements = 0;
-    var num_executed = 0;
-    var missing = [];
-    var fileCC = cc[file];
-    var length = fileCC.length;
-    var currentConditionalEnd = 0;
-    var conditionals = null;
-    if (fileCC.conditionals) {
-      conditionals = fileCC.conditionals;
-    }
-    for (lineNumber = 0; lineNumber < length; lineNumber++) {
-      var n = fileCC[lineNumber];
+function jscoverage_recalculateSummary(cc) {// 生成summary数据的主要方法
+	var totals = {
+		files : 0,
+		statements : 0,
+		executed : 0
+	};
+	var file;
+	var files = [];
+	for (file in cc) {
+		if (!cc.hasOwnProperty(file)) {
+			continue;
+		}
+		files.push(file);
+	}
+	files.sort();
+	var caseinfostr = '';
+	var rowCounter = 0;
+	for ( var f = 0; f < files.length; f++) {
+		file = files[f];
+		var lineNumber;
+		var num_statements = 0;
+		var num_executed = 0;
+		var missing = [];
+		var fileCC = cc[file];
+		var length = fileCC.length;
+		var currentConditionalEnd = 0;
+		var conditionals = null;
+		if (fileCC.conditionals) {
+			conditionals = fileCC.conditionals;
+		}
+		for (lineNumber = 0; lineNumber < length; lineNumber++) {
+			var n = fileCC[lineNumber];
 
-      if (lineNumber === currentConditionalEnd) {
-        currentConditionalEnd = 0;
-      }
-      else if (currentConditionalEnd === 0 && conditionals && conditionals[lineNumber]) {
-        currentConditionalEnd = conditionals[lineNumber];
-      }
+			if (lineNumber === currentConditionalEnd) {
+				currentConditionalEnd = 0;
+			} else if (currentConditionalEnd === 0 && conditionals
+					&& conditionals[lineNumber]) {
+				currentConditionalEnd = conditionals[lineNumber];
+			}
 
-      if (currentConditionalEnd !== 0) {
-        continue;
-      }
+			if (currentConditionalEnd !== 0) {
+				continue;
+			}
 
-      if (n === undefined || n === null) {
-        continue;
-      }
+			if (n === undefined || n === null) {
+				continue;
+			}
 
-      if (n === 0) {
-        missing.push(lineNumber);
-      }
-      else {
-        num_executed++;
-      }
-      num_statements++;
-    }
+			if (n === 0) {
+				missing.push(lineNumber);
+			} else {
+				num_executed++;
+			}
+			num_statements++;
+		}
 
-    var percentage = ( num_statements === 0 ? 0 : parseInt(100 * num_executed / num_statements) );
-    var className = ( rowCounter++ % 2 == 0 ? "odd" : "even" );
-    //------------构造js方法名，此js方法用于得到source----
-    var getSourceFunc = file;
-    while(getSourceFunc.indexOf("/")>-1){//生成js方法名
-        getSourceFunc = getSourceFunc.replace('/','1');
-    }
-    getSourceFunc = 'get_'+getSourceFunc.substring(0,getSourceFunc.length-3);
-    //-------------------------------------------------
-    caseinfostr += "<tr class="+className+" >";
-    caseinfostr += "<td class=leftColumn><a href=# onclick=setSourceHtml(&#39"+getSourceFunc+"&#39)>"+file+"</a></td>";
-    caseinfostr += "<td class=numeric>"+num_statements+"</td>";
-    caseinfostr += "<td class=numeric>"+num_executed+"</td>";  
-    // new coverage td containing a bar graph
-    var covereddivstr = '',pctdivstr = '';
-    if( num_statements === 0 ) {
-        var covered_className = "skipped";
-        covereddivstr += "<div class="+covered_className+" ></div>";
-        pctdivstr += "<span class=pct>0</span>";
-    } else {
-        var covered_className = "covered";
-        covereddivstr += "<div class="+covered_className+" style=width:"+percentage+"px;></div>";
-        pctdivstr += "<span class=pct>"+percentage + "%"+"</span>";
-    }
-    caseinfostr += "<td class=coverage><div class=pctGraph>"+covereddivstr+"</div>"+pctdivstr+"</td>";
-    
-    caseinfostr += "<td>";
-      for (var i = 0; i < missing.length; i++) {
-        if (i !== 0) {
-          caseinfostr += '  ';//空格分隔遗失行
-        }
-//        link = jscoverage_createLink(file, missing[i]);
-        // group contiguous missing lines; e.g., 10, 11, 12 -> 10-12
-        var j, start = missing[i];
-        for (;;) {
-          j = 1;
-          while (i + j < missing.length && missing[i + j] == missing[i] + j) {
-            j++;
-          }
-          var nextmissing = missing[i + j], cur = missing[i] + j;
-          if (isNaN(nextmissing)) {
-            break;
-          }
-          while (cur < nextmissing && ! fileCC[cur]) {
-            cur++;
-          }
-          if (cur < nextmissing || cur >= length) {
-            break;
-          }
-          i += j;
-        }
-        if (start != missing[i] || j > 1) {
-          i += j - 1;
-          caseinfostr += "<a href=# onclick=fixedSourceHtml(&#39"+getSourceFunc+"&#39,"+start+") >"+start+"_"+missing[i]+"</a>";
-        }
-        else caseinfostr += "<a href=# onclick=fixedSourceHtml(&#39"+getSourceFunc+"&#39,"+missing[i]+") >"+missing[i]+"</a>";
-      }
+		var percentage = (num_statements === 0 ? 0 : parseInt(100
+				* num_executed / num_statements));
+		var className = (rowCounter++ % 2 == 0 ? "odd" : "even");
+		// ------------构造js方法名，此js方法用于得到source----
+		var getSourceFunc = file;
+		while (getSourceFunc.indexOf("/") > -1) {// 生成js方法名
+			getSourceFunc = getSourceFunc.replace('/', '1');
+		}
+		getSourceFunc = 'get_'
+				+ getSourceFunc.substring(0, getSourceFunc.length - 3);
+		// -------------------------------------------------
+		caseinfostr += "<tr class=" + className + " >";
+		caseinfostr += "<td class=leftColumn><a href=# onclick=setSourceHtml(&#39"
+				+ getSourceFunc + "&#39)>" + file + "</a></td>";
+		caseinfostr += "<td class=numeric>" + num_statements + "</td>";
+		caseinfostr += "<td class=numeric>" + num_executed + "</td>";
+		// new coverage td containing a bar graph
+		var covereddivstr = '', pctdivstr = '';
+		if (num_statements === 0) {
+			var covered_className = "skipped";
+			covereddivstr += "<div class=" + covered_className + " ></div>";
+			pctdivstr += "<span class=pct>0</span>";
+		} else {
+			var covered_className = "covered";
+			covereddivstr += "<div class=" + covered_className
+					+ " style=width:" + percentage + "px;></div>";
+			pctdivstr += "<span class=pct>" + percentage + "%" + "</span>";
+		}
+		caseinfostr += "<td class=coverage><div class=pctGraph>"
+				+ covereddivstr + "</div>" + pctdivstr + "</td>";
 
-    caseinfostr += "</td></tr>";
-    totals['files'] ++;
-    totals['statements'] += num_statements;
-    totals['executed'] += num_executed;
-  }
-    // write totals data into summaryTotals row
-    var totalsstr = "";
-    totalsstr += "<td class=leftColumn><span class=title>Total:</span><span>"+totals['files']+"</span></td>";
-    totalsstr += "<td class=numeric>"+totals['statements']+"</td>";
-    totalsstr += "<td class=numeric>"+totals['executed']+"</td>";
-    var coverage = parseInt(100 * totals['executed'] / totals['statements']);
-    if( isNaN( coverage ) ) {
-       coverage = 0;
-    }
-    totalsstr += "<td class=coverage><div class=pctGraph><div class=covered style=width:"+coverage+"px; ></div></div><span class=pct>"+coverage+"%"+"</span></td><td id=missingCell></td>";
-  
-   var strs = [totalsstr,caseinfostr];
-  return strs;
-  
+		caseinfostr += "<td>";
+		for ( var i = 0; i < missing.length; i++) {
+			if (i !== 0) {
+				caseinfostr += '  ';// 空格分隔遗失行
+			}
+			// link = jscoverage_createLink(file, missing[i]);
+			// group contiguous missing lines; e.g., 10, 11, 12 -> 10-12
+			var j, start = missing[i];
+			for (;;) {
+				j = 1;
+				while (i + j < missing.length
+						&& missing[i + j] == missing[i] + j) {
+					j++;
+				}
+				var nextmissing = missing[i + j], cur = missing[i] + j;
+				if (isNaN(nextmissing)) {
+					break;
+				}
+				while (cur < nextmissing && !fileCC[cur]) {
+					cur++;
+				}
+				if (cur < nextmissing || cur >= length) {
+					break;
+				}
+				i += j;
+			}
+			if (start != missing[i] || j > 1) {
+				i += j - 1;
+				caseinfostr += "<a href=# onclick=fixedSourceHtml(&#39"
+						+ getSourceFunc + "&#39," + start + ") >" + start + "_"
+						+ missing[i] + "</a>";
+			} else
+				caseinfostr += "<a href=# onclick=fixedSourceHtml(&#39"
+						+ getSourceFunc + "&#39," + missing[i] + ") >"
+						+ missing[i] + "</a>";
+		}
+
+		caseinfostr += "</td></tr>";
+		totals['files']++;
+		totals['statements'] += num_statements;
+		totals['executed'] += num_executed;
+	}
+	// write totals data into summaryTotals row
+	var totalsstr = "";
+	totalsstr += "<td class=leftColumn><span class=title>Total:</span><span>"
+			+ totals['files'] + "</span></td>";
+	totalsstr += "<td class=numeric>" + totals['statements'] + "</td>";
+	totalsstr += "<td class=numeric>" + totals['executed'] + "</td>";
+	var coverage = parseInt(100 * totals['executed'] / totals['statements']);
+	if (isNaN(coverage)) {
+		coverage = 0;
+	}
+	totalsstr += "<td class=coverage><div class=pctGraph><div class=covered style=width:"
+			+ coverage
+			+ "px; ></div></div><span class=pct>"
+			+ coverage
+			+ "%"
+			+ "</span></td><td id=missingCell></td>";
+
+	var strs = [ totalsstr, caseinfostr ];
+	return strs;
+
 }
 
 /**
  * 生成souce 页源码字符串组合，作为data的一项传到report.php里解析
  */
- function getSourceStrs(covinfo){
-      var sourceStrs = '';
-      var coverage = {};
-      for ( var key in covinfo) {
-      	coverage = covinfo[key];
-      	break;
-      }
-      for ( var key in coverage) {
-          sourceStrs += "{"+key+":"+jscoverage_makeTable(coverage[key])+"},a";
-      }
-      return sourceStrs;
- }
+function getSourceStrs(covinfo) {
+	var sourceStrs = '';
+	var coverage = {};
+	for ( var key in covinfo) {
+		coverage = covinfo[key];
+		break;
+	}
+	for ( var key in coverage) {
+		sourceStrs += "{" + key + ":" + jscoverage_makeTable(coverage[key])
+				+ "},a";
+	}
+	return sourceStrs;
+}
 
 /**
  * 生成sourceTab 页代码
  */
 function jscoverage_makeTable(coverage) {
-  var lines = coverage.source;
-  // this can happen if there is an error in the original JavaScript file
-  if (! lines) {
-    lines = [];
-  }
-  var rows = ['<table id="sourceTable">'];
-  var i = 0;
-  var progressBar = document.getElementById('progressBar');
-  var tableHTML;
-  var currentConditionalEnd = 0;
+	var lines = coverage.source;
+	// this can happen if there is an error in the original JavaScript file
+	if (!lines) {
+		lines = [];
+	}
+	var rows = [ '<table id="sourceTable">' ];
+	var i = 0;
+	var progressBar = document.getElementById('progressBar');
+	var tableHTML;
+	var currentConditionalEnd = 0;
 
-  while (i < lines.length) {
-    var lineNumber = i + 1;
+	while (i < lines.length) {
+		var lineNumber = i + 1;
 
-    if (lineNumber === currentConditionalEnd) {
-      currentConditionalEnd = 0;
-    }
-    else if (currentConditionalEnd === 0 && coverage.conditionals && coverage.conditionals[lineNumber]) {
-      currentConditionalEnd = coverage.conditionals[lineNumber];
-    }
+		if (lineNumber === currentConditionalEnd) {
+			currentConditionalEnd = 0;
+		} else if (currentConditionalEnd === 0 && coverage.conditionals
+				&& coverage.conditionals[lineNumber]) {
+			currentConditionalEnd = coverage.conditionals[lineNumber];
+		}
 
-    var row = '<tr>';
-    row += '<td class="numeric">' + lineNumber + '</td>';
-    var timesExecuted = coverage[lineNumber];
-    if (timesExecuted !== undefined && timesExecuted !== null) {
-      if (currentConditionalEnd !== 0) {
-        row += '<td class="y numeric">';
-      }
-      else if (timesExecuted === 0) {
-        row += '<td class="r numeric" id="line-' + lineNumber + '">';
-      }
-      else {
-        row += '<td class="g numeric">';
-      }
-      row += timesExecuted;
-      row += '</td>';
-    }
-    else {
-      row += '<td></td>';
-    }
-    row += '<td><pre>' + lines[i] + '</pre></td>';
-    row += '</tr>';
- //   row += '\n';
-    rows[lineNumber] = row;
-    i++;
-  }
-  rows[i + 1] = '</table>';
-  tableHTML = rows.join('');
-  return tableHTML;
+		var row = '<tr>';
+		row += '<td class="numeric">' + lineNumber + '</td>';
+		var timesExecuted = coverage[lineNumber];
+		if (timesExecuted !== undefined && timesExecuted !== null) {
+			if (currentConditionalEnd !== 0) {
+				row += '<td class="y numeric">';
+			} else if (timesExecuted === 0) {
+				row += '<td class="r numeric" id="line-' + lineNumber + '">';
+			} else {
+				row += '<td class="g numeric">';
+			}
+			row += timesExecuted;
+			row += '</td>';
+		} else {
+			row += '<td></td>';
+		}
+		row += '<td><pre>' + lines[i] + '</pre></td>';
+		row += '</tr>';
+		// row += '\n';
+		rows[lineNumber] = row;
+		i++;
+	}
+	rows[i + 1] = '</table>';
+	tableHTML = rows.join('');
+	return tableHTML;
 }
 
 /**
