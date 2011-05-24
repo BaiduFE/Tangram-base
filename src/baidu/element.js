@@ -50,7 +50,8 @@ baidu.element.Element = function(node){
      * @private
      * @type {Array.<Node>}
      */
-    this._dom = baidu.lang.toArray(node);
+    this._dom = (node.tagName || '').toLowerCase() == 'select' ? 
+    	[node] : baidu.lang.toArray(node);
 };
 
 /**
