@@ -296,7 +296,7 @@ tab.
 @param  queryString  this should always be location.search
 */
 function jscoverage_initTabContents(queryString) {
-  var showMissingColumn = true;
+  var showMissingColumn = false;
   var url = null;
   var windowURL = null;
   var parameters, parameter, i, index, name, value;
