@@ -3,6 +3,9 @@
 	<import file="build_run.xml" />
 	
 	<property name="git.project" value="Tangram-base-release" />
+	<property name="release_file.mailcc" value="yangbo@baidu.com" />
+	<property name="release_file.mailto" value="yangbo@baidu.com" />
+	<property name="release_file.mailfrom" value="yangbo@baidu.com" />
 
 	<target name="importSrc">
 		<!-- delete release file -->
