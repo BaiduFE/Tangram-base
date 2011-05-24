@@ -13,6 +13,8 @@
 		</fileset>
 	</path>
 
+	<import file="build_release.xml" />
+
 	<import file="build_report.xml" />
 
 	<!--为hudson做的扩展，用于支持多用户运行环境，会直接提取当前项目的父目录名称作为user -->
@@ -48,5 +50,5 @@
 
 	<taskdef name='taskImport' classname="com.baidu.tangram.TaskImport" classpathref="ext.classpath">
 	</taskdef>
-	
+
 </project>
