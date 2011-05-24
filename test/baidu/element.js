@@ -246,7 +246,8 @@ test('封装基础 - 构造函数', function() {
 test('element with select', function() {
 	var sel0 = document.createElement('select');
 	var sel1 = document.createElement('select');
-	sel0.name = "sel";
+//	sel0.name = "sel";
+//	baidu.e(sel0).setAttr('name', 'sel').setAttr('selectedIndex', 1);
 	var s0o = sel0.options, s1o = sel1.options;
 	s0o[s0o.length] = new Option('1', '1');
 	s0o[s0o.length] = new Option('2', '2');
@@ -260,29 +261,38 @@ test('element with select', function() {
 	s1o[0].selected = "selected";
 	s1o[1].selected = "selected";
 	var count = 0;
-	baidu.e(sel0).each(function() {
+	var e = baidu.e(sel0);
+	e.each(function() {
 		count++;
 		equals(this.length, 3, 'check this length');
 		equals(this.selectedIndex, 2, 'check index');
 	});
+	//FIXME property get failed
+//	equals(e.attr('selectedIndex'), 2, 'check method chain');
+//	equals(e.attr('length'), 3, 'check method chain');	
+	ok(e.addClass('test-select').hasClass('test-select'),
+			'check add and has class');
+	equals(e.attr('className'), 'test-select', 'check method chain');
 	equals(count, 1, 'check get select');
 
 	count = 0;
 	var typelist = [ 'select-one', 'select-multiple' ];
-	var selectlist = [2, 0];
-	baidu.e([ sel0, sel1 ]).each(function() {
-		equals(this.length, 3, 'check this length');
-		equals(this.selectedIndex, selectlist[count], 'check this selectIndex');
-		equals(this.type, typelist[count++], 'check this type');
-	});
+	var selectlist = [ 2, 0 ];
+	baidu.e([ sel0, sel1 ]).each(
+			function() {
+				equals(this.length, 3, 'check this length');
+				equals(this.selectedIndex, selectlist[count],
+						'check this selectIndex');
+				equals(this.type, typelist[count++], 'check this type');
+			});
 	equals(count, 2, 'check get select');
-	
+
 	var div = document.body.appendChild(document.createElement('div'));
 	div.appendChild(sel0);
 	div.appendChild(sel1);
-	
+
 	count = 0;
-	var typelist = [ 'select-one', 'select-multiple' ];	
+	var typelist = [ 'select-one', 'select-multiple' ];
 	baidu.e(div).children().each(function() {
 		equals(this.length, 3, 'check this length');
 		equals(this.type, typelist[count++], 'check this type');
