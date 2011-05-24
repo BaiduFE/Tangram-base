@@ -22,7 +22,7 @@
  * @author: allstar, erik, meizz, berg
  */
 var T,
-    baidu = T = baidu || {version: "1.3.8"}; 
+    baidu = T = baidu || {version: "1.3.9"}; 
 
 //提出guid，防止在与老版本Tangram混用时
 //在下一行错误的修改window[undefined]
@@ -6087,100 +6087,70 @@ baidu.dom.query = Sizzle;
 
     var ready = baidu.dom.ready = function() {
         var readyBound = false,
-            readyList = [];
+            readyList = [],
+            DOMContentLoaded;
+
+        if (document.addEventListener) {
+            DOMContentLoaded = function() {
+                document.removeEventListener('DOMContentLoaded', DOMContentLoaded, false);
+                ready();
+            };
+
+        } else if (document.attachEvent) {
+            DOMContentLoaded = function() {
+                if (document.readyState === 'complete') {
+                    document.detachEvent('onreadystatechange', DOMContentLoaded);
+                    ready();
+                }
+            };
+        }
 
         function ready() {
             if (!ready.isReady) {
                 ready.isReady = true;
                 for (var i = 0, j = readyList.length; i < j; i++) {
-                        readyList[i]();
+                    readyList[i]();
                 }
             }
         }
 
-        // 本函数代码逻辑来自Jquery，thanks Jquery
+        function doScrollCheck(){
+            try {
+                document.documentElement.doScroll("left");
+            } catch(e) {
+                setTimeout( doScrollCheck, 1 );
+                return;
+            }   
+            ready();
+        }
+
         function bindReady() {
             if (readyBound) {
                 return;
             }
             readyBound = true;
 
-            var doc = document,
-                w = window,
-                opera = baidu.browser.opera;
+            if (document.addEventListener) {
 
-            // Mozilla, Opera (see further below for it) and webkit nightlies currently support this event
-            if (doc.addEventListener) {
-                // Use the handy event callback
-                doc.addEventListener('DOMContentLoaded', opera ? function() {
-                    if (ready.isReady) {
-                        return;
-                    }
-                    for (var i = 0; i < doc.styleSheets.length; i++) {
-                        if (doc.styleSheets[i].disabled) {
-                            setTimeout(arguments.callee, 0);
-                            return;
-                        }
-                    }
-                    // and execute any waiting functions
-                    ready();
-                } : ready, false);
-            } else if (baidu.browser.ie && w == top) {
-                // If IE is used and is not in a frame
-                // Continually check to see if the doc is ready
-                (function() {
-                    if (ready.isReady) {
-                        return;
-                    }
+                document.addEventListener('DOMContentLoaded', DOMContentLoaded, false);
+                window.addEventListener('load', ready, false);
 
-                    try {
-                        // If IE is used, use the trick by Diego Perini
-                        // http://javascript.nwbox.com/IEContentLoaded/
-                        doc.documentElement.doScroll('left');
-                    } catch (error) {
-                        setTimeout(arguments.callee, 0);
-                        return;
-                    }
-                    // and execute any waiting functions
-                    ready();
-                })();
-            } else if (baidu.browser.safari) {
-                var numStyles;
-                (function() {
-                    if (ready.isReady) {
-                        return;
-                    }
-                    if (doc.readyState != 'loaded' && doc.readyState != 'complete') {
-                        setTimeout(arguments.callee, 0);
-                        return;
-                    }
-                    if (numStyles === undefined) {
-                        numStyles = 0;
-                        var s1 = doc.getElementsByTagName('style'),
-                            s2 = doc.getElementsByTagName('link');
-                        if (s1) {
-                            numStyles += s1.length;
-                        }
-                        if (s2) {
-                            for (var i = 0, j = s2.length; i < j; i++) {
-                                if (s2[i].getAttribute('rel') == 'stylesheet') {
-                                    numStyles++;
-                                }
-                            }
-                        }
-                    }
-                    if (doc.styleSheets.length != numStyles) {
-                        setTimeout(arguments.callee, 0);
-                        return;
-                    }
-                    ready();
-                })();
+            } else if (document.attachEvent) {
+
+                document.attachEvent('onreadystatechange', DOMContentLoaded);
+                window.attachEvent('onload', ready);
+
+                var toplevel = false;
+
+                try {
+                    toplevel = window.frameElement == null;
+                } catch (e) {}
+
+                if (document.documentElement.doScroll && toplevel) {
+                    doScrollCheck();
+                }
             }
-
-            // A fallback to window.onload, that will always work
-            w.attachEvent ? w.attachEvent('onload', ready) : w.addEventListener('load', ready, false);
         }
-
         bindReady();
 
         return function(callback) {
@@ -7171,11 +7141,12 @@ baidu.fn.wrapReturnValue = function (func, wrapper, mode) {
  * @grammar baidu.fn.multize(func[, recursive])
  * @param {Function}	func 		需要包装的函数
  * @param {Boolean}		[recursive] 是否递归包装（如果数组里面一项仍然是数组，递归），可选
+ * @param {Boolean}		[joinArray] 将操作的结果展平后返回（如果返回的结果是数组，则将多个数组合成一个），可选
  * @version 1.3
- *             
+ *
  * @returns {Function} 已集化的函数
  */
-baidu.fn.multize = function (func, recursive) {
+baidu.fn.multize = function (func, recursive, joinArray) {
     var newFunc = function(){
         var list = arguments[0],
             fn = recursive ? newFunc : func,
@@ -7189,7 +7160,14 @@ baidu.fn.multize = function (func, recursive) {
             for(len = list.length; i < len; i++){
                 moreArgs[0]=list[i];
                 r = fn.apply(this, moreArgs);
-                ret.push(r); 	
+                if (joinArray) {
+                    if (r) {
+                        //TODO: 需要去重吗？
+                        ret = ret.concat(r);
+                    }
+                } else {
+                    ret.push(r); 	
+                }
             }
             return ret;
         }else{
@@ -7250,7 +7228,8 @@ baidu.element.Element = function(node){
      * @private
      * @type {Array.<Node>}
      */
-    this._dom = baidu.lang.toArray(node);
+    this._dom = (node.tagName || '').toLowerCase() == 'select' ? 
+    	[node] : baidu.lang.toArray(node);
 };
 
 /**
@@ -7263,8 +7242,8 @@ baidu.element.Element = function(node){
  */
 baidu.element.Element.prototype.each = function(iterator) {
     // 每一个iterator接受到的都是封装好的node
-    baidu.array.each(this._dom, function(node){
-        iterator.call(this, new baidu.element.Element(node));
+    baidu.array.each(this._dom, function(node, i){
+        iterator.call(node, node, i);
     });
 };
 
@@ -7280,8 +7259,8 @@ baidu.element.Element.prototype.each = function(iterator) {
  * @return {function}   包装后的方法，能直接挂到Element的prototype上。
  * @private
  */
-baidu.element._toChainFunction = function(func, index){
-    return baidu.fn.methodize(baidu.fn.wrapReturnValue(baidu.fn.multize(func), baidu.element.Element, index), '_dom');
+baidu.element._toChainFunction = function(func, index, joinArray){
+    return baidu.fn.methodize(baidu.fn.wrapReturnValue(baidu.fn.multize(func, 0, 1), baidu.element.Element, index), '_dom');
 };
 
 /**
@@ -7310,14 +7289,24 @@ baidu.element._makeChain = function(){ //将dom/event包下的东西挂到protot
               });
 
     //包装返回值
+    //包含
+    //1. methodize
+    //2. multize，结果如果是数组会被展平
+    //3. getXx == xx
     baidu.each(("addClass empty hide show insertAfter insertBefore insertHTML removeClass " + 
-              "setAttr setAttrs setStyle setStyles show toggleClass toggle children next first " + 
+              "setAttr setAttrs setStyle setStyles show toggleClass toggle next first " + 
               "getAncestorByClass getAncestorBy getAncestorByTag getDocument getParent getWindow " +
-              "last next prev g q query removeStyle setBorderBoxSize setOuterWidth setOuterHeight " +
-              "setBorderBoxWidth setBorderBoxHeight setPosition").split(' '),
+              "last next prev g removeStyle setBorderBoxSize setOuterWidth setOuterHeight " +
+              "setBorderBoxWidth setBorderBoxHeight setPosition children query").split(' '),
               function(fn){
                   proto[fn] = proto[fn.replace(/^get[A-Z]/g, stripGet)] = fnTransformer(baidu.dom[fn], 0);
               });
+
+    //对于baidu.dom.q这种特殊情况，将前两个参数调转
+    //TODO：需要将这种特殊情况归纳到之前的情况中
+    proto['q'] = proto['Q'] = fnTransformer(function(arg1, arg2){
+        return baidu.dom.q.apply(this, [arg2, arg1].concat([].slice.call(arguments, 2)));
+    }, 0);
 
     //包装event中的on 和 un
     baidu.each(("on un").split(' '), function(fn){
@@ -10891,7 +10880,7 @@ baidu.swf.version = (function () {
                     .replace(/(\s)+r/, ".") + ".0";
         }
     } else if (window.ActiveXObject && !window.opera) {
-        for (var i = 10; i >= 2; i--) {
+        for (var i = 12; i >= 2; i--) {
             try {
                 var c = new ActiveXObject('ShockwaveFlash.ShockwaveFlash.' + i);
                 if (c) {
@@ -11033,7 +11022,7 @@ baidu.swf.createHTML = function (options) {
     for (k in options) {
         item = options[k];
         k = k.toLowerCase();
-        if (params[k] && item) {
+        if (params[k] && (item || item === false || item === 0)) {
             str.push('<param name="' + k + '" value="' + encodeHTML(item) + '" />');
         }
     }
@@ -11056,7 +11045,7 @@ baidu.swf.createHTML = function (options) {
     var salign;
     for (k in options) {
         item = options[k];
-        if (item) {
+        if (item || item === false || item === 0) {
             if ((new RegExp("^salign\x24", "i")).test(k)) {
                 salign = item;
                 continue;
@@ -11319,4 +11308,259 @@ baidu.url.queryToJson = function (url) {
     }
     
     return result;
+};
+/*
+ * Tangram
+ * Copyright 2009 Baidu Inc. All rights reserved.
+ */
+
+
+/**
+ * @namespace baidu.async 对异步调用的封装。
+ * @author rocy
+ */
+baidu.async = baidu.async || {};
+/*
+ * Tangram
+ * Copyright 2009 Baidu Inc. All rights reserved.
+ */
+
+
+
+/**
+ * 判断给定object是否包含Deferred主要特征.
+ * @param {Object} obj 待判定object.
+ * @return {Boolean} 判定结果, true 则该object符合Deferred特征.
+ * @author rocy
+ */
+baidu.async._isDeferred = function(obj) {
+    var isFn = baidu.lang.isFunction;
+    return obj && isFn(obj.success) && isFn(obj.then)
+        && isFn(obj.fail) && isFn(obj.cancel);
+};
+/*
+ * Tangram
+ * Copyright 2009 Baidu Inc. All rights reserved.
+ */
+
+
+
+
+
+
+/**
+ * 用于支持异步处理, 使同步异步的调用风格统一.
+ * @class
+ * @grammar new baidu.async.Deferred()
+ * @remark
+ * 示例:
+    function someAsync(){
+        var deferred = new baidu.async.Deferred();
+        setTimeout(function(){
+            afterSomeOperation();
+            if(someReason){
+                deferred.resolve(someValue);
+            } else {
+                deferred.reject(someError);
+            }
+        },100);
+        return deferred;
+    }
+    //用类似同步的方式调用异步操作.
+    someAsync().then(onSuccess, onFail);
+    //onSuccess或onFail可以确保在正确的时间点执行.
+
+ * @author rocy
+ */
+baidu.async.Deferred = function() {
+    var me = this;
+    baidu.extend(me, {
+        _fired: 0,
+        _firing: 0,
+        _cancelled: 0,
+        _resolveChain: [],
+        _rejectChain: [],
+        _result: [],
+        _isError: 0
+    });
+
+    function fire() {
+        if (me._cancelled || me._firing) {
+            return;
+        }
+        //如果已有nextDeferred对象,则转移到nextDeferred上.
+        if (me._nextDeferred) {
+            me._nextDeferred.then(me._resolveChain[0], me._rejectChain[0]);
+            return;
+        }
+        me._firing = 1;
+        var chain = me._isError ? me._rejectChain : me._resolveChain,
+            result = me._result[me._isError ? 1 : 0];
+        // 此处使用while而非for循环,是为了避免firing时插入新函数.
+        while (chain[0] && (! me._cancelled)) {
+            //所有函数仅调用一次.
+            //TODO: 支持传入 this 和 arguments, 而不是仅仅一个值.
+            try {
+                var chainResult = chain.shift().call(me, result);
+                //若方法返回Deferred,则将剩余方法延至Deferred中执行
+                if (baidu.async._isDeferred(chainResult)) {
+                    me._nextDeferred = chainResult;
+                    [].push.apply(chainResult._resolveChain, me._resolveChain);
+                    [].push.apply(chainResult._rejectChain, me._rejectChain);
+                    chain = me._resolveChain = [];
+                    me._rejectChain = [];
+                }
+            } catch (error) {
+                throw error;
+            } finally {
+                me._fired = 1;
+                me._firing = 0;
+            }
+        }
+    }
+
+
+    /**
+     * 调用onSuccess链.使用给定的value作为函数参数.
+     * @param {*} value 成功结果.
+     * @return {baidu.async.Deferred} this.
+     */
+    me.resolve = me.fireSuccess = function(value) {
+        me._result[0] = value;
+        fire();
+        return me;
+    };
+
+    /**
+     * 调用onFail链. 使用给定的error作为函数参数.
+     * @param {Error} error 失败原因.
+     * @return {baidu.async.Deferred} this.
+     */
+    me.reject = me.fireFail = function(error) {
+        me._result[1] = error;
+        me._isError = 1;
+        fire();
+        return me;
+    };
+
+    /**
+     * 添加onSuccess和onFail方法到各自的链上. 如果该deferred已触发,则立即执行.
+     * @param {Function} onSuccess 该deferred成功时的回调函数.第一个形参为成功时结果.
+     * @param {Function} onFail 该deferred失败时的回调函数.第一个形参为失败时结果.
+     * @return {baidu.async.Deferred} this.
+     */
+    me.then = function(onSuccess, onFail) {
+        me._resolveChain.push(onSuccess);
+        me._rejectChain.push(onFail);
+        if (me._fired) {
+            fire();
+        }
+        return me;
+    };
+    
+    /**
+     * 添加方法到onSuccess链上. 如果该deferred已触发,则立即执行.
+     * @param {Function} onSuccess 该deferred成功时的回调函数.第一个形参为成功时结果.
+     * @return {baidu.async.Deferred} this.
+     */
+    me.success = function(onSuccess) {
+        return me.then(onSuccess, baidu.fn.blank);
+    };
+
+    /**
+     * 添加方法到onFail链上. 如果该deferred已触发,则立即执行.
+     * @param {Function} onFail 该deferred失败时的回调函数.第一个形参为失败时结果.
+     * @return {baidu.async.Deferred} this.
+     */
+    me.fail = function(onFail) {
+        return me.then(baidu.fn.blank, onFail);
+    };
+     
+    /**
+     * 中断该deferred, 使其失效.
+     */
+    me.cancel = function() {
+        me._cancelled = 1;
+    };
+};
+/*
+ * Tangram
+ * Copyright 2009 Baidu Inc. All rights reserved.
+ */
+
+
+
+
+/**
+ * 支持异步的ajax.get封装.
+ * @param {String} url 请求地址.
+ * @return {baidu.async.Deferred} Deferred对象,支持链式调用.
+ */
+baidu.async.get = function(url){
+    var deferred = new baidu.async.Deferred();
+    baidu.ajax.request(url, {
+        onsuccess: function(xhr, responseText) {
+            deferred.resolve({xhr: xhr, responseText: responseText}); 
+        },
+        onfailure: function(xhr) {
+            deferred.reject({xhr: xhr});
+        }
+    });
+    return deferred;
+};
+/*
+ * Tangram
+ * Copyright 2009 Baidu Inc. All rights reserved.
+ */
+
+
+
+
+/**
+ * 支持异步的ajax.post封装.
+ * @param {String} url 请求地址.
+ * @param {String} data 请求数据.
+ * @return {baidu.async.Deferred} Deferred对象,支持链式调用.
+ */
+baidu.async.post = function(url, data){
+    var deferred = new baidu.async.Deferred();
+    baidu.ajax.request(url, {
+        method: 'POST',
+        data: data,
+        onsuccess: function(xhr, responseText) {
+            deferred.resolve({xhr: xhr, responseText: responseText}); 
+        },
+        onfailure: function(xhr) {
+            deferred.reject({xhr: xhr});
+        }
+    });
+    return deferred;
+};
+/*
+ * Tangram
+ * Copyright 2009 Baidu Inc. All rights reserved.
+ */
+
+
+
+
+/**
+ * 保证onResolve或onReject可以按序执行. 若第一个参数为deferred,则deferred完成后执行.否则立即执行onResolve,并传入第一个参数.
+ * @param {baidu.async.Deferred|*} deferredOrValue deferred实例或任意值.
+ * @param {Function} onResolve 成功时的回调函数.若第一个参数不是Deferred实例,则立即执行此方法.
+ * @param {Function} onReject 失败时的回调函数.
+ * @remark
+ * 示例一:异步调用: baidu.async.when(asyncLoad(), onResolve, onReject).then(nextSuccess, nextFail);
+ * 示例二:同步异步不确定的调用: baidu.async.when(syncOrNot(), onResolve, onReject).then(nextSuccess, nextFail);
+ * 示例三:同步接异步的调用: baidu.async.when(sync(), onResolve, onReject).then(asyncSuccess, asyncFail).then(afterAllSuccess, afterAllFail);
+ * @return {baidu.async.Deferred} deferred.
+ */
+baidu.async.when = function(deferredOrValue, onResolve, onReject) {
+    if (baidu.async._isDeferred(deferredOrValue)) {
+        deferredOrValue.then(onResolve, onReject);
+        return deferredOrValue;
+    }
+    var deferred = new baidu.async.Deferred();
+    deferred.then(onResolve, onReject).resolve(deferredOrValue);
+    return deferred;
 };
