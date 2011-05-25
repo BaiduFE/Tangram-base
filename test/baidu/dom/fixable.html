@@ -1,0 +1,60 @@
+<html>
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+        <script charset="utf-8" type="text/javascript" src="../../../src/import.php?f=baidu.dom.fixable"></script>
+        <style type="text/css">
+            html{background:url(about:blank) fixed}
+        </style>
+    </head>
+    <body style="height: 2000px;">
+        <div style="height: 2000px;">
+            <div>
+                <input onclick="javascript:render('fdiv');" value="render" type="button">
+                <input onclick="javascript:release('fdiv');" value="release" type="button">
+                <input onclick="javascript:update('fdiv');" value="update" type="button">
+                <div style="background-color: black; width: 200px; height: 200px;">
+                    <div id="fdiv" style="background-color: red; width: 100px; height: 100px;" class="f"></div>
+                </div>
+            </div>
+            <div>
+                <input onclick="javascript:render('fdiv1');" value="render" type="button">
+                <input onclick="javascript:release('fdiv1');" value="release" type="button">
+                <input onclick="javascript:update('fdiv1');" value="update" type="button">
+                <div style="background-color: black; width: 200px; height: 200px;">
+                    <div id="fdiv1" style="background-color: green; width: 100px; height: 100px;" class="f"></div>
+                </div>
+            </div>
+        </div>
+        <script type="text/javascript">
+            var options = {
+                vertival:"top",
+                horizontal:"right",
+                offset:{y:100,x:200},
+                onrender:function(){alert('render');},
+                onrelease:function(){alert('dispose');}
+            };
+
+            var fixable = {};
+            fixable.fdiv = baidu.dom.fixable("fdiv",options);
+            fixable.fdiv1 = baidu.dom.fixable("fdiv1",{});
+
+            function render(id){
+                fixable[id].render();
+            };
+
+            function release(id){
+                fixable[id].release();
+            };
+
+            function update(id){
+                var options = {
+                    vertival:"bottom",
+                    horizontal:"left",
+                    offset:{y:100,x:200}
+                };
+
+                fixable[id].update(options);
+            };
+        </script>
+    </body>
+</html>
