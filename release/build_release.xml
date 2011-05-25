@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="project" default="releaserun" basedir="../">
+	<import file="build_run.xml" />
+
+	<property name="git.project.release" value="Tangram-base-release" />
+	<property name="release_file.mailcc" value="yangbo@baidu.com" />
+	<property name="release_file.mailto" value="yangbo@baidu.com" />
+	<property name="release_file.mailfrom" value="yangbo@baidu.com" />
+
+	<target name="importSrc">
+		<!-- delete release file -->
+		<delete file="release/all_release_src.js" />
+		<delete file="release/core_release_src.js" />
+		<delete file="release/all_release.js" />
+		<delete file="release/core_release.js" />
+		<delete file="release/tangram_all.js" />
+		<delete file="release/tangram_all_src.js" />
+	</target>
+
+	<target name="release" depends="importSrc">
+		<taskImport />
+		<!--YUI -->
+		<exec executable="java">
+			<arg value="-jar" />
+			<arg value="test/tools/lib/yuicompressor-2.4.2.jar" />
+			<arg value="--charset" />
+			<arg value="utf-8" />
+			<arg value="-v" />
+			<arg value="-o" />
+			<arg value="release/all_release.js" />
+			<arg value="release/all_release_src.js" />
+		</exec>
+		<exec executable="java">
+			<arg value="-jar" />
+			<arg value="test/tools/lib/yuicompressor-2.4.2.jar" />
+			<arg value="--charset" />
+			<arg value="utf-8" />
+			<arg value="-v" />
+			<arg value="-o" />
+			<arg value="release/core_release.js" />
+			<arg value="release/core_release_src.js" />
+		</exec>
+	</target>
+
+
+	<target name="release-all" depends="importSrc">
+		<!--import.php 支持定制路径，和base同级即可，主要是为了支持0.2的检测 -->
+		<taskImport ui="Tangram-component" />
+		<!--YUI -->
+
+		<exec executable="java">
+			<arg value="-jar" />
+			<arg value="test/tools/lib/yuicompressor-2.4.2.jar" />
+			<arg value="--charset" />
+			<arg value="utf-8" />
+			<arg value="-v" />
+			<arg value="-o" />
+			<arg value="release/all_release.js" />
+			<arg value="release/all_release_src.js" />
+		</exec>
+		<exec executable="java">
+			<arg value="-jar" />
+			<arg value="test/tools/lib/yuicompressor-2.4.2.jar" />
+			<arg value="--charset" />
+			<arg value="utf-8" />
+			<arg value="-v" />
+			<arg value="-o" />
+			<arg value="release/core_release.js" />
+			<arg value="release/core_release_src.js" />
+		</exec>
+		<exec executable="java">
+			<arg value="-jar" />
+			<arg value="test/tools/lib/yuicompressor-2.4.2.jar" />
+			<arg value="--charset" />
+			<arg value="utf-8" />
+			<arg value="-v" />
+			<arg value="-o" />
+			<arg value="release/tangram_all.js" />
+			<arg value="release/tangram_all_src.js" />
+		</exec>
+	</target>
+
+	<!-- target: release_file_mail start-->
+	<target name="release_file_mail" description="send release_file_mail" depends="release">
+		<delete file="release/release_files.tar" />
+		<tar destfile="release/release_files.tar" basedir="release" includes="*release*.js" />
+		<mail mailhost="hotswap-c.baidu.com" subject="release文件" cclist="${release_file.mailcc}" failonerror="false">
+			<to address="${release_file.mailto}" />
+			<from address="${release_file.mailfrom}" />
+			<message>release文件:all_release.js,all_release_src.js,core_release.js,core_release_src.js</message>
+			<attachments>
+				<fileset dir="release">
+					<include name="release_files.tar" />
+				</fileset>
+			</attachments>
+		</mail>
+	</target>
+	<!-- target: release_file_mail end-->
+
+	<target name="releaserun" depends="init,release,release_file_mail">
+		<gitext />
+		<get src="http://${serverip}/${git.user}/${git.project.release}/test/tools/br/runall.php?ci=true&amp;release=true" dest="/tmp/${git.user}_${git.project}.php" />
+		<waitfor maxwait="300" maxwaitunit="second">
+			<available file="${report.file}" />
+		</waitfor>
+	</target>
+</project>

@@ -23,7 +23,12 @@ test("valid key with option", function() {
 	equals(decodeURIComponent(res), key + "=百度", "decode");
 	remove(key, '/');
 });
-
+test("invalid key, key = '百度Hi'", function() {
+	var key = '百度Hi';
+	baidu.cookie.setRaw(key, key);
+	equal(document.cookie.match(key + '=' + key), null, 'set success');
+	remove(key);
+});
 //    "输入非法的key": function(){
 //        r = baidu.cookie.setRaw("cookie;test", "百,度", {
 //            path: "\/",

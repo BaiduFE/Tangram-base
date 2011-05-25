@@ -20,3 +20,9 @@ test('param color', function() {
 	
 });
 
+test('异常参数param color', function() {
+	var color1 = "#GGGGGG";
+	var c1 = baidu.string.formatColor(color1);
+	equal(c1,"","#GGGGGG 错误参数类型，直接返回\"\"");
+	
+});

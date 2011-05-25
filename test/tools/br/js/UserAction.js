@@ -1,6 +1,7 @@
 var UserAction =
 /**
  * 用例中常用方法的集合
+ * 
  * @author bellcliff
  * @type UserAction
  */
@@ -761,7 +762,7 @@ var UserAction =
 		op.finish = function() {
 			pw.$(fid).unbind();
 			setTimeout(function() {
-				pw.$('div#d').remove();
+				pw.$('div#div'+id).remove();
 				start();
 			}, 20);
 		};
@@ -1216,6 +1217,40 @@ var UserAction =
 					}, delay);
 				} else
 					$(this).trigger('next');
+			}
+		};
+		return check;
+	},
+	fnQueue : function() {
+		var check = {
+			fnlist : [],
+			/**
+			 * 该方法会在fn上注册一个delay属性
+			 * 
+			 * @param fn
+			 * @param delay
+			 */
+			add : function(fn, delay) {
+				delay && (fn.delay = delay);
+				check.fnlist.push(fn);
+				return check;
+			},
+			/**
+			 * 自动下一个
+			 */
+			next : function() {
+				if(check.fnlist.length == 0)
+					return;
+				var fn = check.fnlist[0];		
+				if (fn.delay) {
+					setTimeout(check.next, fn.delay);
+					delete fn.delay;
+				} else {
+					check.fnlist.shift()();
+					// 切断堆栈
+					// setTimeout(fnQueue.next, 0);
+					check.next();
+				}
 			}
 		};
 		return check;

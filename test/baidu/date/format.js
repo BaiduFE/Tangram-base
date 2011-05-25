@@ -31,7 +31,7 @@ test("只有年月日",function(){
 	dateFormat = baidu.date.format(date,"yyyy/MM/dd");//斜线
 	equal(dateFormat,"2009/12/20");
 	
-})
+});
 
 test("24小时制",function(){
 	expect(8);
@@ -54,7 +54,7 @@ test("24小时制",function(){
 	equal(dateFormat,"10-09-15 16:15:47","超过12点，H:m:s");
 	dateFormat = baidu.date.format(date,"M/dd H:m:s");//斜线
 	equal(dateFormat,"9/15 16:15:47");
-})
+});
 
 test("12小时制",function(){
 	expect(9);
@@ -81,6 +81,13 @@ test("12小时制",function(){
 	
 	dateFormat = baidu.date.format(date,"M/dd hh:m:s");//斜线
 	equal(dateFormat,"9/15 04:15:47");
-})
+});
+
+test("测试异常,返回date的toString",function(){
+	expect(1);
+	var date = new Date(2010,9,3,2,2,9,568);//没有超过12点
+	var dateFormat = baidu.date.format(date,new Object());
+	equal(dateFormat,date.toString());
+});
 
 

@@ -13,8 +13,8 @@
  * @function
  * @grammar baidu.sio.callByBrowser(url, opt_callback, opt_options)
  * @param {string} url 加载数据的url
- * @param {Function=} opt_callback 数据加载结束时调用的函数
- * @param {Object=} opt_options 其他可选项
+ * @param {Function|string} opt_callback 数据加载结束时调用的函数或函数名
+ * @param {Object} opt_options 其他可选项
  * @config {String} [charset] script的字符集
  * @config {Integer} [timeOut] 超时时间，超过这个时间将不再响应本请求，并触发onfailure函数
  * @config {Function} [onfailure] timeOut设定后才生效，到达超时时间时触发本函数
