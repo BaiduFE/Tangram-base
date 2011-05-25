@@ -9,6 +9,7 @@
  * 判断给定object是否包含Deferred主要特征.
  * @param {Object} obj 待判定object.
  * @return {Boolean} 判定结果, true 则该object符合Deferred特征.
+ * @private 
  * @author rocy
  */
 baidu.async._isDeferred = function(obj) {
