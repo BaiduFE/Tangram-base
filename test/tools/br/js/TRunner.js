@@ -3,9 +3,13 @@
 	// case class
 	case_class = 'jsframe_qunit',
 	// case status
-	case_running_class = 'running_case';
+	case_running_class = 'running_case',
+	// batch run
+	batchrun = location.search.indexOf("batchrun=true") > 0;
 	window.run = t.run = function(dom) {
-		dom = dom || t.data.case_running || t.data.cases[0];
+		dom = dom || t.data.cases[t.data.case_running];
+		if (!dom) // 取不到当前用例就直接退出
+			return;
 		// 修改IFrame的src，指向新用例的执行地址
 		TT.dom.addClass(dom, case_running_class);
 		t.RunningFrame.src = dom.href;
@@ -20,14 +24,15 @@
 
 		// 初始化数据结构
 		t.data = {
-			cases : TT.q(case_class, TT.g('id_testlist'), 'a')
+			cases : TT.q(case_class, TT.g('id_testlist'), 'a'),
+			case_running : 0,
+			cases_finish : []
 		};
-		t.data.case_running = t.data.cases[0];
 
 		// 绑定执行结束事件
 		window.oncasedone = t.done;
-
-		t.run();
+		if (batchrun)
+			t.run();
 	};
 
 	t.done = function() {
@@ -35,7 +40,7 @@
 		// 自行获取，避免多处同时修改的问题
 
 		// 判定当前节点存在下一个节点并批量执行状态时下一个
-		var cr = t.data.case_running,
+		var dom = t.data.cases[t.data.case_running],
 		// 处理测试结果
 		result = function() {
 
@@ -44,15 +49,21 @@
 		cov = function() {
 
 		};
-		console.log(cr.title);
-		if (cr.nextSibling && cr.nextSibling.tagName == 'a'
-				&& location.search.indexOf('batchrun=true')) {
-			t.data.case_running = cr.nextSibling;
-			t.run();
-		}
 
+		TT.dom.removeClass(dom, case_running_class);
+//		TT.dom.addClass()
+		if (batchrun) {
+			// 判断下一个标签不是用例或者用例已经执行过则直接中断
+			if (t.data.cases_finish[t.data.case_running++])
+				return;
+			// 为旧的环境清理保留两秒的时间
+			setTimeout(t.run, 2000);
+		}
 	};
 
+	/**
+	 * 整合覆盖率信息并发送测试报告
+	 */
 	t.report = function() {
 	};
 

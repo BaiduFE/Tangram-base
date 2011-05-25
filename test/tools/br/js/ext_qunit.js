@@ -4,10 +4,10 @@
 (function() {
 	if (!QUnit)
 		return;
-	var ms = QUnit.moduleStart, d = QUnit.done;
+	var ms = QUnit.moduleStart, d = QUnit.done, td = QUnit.testDone, ts = QUnit.testStart;
 
 	function _d(args /* failures, total */) {
-		//默认展开失败用例
+		// 默认展开失败用例
 		$('li.fail ol').toggle();
 		if (parent && parent.brtest) {
 			parent.$(parent.brtest).trigger('done', [ new Date().getTime(), {
@@ -15,7 +15,12 @@
 				passed : args[1]
 			}, window._$jscoverage || null ]);
 		}
-	}
+		// 追加新版本的支持兼容
+		if (parent && parent.TRunner) {
+			parent.TRunner.done();
+		}
+	};
+
 	QUnit.moduleStart = function() {
 		stop();
 		/* 为批量执行等待import.php正确返回 */
@@ -30,5 +35,9 @@
 	QUnit.done = function() {
 		_d(arguments);
 		d.apply(this, arguments);
+	};
+
+	QUnit.testDone = function() {
+		td.apply(this, arguments);
 	};
 })();
