@@ -27,6 +27,7 @@ function report(){
 	$failures = 0;
 	$tests = 0;
 	$time = 0;
+	$running_url = "http://".$_SERVER ['HTTP_HOST'].":".$_SERVER['SERVER_PORT']."/test/tools/br/run.php";
 	foreach($_POST as $key=>$value){
 		if($key == 'config')
 		continue;
@@ -57,7 +58,8 @@ function report(){
 			$failinfo = $case->appendChild($dom->createElement('failure'));
 			$failinfo->setAttribute('type', 'junit.framework.AssertionFailedError');
 			//FROM php.net, You cannot simply overwrite $textContent, to replace the text content of a DOMNode, as the missing readonly flag suggests.
-			$failinfo->appendChild(new DOMText($value));
+			
+			$failinfo->appendChild(new DOMText("$running_url?case=$key"));
 		}
 		//TODO add more case info in xml
 	}
