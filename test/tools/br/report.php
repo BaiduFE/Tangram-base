@@ -1,4 +1,6 @@
 <?php
+header("Content-type: text/html; charset=utf-8");
+header("Cache-Control: no-cache, max-age=10, must-revalidate");
 //经常碰到傲游和IE6同时完成的情况，如何处理比较合适？
 //TODO add php info in xml
 if(substr_count($_POST['config'], "browser")==0){

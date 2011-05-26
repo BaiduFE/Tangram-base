@@ -26,7 +26,8 @@
 		t.data = {
 			cases : TT.q(case_class, TT.g('id_testlist'), 'a'),
 			case_running : 0,
-			cases_finish : []
+			cases_finish : [],
+			cases_cov : {}
 		};
 
 		// 绑定执行结束事件
@@ -35,7 +36,7 @@
 			t.run();
 	};
 
-	t.done = function() {
+	t.done = function(fail, total, covinfo) {
 		// 提取用例运行的详细信息，不再通过主动上报方式，
 		// 自行获取，避免多处同时修改的问题
 
@@ -43,21 +44,25 @@
 		var dom = t.data.cases[t.data.case_running],
 		// 处理测试结果
 		result = function() {
-
+			TT.ajax.post()
 		},
 		// 处理覆盖率信息
 		cov = function() {
-
+			// 目前只有一个iframe嵌入的情况，暂时处理策略
+			var w = window.frames[0];
+			if (w._$jscoverage) {
+				t.data.cases_cov[dom.path] = w._$jscoverage;
+			}
 		};
 
 		TT.dom.removeClass(dom, case_running_class);
-//		TT.dom.addClass()
+		// TT.dom.addClass()
 		if (batchrun) {
 			// 判断下一个标签不是用例或者用例已经执行过则直接中断
 			if (t.data.cases_finish[t.data.case_running++])
 				return;
-			// 为旧的环境清理保留两秒的时间
-			setTimeout(t.run, 2000);
+			// 为旧的环境清理预留0.2秒的时间
+			setTimeout(t.run, 200);
 		}
 	};
 
