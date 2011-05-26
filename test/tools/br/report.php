@@ -27,7 +27,7 @@ function report(){
 	$failures = 0;
 	$tests = 0;
 	$time = 0;
-	$running_url = "http://".$_SERVER ['HTTP_HOST'].":".$_SERVER['SERVER_PORT']."/test/tools/br/run.php";
+	$running_url = "http://".$_SERVER ['HTTP_HOST'].":".$_SERVER['SERVER_PORT']."BaiduFE/Tangram-base/test/tools/br/run.php";
 	foreach($_POST as $key=>$value){
 		if($key == 'config')
 		continue;
