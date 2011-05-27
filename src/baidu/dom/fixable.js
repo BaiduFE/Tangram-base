@@ -25,7 +25,8 @@
  * @param {Object} options 配置项
  * @config {String} [vertival] 取值[top|bottom] 默认值 top
  * @config {Strgin} [horizontal] 取值[left|right] 默认值 left
- * @config {Object} {x:String|Number, y:String|Number}} 横向与纵向的取值
+ * @config {Object} offset {x:String|Number, y:String|Number}} 横向与纵向的取值
+ * @config {Boolean} [autofix] 是否自动进行fix，默认值为true
  * @config {Function} onrender
  * @config {Function} onupdate
  * @config {Function} onrelease
@@ -42,6 +43,7 @@ baidu.dom.fixable = function(element, options){
         isIE7 = baidu.browser.ie && baidu.browser.ie == 7 ? true : false,
         vertival = options.vertival || 'top',
         horizontal = options.horizontal || 'left',
+        autofix = options.autofix || true,
         origPos,offset,isRender = false,
         onrender = options.onrender || new Function(),
         onupdate = options.onupdate || new Function(),
@@ -55,7 +57,7 @@ baidu.dom.fixable = function(element, options){
     offset = {y:origPos.top,x:origPos.left};
     baidu.extend(offset, options.offset || {});
 
-    render();
+    autofix && render();
    
     function _convert(){
         return {
@@ -154,6 +156,8 @@ baidu.dom.fixable = function(element, options){
 
         //更新offset
         baidu.extend(offset, options.offset || {});
+
+        onupdate();
     }
 
     return {render: render, update: update, release:release};
