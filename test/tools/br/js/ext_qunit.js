@@ -4,22 +4,7 @@
 (function() {
 	if (!QUnit)
 		return;
-	var ms = QUnit.moduleStart, d = QUnit.done, td = QUnit.testDone, ts = QUnit.testStart;
-
-	function _d(args /* failures, total */) {
-		// 默认展开失败用例
-		$('li.fail ol').toggle();
-		if (parent && parent.brtest) {
-			parent.$(parent.brtest).trigger('done', [ new Date().getTime(), {
-				failed : args[0],
-				passed : args[1]
-			}, window._$jscoverage || null ]);
-		}
-		// 追加新版本的支持兼容
-		if (parent && parent.TRunner) {
-			parent.TRunner.done(args[0], args[0] + args[1], _$jscoverage);
-		}
-	}
+	var ms = QUnit.moduleStart, done = QUnit.done;
 
 	QUnit.moduleStart = function() {
 		stop();
@@ -32,12 +17,25 @@
 			}
 		}, 20);
 	};
+	
+	function done_ext(args /* failures, total */) {
+		// 默认展开失败用例
+		$('li.fail ol').toggle();
+		if (parent && parent.brtest) {
+			parent.$(parent.brtest).trigger('done', [ new Date().getTime(), {
+				failed : args[0],
+				passed : args[1]
+			}, window._$jscoverage || null ]);
+		}
+		// 追加新版本的支持兼容
+		if (parent && parent.oncasedone) {
+			parent.oncasedone(args[0], args[0] + args[1], window._$jscoverage);
+		}
+	}
+
 	QUnit.done = function() {
-		_d(arguments);
-		d.apply(this, arguments);
+		done_ext(arguments);
+		done.apply(this, arguments);
 	};
 
-	QUnit.testDone = function() {
-		td.apply(this, arguments);
-	};
 })();
