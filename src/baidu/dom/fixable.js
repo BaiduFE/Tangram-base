@@ -16,6 +16,7 @@
 ///import baidu.object.extend;
 ///import baidu.page.getViewHeight;
 ///import baidu.page.getViewWidth;
+///import baidu.dom._styleFilter.px;
 
 /**
  * 使目标元素拥有可进行与页面可见区域相对位置保持不变的移动的能力
@@ -43,7 +44,7 @@ baidu.dom.fixable = function(element, options){
         isIE7 = baidu.browser.ie && baidu.browser.ie == 7 ? true : false,
         vertival = options.vertival || 'top',
         horizontal = options.horizontal || 'left',
-        autofix = options.autofix || true,
+        autofix = typeof options.autofix != 'undefined' ? options.autofix : true,
         origPos,offset,isRender = false,
         onrender = options.onrender || new Function(),
         onupdate = options.onupdate || new Function(),
@@ -54,7 +55,10 @@ baidu.dom.fixable = function(element, options){
     //获取target原始值
     origPos = _getOriginalStyle();
     //设置offset值
-    offset = {y:origPos.top,x:origPos.left};
+    offset = {
+        y: (isIE6 || isIE7) ? (origPos.position == "static" ? baidu.dom.getPosition(target).top :  baidu.dom.getPosition(target).top - baidu.dom.getPosition(target.parentNode).top) : target.offsetTop,
+        x: (isIE6 || isIE7) ? (origPos.position == "static" ? baidu.dom.getPosition(target).left :  baidu.dom.getPosition(target).left - baidu.dom.getPosition(target.parentNode).left) : target.offsetLeft
+    };
     baidu.extend(offset, options.offset || {});
 
     autofix && render();
@@ -93,14 +97,27 @@ baidu.dom.fixable = function(element, options){
             }()
         };
 
-        result.top = (isIE6 || isIE7) ? (result.position == "static" ? baidu.dom.getPosition(target).top :  baidu.dom.getPosition(target).top - baidu.dom.getPosition(target.parentNode).top) : target.offsetTop;
-        result.left = (isIE6 || isIE7) ? (result.position == "static" ? baidu.dom.getPosition(target).left :  baidu.dom.getPosition(target).left - baidu.dom.getPosition(target.parentNode).left) : target.offsetLeft;
-
+        _getValue('top', result);
+        _getValue('left', result);
+        _getValue('bottom', result);
+        _getValue('right', result);
+        
         return result;
     }
 
-    function _start(){
-        
+    function _getValue(position, options){
+        var result;
+
+        if(options.position == 'static'){
+            options[position] = '';   
+        }else{
+            result = baidu.getStyle(target, position);
+            if(result == 'auto' || result == '0px' ){
+                options[position] = '';
+            }else{
+                options[position] = result;
+            }
+        }
     }
 
     function render(){
@@ -128,8 +145,10 @@ baidu.dom.fixable = function(element, options){
 
        var style = {
            position: origPos.position,
-           left: origPos.left + 'px',
-           top: origPos.top + 'px'
+           left: origPos.left == '' ? 'auto' : origPos.left,
+           top: origPos.top == '' ? 'auto' : origPos.top,
+           bottom: origPos.bottom == '' ? 'auto' : origPos.bottom,
+           right: origPos.right == '' ?  'auto' : origPos.right
        };
 
         if(isIE6){

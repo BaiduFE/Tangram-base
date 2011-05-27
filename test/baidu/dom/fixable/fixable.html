@@ -13,7 +13,7 @@
                 <input onclick="javascript:release('fdiv');" value="release" type="button">
                 <input onclick="javascript:update('fdiv');" value="update" type="button">
                 <div style="background-color: black; width: 200px; height: 200px;">
-                    <div id="fdiv" style="background-color: red; width: 100px; height: 100px;" class="f"></div>
+                    <div id="fdiv" style="background-color: red; width: 100px; height: 100px; position:relative; top:22px; left:50px" class="f"></div>
                 </div>
             </div>
             <div>
@@ -31,12 +31,13 @@
                 horizontal:"right",
                 offset:{y:100,x:200},
                 onrender:function(){alert('render');},
-                onrelease:function(){alert('dispose');}
+                onrelease:function(){alert('dispose');},
+                autofix: false
             };
 
             var fixable = {};
             fixable.fdiv = baidu.dom.fixable("fdiv",options);
-            fixable.fdiv1 = baidu.dom.fixable("fdiv1",{});
+            fixable.fdiv1 = baidu.dom.fixable("fdiv1",{autofix:false});
 
             function render(id){
                 fixable[id].render();
