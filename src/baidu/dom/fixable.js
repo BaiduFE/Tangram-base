@@ -16,6 +16,7 @@
 ///import baidu.object.extend;
 ///import baidu.page.getViewHeight;
 ///import baidu.page.getViewWidth;
+///import baidu.dom._styleFilter.px;
 
 /**
  * 使目标元素拥有可进行与页面可见区域相对位置保持不变的移动的能力
@@ -107,7 +108,7 @@ baidu.dom.fixable = function(element, options){
     function _getValue(position, options){
         var result;
 
-        if(options.position != 'static'){
+        if(options.position == 'static'){
             options[position] = '';   
         }else{
             result = baidu.getStyle(target, position);
@@ -144,10 +145,10 @@ baidu.dom.fixable = function(element, options){
 
        var style = {
            position: origPos.position,
-           left: origPos.left == '' ? '' : origPos.left + 'px',
-           top: origPos.top == '' ? '' : origPos.top + 'px',
-           bottom: origPos.bottom == '' ? '' : origPos.bottom + 'px',
-           right: origPos.right == '' ? '' : origPos.right + 'px'
+           left: origPos.left == '' ? 'auto' : origPos.left,
+           top: origPos.top == '' ? 'auto' : origPos.top,
+           bottom: origPos.bottom == '' ? 'auto' : origPos.bottom,
+           right: origPos.right == '' ?  'auto' : origPos.right
        };
 
         if(isIE6){
