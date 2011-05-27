@@ -232,3 +232,141 @@ test("当超出fix内容超出父页面，超出部分clip掉",function() {
 		}
 	});
 });
+//
+test("autofix用例",function() {
+	ua.frameExt({
+		onafterstart : function(f) {
+			$(f).css('width', 300).css('height', 300);
+		},
+		ontest : function(w, f) {
+			var op = this;
+			w.$(w.document.body).css('border', 0);
+			w.$(w.document.body).append('<div id="test1"></div>');
+			w.$('div#test1').css('width', 600).css('height', 600);
+			var div = w.document.createElement('div');
+			$(div).attr("id", "id01");
+			$(div).css('position', 'absolute').css('left', '20').css('top', '20')
+			.css('backgroundColor', 'red').css('width', '100px').css('height', '100px');
+			w.$(w.document.body).append(div);
+			var options = {
+					vertival : "top",
+					horizontal : "left",
+					offset : {x : 100, y : 100}
+				};
+			options.onrender = function() {
+				ok(true, "onrender方法调用成功");
+			};
+			options.onrelease = function() {
+				ok(true, "onrelease方法调用成功");
+			};
+			options.onupdate = function() {
+				ok(true, "onupdate方法调用成功");
+			};
+			options.autofix = false;
+			// 构造一个fixable对象 
+			var fix = w.baidu.dom.fixable(div,options);
+			equal(w.baidu.dom.getPosition(div).left , 20 , "autofix是false情况，不变更");
+			equal(w.baidu.dom.getPosition(div).top , 20 , "autofix是false情况，不变更");
+			fix.render();
+			equal(w.baidu.dom.getPosition(div).left , 100 , "autofix是false情况，render left:");
+			equal(w.baidu.dom.getPosition(div).top , 100 , "autofix是false情况，render top:");
+			op.finish();
+		}
+	});
+});
+test("position static用例",function() {
+	ua.frameExt({
+		onafterstart : function(f) {
+			$(f).css('width', 300).css('height', 300);
+		},
+		ontest : function(w, f) {
+			var op = this;
+			w.$(w.document.body).css('border', 0);
+			w.$(w.document.body).append('<div id="test1"></div>');
+			w.$('div#test1').css('width', 600).css('height', 600);
+			var div = w.document.createElement('div');
+			$(div).attr("id", "id01");
+			$(div).css('position', 'static')
+			.css('backgroundColor', 'red').css('width', '100px').css('height', '100px');
+			w.$(w.document.body).append(div);
+			var options = {
+					vertival : "top",
+					horizontal : "left",
+					offset : {x : 100, y : 100}
+				};
+			var left = w.baidu.dom.getPosition(div).left;
+			var top = w.baidu.dom.getPosition(div).top;
+			var fix = w.baidu.dom.fixable(div,options);
+			equal(w.baidu.dom.getPosition(div).left , 100 , "position relative情况，render left:");
+			equal(w.baidu.dom.getPosition(div).top , 100 , "position relative情况，render top:");
+			fix.release();
+			equal(w.baidu.dom.getPosition(div).left , left , "position relative情况，release left:");
+			equal(w.baidu.dom.getPosition(div).top , top , "position relative情况，release top:");
+			op.finish();
+		}
+	});
+});
+test("position fixed用例",function() {
+	ua.frameExt({
+		onafterstart : function(f) {
+			$(f).css('width', 300).css('height', 300);
+		},
+		ontest : function(w, f) {
+			var op = this;
+			w.$(w.document.body).css('border', 0);
+			w.$(w.document.body).append('<div id="test1"></div>');
+			w.$('div#test1').css('width', 600).css('height', 600);
+			var div = w.document.createElement('div');
+			$(div).attr("id", "id01");
+			$(div).css('position', 'fixed').css('left', '20').css('top', '20')
+			.css('backgroundColor', 'red').css('width', '100px').css('height', '100px');
+			w.$(w.document.body).append(div);
+			var options = {
+					vertival : "top",
+					horizontal : "left",
+					offset : {x : 100, y : 100}
+				};
+			var left = w.baidu.dom.getPosition(div).left;
+			var top = w.baidu.dom.getPosition(div).top;
+			var fix = w.baidu.dom.fixable(div,options);
+			equal(w.baidu.dom.getPosition(div).left , 100 , "position relative情况，render left:");
+			equal(w.baidu.dom.getPosition(div).top , 100 , "position relative情况，render top:");
+			fix.release();
+			equal(w.baidu.dom.getPosition(div).left , left , "position relative情况，release left:");
+			equal(w.baidu.dom.getPosition(div).top , top , "position relative情况，release top:");
+			op.finish();
+		}
+	});
+});
+test("position relative用例",function() {
+	ua.frameExt({
+		onafterstart : function(f) {
+			$(f).css('width', 300).css('height', 300);
+		},
+		ontest : function(w, f) {
+			var op = this;
+			w.$(w.document.body).css('border', 0);
+			w.$(w.document.body).append('<div id="test1"></div>');
+			w.$('div#test1').css('width', 600).css('height', 600);
+			var div = w.document.createElement('div');
+			$(div).attr("id", "id01");
+			$(div).css('position', 'relative').css('left', '20').css('top', '20')
+			.css('backgroundColor', 'red').css('width', '100px').css('height', '100px');
+			w.$(w.document.body).append(div);
+			var options = {
+					vertival : "top",
+					horizontal : "left",
+					offset : {x : 100, y : 100}
+				};
+			var left = w.baidu.dom.getPosition(div).left;
+			var top = w.baidu.dom.getPosition(div).top;
+			var fix = w.baidu.dom.fixable(div,options);
+			equal(w.baidu.dom.getPosition(div).left , 100 , "position relative情况，render left:");
+			equal(w.baidu.dom.getPosition(div).top , 100 , "position relative情况，render top:");
+			fix.release();
+			equal(w.baidu.dom.getPosition(div).left , left , "position relative情况，release left:");
+			equal(w.baidu.dom.getPosition(div).top , top , "position relative情况，release top:");
+			op.finish();
+		}
+	});
+});
