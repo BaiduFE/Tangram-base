@@ -28,14 +28,13 @@
 			}, window._$jscoverage || null ]);
 		}
 		// 追加新版本的支持兼容
-		if (parent && parent.oncasedone) {
-			parent.oncasedone(args[0], args[0] + args[1], window._$jscoverage);
+		if (parent && parent.TRunner.done) {
+			parent.TRunner.done(args[0], args[1], window._$jscoverage);
 		}
 	}
-
+	
 	QUnit.done = function() {
 		done_ext(arguments);
 		done.apply(this, arguments);
 	};
-
 })();

@@ -14,16 +14,16 @@
 
 	<property name="report.style.path" value="test/tools/br/reportstyle" />
 	<property name="report.output.path" value="test/tools/br/report/html" />
-	<property name="report.xml" value="test/tools/br/report"/>
-	<property name="report.mailto" value="yangbo@baidu.com"/>
-	<property name="report.mailcc" value="yangbo@baidu.com"/>
-	<property name="report.mailfrom" value="yangbo@baidu.com"/>
+	<property name="report.xml" value="test/tools/br/report" />
+	<property name="report.mailto" value="yangbo@baidu.com" />
+	<property name="report.mailcc" value="yangbo@baidu.com" />
+	<property name="report.mailfrom" value="yangbo@baidu.com" />
 
 	<!-- ================================= 
           target: report              
          ================================= -->
 	<target name="report" description="generate and merge report">
-		<mkdir dir="${report.output.path}"/>
+		<mkdir dir="${report.output.path}" />
 		<junitreport todir="${report.output.path}">
 			<fileset dir="${report.xml}">
 				<include name="*.xml" />
@@ -40,15 +40,18 @@
          - - - - - - - - - - - - - - - - - -->
 	<target name="mail" description="send mail" depends="report">
 		<loadfile property="report.html" srcFile="${report.output.path}/junit-noframes.html" />
-		<mail mailhost="hotswap-c.baidu.com" 
-			charset="UTF-8" 
-			messagemimetype="text/html" 
-			subject="Report from ci——${git.user}.${git.project}"
-			cclist="${report.mailcc}"
-			failonerror="false">
+		<mail mailhost="hotswap-c.baidu.com" charset="UTF-8" messagemimetype="text/html" subject="Report from ci——${git.user}.${git.project}" cclist="${report.mailcc}" failonerror="false">
 			<to address="${report.mailto}" />
 			<from address="${report.mailfrom}" />
 			<message>${report.html}</message>
+			<attachments>
+				<fileset dir="test/tools/br/report">
+					<include name="*.xml" />
+				</fileset>
+				<fileset dir="test/tools/br/reportcov">
+					<include name="*.xml" />
+				</fileset>
+			</attachments>
 		</mail>
 	</target>
 

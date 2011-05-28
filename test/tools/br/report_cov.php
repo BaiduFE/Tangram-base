@@ -30,8 +30,8 @@ foreach($_POST as $case => $covinfo){
 	continue;
 	// casename  :  per-1:20|2:20|3:20
 	$covinfos = split('\|', $covinfo);
-	var_dump($covinfo);
-	var_dump($covinfos);
+	//var_dump($covinfo);
+	//var_dump($covinfos);
 	$dom_case = $dom->createElement("case");
 	$dom_case->setAttribute('name', $case);
 	$dom_case->setAttribute('percent', $covinfos[0]);
@@ -51,7 +51,7 @@ foreach($_POST as $case => $covinfo){
 if(!file_exists("reportcov/history"))
 mkdir("reportcov/history", 0777, true);
 //存储数据到xml文件
-$covfile = "reportcov/{$config['browser']}.xml";
+$covfile = "reportcov/cov_{$config['browser']}.xml";
 $covfile_history = "reportcov/history/{$config['browser']}.xml";
 if(file_exists($covfile)){
 	//上一次执行的覆盖率信息存入history

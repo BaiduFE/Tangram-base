@@ -1,5 +1,9 @@
 (function() {
-	var t = window.TRunner = {},
+	var t = window.TRunner = {
+		TIMEOUT : 8000,
+		case_jscoverage : {},
+		case_testresult : {}
+	},
 	// case classes
 	classes = {
 		normal : 'jsframe_qunit',
@@ -11,18 +15,12 @@
 	batchrun = location.search.indexOf("batchrun=true") > 0;
 
 	t.init = function() {
-		// 创建执行用IFrame，并初始化部分变量，绑定事件
-		t.RunningFrame = t.RunningFrame || document.createElement('iframe');
-		TT.dom.addClass(t.RunningFrame, 'runningframe');
-		TT.g('id_runningarea').appendChild(t.RunningFrame);
 		TT.dom.show('id_runningarea');
 
 		// 初始化数据结构
 		TT.object.extend(t, {
-			cases : TT.q(classes.normal, TT.g('id_testlist'), 'a'),
-			case_index : 0,
-			case_result : {},
-			case_cov : {}
+			cases : TT.q(classes.normal, TT.g('id_testlist'), 'a'), 
+			case_index : 0
 		});
 
 		// 绑定执行结束事件
@@ -31,14 +29,25 @@
 			t.run();
 	};
 
-	window.run = t.run = function(dom) {
+	t.run = window.run = function(dom) {
 		dom = dom || t.cases[t.case_index];
 		if (!dom) // 取不到当前用例就直接退出
 			return;
 		// 修改IFrame的src，指向新用例的执行地址
 		TT.dom.addClass(dom, classes.running);
+
+		// 创建执行用IFrame，并初始化部分变量，绑定事件
+		if(t.RunningFrame){
+			TT.dom.remove(t.RunningFrame);
+		}
+		t.RunningFrame = document.createElement('iframe');
+		TT.dom.addClass(t.RunningFrame, 'runningframe');
+		TT.g('id_runningarea').appendChild(t.RunningFrame);
 		t.RunningFrame.src = dom.href
 				+ (location.search.indexOf('cov=true') > 0 ? "&cov=true" : "");
+		if (batchrun) {
+			t.timeoutHandle = setTimeout(t.done, t.TIMEOUT);
+		}
 	};
 
 	/**
@@ -53,11 +62,14 @@
 	 * 
 	 */
 	t.done = function(fail, total, covinfo) {
+		clearTimeout(t.timeoutHandle);
 		// 超时处理
 		if (!TT.lang.isNumber(fail)) {
 			fail = 1;
 			total = 1;
 		}
+
+		// 由于最后统一运算消耗资源导致浏览器不响应，修改为每次结束时merge
 
 		var index = t.case_index,
 		//
@@ -69,26 +81,27 @@
 		TT.dom.addClass(dom, fail == 0 ? classes.pass : classes.fail);
 
 		// 更新测试结果
-		t.case_result[path] = fail + ',' + total;
+		t.case_testresult[path] = fail + ',' + total;
 
 		// 更新覆盖率
-		t.case_cov[path] = covinfo;
+		cov_merge(covinfo);
 
 		if (batchrun) {
 
 			// 发送测试结果
 			if (t.cases.length == index + 1) {
 				// 整合覆盖率
-				var covmerged = cov_merge(t.case_cov),
-				// 计算覆盖率并计入测试结果
-				covserials = cov_percent(covmerged, t.case_result);
+				// var covmerged = cov_merge(t.case_cov),
+				// 计算覆盖率并扁平化
+				covserials = cov_percent(t.case_jscoverage, t.case_testresult);
 				// 追加参数到结果中
-				t.case_result['config'] = covserials['config'] = location.search
+				t.case_testresult['config'] = covserials['config'] = location.search
 						.substring(1);
 				// 发送测试结果
 				TT.ajax.post('report_cov.php', TT.url.jsonToQuery(covserials));
-				TT.ajax.post('report.php', TT.url.jsonToQuery(t.case_result));
-			} else if (t.case_result[t.cases[index + 1].attributes['path']])
+				TT.ajax.post('report.php', TT.url
+						.jsonToQuery(t.case_testresult));
+			} else if (t.case_testresult[t.cases[index + 1].attributes['path']])
 				// 如果下一个用例的测试结果已经被记录直接返回，此情况为手工点击
 				return;
 			else {
@@ -103,27 +116,20 @@
 	TT.dom.ready(t.init);
 
 	/**
-	 * 对现有覆盖率结果进行整合
+	 * 整合覆盖率
 	 */
 	function cov_merge(cov_info) {
-		var cov_merged = {};
-		TT.object.each(cov_info, function(v, k) {
-			// console.log('cov from : ' + k);
-			// v 是一个jscoverage数据包
-			TT.object.each(v, function(cov_case, case_path) {
-				delete cov_case.source;
-				var info = cov_merged[case_path];
-				if (info !== undefined) {
-					for ( var i = 0; i < info.length; i++) {
-						if (info[i] != undefined)// 整合每一行的结果
-							info[i] += cov_case[i];
-					}
-					cov_merged[case_path] = info;
-				} else
-					cov_merged[case_path] = cov_case;
+		var cc = t.case_jscoverage;
+		if (cov_info)
+			TT.object.each(cov_info, function(v, k) {
+				if (!cc[k])
+					cc[k] = [];
+				TT.array.each(v, function(num, line){
+					if (typeof num == 'undefined' || cc[k][line] == 1)
+						return;
+					cc[k][line] = num == 0 ? 0 : 1;
+				});
 			});
-		});
-		return cov_merged;
 	}
 
 	function cov_percent(cov_info, case_result) {
@@ -137,7 +143,7 @@
 				count++;
 				per += line + ":" + num + ",";// 序列化以传递复杂结构
 			});
-			var _percent = 100 * covered / count;
+			var _percent = (100 * covered / count).toFixed(2);
 			case_result[path] += "," + _percent;
 			percent[path] = _percent + "|" + per;
 		});
