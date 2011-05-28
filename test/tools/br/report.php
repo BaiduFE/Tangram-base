@@ -79,7 +79,8 @@ mkdir(Config::$REPORT_TEST_PATH, 0777, true);
 $dom->save(Config::$REPORT_TEST_PATH."/{$config['browser']}.xml");
 
 $dom = new DOMDocument('1.0', 'utf-8');
-
+//开始检测前尝试删除
+unlink("done");
 //创建一个标志位文件表示执行结束
 foreach (Config::$BROWSERS as $key=>$value){
 	$file = Config::$REPORT_TEST_PATH."/$key.xml";
@@ -88,5 +89,6 @@ foreach (Config::$BROWSERS as $key=>$value){
 		return;
 	}
 }
+touch("done");
 Config::StopAll();
 ?>
