@@ -19,12 +19,12 @@
 		the specific language governing permissions and limitations under the License. -->
 
 	<xsl:param name="TITLE">
-		Unit Test Results.
+		Tangram CI result.
 	</xsl:param>
 
 	<!-- Sample stylesheet to be used with Ant JUnitReport output. It creates 
 		a non-framed report that can be useful to send via e-mail or such. -->
-	<xsl:template match="testsuites">
+	<xsl:template match="testsuite">
 		<html>
 			<head>
 				<title>

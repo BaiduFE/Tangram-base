@@ -13,7 +13,7 @@ if(substr_count($_POST['config'], "browser")==0){
 
 $dom = new DOMDocument('1.0', 'utf-8');
 //FIXME 追加xml校验用dtd文件头
-$suite = $dom->appendChild($dom->createElement('suite'));
+$suite = $dom->appendChild($dom->createElement('coveragesuite'));
 $cfg = preg_split('/[&=]/', $_POST['config']);
 $config = array();
 for($i = 0; $i < sizeof($cfg); $i+=2){
@@ -47,16 +47,15 @@ foreach($_POST as $case => $covinfo){
 		$dom_case->appendChild($dom_line);
 	}
 }
-
-if(!file_exists("reportcov/history"))
-mkdir("reportcov/history", 0777, true);
+require_once 'config.php';
+if(!file_exists(Config::$REPORT_COVERAGE_PATH."/history"))
+mkdir(Config::$REPORT_COVERAGE_PATH."/history", 0777, true);
 //存储数据到xml文件
-$covfile = "reportcov/cov_{$config['browser']}.xml";
-$covfile_history = "reportcov/history/{$config['browser']}.xml";
+$covfile = Config::$REPORT_COVERAGE_PATH."/cov_{$config['browser']}.xml";
+$covfile_history = Config::$REPORT_COVERAGE_PATH."/history/cov_{$config['browser']}.xml";
 if(file_exists($covfile)){
 	//上一次执行的覆盖率信息存入history
-	file_put_contents($covfile_history,file_get_contents($covfile));
+	copy($covfile, $covfile_history);
 }
 $dom->save($covfile);
-
 ?>

@@ -19,7 +19,7 @@
 
 		// 初始化数据结构
 		TT.object.extend(t, {
-			cases : TT.q(classes.normal, TT.g('id_testlist'), 'a'), 
+			cases : TT.q(classes.normal, TT.g('id_testlist'), 'a'),
 			case_index : 0
 		});
 
@@ -37,7 +37,7 @@
 		TT.dom.addClass(dom, classes.running);
 
 		// 创建执行用IFrame，并初始化部分变量，绑定事件
-		if(t.RunningFrame){
+		if (t.RunningFrame) {
 			TT.dom.remove(t.RunningFrame);
 		}
 		t.RunningFrame = document.createElement('iframe');
@@ -96,9 +96,11 @@
 				covserials = cov_percent(t.case_jscoverage, t.case_testresult);
 				// 追加参数到结果中
 				t.case_testresult['config'] = covserials['config'] = location.search
-						.substring(1);
+						.substring(1)
+						+ "&total_coverage=" + covserials[1];
 				// 发送测试结果
-				TT.ajax.post('report_cov.php', TT.url.jsonToQuery(covserials));
+				TT.ajax.post('report_cov.php', TT.url
+						.jsonToQuery(covserials[0]));
 				TT.ajax.post('report.php', TT.url
 						.jsonToQuery(t.case_testresult));
 			} else if (t.case_testresult[t.cases[index + 1].attributes['path']])
@@ -124,7 +126,7 @@
 			TT.object.each(cov_info, function(v, k) {
 				if (!cc[k])
 					cc[k] = [];
-				TT.array.each(v, function(num, line){
+				TT.array.each(v, function(num, line) {
 					if (typeof num == 'undefined' || cc[k][line] == 1)
 						return;
 					cc[k][line] = num == 0 ? 0 : 1;
@@ -133,20 +135,24 @@
 	}
 
 	function cov_percent(cov_info, case_result) {
-		var percent = {};
+		var percent = {}, total_code_number = 0, total_code_coveraged = 0;
 		TT.object.each(cov_info, function(info, path) {
 			var count = 0, covered = 0, per = "";
 			TT.array.each(info, function(num, line) {
 				if (typeof num == 'undefined')
 					return;
-				covered += (num == 0 ? 0 : 1);
+				if (num == 0) {
+					covered++;
+					total_code_coveraged++;
+				}
 				count++;
+				total_code_number++;
 				per += line + ":" + num + ",";// 序列化以传递复杂结构
 			});
 			var _percent = (100 * covered / count).toFixed(2);
 			case_result[path] += "," + _percent;
 			percent[path] = _percent + "|" + per;
 		});
-		return percent;
+		return [ percent, (total_code_coveraged / total_code_number).toFixed(2) ];
 	}
 })();
