@@ -29,7 +29,7 @@
           调整使用xsl task产出覆盖率报告和测试报告              
          ================================= -->
 	<target name="report" description="generate and merge report">
-
+		
 	</target>
 
 	<!-- - - - - - - - - - - - - - - - - - 
@@ -42,11 +42,8 @@
 			<from address="${report.mailfrom}" />
 			<message>mergings</message>
 			<attachments>
-				<fileset dir="${report.test.xml}">
-					<include name="*.xml" />
-				</fileset>
-				<fileset dir="${report.coverage.xml}">
-					<include name="*.xml" />
+				<fileset dir="${report.path}">
+					<include name="**/*.xml" />
 				</fileset>
 			</attachments>
 		</mail>
