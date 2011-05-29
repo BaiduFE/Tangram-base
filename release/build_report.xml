@@ -29,27 +29,18 @@
           调整使用xsl task产出覆盖率报告和测试报告              
          ================================= -->
 	<target name="report" description="generate and merge report">
-		<mkdir dir="${report.test.html}" />
-		<junitreport todir="${report.test.html}">
-			<fileset dir="${report.test.xml}">
-				<include name="*.xml" />
-			</fileset>
-			<!-- brief report for mail message -->
-			<report format="noframes" styledir="${report.style.path}" todir="${report.test.html}" />
-			<!-- detail report for mail attachements 
-			<report format="noframes" styledir="reportstyle/detail" todir="${junit.out.dir.html.detail}" />-->
-		</junitreport>
+
 	</target>
 
 	<!-- - - - - - - - - - - - - - - - - - 
           target: mail                      
          - - - - - - - - - - - - - - - - - -->
 	<target name="mail" description="send mail" depends="report">
-		<loadfile property="report.html" srcFile="${report.test.html}/junit-noframes.html" />
+		<!--<loadfile property="report.html" srcFile="${report.test.html}/junit-noframes.html" />-->
 		<mail mailhost="hotswap-c.baidu.com" charset="UTF-8" messagemimetype="text/html" subject="Report from ci——${git.user}.${git.project}" cclist="${report.mailcc}" failonerror="false">
 			<to address="${report.mailto}" />
 			<from address="${report.mailfrom}" />
-			<message>${report.html}</message>
+			<message>mergings</message>
 			<attachments>
 				<fileset dir="${report.test.xml}">
 					<include name="*.xml" />

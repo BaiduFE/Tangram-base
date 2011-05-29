@@ -78,18 +78,24 @@ if(!is_dir(Config::$REPORT_TEST_PATH))
 mkdir(Config::$REPORT_TEST_PATH, 0777, true);
 $dom->save(Config::$REPORT_TEST_PATH."/{$config['browser']}.xml");
 
-$dom = new DOMDocument('1.0', 'utf-8');
-
-//开始检测前尝试删除
-//unlink("done");
-//创建一个标志位文件表示执行结束
+//整合覆盖率文档到单一文档，需确认所有浏览器完成相关操作后进行
+$dom_suites = new DOMDocument('1.0', 'UTF-8');
+$suites = $dom->appendChild($dom->createElement('testsuites'));
 foreach (Config::$BROWSERS as $key=>$value){
 	$file = Config::$REPORT_TEST_PATH."/$key.xml";
 	if(!file_exists($file)){
-		echo "wait for report : $file\r\n<br />";
+		$info =  "wait for test report : $file";
+		error_log($info);
+		echo $info;
 		return;
 	}
+	$xmlDoc = new DOMDocument('1.0', 'utf-8');
+	$xmlDoc->load($file);
+	$xmlDom = $xmlDoc->documentElement;
+	//echo $xmlDom->nodeName;
+	$suites->appendChild($dom_suites->importNode($xmlDom, true));
+	//$dom->dom
 }
-touch("report/done");
+$dom_suites->save(Config::$REPORT_TEST_PATH."/html/reports.xml");
 Config::StopAll();
 ?>

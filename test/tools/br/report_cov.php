@@ -58,4 +58,24 @@ if(file_exists($covfile)){
 	copy($covfile, $covfile_history);
 }
 $dom->save($covfile);
+
+//整合覆盖率文档到单一文档，需确认所有浏览器完成相关操作后进行
+$dom_suites = new DOMDocument('1.0', 'UTF-8');
+$suites = $dom->appendChild($dom->createElement('coveragesuites'));
+foreach (Config::$BROWSERS as $key=>$value){
+	$file = Config::$REPORT_COVERAGE_PATH."/cov_$key.xml";
+	if(!file_exists($file)){
+		$info =  "wait for report : $file";
+		error_log($info);
+		echo $info;
+		return;
+	}
+	$xmlDoc = new DOMDocument('1.0', 'utf-8');
+	$xmlDoc->load($file);
+	$xmlDom = $xmlDoc->documentElement;
+	//echo $xmlDom->nodeName;
+	$suites->appendChild($dom_suites->importNode($xmlDom, true));
+	//$dom->dom
+}
+$dom_suites->save(Config::$REPORT_COVERAGE_PATH."/html/reports.xml");
 ?>

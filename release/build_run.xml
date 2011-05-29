@@ -4,7 +4,7 @@
 	<property name="serverip" value="10.32.34.115:8000" />
 	<property name="report.path" value="test/tools/br/report" />
 	<property name="coverage.path" value="test/coverage" />
-	<property name="build.end" value="test/tools/br/report/done" />
+	<property name="build.end" value="test/tools/br/report/html/reports.xml" />
 	<property name="git.project" value="Tangram-base" />
 	<property name="git.user" value="" />
 	<path id="ext.classpath">
