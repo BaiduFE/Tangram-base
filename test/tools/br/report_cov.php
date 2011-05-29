@@ -48,11 +48,13 @@ foreach($_POST as $case => $covinfo){
 	}
 }
 require_once 'config.php';
-if(!file_exists(Config::$REPORT_COVERAGE_PATH."/history"))
-mkdir(Config::$REPORT_COVERAGE_PATH."/history", 0777, true);
+if(!file_exists(Config::$REPORT_COVERAGE_PATH."history")){
+mkdir(Config::$REPORT_COVERAGE_PATH."history", 0777, true);
+echo 'mkdir : '.Config::$REPORT_COVERAGE_PATH."history";
+}
 //存储数据到xml文件
-$covfile = Config::$REPORT_COVERAGE_PATH."/cov_{$config['browser']}.xml";
-$covfile_history = Config::$REPORT_COVERAGE_PATH."/history/cov_{$config['browser']}.xml";
+$covfile = Config::$REPORT_COVERAGE_PATH."cov_{$config['browser']}.xml";
+$covfile_history = Config::$REPORT_COVERAGE_PATH."history/cov_{$config['browser']}.xml";
 if(file_exists($covfile)){
 	//上一次执行的覆盖率信息存入history
 	copy($covfile, $covfile_history);
@@ -61,7 +63,7 @@ $dom->save($covfile);
 
 //整合覆盖率文档到单一文档，需确认所有浏览器完成相关操作后进行
 $dom_suites = new DOMDocument('1.0', 'UTF-8');
-$suites = $dom_suites->appendChild($dom->createElement('coveragesuites'));
+$suites = $dom_suites->appendChild($dom_suites->createElement('coveragesuites'));
 foreach (Config::$BROWSERS as $key=>$value){
 	$file = Config::$REPORT_COVERAGE_PATH."/cov_$key.xml";
 	if(!file_exists($file)){

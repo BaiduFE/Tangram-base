@@ -2,7 +2,8 @@
 	var t = window.TRunner = {
 		TIMEOUT : 8000,
 		case_jscoverage : {},
-		case_testresult : {}
+		case_testresult : {},
+		case_starttime : 0
 	},
 	// case classes
 	classes = {
@@ -43,6 +44,10 @@
 		t.RunningFrame = document.createElement('iframe');
 		TT.dom.addClass(t.RunningFrame, 'runningframe');
 		TT.g('id_runningarea').appendChild(t.RunningFrame);
+
+		// 记录用例启动时间
+		t.case_starttime = new Date().getTime();
+
 		t.RunningFrame.src = dom.href
 				+ (location.search.indexOf('cov=true') > 0 ? "&cov=true" : "");
 		if (batchrun) {
@@ -80,8 +85,9 @@
 		TT.dom.removeClass(dom, classes.running);
 		TT.dom.addClass(dom, fail == 0 ? classes.pass : classes.fail);
 
-		// 更新测试结果
-		t.case_testresult[path] = fail + ',' + total;
+		// 使用数组记录失败，全部
+		t.case_testresult[path] = [ fail, total, t.case_starttime,
+				new Date().getTime() ];
 
 		// 更新覆盖率
 		cov_merge(covinfo);
@@ -93,9 +99,10 @@
 				// 整合覆盖率
 				// var covmerged = cov_merge(t.case_cov),
 				// 计算覆盖率并扁平化
-				covserials = cov_percent(t.case_jscoverage, t.case_testresult);
+				var covserials = cov_percent(t.case_jscoverage,
+						t.case_testresult);
 				// 追加参数到结果中
-				t.case_testresult['config'] = covserials['config'] = location.search
+				t.case_testresult['config'] = covserials[0]['config'] = location.search
 						.substring(1)
 						+ "&total_coverage=" + covserials[1];
 				// 发送测试结果
@@ -137,11 +144,13 @@
 	function cov_percent(cov_info, case_result) {
 		var percent = {}, total_code_number = 0, total_code_coveraged = 0;
 		TT.object.each(cov_info, function(info, path) {
-			var count = 0, covered = 0, per = "";
+			var count = 0, covered = 0, per = "",
+			// 使用数组记录测试记录
+			result = case_result[path] || [ 0, 0, 0, 0 ];
 			TT.array.each(info, function(num, line) {
 				if (typeof num == 'undefined')
 					return;
-				if (num == 0) {
+				if (num != 0) {
 					covered++;
 					total_code_coveraged++;
 				}
@@ -150,9 +159,12 @@
 				per += line + ":" + num + ",";// 序列化以传递复杂结构
 			});
 			var _percent = (100 * covered / count).toFixed(2);
-			case_result[path] += "," + _percent;
+			// 某些接口没有用例，容错
+			result.push(_percent);
+			case_result[path] = result.join(',');
 			percent[path] = _percent + "|" + per;
 		});
-		return [ percent, (total_code_coveraged / total_code_number).toFixed(2) ];
+		return [ percent,
+				(100 * total_code_coveraged / total_code_number).toFixed(2) ];
 	}
 })();

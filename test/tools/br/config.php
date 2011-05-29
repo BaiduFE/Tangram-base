@@ -44,6 +44,6 @@ class Config{
 	public static $COVERAGE_PATH = "../../../test/coverage/";
 
 	public static $REPORT_TEST_PATH = "report/";
-	public static $REPORT_COVERAGE_PATH = "report/coverage";
+	public static $REPORT_COVERAGE_PATH = "report/coverage/";
 }
 ?>

@@ -46,14 +46,14 @@ foreach($_POST as $key=>$value){
 	$info = explode(",", $value);
 
 	//errornum + ',' + allnum + ','+ kissPerc || 0 + ',' + wb.kissstart + ','+ wb.kissend;
-	$casetime = ($info[4]-$info[3])/1000;
+	$casetime = ($info[3]-$info[2])/1000;
 	$time+=$casetime;
 	$tests++;
 	$failure = (int)($info[0]);
 	$case = $suite->appendChild($dom->createElement('testcase'));
 	$case->setAttribute("name", $key);
 	$case->setAttribute("time", $casetime);
-	$case->setAttribute("cov", $info[2]);
+	$case->setAttribute("cov", $info[4]);
 	$case->setAttribute("fail", $info[0]);
 	$case->setAttribute("total", $info[1]);
 	//		covHtml($config['browser'].'/'.$key,$info[2]);
