@@ -29,7 +29,7 @@
 			t.run();
 	};
 
-	t.run = window.run = function(dom) {
+	t.run = function(dom) {
 		dom = dom || t.cases[t.case_index];
 		if (!dom) // 取不到当前用例就直接退出
 			return;

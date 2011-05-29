@@ -20,7 +20,6 @@
 
 	<target name="init">
 		<delete dir="${report.path}" />
-		<delete file="${report.file}" />
 	</target>
 
 	<target name="coverage">
