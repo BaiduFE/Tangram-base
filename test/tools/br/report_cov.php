@@ -61,7 +61,7 @@ $dom->save($covfile);
 
 //整合覆盖率文档到单一文档，需确认所有浏览器完成相关操作后进行
 $dom_suites = new DOMDocument('1.0', 'UTF-8');
-$suites = $dom->appendChild($dom->createElement('coveragesuites'));
+$suites = $dom_suites->appendChild($dom->createElement('coveragesuites'));
 foreach (Config::$BROWSERS as $key=>$value){
 	$file = Config::$REPORT_COVERAGE_PATH."/cov_$key.xml";
 	if(!file_exists($file)){
