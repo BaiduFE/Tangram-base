@@ -48,10 +48,6 @@ foreach($_POST as $case => $covinfo){
 	}
 }
 require_once 'config.php';
-if(!file_exists(Config::$REPORT_COVERAGE_PATH."history")){
-mkdir(Config::$REPORT_COVERAGE_PATH."history", 0777, true);
-echo 'mkdir : '.Config::$REPORT_COVERAGE_PATH."history";
-}
 //存储数据到xml文件
 $covfile = Config::$REPORT_COVERAGE_PATH."cov_{$config['browser']}.xml";
 $covfile_history = Config::$REPORT_COVERAGE_PATH."history/cov_{$config['browser']}.xml";

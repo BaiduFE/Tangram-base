@@ -74,8 +74,6 @@ if(array_key_exists($config['browser'], Config::$BROWSERS)){
 	$host = Config::$BROWSERS[$config['browser']][0];
 	$suite->setAttribute('hostname', $host);
 }
-if(!is_dir(Config::$REPORT_TEST_PATH))
-mkdir(Config::$REPORT_TEST_PATH, 0777, true);
 $dom->save(Config::$REPORT_TEST_PATH."{$config['browser']}.xml");
 
 //整合覆盖率文档到单一文档，需确认所有浏览器完成相关操作后进行

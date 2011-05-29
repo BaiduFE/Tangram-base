@@ -40,7 +40,7 @@
 		<mail mailhost="hotswap-c.baidu.com" charset="UTF-8" messagemimetype="text/html" subject="Report from ci——${git.user}.${git.project}" cclist="${report.mailcc}" failonerror="false">
 			<to address="${report.mailto}" />
 			<from address="${report.mailfrom}" />
-			<message>mergings</message>
+			<message>mergin</message>
 			<attachments>
 				<fileset dir="${report.path}">
 					<include name="**/*.xml" />
