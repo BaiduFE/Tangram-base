@@ -20,6 +20,9 @@
 
 	<target name="init">
 		<delete dir="${report.path}" />
+		<mkdir dir="${report.path}/html"/>
+		<mkdir dir="${report.path}/coverage/html"/>
+		<mkdir dir="${report.path}/coverage/history"/>
 	</target>
 
 	<target name="coverage">

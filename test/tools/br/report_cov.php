@@ -65,7 +65,7 @@ $dom->save($covfile);
 $dom_suites = new DOMDocument('1.0', 'UTF-8');
 $suites = $dom_suites->appendChild($dom_suites->createElement('coveragesuites'));
 foreach (Config::$BROWSERS as $key=>$value){
-	$file = Config::$REPORT_COVERAGE_PATH."/cov_$key.xml";
+	$file = Config::$REPORT_COVERAGE_PATH."cov_$key.xml";
 	if(!file_exists($file)){
 		$info =  "wait for report : $file";
 		error_log($info);
@@ -79,5 +79,5 @@ foreach (Config::$BROWSERS as $key=>$value){
 	$suites->appendChild($dom_suites->importNode($xmlDom, true));
 	//$dom->dom
 }
-$dom_suites->save(Config::$REPORT_COVERAGE_PATH."/html/reports.xml");
+$dom_suites->save(Config::$REPORT_COVERAGE_PATH."html/cov_reports.xml");
 ?>

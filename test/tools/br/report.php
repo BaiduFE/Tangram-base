@@ -76,13 +76,13 @@ if(array_key_exists($config['browser'], Config::$BROWSERS)){
 }
 if(!is_dir(Config::$REPORT_TEST_PATH))
 mkdir(Config::$REPORT_TEST_PATH, 0777, true);
-$dom->save(Config::$REPORT_TEST_PATH."/{$config['browser']}.xml");
+$dom->save(Config::$REPORT_TEST_PATH."{$config['browser']}.xml");
 
 //整合覆盖率文档到单一文档，需确认所有浏览器完成相关操作后进行
 $dom_suites = new DOMDocument('1.0', 'UTF-8');
 $suites = $dom_suites->appendChild($dom_suites->createElement('testsuites'));
 foreach (Config::$BROWSERS as $key=>$value){
-	$file = Config::$REPORT_TEST_PATH."/$key.xml";
+	$file = Config::$REPORT_TEST_PATH."$key.xml";
 	if(!file_exists($file)){
 		$info =  "wait for test report : $file";
 		error_log($info);
@@ -96,6 +96,6 @@ foreach (Config::$BROWSERS as $key=>$value){
 	$suites->appendChild($dom_suites->importNode($xmlDom, true));
 	//$dom->dom
 }
-$dom_suites->save(Config::$REPORT_TEST_PATH."/html/reports.xml");
+$dom_suites->save(Config::$REPORT_TEST_PATH."html/reports.xml");
 Config::StopAll();
 ?>
