@@ -20,7 +20,7 @@
 
 		// 初始化数据结构
 		TT.object.extend(t, {
-			cases : TT.q(classes.normal, TT.g('id_testlist'), 'a'),
+			cases : TT.g("id_testlist").getElementsByTagName('a'),
 			case_index : 0
 		});
 
@@ -28,10 +28,22 @@
 		window.oncasedone = t.done;
 		if (batchrun)
 			t.run();
+		else {
+			// 为所有a标签添加一个点击操作方法
+			TT.array.each(t.cases, function(_case, index) {
+				TT.event.on(_case, 'onclick', function(event) {
+					t.case_index = index;
+					t.run();
+					var e = event||window.event;
+					TT.event.stop(e);
+					return false;
+				});
+			});
+		}
 	};
 
-	t.run = function(dom) {
-		dom = dom || t.cases[t.case_index];
+	t.run = function() {
+		var dom = t.cases[t.case_index];
 		if (!dom) // 取不到当前用例就直接退出
 			return;
 		// 修改IFrame的src，指向新用例的执行地址
