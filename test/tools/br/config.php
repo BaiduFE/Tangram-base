@@ -35,13 +35,15 @@ class Config{
 	 */
 	public static $SOURCE_PATH = array("../../../src/",
 		"../../../../Tangram-base/src/",
-		"../../../../tangram/src/"
-		);
+		"../../../../tangram/src/");
 
-		/**
-		 * 覆盖率相关源码所在路径，如果路径中没有找到会回到$SOURCH_PATH中查找
-		 * @var string
-		 */
-		public static $COVERAGE_PATH = "../../../test/coverage/";
+	/**
+	 * 覆盖率相关源码所在路径，如果路径中没有找到会回到$SOURCH_PATH中查找
+	 * @var string
+	 */
+	public static $COVERAGE_PATH = "../../../test/coverage/";
+
+	public static $REPORT_TEST_PATH = "report/";
+	public static $REPORT_COVERAGE_PATH = "report/coverage/";
 }
 ?>

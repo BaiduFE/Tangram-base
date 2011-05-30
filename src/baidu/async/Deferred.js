@@ -11,6 +11,7 @@
 /**
  * 用于支持异步处理, 使同步异步的调用风格统一.
  * @class
+ * @private
  * @grammar new baidu.async.Deferred()
  * @remark
  * 示例:

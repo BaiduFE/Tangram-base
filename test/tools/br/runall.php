@@ -69,8 +69,23 @@ if(array_key_exists('clear', $_GET)){
 if(file_exists('report')){
 	//	rmdir('report');
 	$reports = scandir('report');
-	print 'on batch run, please waiting : '. (sizeof($reports)-2);
-	return;
+	var_dump($reports);
+	$count = 0;
+	foreach($reports as $path){
+		if(is_dir("report/$path")){
+			$count++;
+		}
+	}
+	$count = sizeof($reports) - $count;
+	if($count > 0){
+		$info = "wait for last run : $count";
+		echo $info;
+		error_log($info);
+		return;
+	}else{
+		$message = "start running";
+		error_log($message);
+	}
 }else{
 	mkdir('report');
 }

@@ -4,7 +4,7 @@
 	<property name="serverip" value="10.32.34.115:8000" />
 	<property name="report.path" value="test/tools/br/report" />
 	<property name="coverage.path" value="test/coverage" />
-	<property name="report.file" value="test/tools/br/report.xml" />
+	<property name="build.end" value="test/tools/br/report/html/reports.xml" />
 	<property name="git.project" value="Tangram-base" />
 	<property name="git.user" value="" />
 	<path id="ext.classpath">
@@ -20,7 +20,9 @@
 
 	<target name="init">
 		<delete dir="${report.path}" />
-		<delete file="${report.file}" />
+		<mkdir dir="${report.path}/html" />
+		<mkdir dir="${report.path}/coverage/html" />
+		<mkdir dir="${report.path}/coverage/history" />
 	</target>
 
 	<target name="coverage">
@@ -38,11 +40,11 @@
 	</target>
 	<target name="getreport" depends="init,coverage,execute">
 		<waitfor maxwait="300" maxwaitunit="second">
-			<available file="${report.file}" />
+			<available file="${build.end}" />
 		</waitfor>
 
 		<!-- junit report and mail -->
-		<antcall target="mail" />
+		<!-- 临时屏蔽报告发送<antcall target="mail" />-->
 		<!-- junit report and mail end -->
 	</target>
 
