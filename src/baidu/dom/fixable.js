@@ -40,8 +40,7 @@
 baidu.dom.fixable = function(element, options){
 
     var target  = baidu.g(element),
-        isIE6 = baidu.browser.ie && baidu.browser.ie <= 6 ? true : false,
-        isIE7 = baidu.browser.ie && baidu.browser.ie == 7 ? true : false,
+        isUnderIE7 = baidu.browser.ie && baidu.browser.ie <= 7 ? true : false,
         vertival = options.vertival || 'top',
         horizontal = options.horizontal || 'left',
         autofix = typeof options.autofix != 'undefined' ? options.autofix : true,
@@ -56,8 +55,8 @@ baidu.dom.fixable = function(element, options){
     origPos = _getOriginalStyle();
     //设置offset值
     offset = {
-        y: (isIE6 || isIE7) ? (origPos.position == "static" ? baidu.dom.getPosition(target).top :  baidu.dom.getPosition(target).top - baidu.dom.getPosition(target.parentNode).top) : target.offsetTop,
-        x: (isIE6 || isIE7) ? (origPos.position == "static" ? baidu.dom.getPosition(target).left :  baidu.dom.getPosition(target).left - baidu.dom.getPosition(target.parentNode).left) : target.offsetLeft
+        y: isUnderIE7 ? (origPos.position == "static" ? baidu.dom.getPosition(target).top :  baidu.dom.getPosition(target).top - baidu.dom.getPosition(target.parentNode).top) : target.offsetTop,
+        x: isUnderIE7 ? (origPos.position == "static" ? baidu.dom.getPosition(target).left :  baidu.dom.getPosition(target).left - baidu.dom.getPosition(target.parentNode).left) : target.offsetLeft
     };
     baidu.extend(offset, options.offset || {});
 
@@ -125,7 +124,7 @@ baidu.dom.fixable = function(element, options){
 
         baidu.setStyles(target, {top:'', left:'', bottom:'', right:''});
         
-        if(!isIE6 && !isIE7){
+        if(!isUnderIE7){
             var style = {position:"fixed"};
             style[vertival == "top" ? "top" : "bottom"] = offset.y + "px";
             style[horizontal == "left" ? "left" : "right"] = offset.x + "px";
@@ -151,7 +150,7 @@ baidu.dom.fixable = function(element, options){
            right: origPos.right == '' ?  'auto' : origPos.right
        };
 
-        if(isIE6 && isIE7){
+        if(isUnderIE7){
             target.style.removeExpression("left");
             target.style.removeExpression("top");
         }
