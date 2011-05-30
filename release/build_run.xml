@@ -44,7 +44,7 @@
 		</waitfor>
 
 		<!-- junit report and mail -->
-		<!-- 临时屏蔽报告发送<antcall target="mail" />-->
+		<antcall target="mail" />
 		<!-- junit report and mail end -->
 	</target>
 
