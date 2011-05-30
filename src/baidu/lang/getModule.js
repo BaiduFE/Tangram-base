@@ -15,7 +15,7 @@
  * @param {string} name 变量或者命名空间的名字.
  * @param {Object=} opt_obj 从这个对象开始查找，默认是window;
  * @return {?Object} 返回找到的对象，如果没有找到返回null.
- * @see goog.getModule
+ * @see goog.getObjectByName
  */
 baidu.lang.getModule = function(name, opt_obj) {
     var parts = name.split('.'),
