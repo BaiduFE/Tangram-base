@@ -125,7 +125,7 @@ baidu.dom.fixable = function(element, options){
 
         baidu.setStyles(target, {top:'', left:'', bottom:'', right:''});
         
-        if(!isIE6){
+        if(!isIE6 && !isIE7){
             var style = {position:"fixed"};
             style[vertival == "top" ? "top" : "bottom"] = offset.y + "px";
             style[horizontal == "left" ? "left" : "right"] = offset.x + "px";
@@ -151,7 +151,7 @@ baidu.dom.fixable = function(element, options){
            right: origPos.right == '' ?  'auto' : origPos.right
        };
 
-        if(isIE6){
+        if(isIE6 && isIE7){
             target.style.removeExpression("left");
             target.style.removeExpression("top");
         }
