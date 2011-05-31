@@ -50,8 +50,10 @@ foreach($_POST as $case => $covinfo){
 require_once 'config.php';
 //存储数据到xml文件
 $covfile = Config::$REPORT_COVERAGE_PATH."cov_{$config['browser']}.xml";
-$covfile_history = "coverage_history/cov_{$config['browser']}.xml";
+$covfile_history = Config::$REPORT_COVERAGE_PATH_HISTORY."cov_{$config['browser']}.xml";
 if(file_exists($covfile)){
+	if(!file_exists(Config::$REPORT_COVERAGE_PATH_HISTORY))
+	mkdir(Config::$REPORT_COVERAGE_PATH_HISTORY);
 	//上一次执行的覆盖率信息存入history
 	copy($covfile, $covfile_history);
 }

@@ -45,5 +45,6 @@ class Config{
 
 	public static $REPORT_TEST_PATH = "report/";
 	public static $REPORT_COVERAGE_PATH = "report/coverage/";
+	public static $REPORT_COVERAGE_PATH_HISTORY = "covhis/";
 }
 ?>
