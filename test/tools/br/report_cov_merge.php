@@ -1,5 +1,5 @@
 <?
-
+function cov_merge(){
 //整合覆盖率文档到单一文档，需确认所有浏览器完成相关操作后进行
 $doc_cases = new DOMDocument('1.0', 'UTF-8');
 $dom_cases = $doc_cases->appendChild($doc_cases->createElement('cases'));
@@ -31,7 +31,7 @@ foreach (Config::$BROWSERS as $key=>$value){
 	$file = Config::$REPORT_COVERAGE_PATH."cov_$key.xml";
 	//如果某个浏览器没完事就退出先
 	if(!file_exists($file)){
-		$info = "wait for report : $file";
+		$info = "wait for report : $key";
 		error_log($info);
 		echo $info;
 		return;
@@ -59,5 +59,5 @@ foreach ($cases as $name=>$case){
 	}
 }
 $doc_cases->save(Config::$REPORT_COVERAGE_PATH."html/cov_cases.xml");
-
+}
 ?>

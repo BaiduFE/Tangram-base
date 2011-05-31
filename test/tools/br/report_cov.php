@@ -59,5 +59,6 @@ if(file_exists($covfile)){
 }
 $dom->save($covfile);
 
-include 'report_cov_merge.php';
+require_once 'report_cov_merge.php';
+cov_merge();
 ?>
