@@ -58,7 +58,4 @@ if(file_exists($covfile)){
 	copy($covfile, $covfile_history);
 }
 $dom->save($covfile);
-
-require_once 'report_cov_merge.php';
-cov_merge();
 ?>

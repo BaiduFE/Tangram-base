@@ -95,5 +95,9 @@ foreach (Config::$BROWSERS as $key=>$value){
 	//$dom->dom
 }
 $dom_suites->save(Config::$REPORT_TEST_PATH."html/reports.xml");
+
+require_once 'report_cov_merge.php';
+cov_merge();
+
 Config::StopAll();
 ?>
