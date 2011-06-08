@@ -8,7 +8,7 @@ if(substr_count($_POST['config'], "browser")==0){
 	return;
 }
 
-include 'config.php';
+include('config.php');
 /**
  * for junit report
  */
@@ -96,7 +96,7 @@ foreach (Config::$BROWSERS as $key=>$value){
 }
 $dom_suites->save(Config::$REPORT_TEST_PATH."html/reports.xml");
 
-require_once 'report_cov_merge.php';
+include('report_cov_merge.php');
 cov_merge();
 
 Config::StopAll();
