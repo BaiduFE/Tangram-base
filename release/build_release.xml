@@ -1,16 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="project" default="getreport" basedir="../">
-	<!-- 配置信息 10.32.34.115:8000 -->
-	<property name="serverip" value="10.32.34.115:8000" />
-	<property name="coverage.path" value="test/coverage" />
-	<property name="git.project" value="Tangram-base" />
-	<property name="project-release" value="Tangram-base-release" />
-	<property name="git.user" value="" />
-	<property name="release_file.mailto" value="tianlili@baidu.com"/>
-	<property name="release_file.mailcc" value="tianlili@baidu.com"/>
-	<property name="release_file.mailfrom" value="tianlili@baidu.com"/>
-
+<project name="project" default="releaserun" basedir="../">
 	<import file="build_run.xml" />
+
+	<property name="git.project.release" value="Tangram-base-release" />
+	<property name="release_file.mailcc" value="yangbo@baidu.com" />
+	<property name="release_file.mailto" value="yangbo@baidu.com" />
+	<property name="release_file.mailfrom" value="yangbo@baidu.com" />
 
 	<target name="importSrc">
 		<!-- delete release file -->
@@ -88,28 +83,23 @@
 	<!-- target: release_file_mail start-->
 	<target name="release_file_mail" description="send release_file_mail" depends="release">
 		<delete file="release/release_files.tar" />
-		<tar destfile="release/release_files.tar" 
-		    basedir = "release" 
-		    includes ="*release*.js"
-		 />
-		<mail mailhost="hotswap-c.baidu.com" 
-			subject="release文件"
-			cclist="${release_file.mailcc}"
-			failonerror="false">
+		<tar destfile="release/release_files.tar" basedir="release" includes="*release*.js" />
+		<mail mailhost="hotswap-c.baidu.com" subject="release文件" cclist="${release_file.mailcc}" failonerror="false">
 			<to address="${release_file.mailto}" />
 			<from address="${release_file.mailfrom}" />
 			<message>release文件:all_release.js,all_release_src.js,core_release.js,core_release_src.js</message>
 			<attachments>
-			    <fileset dir="release">
-			     <include name="release_files.tar" />
-			    </fileset>
+				<fileset dir="release">
+					<include name="release_files.tar" />
+				</fileset>
 			</attachments>
 		</mail>
 	</target>
 	<!-- target: release_file_mail end-->
-	
+
 	<target name="releaserun" depends="init,release,release_file_mail">
-		<get src="http://${serverip}/${project-release}/test/tools/br/runall.php?ci=true&amp;release=true" dest="/tmp/${git.user}_${git.project}.php" />
+		<gitext />
+		<get src="http://${serverip}/${git.user}/${git.project.release}/test/tools/br/runall.php?ci=true&amp;release=true" dest="/tmp/${git.user}_${git.project}.php" />
 		<waitfor maxwait="300" maxwaitunit="second">
 			<available file="${report.file}" />
 		</waitfor>

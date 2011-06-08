@@ -16,7 +16,7 @@
  * @function
  * @grammar baidu.array.remove(source, match)
  * @param {Array} source 需要移除项的数组
- * @param {Any|Function} match 要移除的项
+ * @param {Any} match 要移除的项
  * @meta standard
  * @see baidu.array.removeAt
  *             

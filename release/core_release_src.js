@@ -22,7 +22,7 @@
  * @author: allstar, erik, meizz, berg
  */
 var T,
-    baidu = T = baidu || {version: "1.3.8"}; 
+    baidu = T = baidu || {version: "1.3.9"}; 
 
 //提出guid，防止在与老版本Tangram混用时
 //在下一行错误的修改window[undefined]
@@ -2364,100 +2364,70 @@ baidu.q = baidu.Q = baidu.dom.q;
 
     var ready = baidu.dom.ready = function() {
         var readyBound = false,
-            readyList = [];
+            readyList = [],
+            DOMContentLoaded;
+
+        if (document.addEventListener) {
+            DOMContentLoaded = function() {
+                document.removeEventListener('DOMContentLoaded', DOMContentLoaded, false);
+                ready();
+            };
+
+        } else if (document.attachEvent) {
+            DOMContentLoaded = function() {
+                if (document.readyState === 'complete') {
+                    document.detachEvent('onreadystatechange', DOMContentLoaded);
+                    ready();
+                }
+            };
+        }
 
         function ready() {
             if (!ready.isReady) {
                 ready.isReady = true;
                 for (var i = 0, j = readyList.length; i < j; i++) {
-                        readyList[i]();
+                    readyList[i]();
                 }
             }
         }
 
-        // 本函数代码逻辑来自Jquery，thanks Jquery
+        function doScrollCheck(){
+            try {
+                document.documentElement.doScroll("left");
+            } catch(e) {
+                setTimeout( doScrollCheck, 1 );
+                return;
+            }   
+            ready();
+        }
+
         function bindReady() {
             if (readyBound) {
                 return;
             }
             readyBound = true;
 
-            var doc = document,
-                w = window,
-                opera = baidu.browser.opera;
+            if (document.addEventListener) {
 
-            // Mozilla, Opera (see further below for it) and webkit nightlies currently support this event
-            if (doc.addEventListener) {
-                // Use the handy event callback
-                doc.addEventListener('DOMContentLoaded', opera ? function() {
-                    if (ready.isReady) {
-                        return;
-                    }
-                    for (var i = 0; i < doc.styleSheets.length; i++) {
-                        if (doc.styleSheets[i].disabled) {
-                            setTimeout(arguments.callee, 0);
-                            return;
-                        }
-                    }
-                    // and execute any waiting functions
-                    ready();
-                } : ready, false);
-            } else if (baidu.browser.ie && w == top) {
-                // If IE is used and is not in a frame
-                // Continually check to see if the doc is ready
-                (function() {
-                    if (ready.isReady) {
-                        return;
-                    }
+                document.addEventListener('DOMContentLoaded', DOMContentLoaded, false);
+                window.addEventListener('load', ready, false);
 
-                    try {
-                        // If IE is used, use the trick by Diego Perini
-                        // http://javascript.nwbox.com/IEContentLoaded/
-                        doc.documentElement.doScroll('left');
-                    } catch (error) {
-                        setTimeout(arguments.callee, 0);
-                        return;
-                    }
-                    // and execute any waiting functions
-                    ready();
-                })();
-            } else if (baidu.browser.safari) {
-                var numStyles;
-                (function() {
-                    if (ready.isReady) {
-                        return;
-                    }
-                    if (doc.readyState != 'loaded' && doc.readyState != 'complete') {
-                        setTimeout(arguments.callee, 0);
-                        return;
-                    }
-                    if (numStyles === undefined) {
-                        numStyles = 0;
-                        var s1 = doc.getElementsByTagName('style'),
-                            s2 = doc.getElementsByTagName('link');
-                        if (s1) {
-                            numStyles += s1.length;
-                        }
-                        if (s2) {
-                            for (var i = 0, j = s2.length; i < j; i++) {
-                                if (s2[i].getAttribute('rel') == 'stylesheet') {
-                                    numStyles++;
-                                }
-                            }
-                        }
-                    }
-                    if (doc.styleSheets.length != numStyles) {
-                        setTimeout(arguments.callee, 0);
-                        return;
-                    }
-                    ready();
-                })();
+            } else if (document.attachEvent) {
+
+                document.attachEvent('onreadystatechange', DOMContentLoaded);
+                window.attachEvent('onload', ready);
+
+                var toplevel = false;
+
+                try {
+                    toplevel = window.frameElement == null;
+                } catch (e) {}
+
+                if (document.documentElement.doScroll && toplevel) {
+                    doScrollCheck();
+                }
             }
-
-            // A fallback to window.onload, that will always work
-            w.attachEvent ? w.attachEvent('onload', ready) : w.addEventListener('load', ready, false);
         }
-
         bindReady();
 
         return function(callback) {
@@ -4455,7 +4425,7 @@ baidu.swf.version = (function () {
                     .replace(/(\s)+r/, ".") + ".0";
         }
     } else if (window.ActiveXObject && !window.opera) {
-        for (var i = 10; i >= 2; i--) {
+        for (var i = 12; i >= 2; i--) {
             try {
                 var c = new ActiveXObject('ShockwaveFlash.ShockwaveFlash.' + i);
                 if (c) {
@@ -4597,7 +4567,7 @@ baidu.swf.createHTML = function (options) {
     for (k in options) {
         item = options[k];
         k = k.toLowerCase();
-        if (params[k] && item) {
+        if (params[k] && (item || item === false || item === 0)) {
             str.push('<param name="' + k + '" value="' + encodeHTML(item) + '" />');
         }
     }
@@ -4620,7 +4590,7 @@ baidu.swf.createHTML = function (options) {
     var salign;
     for (k in options) {
         item = options[k];
-        if (item) {
+        if (item || item === false || item === 0) {
             if ((new RegExp("^salign\x24", "i")).test(k)) {
                 salign = item;
                 continue;

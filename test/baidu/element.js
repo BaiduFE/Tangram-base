@@ -72,9 +72,10 @@ test('封装基础 - each', function() {
 	childNode2 = parentNode.appendChild(document.createElement('p'));
 
 	var count = 0;
-	baidu.e([ parentNode, childNode1, childNode2 ]).each(function(node) {
-		count++;
-		node.addClass('test');// 为每个元素添加class，为后续操作做准备，并检测参数
+	baidu.e([ parentNode, childNode1, childNode2 ]).each(function(dom, idx) {
+		baidu.e(this).addClass('test');// 为每个元素添加class，为后续操作做准备，并检测参数
+		equals(idx, count++, 'check parameter index');
+		ok(baidu.e(dom).hasClass('test'), 'check parameter dom');
 	});
 	equals(count, 3, '上面的回调函数应该执行3次');
 
@@ -83,14 +84,14 @@ test('封装基础 - each', function() {
 	baidu.e(a_link).addClass('test');
 	baidu.e(parentNode).q('test').each(function(item) {
 		count++;
-		ok(this.hasClass('test'), '检测class之外同时检测this指针');
+		ok(baidu.e(this).hasClass('test'), '检测class之外同时检测this指针');
 	});
 	equals(count, 2, '上述回调应该执行2次');
 
 	count = 0;
 	baidu.e(parentNode).children().each(function(div) {
 		count++;// children传入到函数中的应该是每一个元素
-		ok(this.hasClass('test'), '检测class之外同时检测this指针');
+		ok(baidu.e(this).hasClass('test'), '检测class之外同时检测this指针');
 	});
 	equals(count, 2);
 
@@ -99,19 +100,19 @@ test('封装基础 - each', function() {
 		count++;
 	});
 	equals(count, 4, '对document查找，应该是4个元素');
-	
+
 	count = 0;
 	baidu.e(document).q('test', 'div').each(function() {
 		count++;
 	});
 	equals(count, 2, '对document查找class是test的div，测试q的第二个参数');
-	
+
 	count = 0;
 	baidu.e(document).q('test', 'table').each(function() {
 		count++;
 	});
 	equals(count, 0, '对document查找class是test的table，测试q的第二个参数');
-	TT.e([ parentNode, a_link ]).remove();
+	baidu.e([ parentNode, a_link ]).remove();
 });
 
 test('event + on + un + stop', function() {
@@ -222,24 +223,82 @@ test('直接返回返回值 ', function() {
 	equal(d, null, 'check remove : ');
 });
 
-test(
-		'封装基础 - 构造函数',
-		function() {
-			var div = document.body.appendChild(document.createElement('DIV'));
-			div.innerHTML = new Array(10).join('<span>hello</span>');
+test('封装基础 - 构造函数', function() {
+	var div = document.body.appendChild(document.createElement('DIV'));
+	div.innerHTML = new Array(10).join('<span>hello</span>');
 
-			var a = new baidu.element.Element(div);
-			equal(a._dom.length, 1, "passed test");
-			deepEqual(a._dom, [ div ], "passed test");
+	var a = new baidu.element.Element(div);
+	equal(a._dom.length, 1, "passed test");
+	deepEqual(a._dom, [ div ], "passed test");
 
-			var childs = div.getElementsByTagName('span'), b = new baidu.element.Element(
-					childs);
-			equal(b._dom.length, 9, "passed test");
-			deepEqual(b._dom, baidu.lang.toArray(childs), "passed test");
-			var childs = div.getElementsByTagName('span'), b = new baidu.element.Element(
-					childs);
-			equal(b._dom.length, 9, "passed test");
-			deepEqual(b._dom, baidu.lang.toArray(childs), "passed test");
+	var childs = div.getElementsByTagName('span');
+	var b = new baidu.element.Element(childs);
+	equal(b._dom.length, 9, "passed test");
+	deepEqual(b._dom, baidu.lang.toArray(childs), "passed test");
+	childs = div.getElementsByTagName('span');
+	b = new baidu.element.Element(childs);
+	equal(b._dom.length, 9, "passed test");
+	deepEqual(b._dom, baidu.lang.toArray(childs), "passed test");
 
-			document.body.removeChild(div);
-		});
+	document.body.removeChild(div);
+});
+
+test('element with select', function() {
+	var sel0 = document.createElement('select');
+	var sel1 = document.createElement('select');
+//	sel0.name = "sel";
+//	baidu.e(sel0).setAttr('name', 'sel').setAttr('selectedIndex', 1);
+	var s0o = sel0.options, s1o = sel1.options;
+	s0o[s0o.length] = new Option('1', '1');
+	s0o[s0o.length] = new Option('2', '2');
+	s0o[s0o.length] = new Option('3', '3');
+	s0o[2].selected = "selected";
+	sel1.name = "selmul";
+	sel1.multiple = "multiple";
+	s1o[s1o.length] = new Option('1', '1');
+	s1o[s1o.length] = new Option('2', '2');
+	s1o[s1o.length] = new Option('3', '3');
+	s1o[0].selected = "selected";
+	s1o[1].selected = "selected";
+	var count = 0;
+	var e = baidu.e(sel0);
+	e.each(function() {
+		count++;
+		equals(this.length, 3, 'check this length');
+		equals(this.selectedIndex, 2, 'check index');
+	});
+	//FIXME property get failed
+//	equals(e.attr('selectedIndex'), 2, 'check method chain');
+//	equals(e.attr('length'), 3, 'check method chain');	
+	ok(e.addClass('test-select').hasClass('test-select'),
+			'check add and has class');
+	equals(e.attr('className'), 'test-select', 'check method chain');
+	equals(count, 1, 'check get select');
+
+	count = 0;
+//	var typelist = [ 'select-one', 'select-multiple' ];
+//	var selectlist = [ 2, 0 ];
+	baidu.e([ sel0, sel1 ]).each(
+			function() {
+				equals(this.length, 3, 'check this length');
+				count++;
+//				equals(this.selectedIndex, selectlist[count],
+//						'check this selectIndex');
+//				equals(this.type, typelist[count++], 'check this type');
+			});
+	equals(count, 2, 'check get select');
+
+	var div = document.body.appendChild(document.createElement('div'));
+	div.appendChild(sel0);
+	div.appendChild(sel1);
+
+	count = 0;
+//	var typelist = [ 'select-one', 'select-multiple' ];
+	baidu.e(div).children().each(function() {
+		equals(this.length, 3, 'check this length');
+		count++;
+//		equals(this.type, typelist[count++], 'check this type');
+	});
+	equals(count, 2, 'check get select');
+	TT.e(div).remove();
+});

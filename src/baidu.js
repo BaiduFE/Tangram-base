@@ -17,12 +17,18 @@
  * Copyright 2009 Baidu Inc. All rights reserved.
  */
 
+ /**
+ * @namespace T Tangram七巧板
+ * @name T
+ * @version 1.3.9
+*/
+
 /**
  * 声明baidu包
  * @author: allstar, erik, meizz, berg
  */
 var T,
-    baidu = T = baidu || {version: "1.3.8"}; 
+    baidu = T = baidu || {version: "1.3.9"}; 
 
 //提出guid，防止在与老版本Tangram混用时
 //在下一行错误的修改window[undefined]
