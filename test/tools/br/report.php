@@ -67,6 +67,7 @@ foreach($_POST as $key=>$value){
 	//TODO add more case info in xml
 }
 
+//测试结果记录
 $suite->setAttribute('time', $time);
 $suite->setAttribute('failures', $failures);
 $suite->setAttribute('tests', $tests);
@@ -76,26 +77,7 @@ if(array_key_exists($config['browser'], Config::$BROWSERS)){
 }
 $dom->save(Config::$REPORT_TEST_PATH."{$config['browser']}.xml");
 
-//整合覆盖率文档到单一文档，需确认所有浏览器完成相关操作后进行
-$dom_suites = new DOMDocument('1.0', 'UTF-8');
-$suites = $dom_suites->appendChild($dom_suites->createElement('testsuites'));
-foreach (Config::$BROWSERS as $key=>$value){
-	$file = Config::$REPORT_TEST_PATH."$key.xml";
-	if(!file_exists($file)){
-		$info =  "wait for test report : $file";
-		error_log($info);
-		echo $info;
-		return;
-	}
-	$xmlDoc = new DOMDocument('1.0', 'utf-8');
-	$xmlDoc->load($file);
-	$xmlDom = $xmlDoc->documentElement;
-	//echo $xmlDom->nodeName;
-	$suites->appendChild($dom_suites->importNode($xmlDom, true));
-	//$dom->dom
-}
-$dom_suites->save(Config::$REPORT_TEST_PATH."html/reports.xml");
-
+//覆盖率基于用例级别的浏览器间整合
 function mergeCase($cases, $dom_case){
 	$name = $dom_case->getAttribute('name');
 	if(!array_key_exists($name, $cases))
@@ -121,7 +103,7 @@ $cases = array();
 foreach (Config::$BROWSERS as $key=>$value){
 	$file = Config::$REPORT_COVERAGE_PATH."cov_$key.xml";
 	//如果某个浏览器没完事就退出先
-	if(!file_exists($file)){
+	if(!file_exists($file) || !file_exists(Config::$REPORT_TEST_PATH."$key.xml")){
 		$info = "wait for report : $key";
 		error_log($info);
 		echo $info;
@@ -150,6 +132,20 @@ foreach ($cases as $name=>$case){
 	}
 }
 $doc_cases->save(Config::$REPORT_COVERAGE_PATH."html/cov_cases.xml");
+
+//测试结果到单一文档
+$dom_suites = new DOMDocument('1.0', 'UTF-8');
+$suites = $dom_suites->appendChild($dom_suites->createElement('testsuites'));
+foreach (Config::$BROWSERS as $key=>$value){
+	$file = Config::$REPORT_TEST_PATH."$key.xml";
+	$xmlDoc = new DOMDocument('1.0', 'utf-8');
+	$xmlDoc->load($file);
+	$xmlDom = $xmlDoc->documentElement;
+	//echo $xmlDom->nodeName;
+	$suites->appendChild($dom_suites->importNode($xmlDom, true));
+	//$dom->dom
+}
+$dom_suites->save(Config::$REPORT_TEST_PATH."html/reports.xml");
 
 Config::StopAll();
 ?>
