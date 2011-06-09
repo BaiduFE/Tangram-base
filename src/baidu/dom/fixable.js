@@ -20,7 +20,7 @@
 
 /**
  * 使目标元素拥有可进行与页面可见区域相对位置保持不变的移动的能力
- * @name baidu.dom.fixable
+ * @name T.dom.fixable
  * @function
  * @param {HTMLElement|String} element 目标元素或目标元素的id
  * @param {Object} options 配置项
@@ -32,9 +32,6 @@
  * @config {Function} [onupdate] 当位置被更新的时候触发
  * @config {Function} [onrelease] 当被释放的时候触发
  * @return {Object} 返回值一个对象，有三个方法：render、update、release
- * @config {Function} render
- * @config {Function} update
- * @config {Function} release
  */
 
 baidu.dom.fixable = function(element, options){
