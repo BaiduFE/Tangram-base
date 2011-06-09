@@ -32,9 +32,6 @@
  * @config {Function} [onupdate] 当位置被更新的时候触发
  * @config {Function} [onrelease] 当被释放的时候触发
  * @return {Object} 返回值一个对象，有三个方法：render、update、release
- * @config {Function} render
- * @config {Function} update
- * @config {Function} release
  */
 
 baidu.dom.fixable = function(element, options){
