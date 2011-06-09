@@ -778,6 +778,12 @@ var UserAction =
 				url = this.src.split('import.php')[1];
 			}
 		});
+		var srcpath = '';
+		if(location.href.indexOf("/run.do") > 0) {
+			srcpath = location.href.replace("run.do","frame.do");
+		} else {
+			srcpath = cpath + 'frame.php' + url;
+		}
 		pw.$(fid).one('load', function(e) {
 			var w = e.target.contentWindow;
 			var h = setInterval(function() {
@@ -787,7 +793,7 @@ var UserAction =
 				}
 			}, 20);
 			// 找到当前操作的iframe，然后call ontest
-		}).attr('src', cpath + 'frame.php' + url);
+		}).attr('src', srcpath);
 	},
 
 	/**
@@ -821,7 +827,13 @@ var UserAction =
 	commonData : {// 针对测试文件的路径而不是UserAction的路径
 		"testdir" : '../../',
 		datadir : (function() {
-			return location.href.split("/test/")[0] + "/test/tools/data/";
+			var href = '';
+			if(location.href.indexOf("/run.do") > 0) {
+				href = location.href.split("/run.do")[0] + "/test/tools/data/";
+			} else {
+				href = location.href.split("/test/")[0] + "/test/tools/data/";
+			}
+			return href;
 		})(),
 		currentPath : function() {
 			var params = location.search.substring(1).split('&');
@@ -829,9 +841,17 @@ var UserAction =
 				var p = params[i];
 				if (p.split('=')[0] == 'case') {
 					var casepath = p.split('=')[1].split('.').join('/');
-					return location.href.split('/test/')[0] + '/test/'
-							+ casepath.substring(0, casepath.lastIndexOf('/'))
-							+ '/';
+					var href = '';
+					if(location.href.indexOf("/run.do") > 0) {
+						href = location.href.split('/run.do')[0] + '/test/'
+						+ casepath.substring(0, casepath.lastIndexOf('/'))
+						+ '/';
+					} else {
+						href = location.href.split('/test/')[0] + '/test/'
+						+ casepath.substring(0, casepath.lastIndexOf('/'))
+						+ '/';
+					}
+					return href;
 				}
 			}
 			return "";
@@ -851,8 +871,14 @@ var UserAction =
 		win = win || window;
 		var doc = win.document;
 
-		var srcpath = location.href.split("/test/")[0]
-				+ "/test/tools/br/import.php";
+		var srcpath = '';
+		if(location.href.indexOf("/run.do") > 0) {
+			srcpath = location.href.split("/run.do")[0]
+			+ "/test/tools/br/import.php";
+		} else {
+			srcpath =location.href.split("/test/")[0]
+			+ "/test/tools/br/import.php";
+		}
 		var param0 = src;
 		var ps = {
 			f : src

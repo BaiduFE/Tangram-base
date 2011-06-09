@@ -90,7 +90,7 @@
         bindReady();
 
         return function(callback) {
-            ready.isReady ? callback() : (readyList[readyList.length] = callback);
+            ready.isReady ? callback() : readyList.push(callback);
         };
     }();
 

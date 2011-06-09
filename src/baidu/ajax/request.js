@@ -13,8 +13,7 @@
  * @function
  * @grammar baidu.ajax.request(url[, options])
  * @param {string} 	url 发送请求的url
- * @param {Object} 	[options] 发送请求的选项参数
-				
+ * @param {Object=} 	opt_options 发送请求的选项参数
  * @config {String} 	[method] 			请求发送的类型。默认为GET
  * @config {Boolean}  [async] 			是否异步请求。默认为true（异步）
  * @config {String} 	[data] 				需要发送的数据。如果是GET请求的话，不需要这个属性
@@ -33,9 +32,9 @@
  *             
  * @returns {XMLHttpRequest} 发送请求的XMLHttpRequest对象
  */
-baidu.ajax.request = function (url, options) {
-	options = options || {};
-    var data        = options.data || "",
+baidu.ajax.request = function (url, opt_options) {
+    var options     = opt_options || {},
+        data        = options.data || "",
         async       = !(options.async === false),
         username    = options.username || "",
         password    = options.password || "",
@@ -205,7 +204,8 @@ baidu.ajax.request = function (url, options) {
         // 在open之后再进行http请求头设定
         // FIXME 是否需要添加; charset=UTF-8呢
         if (method == 'POST') {
-            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            xhr.setRequestHeader("Content-Type",
+                (headers['Content-Type'] || "application/x-www-form-urlencoded"));
         }
         
         for (key in headers) {

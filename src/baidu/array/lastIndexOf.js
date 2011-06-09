@@ -16,7 +16,7 @@
  * @function
  * @grammar baidu.array.lastIndexOf(source, match)
  * @param {Array} source 需要查询的数组
- * @param {Any|Function} match 查询项
+ * @param {Any} match 查询项
  * @param {number} [fromIndex] 查询的起始位索引位置，如果为负数，则从source.length+fromIndex往前开始查找
  * @see baidu.array.indexOf
  *             
