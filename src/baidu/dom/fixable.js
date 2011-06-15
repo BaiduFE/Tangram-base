@@ -26,15 +26,12 @@
  * @param {Object} options 配置项
  * @config {String} [vertival] 取值[top|bottom] 默认值 top
  * @config {Strgin} [horizontal] 取值[left|right] 默认值 left
- * @config {Object} offset {x:String|Number, y:String|Number}} 横向与纵向的取值
+ * @config {Object} [offset] {x:String|Number, y:String|Number}} 横向与纵向的取值
  * @config {Boolean} [autofix] 是否自动进行fix，默认值为true
- * @config {Function} onrender
- * @config {Function} onupdate
- * @config {Function} onrelease
- * @return {Object} 
- * @config {Function} render
- * @config {Function} update
- * @config {Function} release
+ * @config {Function} [onrender] 当被渲染时候触发
+ * @config {Function} [onupdate] 当位置被更新的时候触发
+ * @config {Function} [onrelease] 当被释放的时候触发
+ * @return {Object} 返回值一个对象，有三个方法：render、update、release
  */
 
 baidu.dom.fixable = function(element, options){
