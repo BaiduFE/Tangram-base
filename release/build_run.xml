@@ -40,14 +40,19 @@
 		<gitext />
 		<get src="http://${serverip}/addTask?proj=${git.user}.${git.project}" dest="/tmp/${git.uesr}_${git.project}.php"/>
 	</target>
-	<target name="getreport" depends="init,coverage,execute_j">
+	<target name="getreport" depends="init,coverage,execute">
 		<waitfor maxwait="300" maxwaitunit="second">
 			<available file="${report.file}" />
 		</waitfor>
 
 		<!-- junit report and mail -->
-		<!-- <antcall target="mail" /> -->
+		<antcall target="mail" />
 		<!-- junit report and mail end -->
+	</target>
+	<target name="getreport_j" depends="init,coverage,execute_j">
+		<waitfor maxwait="300" maxwaitunit="second">
+			<available file="${report.file}" />
+		</waitfor>
 	</target>
 
 	<taskdef name='taskImport' classname="com.baidu.tangram.TaskImport" classpathref="ext.classpath">
