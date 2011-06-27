@@ -20,7 +20,7 @@
 
 /**
  * 使目标元素拥有可进行与页面可见区域相对位置保持不变的移动的能力
- * @name baidu.dom.fixable
+ * @name T.dom.fixable
  * @function
  * @param {HTMLElement|String} element 目标元素或目标元素的id
  * @param {Object} options 配置项
