@@ -9,6 +9,7 @@
 /**
  * 支持异步的ajax.get封装.
  * @param {String} url 请求地址.
+ * @version 1.3.9 
  * @return {baidu.async.Deferred} Deferred对象,支持链式调用.
  */
 baidu.async.get = function(url){
