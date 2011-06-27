@@ -10,6 +10,7 @@
  * 支持异步的ajax.post封装.
  * @param {String} url 请求地址.
  * @param {String} data 请求数据.
+ * @version 1.3.9 
  * @return {baidu.async.Deferred} Deferred对象,支持链式调用.
  */
 baidu.async.post = function(url, data){

@@ -11,6 +11,7 @@
  * @param {baidu.async.Deferred|*} deferredOrValue deferred实例或任意值.
  * @param {Function} onResolve 成功时的回调函数.若第一个参数不是Deferred实例,则立即执行此方法.
  * @param {Function} onReject 失败时的回调函数.
+ * @version 1.3.9 
  * @remark
  * 示例一:异步调用: baidu.async.when(asyncLoad(), onResolve, onReject).then(nextSuccess, nextFail);
  * 示例二:同步异步不确定的调用: baidu.async.when(syncOrNot(), onResolve, onReject).then(nextSuccess, nextFail);
