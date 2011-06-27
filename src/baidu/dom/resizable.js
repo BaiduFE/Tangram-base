@@ -195,7 +195,7 @@ baidu.dom.resizable = function(element,options) {
          */
         orgCursor = baidu.getStyle(document.body, 'cursor');
         baidu.setStyle(document.body, 'cursor', key + '-resize');
-        baidu.on(document, 'mouseup',stop);
+        baidu.on(ele, 'mouseup',stop);
         baidu.on(document.body, 'selectstart', unselect);
         mozUserSelect = document.body.style.MozUserSelect;
         document.body.style.MozUserSelect = 'none';
@@ -230,7 +230,7 @@ baidu.dom.resizable = function(element,options) {
          * 删除事件监听
          * 还原css属性设置
          */
-        baidu.un(document, 'mouseup',stop);
+        baidu.un(currentEle, 'mouseup',stop);
         baidu.un(document, 'selectstart', unselect);
         document.body.style.MozUserSelect = mozUserSelect;
         baidu.un(document.body, 'selectstart', unselect);

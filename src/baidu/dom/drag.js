@@ -68,7 +68,8 @@
         op = baidu.object.extend({
             autoStop:true   // false 用户手动结束拖曳 ｜ true 在mouseup时自动停止拖曳
             ,capture : true // 鼠标拖曳粘滞
-            ,interval : 20  // 拖曳行为的触发频度（时间：毫秒）
+            ,interval : 16  // 拖曳行为的触发频度（时间：毫秒）
+            ,handler : target
         }, options);
 
         offset_parent = baidu.dom.getPosition(target.offsetParent);
@@ -92,17 +93,18 @@
             oy = xy.y;
         }
 
-        timer = setInterval(render, op.interval);
+        //timer = setInterval(render, op.interval);
 
         // 这项为 true，缺省在 onmouseup 事件终止拖曳
-        op.autoStop && baidu.event.on(document, "mouseup", stop);
+        op.autoStop && baidu.event.on(op.handler, "mouseup", stop);
+        op.autoStop && baidu.event.on(window, "mouseup", stop);
         
         // 在拖曳过程中页面里的文字会被选中高亮显示，在这里修正
-        baidu.event.on(document.body, "selectstart", unselect);
+        baidu.event.on(document, "selectstart", unselect);
 
         // 设置鼠标粘滞
-        if (op.capture && target.setCapture) {
-            target.setCapture();
+        if (op.capture && op.handler.setCapture) {
+            op.handler.setCapture();
         } else if (op.capture && window.captureEvents) {
             window.captureEvents(Event.MOUSEMOVE|Event.MOUSEUP);
         }
@@ -116,7 +118,8 @@
         if(isFunction(op.ondragstart)){
             op.ondragstart(target, op);
         }
-
+        
+        timer = setInterval(render, op.interval);
         return {stop : stop, update : update};
     };
 
@@ -131,19 +134,20 @@
      * 手动停止拖拽
      */
     function stop() {
-        clearTimeout(timer);
+        clearInterval(timer);
 
         // 解除鼠标粘滞
-        if (op.capture && target.releaseCapture) {
-            target.releaseCapture();
+        if (op.capture && op.handler.releaseCapture) {
+            op.handler.releaseCapture();
         } else if (op.capture && window.releaseEvents) {
             window.releaseEvents(Event.MOUSEMOVE|Event.MOUSEUP);
         }
 
         // 拖曳时网页内容被框选
         document.body.style.MozUserSelect = mozUserSelect;
-        baidu.event.un(document.body, "selectstart", unselect);
-        op.autoStop && baidu.event.un(document, "mouseup", stop);
+        baidu.event.un(document, "selectstart", unselect);
+        op.autoStop && baidu.event.un(op.handler, "mouseup", stop);
+        op.autoStop && baidu.event.un(window, "mouseup", stop);
 
         // ondragend 事件
         if(isFunction(op.ondragend)){
