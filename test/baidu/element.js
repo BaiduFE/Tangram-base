@@ -116,7 +116,7 @@ test('封装基础 - each', function() {
 });
 
 test('event + on + un + stop', function() {
-	expect(5);
+	expect(6);
 	stop();
 	ua.importsrc('baidu.event.stop', function() {
 		var p = document.body.appendChild(document.createElement('div'));
