@@ -86,9 +86,6 @@
 					text-align:right;
 					}
       			</style>
-				<script type="text/javascript">
-
-				</script>
 			</head>
 			<body>
 				<a name="top"></a>
@@ -123,21 +120,18 @@
 	<!-- Name | Tests | Errors | Failures | Time -->
 	<!-- ================================================================== -->
 	<xsl:template name="browsers">
-		<xsl:for-each
-			select="/testsuites/testsuite[not(./@package = preceding-sibling::testsuite/@package)]">
-			<h3> Browsers</h3>
-			<table class="details" border="0" cellpadding="5" cellspacing="2"
-				width="95%">
-				<xsl:call-template name="testsuite.test.header" />
+		<h3> Browsers</h3>
+		<table class="details" border="0" cellpadding="5" cellspacing="2"
+			width="95%">
+			<xsl:call-template name="testsuite.test.header" />
 
-				<!-- match the testsuites of this package -->
-				<xsl:apply-templates select="/testsuites/testsuite"
-					mode="print.test" />
-			</table>
-			<a href="#top">Back to top</a>
-			<p />
-			<p />
-		</xsl:for-each>
+			<!-- match the testsuites of this package -->
+			<xsl:apply-templates select="/testsuites/testsuite"
+				mode="print.test" />
+		</table>
+		<a href="#top">Back to top</a>
+		<p />
+		<p />
 	</xsl:template>
 
 	<xsl:template name="cases">

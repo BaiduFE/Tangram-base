@@ -31,12 +31,16 @@
 			<arg value="--encoding=UTF-8" />
 			<arg value="src" />
 			<arg value="${coverage.path}" />
-		</exec>
+		</exec> 
 	</target>
 
 	<target name="execute" depends="init,coverage">
 		<gitext />
 		<get src="http://${serverip}/${git.user}/${git.project}/test/tools/br/runall.php?ci=true&amp;cov=true" dest="/tmp/${git.user}_${git.project}.php" />
+	</target>
+	<target name="execute_j" depends="init,coverage">
+		<gitext />
+		<get src="http://${serverip}/addTask?proj=${git.user}.${git.project}" dest="/tmp/${git.uesr}_${git.project}.php"/>
 	</target>
 	<target name="getreport" depends="init,coverage,execute">
 		<waitfor maxwait="300" maxwaitunit="second">
@@ -46,6 +50,11 @@
 		<!-- junit report and mail -->
 		<antcall target="mail" />
 		<!-- junit report and mail end -->
+	</target>
+	<target name="getreport_j" depends="init,coverage,execute_j">
+		<waitfor maxwait="300" maxwaitunit="second">
+			<available file="${report.file}" />
+		</waitfor>
 	</target>
 
 	<taskdef name='taskImport' classname="com.baidu.tangram.TaskImport" classpathref="ext.classpath">

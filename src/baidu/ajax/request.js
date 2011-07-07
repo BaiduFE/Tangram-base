@@ -13,7 +13,7 @@
  * @function
  * @grammar baidu.ajax.request(url[, options])
  * @param {string} 	url 发送请求的url
- * @param {Object=} 	opt_options 发送请求的选项参数
+ * @param {Object} 	opt_options 发送请求的选项参数
  * @config {String} 	[method] 			请求发送的类型。默认为GET
  * @config {Boolean}  [async] 			是否异步请求。默认为true（异步）
  * @config {String} 	[data] 				需要发送的数据。如果是GET请求的话，不需要这个属性
