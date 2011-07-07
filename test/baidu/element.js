@@ -116,7 +116,7 @@ test('封装基础 - each', function() {
 });
 
 test('event + on + un + stop', function() {
-	expect(3);
+	expect(5);
 	stop();
 	ua.importsrc('baidu.event.stop', function() {
 		var p = document.body.appendChild(document.createElement('div'));
@@ -138,6 +138,24 @@ test('event + on + un + stop', function() {
 		baidu.e(document.body).un('click');
 		baidu.e(document).un('click');
 		TT.event.fire(p, 'click');
+
+		// multi dom binding
+		var count = 0;
+		baidu.e(
+				[ p.appendChild(document.createElement('div')),
+						p.appendChild(document.createElement('div')) ]).on(
+				'click', function(e) {
+					count++;
+				}).each(function(item) {
+			item.innerHTML = count++;
+		});
+		count = 0;
+		baidu.e(p).children().each(function(dom, i) {
+			equals(dom.innerHTML, count, 'check fired on different dom');
+			TT.event.fire(dom, 'click')
+		});
+		equals(count, 2, "check fired on two div");
+
 		baidu.e(p).remove();
 		start();
 	}, 'baidu.event.stop');
@@ -148,32 +166,38 @@ test('event + on + un + stop', function() {
  * <li>校验方法的集合，方法包含所有baidu.dom中包含的方法
  * <li>不包含drag和ready
  */
-test('function list', function() {
-	var div = document.body.appendChild(document.createElement('div'));
-	var ele = baidu.element(div);
-	stop();
-	$.get(upath + 'element.php', function(data) {
-		var funs = data.split(" "), count = 0;
-		var countlose = 0;
-		for ( var i = 0; i < funs.length; i++) {
-			var f = funs[i];
-			var p = ele[f];
-			if (p && typeof p == 'function')
-				count++;
-			else {
-				if ('ready drag ddManager create resizable fixable getComputedStyle'
-						.indexOf(f) >= 0)
-					continue;
-				ok(false, '[' + f + '] not in function list');
-				countlose++;
-			}
-		}
-		equals(countlose, 0, '没有函数被遗漏');
-		TT.e(div).remove();
-		start();
-	});
+test(
+		'function list',
+		function() {
+			var div = document.body.appendChild(document.createElement('div'));
+			var ele = baidu.element(div);
+			stop();
+			$
+					.get(
+							upath + 'element.php',
+							function(data) {
+								var funs = data.split(" "), count = 0;
+								var countlose = 0;
+								for ( var i = 0; i < funs.length; i++) {
+									var f = funs[i];
+									var p = ele[f];
+									if (p && typeof p == 'function')
+										count++;
+									else {
+										if ('ready drag ddManager create resizable fixable getComputedStyle'
+												.indexOf(f) >= 0)
+											continue;
+										ok(false, '[' + f
+												+ '] not in function list');
+										countlose++;
+									}
+								}
+								equals(countlose, 0, '没有函数被遗漏');
+								TT.e(div).remove();
+								start();
+							});
 
-});
+		});
 
 /**
  * 返回值是第一个参数的包装 draggable droppable resizable
@@ -246,8 +270,8 @@ test('封装基础 - 构造函数', function() {
 test('element with select', function() {
 	var sel0 = document.createElement('select');
 	var sel1 = document.createElement('select');
-//	sel0.name = "sel";
-//	baidu.e(sel0).setAttr('name', 'sel').setAttr('selectedIndex', 1);
+	// sel0.name = "sel";
+	// baidu.e(sel0).setAttr('name', 'sel').setAttr('selectedIndex', 1);
 	var s0o = sel0.options, s1o = sel1.options;
 	s0o[s0o.length] = new Option('1', '1');
 	s0o[s0o.length] = new Option('2', '2');
@@ -267,25 +291,24 @@ test('element with select', function() {
 		equals(this.length, 3, 'check this length');
 		equals(this.selectedIndex, 2, 'check index');
 	});
-	//FIXME property get failed
-//	equals(e.attr('selectedIndex'), 2, 'check method chain');
-//	equals(e.attr('length'), 3, 'check method chain');	
+	// FIXME property get failed
+	// equals(e.attr('selectedIndex'), 2, 'check method chain');
+	// equals(e.attr('length'), 3, 'check method chain');
 	ok(e.addClass('test-select').hasClass('test-select'),
 			'check add and has class');
 	equals(e.attr('className'), 'test-select', 'check method chain');
 	equals(count, 1, 'check get select');
 
 	count = 0;
-//	var typelist = [ 'select-one', 'select-multiple' ];
-//	var selectlist = [ 2, 0 ];
-	baidu.e([ sel0, sel1 ]).each(
-			function() {
-				equals(this.length, 3, 'check this length');
-				count++;
-//				equals(this.selectedIndex, selectlist[count],
-//						'check this selectIndex');
-//				equals(this.type, typelist[count++], 'check this type');
-			});
+	// var typelist = [ 'select-one', 'select-multiple' ];
+	// var selectlist = [ 2, 0 ];
+	baidu.e([ sel0, sel1 ]).each(function() {
+		equals(this.length, 3, 'check this length');
+		count++;
+		// equals(this.selectedIndex, selectlist[count],
+		// 'check this selectIndex');
+		// equals(this.type, typelist[count++], 'check this type');
+	});
 	equals(count, 2, 'check get select');
 
 	var div = document.body.appendChild(document.createElement('div'));
@@ -293,11 +316,11 @@ test('element with select', function() {
 	div.appendChild(sel1);
 
 	count = 0;
-//	var typelist = [ 'select-one', 'select-multiple' ];
+	// var typelist = [ 'select-one', 'select-multiple' ];
 	baidu.e(div).children().each(function() {
 		equals(this.length, 3, 'check this length');
 		count++;
-//		equals(this.type, typelist[count++], 'check this type');
+		// equals(this.type, typelist[count++], 'check this type');
 	});
 	equals(count, 2, 'check get select');
 	TT.e(div).remove();
