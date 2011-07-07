@@ -12,26 +12,30 @@
             for report merge and mail
     </description>
 
-	<property name="report.style.path" value="test/tools/br/reportstyle" />
-	<property name="report.output.path" value="test/tools/br/report/html" />
-	<property name="report.xml" value="test/tools/br/report"/>
-	<property name="report.mailto" value="yangbo@baidu.com"/>
-	<property name="report.mailcc" value="yangbo@baidu.com"/>
-	<property name="report.mailfrom" value="yangbo@baidu.com"/>
+	<property name="report.style.path" value="test/tools/br/reportstyle/" />
+	<property name="report.path" value="test/tools/br/report" />
+	<property name="report.test.xml" value="${report.path}/" />
+	<property name="report.test.xsl" value="test/tools/br/reportstyle/TangramTest-test.xsl" />
+	<property name="report.test.html" value="${report.path}/html/" />
+	<property name="report.coverage.xsl" value="test/tools/br/reportstyle/TangramTest-coverage.xsl" />
+	<property name="report.coverage.xml" value="${report.path}/coverage/" />
+	<property name="report.coverage.html" value="${report.path}/coverage/html/" />
+	<property name="report.mailto" value="yangbo@baidu.com" />
+	<property name="report.mailcc" value="yangbo@baidu.com" />
+	<property name="report.mailfrom" value="yangbo@baidu.com" />
 
 	<!-- ================================= 
-          target: report              
+          target: report
+          调整使用xsl task产出覆盖率报告和测试报告              
          ================================= -->
 	<target name="report" description="generate and merge report">
-		<mkdir dir="${report.output.path}"/>
-		<junitreport todir="${report.output.path}">
-			<fileset dir="${report.xml}">
+		<xslt in="${report.coverage.html}cov_cases.xml" out="${report.coverage.html}coverage.html" style="${report.coverage.xsl}" />
+
+		<junitreport todir="${report.path}/html">
+			<fileset dir="${report.test.xml}">
 				<include name="*.xml" />
 			</fileset>
-			<!-- brief report for mail message -->
-			<report format="noframes" styledir="${report.style.path}" todir="${report.output.path}" />
-			<!-- detail report for mail attachements 
-			<report format="noframes" styledir="reportstyle/detail" todir="${junit.out.dir.html.detail}" />-->
+			<report format="noframes" styledir="${report.style.path}" todir="${report.path}/html" />
 		</junitreport>
 	</target>
 
@@ -39,16 +43,17 @@
           target: mail                      
          - - - - - - - - - - - - - - - - - -->
 	<target name="mail" description="send mail" depends="report">
-		<loadfile property="report.html" srcFile="${report.output.path}/junit-noframes.html" />
-		<mail mailhost="hotswap-c.baidu.com" 
-			charset="UTF-8" 
-			messagemimetype="text/html" 
-			subject="report from ci——${git.user}.${git.project}"
-			cclist="${report.mailcc}"
-			failonerror="false">
+		<loadfile property="report.html" srcFile="${report.test.html}/junit-noframes.html" />
+		<loadfile property="coverage.html" srcFile="${report.coverage.html}/coverage.html" />
+		<mail mailhost="hotswap-c.baidu.com" charset="UTF-8" messagemimetype="text/html" subject="Report from ci——${git.user}.${git.project}" cclist="${report.mailcc}" failonerror="false">
 			<to address="${report.mailto}" />
 			<from address="${report.mailfrom}" />
-			<message>${report.html}</message>
+			<message>${report.html}${coverage.html}</message>
+			<!--<attachments>
+				<fileset dir="${report.path}">
+					<include name="**/*.xml" />
+				</fileset>
+			</attachments>-->
 		</mail>
 	</target>
 

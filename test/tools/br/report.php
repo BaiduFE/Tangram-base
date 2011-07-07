@@ -1,4 +1,6 @@
 <?php
+header("Content-type: text/html; charset=utf-8");
+header("Cache-Control: no-cache, max-age=10, must-revalidate");
 //经常碰到傲游和IE6同时完成的情况，如何处理比较合适？
 //TODO add php info in xml
 if(substr_count($_POST['config'], "browser")==0){
@@ -6,130 +8,144 @@ if(substr_count($_POST['config'], "browser")==0){
 	return;
 }
 
-include 'config.php';
-function report(){
-	/**
-	 * for junit report
-	 */
-	$dom = new DOMDocument('1.0', 'utf-8');
-	$suite = $dom->appendChild($dom->createElement('testsuite'));
-	$cfg = preg_split('/[&=]/', $_POST['config']);
-	$config = array();
-	for($i = 0; $i < sizeof($cfg); $i+=2){
-		//	echo "{$cfg[$i]} {$cfg[$i+1]}\r\n<br />";
-		$config[$cfg[$i]] = $cfg[$i+1];
-		$p = $suite->appendChild($dom->createElement("property"));
-		$p->setAttribute('name', $cfg[$i]);
-		$p->setAttribute('value', $cfg[$i+1]);
-	}
-	$suite->setAttribute("name", $config['browser']);
-	$errors = 0;
-	$failures = 0;
-	$tests = 0;
-	$time = 0;
-	foreach($_POST as $key=>$value){
-		if($key == 'config')
+include('config.php');
+/**
+ * for junit report
+ */
+$dom = new DOMDocument('1.0', 'utf-8');
+$suite = $dom->appendChild($dom->createElement('testsuite'));
+$cfg = preg_split('/[&=]/', $_POST['config']);
+$config = array();
+for($i = 0; $i < sizeof($cfg); $i+=2){
+	//	echo "{$cfg[$i]} {$cfg[$i+1]}\r\n<br />";
+	$config[$cfg[$i]] = $cfg[$i+1];
+	$p = $suite->appendChild($dom->createElement("property"));
+	$p->setAttribute('name', $cfg[$i]);
+	$p->setAttribute('value', $cfg[$i+1]);
+}
+$suite->setAttribute("name", $config['browser']);
+$suite->setAttribute("total_coverage", $config['total_coverage']);
+$errors = 0;
+$failures = 0;
+$tests = 0;
+$time = 0;
+foreach($_POST as $key=>$value){
+	echo "<a>$key</a><br />";
+	if($key == 'config')
+	continue;
+	if($key == 'covsummaryinfo'){//此方法生成summary页面
+		$array = explode("、", $value);//preg_split('/[,]/', $value);
+		covsummaryinfohtml($config['browser'],$array);
 		continue;
-		if($key == 'covsummaryinfo'){//此方法生成summary页面
-			$array = explode("、", $value);//preg_split('/[,]/', $value);
-			covsummaryinfohtml($config['browser'],$array);
-			continue;
-		};
-		if($key == 'covsourceinfo'){//此方法生成source 存储文件
-			covsourceinfotojs($config['browser'],$value);
-			continue;
-		};
+	};
+	if($key == 'covsourceinfo'){//此方法生成source 存储文件
+		covsourceinfotojs($config['browser'],$value);
+		continue;
+	};
 
-		$info = explode(",", $value);
+	$info = explode(",", $value);
 
-		//errornum + ',' + allnum + ','+ kissPerc || 0 + ',' + wb.kissstart + ','+ wb.kissend;
-		$casetime = ($info[4]-$info[3])/1000;
-		$time+=$casetime;
-		$tests++;
-		$failure = (int)($info[0]);
-		$case = $suite->appendChild($dom->createElement('testcase'));
-		$case->setAttribute("name", $key);
-		$case->setAttribute("time", $casetime);
-		$case->setAttribute("cov", $info[2]);
-		//		covHtml($config['browser'].'/'.$key,$info[2]);
-		if($failure > 0){
-			$failures++;
-			$failinfo = $case->appendChild($dom->createElement('failure'));
-			$failinfo->setAttribute('type', 'junit.framework.AssertionFailedError');
-			//FROM php.net, You cannot simply overwrite $textContent, to replace the text content of a DOMNode, as the missing readonly flag suggests.
-			$failinfo->appendChild(new DOMText($value));
-		}
-		//TODO add more case info in xml
+	//errornum + ',' + allnum + ','+ kissPerc || 0 + ',' + wb.kissstart + ','+ wb.kissend;
+	$casetime = ($info[3]-$info[2])/1000;
+	$time+=$casetime;
+	$tests++;
+	$failure = (int)($info[0]);
+	$case = $suite->appendChild($dom->createElement('testcase'));
+	$case->setAttribute("name", $key);
+	$case->setAttribute("time", $casetime);
+	$case->setAttribute("cov", $info[4]);
+	$case->setAttribute("fail", $info[0]);
+	$case->setAttribute("total", $info[1]);
+	//		covHtml($config['browser'].'/'.$key,$info[2]);
+	if($failure > 0){
+		$failures++;
+		$failinfo = $case->appendChild($dom->createElement('failure'));
+		$failinfo->setAttribute('type', 'junit.framework.AssertionFailedError');
+		//FROM php.net, You cannot simply overwrite $textContent, to replace the text content of a DOMNode, as the missing readonly flag suggests.
+		$failinfo->appendChild(new DOMText($value));
 	}
+	//TODO add more case info in xml
+}
 
-	$suite->setAttribute('time', $time);
-	$suite->setAttribute('failures', $failures);
-	$suite->setAttribute('tests', $tests);
+//测试结果记录
+$suite->setAttribute('time', $time);
+$suite->setAttribute('failures', $failures);
+$suite->setAttribute('tests', $tests);
+if(array_key_exists($config['browser'], Config::$BROWSERS)){
 	$host = Config::$BROWSERS[$config['browser']][0];
 	$suite->setAttribute('hostname', $host);
-	
-	if(!is_dir("report"))
-	mkdir("report");
-	$dom->save("report/{$config['browser']}.xml");
+}
+$dom->save(Config::$REPORT_TEST_PATH."{$config['browser']}.xml");
+
+//覆盖率基于用例级别的浏览器间整合
+function mergeCase($cases, $dom_case){
+	$name = $dom_case->getAttribute('name');
+	if(!array_key_exists($name, $cases))
+	$cases[$name] = array();
+	$lines = $dom_case->getElementsByTagName('line');
+	for($index = 0; $index < $lines->length; $index++){
+		$node_line = $lines->item($index);
+		$line = $node_line->getAttribute('line');
+		$num = $node_line->getAttribute('number');
+		if(array_key_exists($line, $cases[$name]) && $cases[$name][$line] == '1')
+		continue;
+		$cases[$name][$line] = $num;
+	}
+	return $cases;
 }
 
-//展示覆盖率报告
-require_once 'simple_html_dom.php';
-if(file_exists("coveragereport/jscoverage.html")){
-	$html = file_get_html("coveragereport/jscoverage.html");
-}
-function covsummaryinfohtml($browser,$info){//生成jscoverage summary 页面的静态页面
-	global $html;
-	$totals = substr($info[0],1,strlen($info[0])-2);
-	$caseinfo = substr($info[1],1,strlen($info[1])-2);
-	$summaryTotals = $html->getElementById('summaryTotals');
-	$summaryTotals->setAttribute('innertext',$totals);
-	$tbody = $html->getElementById('summaryTbody');
-	$tbody->setAttribute('innertext',$caseinfo);
-	if(is_dir('coveragereport/browser/'.$browser)){
-		unlink('coveragereport/browser/'.$browser.'/'.$browser.'.html');
-	}
-	else mkdir('coveragereport/browser/'.$browser);
-	$html->save('coveragereport/browser/'.$browser.'/'.$browser.'.html');
-};
-
-function covsourceinfotojs($browser,$info){//每个源码文件对应的html写入到js文件中，封装成一个方法 如get_baidu1ajax1form
-	$filepath = 'coveragereport/browser/'.$browser.'/'.'source.js';
-	if(is_dir('coveragereport/browser/'.$browser)){
-		if(file_exists($filepath))unlink($filepath);
-	}
-	else mkdir('coveragereport/browser/'.$browser);
-	$array = explode("},a", $info);
-	$js_content = '';
-	foreach($array as $a){
-		if(!empty($a)&&$a!=''){
-			$title = substr($a,1,strpos($a,':')-4);
-			$title = str_replace('/','1',$title);
-			$content = substr($a,strpos($a,':')+1,strlen($a));
-		    $content = str_replace("'","&#39",$content);//linux生成的引号不带 \,$content 中的 ' 会跟外层的' 形成对，所以加\
-			$content = str_replace("\x<","\x0<",$content);
-			$js_content .= "function get_".$title."(){ \n return '".$content."' ; \n}\r\n" ;
-		}
-	};
-	file_put_contents($filepath, $js_content);
-};
-
-report();
-$dom = new DOMDocument('1.0', 'utf-8');
-$testsuites = $dom->appendChild($dom->createElement('testsuites'));
+//整合覆盖率文档到单一文档，需确认所有浏览器完成相关操作后进行
+$doc_cases = new DOMDocument('1.0', 'UTF-8');
+$dom_cases = $doc_cases->appendChild($doc_cases->createElement('cases'));
+//追加一个记录所有浏览器信息的节点，用于在展现结果时关联外部文件
+$browsers = $dom_cases->appendChild($doc_cases->createElement('browsers'));
+$cases = array();
 foreach (Config::$BROWSERS as $key=>$value){
-	$file = "report/$key.xml";
-	if(!file_exists($file)){
-		echo "wait for report : $file\r\n<br />";
+	$file = Config::$REPORT_COVERAGE_PATH."cov_$key.xml";
+	//如果某个浏览器没完事就退出先
+	if(!file_exists($file) || !file_exists(Config::$REPORT_TEST_PATH."$key.xml")){
+		$info = "wait for report : $key";
+		error_log($info);
+		echo $info;
 		return;
 	}
 	$xmlDoc = new DOMDocument('1.0', 'utf-8');
 	$xmlDoc->load($file);
 	$xmlDom = $xmlDoc->documentElement;
-	//echo $xmlDom->nodeName;
-	$testsuites->appendChild($dom->importNode($xmlDom, true));
+	$_dom_cases = $xmlDoc->getElementsByTagName('case');
+	for($index = 0; $index < $_dom_cases->length; $index++){
+		$cases = mergeCase($cases, $_dom_cases->item($index));
+	}
+
+	$browsers->appendChild($doc_cases->createElement('browser', $key));
 }
-$dom->save("report.xml");
+
+foreach ($cases as $name=>$case){
+	echo "$name $case \r\n";
+	$dom_case = $dom_cases->appendChild($doc_cases->createElement('case'));
+	$dom_case->setAttribute('name', $name);
+	foreach($case as $line=>$number){
+		echo "$line $number \r\n";
+		$dom_line = $dom_case->appendChild($doc_cases->createElement('line'));
+		$dom_line->setAttribute('line', $line);
+		$dom_line->setAttribute('number', $number);
+	}
+}
+$doc_cases->save(Config::$REPORT_COVERAGE_PATH."html/cov_cases.xml");
+
+//测试结果到单一文档
+$dom_suites = new DOMDocument('1.0', 'UTF-8');
+$suites = $dom_suites->appendChild($dom_suites->createElement('testsuites'));
+foreach (Config::$BROWSERS as $key=>$value){
+	$file = Config::$REPORT_TEST_PATH."$key.xml";
+	$xmlDoc = new DOMDocument('1.0', 'utf-8');
+	$xmlDoc->load($file);
+	$xmlDom = $xmlDoc->documentElement;
+	//echo $xmlDom->nodeName;
+	$suites->appendChild($dom_suites->importNode($xmlDom, true));
+	//$dom->dom
+}
+$dom_suites->save(Config::$REPORT_TEST_PATH."html/reports.xml");
 
 Config::StopAll();
 ?>
