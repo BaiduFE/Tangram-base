@@ -89,10 +89,10 @@ class Kiss{
 
 	public function print_js($cov=false, $release=false){
 		print '<script type="text/javascript" src="js/jquery-1.3.2.js"></script>'."\n";
+		print '<script type="text/javascript" src="js/Tangram-1.3.9.js"></script>'."\n";
 		print '<script type="text/javascript" src="js/testrunner.js"></script>'."\n";
 		print '<script type="text/javascript" src="js/ext_qunit.js"></script>'."\n";
 		print '<script type="text/javascript" src="js/UserAction.js"></script>'."\n";
-		print '<script type="text/javascript" src="js/Tangram-1.3.8.js"></script>'."\n";
 
 		print '<link media="screen" href="css/qunit.css" type="text/css" rel="stylesheet" />'."\n";
 
@@ -160,8 +160,12 @@ class Kiss{
 			if($c->empty)
 			continue;
 			if($c->match($matcher)){
-				print("<a href=\"run.php?case=$name\" id=\"$c->case_id\" class=\"jsframe_qunit\" target=\"_blank\" title=\"$name\" onclick=\"run('$name');\$('#id_rerun').html('$name');return false;\">"
-				/*过长的时候屏蔽超出20的部分，因为隐藏的处理，所有用例不能直接使用标签a中的innerHTML，而应该使用title*/
+				print("<a href=\"run.php?case=$name\" id=\"$c->case_id\" path=\"$caseitem\""
+				."class=\"jsframe_qunit\" target=\"_blank\" title=\"$name\" >"
+
+				/*过长的时候屏蔽超出20的部分，因为隐藏的处理，所有用例不能
+				 * 直接使用标签a中的innerHTML，而应该使用title
+				 */
 				.substr($name, 6)."</a>\n");
 			}
 		}

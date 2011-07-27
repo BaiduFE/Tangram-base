@@ -19,14 +19,12 @@
 		the specific language governing permissions and limitations under the License. -->
 
 	<xsl:param name="TITLE">
-		Tangram测试报告
+		Tangram CI result.
 	</xsl:param>
 
 	<!-- Sample stylesheet to be used with Ant JUnitReport output. It creates 
 		a non-framed report that can be useful to send via e-mail or such. -->
-	<xsl:template match="testsuites">
-		<xsl:variable name="failureCount" select="sum(testsuite/@failures)" />
-
+	<xsl:template match="testsuite">
 		<html>
 			<head>
 				<title>
@@ -86,6 +84,9 @@
 					text-align:right;
 					}
       			</style>
+				<script type="text/javascript">
+
+				</script>
 			</head>
 			<body>
 				<a name="top"></a>
@@ -98,17 +99,12 @@
 				<!-- Package List part <xsl:call-template name="packagelist" /> <hr size="1" 
 					width="95%" align="left" /> -->
 
-				<xsl:if test="$failureCount &gt; 0">
-					<!-- For each package create its part -->
-					<xsl:call-template name="browsers" />
-					<hr size="1" width="95%" align="left" />
+				<!-- For each package create its part -->
+				<xsl:call-template name="browsers" />
+				<hr size="1" width="95%" align="left" />
 
-					<!-- For each class create the part -->
-					<xsl:call-template name="cases" />
-				</xsl:if>
-				<xsl:if test="$failureCount = 0">
-					<img src="http://10.32.34.115:8000/coffee.jpg" />
-				</xsl:if>
+				<!-- For each class create the part -->
+				<xsl:call-template name="cases" />
 
 			</body>
 		</html>
@@ -120,18 +116,21 @@
 	<!-- Name | Tests | Errors | Failures | Time -->
 	<!-- ================================================================== -->
 	<xsl:template name="browsers">
-		<h3> Browsers</h3>
-		<table class="details" border="0" cellpadding="5" cellspacing="2"
-			width="95%">
-			<xsl:call-template name="testsuite.test.header" />
+		<xsl:for-each
+			select="/testsuites/testsuite[not(./@package = preceding-sibling::testsuite/@package)]">
+			<h3> Browsers</h3>
+			<table class="details" border="0" cellpadding="5" cellspacing="2"
+				width="95%">
+				<xsl:call-template name="testsuite.test.header" />
 
-			<!-- match the testsuites of this package -->
-			<xsl:apply-templates select="/testsuites/testsuite"
-				mode="print.test" />
-		</table>
-		<a href="#top">Back to top</a>
-		<p />
-		<p />
+				<!-- match the testsuites of this package -->
+				<xsl:apply-templates select="/testsuites/testsuite"
+					mode="print.test" />
+			</table>
+			<a href="#top">Back to top</a>
+			<p />
+			<p />
+		</xsl:for-each>
 	</xsl:template>
 
 	<xsl:template name="cases">
@@ -140,6 +139,7 @@
 			width="95%">
 			<xsl:call-template name="testcase.test.header" />
 			<xsl:for-each select="/testsuites/testsuite[1]/testcase">
+				<xsl:value-of select="@name"></xsl:value-of>
 				<xsl:sort select="@name" />
 				<xsl:call-template name="cases.printcase">
 					<xsl:with-param name="casename" select="@name"></xsl:with-param>
@@ -199,6 +199,7 @@
 		<xsl:variable name="timeCount" select="sum(testsuite/@time)" />
 		<xsl:variable name="successRate"
 			select="($testCount - $failureCount - $errorCount) div $testCount" />
+		
 		<table class="details" border="0" cellpadding="5" cellspacing="2"
 			width="95%">
 			<tr valign="top">
@@ -206,6 +207,7 @@
 				<th>Failures</th>
 				<th>Errors</th>
 				<th>Success rate</th>
+				<th>Coverage</th>
 				<th>Time</th>
 			</tr>
 			<tr valign="top">
@@ -228,6 +230,9 @@
 					<xsl:call-template name="display-percent">
 						<xsl:with-param name="value" select="$successRate" />
 					</xsl:call-template>
+				</td>
+				<td>
+					<xsl:value-of select="$coveragePercent" />
 				</td>
 				<td>
 					<xsl:call-template name="display-time">
@@ -253,14 +258,6 @@
 	<!-- Page HEADER -->
 	<xsl:template name="pageHeader">
 		<h1>
-			<xsl:attribute name="style">color:
-			<xsl:if test="sum(testsuite/@failues) &gt; 0">
-			red 
-		</xsl:if>
-		<xsl:if test="sum(testsuite/@failues) = 0">
-		green 
-		</xsl:if>;
-		</xsl:attribute>
 			<xsl:value-of select="$TITLE" />
 		</h1>
 		<table width="100%">
