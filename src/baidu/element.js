@@ -99,7 +99,7 @@ baidu.element._makeChain = function(){ //将dom/event包下的东西挂到protot
         fnTransformer = baidu.element._toChainFunction;
 
     //返回值是第一个参数的包装
-    baidu.each(("draggable droppable resizable").split(' '),
+    baidu.each(("draggable droppable resizable fixable").split(' '),
               function(fn){
                   proto[fn] =  fnTransformer(baidu.dom[fn], 1);
               });
