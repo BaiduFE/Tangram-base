@@ -138,6 +138,7 @@ baidu.dom.query = (function (){
         ':first-child': 3, ':last-child': 3, ':only-child': 3, ':not-ex': 7 };
     var efMap = { id: '#', name: 'N' };
     var testingOrder = function (a, b){ return a.tR - b.tR; };
+    var regPos = /:(nth|eq|gt|lt|first|last|even|odd)$/;
 
     function process(seq){
         var finder, t;
@@ -163,6 +164,16 @@ baidu.dom.query = (function (){
             if (simple.kind == ':not' && !((t=simple[0],t.length==1)&&(t=t[0],t.length==1))) {
                 simple.kind = ':not-ex';
             }
+            //remark: 这里是为了支持sizzle的setFilter系列
+            if (regPos.test(simple.kind)) {
+                var newSimple = make(simple.kind, simple.slice(0));
+                simple.kind = '*';
+                if (!seq.allPoses) {
+                    seq.allPoses = [newSimple];
+                } else {
+                    seq.allPoses.push(newSimple);
+                }
+            }
             // 计算选择器的得分用于优先级排序等策略
             simple.fR = fRMap[simple.kind] | 0;
             simple.tR = tRMap[simple.kind] | 0;
@@ -185,8 +196,15 @@ baidu.dom.query = (function (){
         var k = chain.length;
         while (k --) {
             var seq = chain[k];
-            seq.N = 'node' + k;
             seq = process(seq);
+            seq.N = 'node' + k;
+            //remark: 这里是为了支持sizzle的setFilter.
+            if (seq.allPoses) {
+                if (!chain.allPoses) {
+                    chain.allPoses = [];
+                }
+                chain.allPoses.push.apply(chain.allPoses, seq.allPoses);
+            }
             if (seq.$ && (!part.fR || seq.$.fR > part.fR || (seq.$.fR == part.fR && parts.length == 1))) {
                 part.fR = seq.$.fR;
                 part.fI = part.length;
@@ -254,13 +272,16 @@ baidu.dom.query = (function (){
         '+': BY_ELEMENT ? '/*^var #{N}H={};var #{N};^*/if(#{N}=#{C}.previousElementSibling){#{X}}' : '/*^var #{N}H={};^*/var #{N}=#{C};while(#{N}=#{N}.previousSibling){#{X}break;}',
         '~': BY_ELEMENT ? '/*^var #{N}H={};^*/var #{N}=#{C};while(#{N}=#{N}.previousElementSibling){' + TPL_TOPASS + '}' : '/*^var #{N}H={};^*/var #{N}=#{C};while(#{N}=#{N}.previousSibling){' + TPL_TOPASS + '}'
     };
-    var TPL_MAIN = 'function(root, result){result=result||[];var qid=Q.qid,t,l=result.length;#{X}Q.qid=qid;return result;}';
-    var TPL_HELP = '/*^var #{N}L;^*/if(!#{N}L||!' + format(TPL_CONTAINS, ['#{N}L', '#{N}']) +'){#{X}#{N}L=#{N};}';
+    var TPL_MAIN = 'function(root){var result=[];var qid=Q.qid,t,l=result.length;BQ:{#{X}}Q.qid=qid;return result;}';
+    var TPL_HELP = '/*^var #{N}L;^*/if(!#{N}L||!(' + format(TPL_CONTAINS, ['#{N}L', '#{N}']) +')){#{X}#{N}L=#{N};}';
     var TPL_PUSH = 'result[l++]=#{N};';
+    var TPL_INPUT_T = TPL_XHTML + '/*^var input_t=!xhtml?"INPUT":"input";^*/';
+    var TPL_POS = '/*^var pos=-1;^*/';
     var TPL_TEST = {
-        'T': TPL_XHTML +'/*^var #{N}T=!xhtml?("#{0}").toUpperCase():"#{0}";^*/#{N}.tagName==#{N}T',
+        'T': TPL_XHTML +'/*^var #{N}T=!xhtml?("#{0}").toUpperCase():"#{0}";^*/#{N}.nodeName==#{N}T',
         '#': '#{N}.id=="#{0}"',
         'N': '#{N}.name=="#{0}"',
+
         '[': IE678 ? '(t=#{N}.getAttributeNode("#{0}"))&&(t.specified)' : '#{N}.hasAttribute("#{0}")',
         '=': '#{A}=="#{1}"',
         '!=': '#{A}!="#{1}"',
@@ -269,15 +290,47 @@ baidu.dom.query = (function (){
         '*=': '(t=#{A})&&t.indexOf("#{1}")!==-1',
         '|=': '(t=#{A})&&(t=="#{1}"||t.slice(0,#{L})=="#{P}")',
         '~=': '(t=#{A})&&(" "+t+" ").indexOf("#{P}")!==-1',
+
+        ':element': '#{N}.nodeType==1',
         ':contains': '(#{N}.textContent||#{N}.innerText).indexOf("#{0}")!==-1',
-        ':empty': '!#{N}.firstChild',
         ':first-child': BY_ELEMENT ? '#{N}.parentNode.firstElementChild===#{N}' : 'Q._isFirstChild(#{N})',
         ':nth-child': TPL_DOC + '/*^var rev=doc._Q_rev||(doc._Q_rev=Q.qid++);^*/Q._index(#{N},#{0},#{1},rev)',
         ':last-child': BY_ELEMENT ? '#{N}.parentNode.lastElementChild===#{N}' : 'Q._isLastChild(#{N})',
         ':only-child': BY_ELEMENT ? '(t=#{N}.parentNode)&&(t.firstElementChild===#{N}&&t.lastElementChild===#{N})' : 'Q._isOnlyChild(#{N})',
+
         ':not-ex': '/*^var _#{G}=Q._hash(Q("#{1}",root));qid=Q.qid;^*/!_#{G}[' + TPL_QID + ']',
         ':has': '(t=Q("#{1}", #{N}),qid=Q.qid,t.length>0)',
-        ':element': '#{N}.nodeType==1'
+        ':parent': '!!#{N}.firstChild',
+        ':empty': '!#{N}.firstChild',
+
+        ':header': '/h\\d/i.test(#{N}.nodeName)',
+        ':input': '/input|select|textarea|button/i.test(#{N}.nodeName)',
+        ':enabled': '#{N}.disabled===false&&#{N}.type!=="hidden"',
+        ':disabled': '#{N}.disabled===true',
+        ':checked': '#{N}.checked===true',
+        ':selected': '(#{N}.parentNode.selectedIndex,#{N}.selected===true)',
+
+        // TODO: 这些伪类可以转化成为标签选择器加以优化！
+        ':focus': TPL_DOC + '#{N}===doc.activeElement',
+        ':button': TPL_INPUT_T + '#{N}.nodeName==="button"||(#{N}.nodeName===input_t&&#{N}.type==="button")',
+        ':submit': TPL_INPUT_T + '#{N}.nodeName===input_t&&#{N}.type==="submit"',
+        ':reset': TPL_INPUT_T + '#{N}.nodeName===input_t&&#{N}.type==="reset"',
+        ':text': TPL_INPUT_T + '#{N}.nodeName===input_t&&#{N}.type==="text"&&(t=#{N}.getAttribute("type"),t==="text"||t===null)',
+        ':radio': TPL_INPUT_T + '#{N}.nodeName===input_t&&#{N}.type==="radio"',
+        ':checkbox': TPL_INPUT_T + '#{N}.nodeName===input_t&&#{N}.type==="checkbox"',
+        ':file': TPL_INPUT_T + '#{N}.nodeName===input_t&&#{N}.type==="file"',
+        ':password': TPL_INPUT_T + '#{N}.nodeName===input_t&&#{N}.type==="password"',
+        ':image': TPL_INPUT_T + '#{N}.nodeName===input_t&&#{N}.type==="image"',
+
+        // setFilters
+        ':first': 'if(pos===0){result[0]=#{N};break BQ;}',
+        ':last': 'result[0]=#{N};',
+        ':eq': 'if(pos===#{0}){result[0]=#{N};break BQ;}',
+        ':nth': 'if(pos===#{0}){result[0]=#{N};break BQ;}',
+        ':lt': 'if(pos<#{0}){#{X}}else break BQ;',
+        ':gt': 'if(pos>#{0}){#{X}}',
+        ':even': 'if(pos%2===0){#{X}}',
+        ':odd': 'if(pos%2===1){#{X}}'
     };
 
     function genAttrCode(attr){
@@ -377,20 +430,20 @@ baidu.dom.query = (function (){
             X: genThenCode(seq)
         });
     }
-    function genNextCode(part, isLast){
+    function genNextCode(part, thenCode){
         var code = '#{X}';
         var k = part.fI;
         while (k --) {
             code = format(code, { X: genFindCode(part[k], part[k+1].N) });
         }
         var nextCode;
-        if (!isLast) {
+        if (!thenCode) {
             if (part.fI == 0 && (k = part[0].$.kind) && (k != 'S' && k != '#')) {
                 nextCode = format(TPL_HELP, { N: part[0].N });
                 code = format(code, { X: nextCode })
             }
         } else {
-            nextCode = format(TPL_PUSH, { N: part[0].N });
+            nextCode = format(thenCode, { N: part[0].N });
             code = format(code, { X: nextCode });
         }
         return code;
@@ -413,22 +466,38 @@ baidu.dom.query = (function (){
         code = format(code, { R: part.R });
         return code;
     }
-    function genPartCode(part, isLast){
+    function genPartCode(part, thenCode){
         var code = genFindCode(part[part.fI], part.R, ' ');
-        var nextCode = genNextCode(part, isLast);
+        var nextCode = genNextCode(part, thenCode);
         if (part.fI < part.length - 1) {
             var passCode = genLeftCode(part);
             nextCode = format(passCode, { Y: nextCode });
         }
         return format(code, { X: nextCode });
     }
-    function genCode(parts){
+    //todo: 把其他的genXXX函数改成这样
+    function genThatCode(seq, thenCode){
+        var k = seq.length;
+        while (k --) {
+            var tpl = TPL_TEST[seq[k].kind];
+            thenCode = format(tpl, { X: thenCode, 0: seq[k][0] });
+        }
+        return thenCode;
+    }
+    function genCode(chain){
+        var parts = slice(chain);
+
+        var thenCode = TPL_PUSH;
+        if (chain.allPoses) {
+            thenCode = TPL_POS + 'pos++;' + genThatCode(chain.allPoses, TPL_PUSH);
+        }
         CTX_NGEN = 0;
         var code = '#{X}';
+
         var k = parts.length;
         while (k --) {
             var part = parts[k];
-            code = format(code, { X: genPartCode(part, k == 0) });
+            code = format(code, { X: genPartCode(part, k == 0 ? thenCode : false ) });
         }
         return code;
     }
@@ -459,7 +528,7 @@ baidu.dom.query = (function (){
         var k = group.length;
         while (k --) {
             var chain = group[k];
-            var code = genCode(slice(chain));
+            var code = genCode(chain);
             if (tags && chain.tag && !tags[chain.tag[0]]) {
                 tags[chain.tag[0]] = 1;
             } else {
@@ -480,16 +549,16 @@ baidu.dom.query = (function (){
             var k = group.length;
             var result = [];
             while (k --) {
-                result = group[k](root, result);
+                result.push.apply(result, group[k](root));
             }
             return uniqueSort(result, tags != null);
         };
     }
 
     Q._hash = function (result){
-        var hash = result.hash;
+        var hash = result._Q_hash;
         if (hash == null) {
-            hash = result.hash = {};
+            hash = result._Q_hash = {};
             var k = result.length;
             var qid = Q.qid;
             while (k --) {
@@ -500,17 +569,35 @@ baidu.dom.query = (function (){
         }
         return hash;
     };
+    var _slice = Array.prototype.slice;
+    Q._toArray1 = function (staticNodeList){
+        var k = staticNodeList.length;
+        var a = new Array(k);
+        while (k --) {
+            a[k] = staticNodeList[k];
+        }
+        return a;
+    };
+    Q._toArray = function (staticNodeList){
+        try {
+            return _slice.call(staticNodeList, 0);
+        } catch(ex){}
+        return (Q._toArray = Q._toArray1)(staticNodeList);
+    };
 
     function queryXML(expr, root, ret){
         throw ['NotImpl'];
     }
     var cache = {};
     var inQuery = false;
-    function query(expr, root, ret){
+    function query(expr, root, result, seed){
         root = root || d;
+        var ret;
         var doc = root.ownerDocument || root;
         if (!doc.getElementById) {
-            return queryXML(expr, root, ret);
+            return queryXML(expr, root, result);
+        } else if (root === doc && doc.querySelectorAll) {
+            ret = Q._toArray(doc.querySelectorAll(expr));
         }
         var fn  = cache[expr] || (cache[expr] = compile(expr));
         if (!inQuery) {
@@ -518,15 +605,37 @@ baidu.dom.query = (function (){
             if (!MUTATION) {
                 doc._Q_rev = Q.qid ++;
             }
-            var result = fn(root, ret);
+            ret = fn(root);
             inQuery = false;
-            return result;
         } else {
-            return fn(root, ret);
+            ret= fn(root);
         }
+        if (seed) {
+            ret = Q._in(seed, ret);
+        }
+        if (result) {
+            ret.push.apply(result, ret);
+        } else {
+            result = ret;
+        }
+        return result;
     }
 
     Q.qid = 1;
+    Q._in = function (nodes, nodeSet){
+        var hash = Q._hash(nodeSet);
+        var ret = [];
+        for (var i=0; i<nodes.length; i++) {
+            var node = nodes[i];
+            if (hash[node._Q_id||(node._Q_id=++Q.qid)]) {
+                ret.push(node);
+            }
+        }
+        return ret;
+    };
+    Q.matches = function (expr, set){
+        return Q(expr, null, null, set);
+    };
     Q.contains = d.documentElement.contains ? function (a, b){
         return a !== b && a.contains(b);
     } : function (a, b) {
@@ -579,10 +688,10 @@ baidu.dom.query = (function (){
         return true;
     };
     Q._isXHTML = function (doc){
-        return doc.documentElement.tagName == 'html';
+        return doc.documentElement.nodeName == 'html';
     };
-    function Q(expr, root, ret){
-        return query(expr, root, ret);
+    function Q(expr, root, ret, seed){
+        return query(expr, root, ret, seed);
     }
     return Q;
 })();
