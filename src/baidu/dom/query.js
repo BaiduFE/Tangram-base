@@ -252,7 +252,7 @@ baidu.dom.query = (function (){
     var TPL_CONTAINS = IE678 ? '#{0}.contains(#{1})' : '#{0}.compareDocumentPosition(#{1})&16';
     var TPL_QID = '#{N}._Q_id||(#{N}._Q_id=++qid)';
     var TPL_FIND = {
-        '#': 'var #{N}=#{R}.getElementById?#{R}.getElementById("#{P}"):#{R}.getElementsByTagName("*")["#{P}"];if(#{N}){#{X}}',
+        '#': 'var #{N}=Q._byId("#{P}", #{R});if(#{N}){#{X}}',
         'N': TPL_DOC + 'var #{N}A=doc.getElementsByName("#{P}");for(var #{N}I=0,#{N};#{N}=#{N}A[#{N}I];#{N}I++){if(#{R}===doc||' + format(TPL_CONTAINS, ['#{R}', '#{N}']) +'){#{X}}}',
         'T': 'var #{N}A=#{R}.getElementsByTagName("#{P}");for(var #{N}I=0,#{N};#{N}=#{N}A[#{N}I];#{N}I++){#{X}}',
         '.': 'var #{N}A=#{R}.getElementsByClassName("#{P}");for(var #{N}I=0,#{N};#{N}=#{N}A[#{N}I];#{N}I++){#{X}}',
@@ -622,6 +622,17 @@ baidu.dom.query = (function (){
     }
 
     Q.qid = 1;
+    Q._byId = function (id, root){
+        if (BY_ID1) {
+            return root.getElementsByTagName('*')[id];
+        }
+        var doc = root.ownerDocument || root;
+        var node = doc.getElementById(id);
+        if (node && Q.contains(root, node) && (!IE678 || (node.id === id || node.getAttributeNode('id').nodeValue === id))) {
+            return node;
+        }
+        return null;
+    };
     Q._in = function (nodes, nodeSet){
         var hash = Q._hash(nodeSet);
         var ret = [];
