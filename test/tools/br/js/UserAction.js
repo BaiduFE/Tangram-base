@@ -1186,6 +1186,7 @@ var UserAction =
 				// ssr)
 				m = _ua.match(/Opera[\s\/]([^\s]*)/);
 				if (m && m[1]) {
+					m[1]= _ua.match(/Version[\s\/]([^\s]*)/)[1] || m[1]; //tianlili修改，为了得到opera10之后的真实版本信息而非固定标识9.80
 					o.opera = numberify(m[1]);
 					m = _ua.match(/Opera Mini[^;]*/);
 					if (m) {
