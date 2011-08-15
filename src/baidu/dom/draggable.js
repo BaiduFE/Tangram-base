@@ -36,7 +36,7 @@
  * @version 1.2
  * @remark    要拖拽的元素必须事先设定样式的postion值，如果postion为absloute，并且没有设定top和left，拖拽开始时，无法取得元素的top和left值，这时会从[0,0]点开始拖拽<br>如果要拖拽的元素是static定位，会被改成relative定位方式。
  * @see baidu.dom.drag
- * @return {Draggable Instance} 拖拽实例，包含cancel方法，可以停止拖拽.
+ * @returns {Draggable Instance} 拖拽实例，包含cancel方法，可以停止拖拽.
  */
 
 baidu.dom.draggable = function(element, options) {
