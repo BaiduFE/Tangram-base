@@ -24,13 +24,15 @@
 /**
  * @namespace baidu.element 通过该方法封装的对象可使用dom、event方法集合以及each方法进行链式调用。
  */
-baidu.element = baidu.e = function(node){
+baidu.element = function(node){
     var gNode = baidu._g(node);
     if(!gNode && baidu.dom.query){
         gNode = baidu.dom.query(node);
     }
     return new baidu.element.Element(gNode);
 };
+// 声明快捷方法
+baidu.e = baidu.element;
 
 /**
  * Element类，所有扩展到链条上的方法都会被放在这里面

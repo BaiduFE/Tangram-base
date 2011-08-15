@@ -7,7 +7,7 @@
 
 /**
  * 事件中心
- * @class 事件中心
+ * @class
  * @name baidu.lang.eventCenter
  * @author rocy
  */

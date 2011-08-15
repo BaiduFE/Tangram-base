@@ -16,7 +16,8 @@ if (/opera\/(\d+\.\d)/i.test(navigator.userAgent)) {
  * @property opera opera版本号
  * @grammar baidu.browser.opera
  * @meta standard
- * @see baidu.browser.ie,baidu.browser.firefox,baidu.browser.safari,baidu.browser.chrome 
+ * @see baidu.browser.ie,baidu.browser.firefox,baidu.browser.safari,baidu.browser.chrome
+ * @returns {Number} opera版本号
  */
     baidu.browser.opera = + RegExp['\x241'];
 }

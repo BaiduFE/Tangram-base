@@ -22,6 +22,7 @@
  * 使目标元素拥有可进行与页面可见区域相对位置保持不变的移动的能力
  * @name baidu.dom.fixable
  * @function
+ * @grammar baidu.dom.fixable(element, options)
  * @param {HTMLElement|String} element 目标元素或目标元素的id
  * @param {Object} options 配置项
  * @config {String} [vertival] 取值[top|bottom] 默认值 top
@@ -31,7 +32,7 @@
  * @config {Function} [onrender] 当被渲染时候触发
  * @config {Function} [onupdate] 当位置被更新的时候触发
  * @config {Function} [onrelease] 当被释放的时候触发
- * @return {Object} 返回值一个对象，有三个方法：render、update、release
+ * @returns {Object} 返回值一个对象，有三个方法：render、update、release
  */
 
 baidu.dom.fixable = function(element, options){

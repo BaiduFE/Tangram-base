@@ -9,7 +9,6 @@
  */
 
 ///import baidu.browser;
-
 (function(){
     var ua = navigator.userAgent;
     /*
@@ -22,7 +21,8 @@
          * @property safari safari版本号
          * @grammar baidu.browser.safari
          * @meta standard
-         * @see baidu.browser.ie,baidu.browser.firefox,baidu.browser.opera,baidu.browser.chrome   
+         * @see baidu.browser.ie,baidu.browser.firefox,baidu.browser.opera,baidu.browser.chrome
+         * @returns {Number} safari版本号
          */
     	baidu.browser.safari = + (RegExp['\x241'] || RegExp['\x242']);
     }
