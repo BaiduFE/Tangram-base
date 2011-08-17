@@ -26,7 +26,9 @@ baidu.lang.eventCenter = baidu.lang.eventCenter || baidu.lang.createSingle();
 
 /**
  * 移除全局事件监听器。
+ * @name baidu.lang.eventCenter.removeEventListener
  * @grammar baidu.lang.eventCenter.removeEventListener(type, handler)
+ * @function
  * @param {string}   type     事件类型
  * @param {Function|string} handler  要移除的事件监听函数或者监听函数的key
  * @remark 	如果第二个参数handler没有被绑定到对应的自定义事件中，什么也不做。
@@ -34,7 +36,9 @@ baidu.lang.eventCenter = baidu.lang.eventCenter || baidu.lang.createSingle();
 
 /**
  * 派发全局自定义事件，使得绑定到全局自定义事件上面的函数都会被执行。
+ * @name baidu.lang.eventCenter.dispatchEvent
  * @grammar baidu.lang.eventCenter.dispatchEvent(event, options)
+ * @function
  * @param {baidu.lang.Event|String} event 	Event对象，或事件名称(1.1.1起支持)
  * @param {Object} 					options 扩展参数,所含属性键值会扩展到Event对象上(1.2起支持)
  */
