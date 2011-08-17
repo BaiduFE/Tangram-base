@@ -13,8 +13,8 @@
 ///import baidu.lang.isFunction;
 
 /**
- * 
- * @class  Tangram继承机制提供的一个基类，用户可以通过继承baidu.lang.Class来获取它的属性及方法。
+ * Tangram继承机制提供的一个基类，用户可以通过继承baidu.lang.Class来获取它的属性及方法。
+ * @class
  * @name 	baidu.lang.Class
  * @grammar baidu.lang.Class(guid)
  * @param 	{string}	guid	对象的唯一标识
