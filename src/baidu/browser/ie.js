@@ -4,9 +4,9 @@
  */
 
 ///import baidu.browser;
-if (/msie (\d+\.\d+)/i.test(navigator.userAgent)) {
-    //IE 8下，以documentMode为准
-    //在百度模板中，可能会有$，防止冲突，将$1 写成 \x241
+
+//IE 8下，以documentMode为准
+//在百度模板中，可能会有$，防止冲突，将$1 写成 \x241
 /**
  * 判断是否为ie浏览器
  * @property ie ie版本号
@@ -15,5 +15,4 @@ if (/msie (\d+\.\d+)/i.test(navigator.userAgent)) {
  * @shortcut ie
  * @see baidu.browser.firefox,baidu.browser.safari,baidu.browser.opera,baidu.browser.chrome,baidu.browser.maxthon 
  */
-   baidu.browser.ie = baidu.ie = document.documentMode || + RegExp['\x241'];
-}
+baidu.browser.ie = baidu.ie = /msie (\d+\.\d+)/i.test(navigator.userAgent) ? (document.documentMode || + RegExp['\x241']) : 0;

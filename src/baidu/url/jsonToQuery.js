@@ -34,7 +34,8 @@ baidu.url.jsonToQuery = function (json, replacer_opt) {
         // 这里只考虑item为数组、字符串、数字类型，不考虑嵌套的object
         if (baidu.lang.isArray(item)) {
             itemLen = item.length;
-            // FIXME value的值需要encodeURIComponent转义吗？
+            // value的值需要encodeURIComponent转义吗？
+            // FIXED 优化了escapeSymbol函数
             while (itemLen--) {
                 result.push(key + '=' + replacer(item[itemLen], key));
             }

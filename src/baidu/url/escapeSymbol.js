@@ -18,7 +18,11 @@
  * @return {string} 转义后的字符串
  */
 baidu.url.escapeSymbol = function(source) {
-    return String(source).replace(/[#%&+=\/\\\s]/g, function(all) {
+    
+    //TODO: 之前使用\s来匹配任意空白符
+    //发现在ie下无法匹配中文全角空格和纵向指标符\v，所以改\s为\f\r\n\t\v以及中文全角空格和英文空格
+    //但是由于ie本身不支持纵向指标符\v,故去掉对其的匹配，保证各浏览器下效果一致
+    return String(source).replace(/[#%&+=\/\\\ \　\f\r\n\t]/g, function(all) {
         return '%' + (0x100 + all.charCodeAt()).toString(16).substring(1).toUpperCase();
     });
 };
