@@ -26,19 +26,24 @@ test(
 			equals(
 					baidu.url
 							.escapeSymbol("％%＆&＋+、/＃#＝=　 ａＡｑＷ%\t&\a+\b/\f#\?=\r \%\&\+\/\#\=\ "),
-					"％%25＆%26＋%2B、%2F＃%23＝%3D　%20ａＡｑＷ%25\t%26\a"
-							+ "%2B\b%2F\f%23\?%3D\r%20\%25\%26\%2B\%2F\%23\%3D\%20",
-					'% & + / # =   is included in string(quan jiao zi fu)');
+//					"％%25＆%26＋%2B、%2F＃%23＝%3D　%20ａＡｑＷ%25\t%26\a"
+//							+ "%2B\b%2F\f%23\?%3D\r%20\%25\%26\%2B\%2F\%23\%3D\%20",
+					//escapeSymbol升级之后，\s也被转义（\s匹配任意的空白符，包括空格，中文全角空格，制表符(\t \v)，换行符(\n)，回车符(\r)，换页符(\f)）
+					"％%25＆%26＋%2B、%2F＃%23＝%3D%100%20ａＡｑＷ%25%09%26a%2B\b%2F%0C%23?%3D%0D%20%25%26%2B%2F%23%3D%20",
+					'% & + / # = /s is included in string(quan jiao zi fu)');
 		});
 
-test("没有这七个字符", function() {
+test("没有这七个字符，有空白符", function() {
 	equals(baidu.url.escapeSymbol("aQ1!sW2@dE3$fR4^gT5*hY6(jU7)"),
 			"aQ1!sW2@dE3$fR4^gT5*hY6(jU7)",
 			'% & + / # =   is not included in string(for english char)');
 	equals(baidu.url.escapeSymbol("这是中文吗好像有点像你说呢"), "这是中文吗好像有点像你说呢",
 			'% & + / # =   is not included in string(for english char)');
-	equals(baidu.url.escapeSymbol("％＆＋、＃＝　ａＡｑＷ\t\a\b\f\?\r"),
-			"％＆＋、＃＝　ａＡｑＷ\t\a\b\f\?\r",
+	equals(baidu.url.escapeSymbol("％＆＋、＃＝　ａＡｑＷ\t\a\b\f\?\r\n"),
+//			"％＆＋、＃＝　ａＡｑＷ\t\a\b\f\?\r",
+			//escapeSymbol升级之后，\s也被转义（\s匹配任意的空白符，包括空格，中文全角空格，制表符(\t \v)，换行符(\n)，回车符(\r)，换页符(\f)）
+			//因为IE不支持\v，所以不测试\v
+			"％＆＋、＃＝\%100ａＡｑＷ\%09\a\b\%0C\?\%0D\%0A",
 			'% & + / # =   is not included in string(quan jiao zi fu)');
 });
 
