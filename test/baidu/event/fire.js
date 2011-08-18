@@ -90,7 +90,7 @@ module('baidu.event.fire');
 			check(eList[e]);
 		}
 
-		if (ua.browser.ie == 0) {
+		if (ua.browser.ie) {
 			for ( var e in hList) {
 				check( {
 					eName : hList[e],
