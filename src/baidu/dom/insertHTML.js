@@ -1,14 +1,10 @@
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
- * 
- * path: baidu/dom/insertHTML.js
- * author: allstar, erik, berg,wenyuxiang,lixiaopeng
- * version: 1.1.2
- * date: 2010-07-13
  */
 
 ///import baidu.dom.g;
+///import baidu.browser.ie;
 
 /**
  * 在目标元素的指定位置插入HTML代码
@@ -33,7 +29,9 @@ baidu.dom.insertHTML = function (element, position, html) {
     element = baidu.dom.g(element);
     var range,begin;
 
-    if (element.insertAdjacentHTML) {
+    //在opera中insertAdjacentHTML方法实现不标准，如果DOMNodeInserted方法被监听则无法一次插入多element
+    //by lixiaopeng @ 2011-8-19
+    if (baidu.browser.ie) {
         element.insertAdjacentHTML(position, html);
     } else {
         // 这里不做"undefined" != typeof(HTMLElement) && !window.opera判断，其它浏览器将出错？！
