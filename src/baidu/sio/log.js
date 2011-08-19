@@ -7,8 +7,10 @@
 
 /**
  * 通过请求一个图片的方式令服务器存储一条日志
- * author: int08h,leeight
+ * @function
+ * @grammar baidu.sio.log(url)
  * @param {string} url 要发送的地址.
+ * @author: int08h,leeight
  */
 baidu.sio.log = function(url) {
   var img = new Image(),

@@ -24,13 +24,15 @@
 /**
  * @namespace baidu.element 通过该方法封装的对象可使用dom、event方法集合以及each方法进行链式调用。
  */
-baidu.element = baidu.e = function(node){
+baidu.element = function(node){
     var gNode = baidu._g(node);
     if(!gNode && baidu.dom.query){
         gNode = baidu.dom.query(node);
     }
     return new baidu.element.Element(gNode);
 };
+// 声明快捷方法
+baidu.e = baidu.element;
 
 /**
  * Element类，所有扩展到链条上的方法都会被放在这里面
@@ -99,7 +101,7 @@ baidu.element._makeChain = function(){ //将dom/event包下的东西挂到protot
         fnTransformer = baidu.element._toChainFunction;
 
     //返回值是第一个参数的包装
-    baidu.each(("draggable droppable resizable").split(' '),
+    baidu.each(("draggable droppable resizable fixable").split(' '),
               function(fn){
                   proto[fn] =  fnTransformer(baidu.dom[fn], 1);
               });

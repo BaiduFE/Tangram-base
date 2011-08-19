@@ -22,13 +22,13 @@ test("Json只有一个属性对", function(){
 	//属性和值包含中文
 	equals(baidu.url.jsonToQuery({"abc中文":"你好baidu"}), "abc中文=你好baidu", '');
 	//属性和值包括全角字符、转义字符等特殊字符
-	equals(baidu.url.jsonToQuery({"ＡａｂＢ！＠＃＄％＾＆＊（）＿＋＝／　１２３４\t\a":"１９０ａｌｄｏｅ；ｓ）（＊＆＾％＄＃＠\n\f"}), 'ＡａｂＢ！＠＃＄％＾＆＊（）＿＋＝／　１２３４\t\a=１９０ａｌｄｏｅ；ｓ）（＊＆＾％＄＃＠\n\f', '');
+	equals(baidu.url.jsonToQuery({"ＡａｂＢ！＠＃＄％＾＆＊（）＿＋＝／　１２３４\t\a":"１９０ａｌｄｏｅ；ｓ）（＊＆＾％＄＃＠\n\f"}), 'ＡａｂＢ！＠＃＄％＾＆＊（）＿＋＝／　１２３４\t\a=１９０ａｌｄｏｅ；ｓ）（＊＆＾％＄＃＠\%0A\%0C', '');
 });
 
 test("Json不止一个属性对", function(){
-	equals(baidu.url.jsonToQuery({"zaq147!@":"xsw258$^", "a":"q", "@":"$", "+":"+", "abc中文":"你好baidu","ＡａｂＢ！＠＃＄％＾＆＊（）＿＋＝／　１２３４\t\a":"１９０ａｌｄｏｅ；ｓ）（＊＆＾％＄＃＠\n\f"}), "zaq147!@=xsw258$^&a=q&@=$&+=%2B&abc中文=你好baidu&ＡａｂＢ！＠＃＄％＾＆＊（）＿＋＝／　１２３４\t\a=１９０ａｌｄｏｅ；ｓ）（＊＆＾％＄＃＠\n\f", '');
+	equals(baidu.url.jsonToQuery({"zaq147!@":"xsw258$^", "a":"q", "@":"$", "+":"+", "abc中文":"你好baidu","ＡａｂＢ！＠＃＄％＾＆＊（）＿＋＝／　１２３４\t\a":"１９０ａｌｄｏｅ；ｓ）（＊＆＾％＄＃＠\n\f"}), "zaq147!@=xsw258$^&a=q&@=$&+=%2B&abc中文=你好baidu&ＡａｂＢ！＠＃＄％＾＆＊（）＿＋＝／　１２３４\t\a=１９０ａｌｄｏｅ；ｓ）（＊＆＾％＄＃＠\%0A\%0C", '');
 	//key名字可能与前面的&符号组成实体字符，如&copy=1,这是不正常的用法
-	equals(baidu.url.jsonToQuery({"copy":"1", "copy3":"2", "lt;":"\t"}), "copy=1&copy3=2&lt;=\t", '');
+	equals(baidu.url.jsonToQuery({"copy":"1", "copy3":"2", "lt;":"\t"}), "copy=1&copy3=2&lt;=%09", '');
 });
 
 test("Json存在相同的属性对", function(){

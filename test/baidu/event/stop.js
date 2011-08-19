@@ -2,7 +2,10 @@
 module("stop event");
 
 test("stop事件--结合stopPropagation和preventDefault",function(){
-	var on = function(element, type, fn) {
+	
+    stop();
+    
+    var on = function(element, type, fn) {
 		if (element.addEventListener) {
 			element.addEventListener(type, fn, false);
 		} else if (document.body.attachEvent) {
@@ -39,17 +42,23 @@ test("stop事件--结合stopPropagation和preventDefault",function(){
 	};
 	on(document.body, "click", propaFromSrcElem);
 	document.body.appendChild(a);
-	window.scroll(0, document.body.scrollHeight);
-      /*获得鼠标点击事件*/
 	ua.beforedispatch = function(e){
 		e = e || window.event;
 		baidu.event.preventDefault(e);	
 	};
-	ua.click(a, "click");
-	var top = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
-	ok(top != 0, "preventDefault");//a标签跳转到页首的功能被禁用
-	un(document.body,"click",propaFromSrcElem);//恢复环境，去除事件
-	document.body.removeChild(div);
-	document.body.removeChild(a);
+    
+    setTimeout(function(){
+        window.scroll(0, document.body.scrollHeight);
+        /*获得鼠标点击事件*/
+	
+	    ua.click(a, "click");
+	    var top = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+	    ok(top != 0, "preventDefault");//a标签跳转到页首的功能被禁用
+	    un(document.body,"click",propaFromSrcElem);//恢复环境，去除事件
+	    document.body.removeChild(div);
+	    document.body.removeChild(a);
+
+        start();
+    }, 0);
 });
 

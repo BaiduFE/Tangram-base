@@ -12,8 +12,10 @@
 
 /**
  * 去掉字符串中的html标签
+ * @function
+ * @grammar baidu.string.stripTags(source)
  * @param {string} source 要处理的字符串.
- * @return {string}
+ * @return {String}
  */
 baidu.string.stripTags = function(source) {
     return String(source || '').replace(/<[^>]+>/g, '');
