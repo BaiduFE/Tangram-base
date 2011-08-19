@@ -121,7 +121,7 @@ test('selector', function() {
 	equals(baidu.dom.query('a:not(a:nth-child(odd))')[0], link1, ':not(a:b)');
 	equals(baidu.dom.query('a:not(a:nth-child(odd) + a)')[0], link, ':not(div + p)');
 	equals(baidu.dom.query('a:not(p > a)').length, 0, ':not(div > p)');
-
+	
 	if(!ua.browser['ie']){
 		equals(baidu.dom.query(':root')[0].tagName.toLowerCase(), 'html', ':root');
 		equals(baidu.dom.query('strong:nth-last-child(2) + span')[0], span, 'strong:nth-last-child(2) + span');
