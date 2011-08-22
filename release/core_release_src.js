@@ -17,6 +17,12 @@
  * Copyright 2009 Baidu Inc. All rights reserved.
  */
 
+ /**
+ * @namespace T Tangram七巧板
+ * @name T
+ * @version 1.3.9
+*/
+
 /**
  * 声明baidu包
  * @author: allstar, erik, meizz, berg
@@ -75,6 +81,7 @@ baidu.fn = baidu.fn || {};
  * @function
  * @grammar baidu.fn.blank()
  * @meta standard
+ * @return {Function} 一个空函数
  * @version 1.3.3
  */
 baidu.fn.blank = function () {};
@@ -93,8 +100,7 @@ baidu.fn.blank = function () {};
  * @function
  * @grammar baidu.ajax.request(url[, options])
  * @param {string} 	url 发送请求的url
- * @param {Object} 	[options] 发送请求的选项参数
-				
+ * @param {Object} 	options 发送请求的选项参数
  * @config {String} 	[method] 			请求发送的类型。默认为GET
  * @config {Boolean}  [async] 			是否异步请求。默认为true（异步）
  * @config {String} 	[data] 				需要发送的数据。如果是GET请求的话，不需要这个属性
@@ -113,9 +119,9 @@ baidu.fn.blank = function () {};
  *             
  * @returns {XMLHttpRequest} 发送请求的XMLHttpRequest对象
  */
-baidu.ajax.request = function (url, options) {
-	options = options || {};
-    var data        = options.data || "",
+baidu.ajax.request = function (url, opt_options) {
+    var options     = opt_options || {},
+        data        = options.data || "",
         async       = !(options.async === false),
         username    = options.username || "",
         password    = options.password || "",
@@ -285,7 +291,8 @@ baidu.ajax.request = function (url, options) {
         // 在open之后再进行http请求头设定
         // FIXME 是否需要添加; charset=UTF-8呢
         if (method == 'POST') {
-            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            xhr.setRequestHeader("Content-Type",
+                (headers['Content-Type'] || "application/x-www-form-urlencoded"));
         }
         
         for (key in headers) {
@@ -502,7 +509,7 @@ baidu.array.filter = function (source, iterator, thisObject) {
  * @function
  * @grammar baidu.array.remove(source, match)
  * @param {Array} source 需要移除项的数组
- * @param {Any|Function} match 要移除的项
+ * @param {Any} match 要移除的项
  * @meta standard
  * @see baidu.array.removeAt
  *             
@@ -563,49 +570,36 @@ baidu.browser = baidu.browser || {};
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
- * 
- * path: baidu/browser/firefox.js
- * author: allstar
- * version: 1.1.0
- * date: 2009/11/23
  */
 
 
 
-if (/firefox\/(\d+\.\d)/i.test(navigator.userAgent)) {
 /**
  * 判断是否为firefox浏览器
  * @property firefox firefox版本号
  * @grammar baidu.browser.firefox
  * @meta standard
- * @see baidu.browser.ie,baidu.browser.safari,baidu.browser.opera,baidu.browser.chrome   
+ * @see baidu.browser.ie,baidu.browser.safari,baidu.browser.opera,baidu.browser.chrome
+ * @return {Number} firefox版本号
  */
-    baidu.browser.firefox = + RegExp['\x241'];
-}
+baidu.browser.firefox = /firefox\/(\d+\.\d+)/i.test(navigator.userAgent) ? + RegExp['\x241'] : undefined;
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
- * 
- * path: baidu/browser/ie.js
- * author: allstar
- * version: 1.1.0
- * date: 2009/11/23
  */
 
 
-if (/msie (\d+\.\d)/i.test(navigator.userAgent)) {
-    //IE 8下，以documentMode为准
-    //在百度模板中，可能会有$，防止冲突，将$1 写成 \x241
+
+//IE 8下，以documentMode为准
+//在百度模板中，可能会有$，防止冲突，将$1 写成 \x241
 /**
  * 判断是否为ie浏览器
- * @property ie ie版本号
+ * @name baidu.browser.ie
+ * @field
  * @grammar baidu.browser.ie
- * @meta standard
- * @shortcut ie
- * @see baidu.browser.firefox,baidu.browser.safari,baidu.browser.opera,baidu.browser.chrome,baidu.browser.maxthon 
+ * @returns {Number} IE版本号
  */
-   baidu.browser.ie = baidu.ie = document.documentMode || + RegExp['\x241'];
-}
+baidu.browser.ie = baidu.ie = /msie (\d+\.\d+)/i.test(navigator.userAgent) ? (document.documentMode || + RegExp['\x241']) : undefined;
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
@@ -624,6 +618,7 @@ if (/msie (\d+\.\d)/i.test(navigator.userAgent)) {
  * @grammar baidu.browser.isGecko
  * @meta standard
  * @see baidu.browser.isWebkit
+ * @returns {Boolean} 布尔值
  */
 baidu.browser.isGecko = /gecko/i.test(navigator.userAgent) && !/like gecko/i.test(navigator.userAgent);
 /*
@@ -643,6 +638,7 @@ baidu.browser.isGecko = /gecko/i.test(navigator.userAgent) && !/like gecko/i.tes
  * @property isStrict 
  * @grammar baidu.browser.isStrict
  * @meta standard
+ * @returns {Boolean} 布尔值
  */
 baidu.browser.isStrict = document.compatMode == "CSS1Compat";
 /*
@@ -663,6 +659,7 @@ baidu.browser.isStrict = document.compatMode == "CSS1Compat";
  * @grammar baidu.browser.isWebkit
  * @meta standard
  * @see baidu.browser.isGecko
+ * @returns {Boolean} 布尔值
  */
 baidu.browser.isWebkit = /webkit/i.test(navigator.userAgent);
 /*
@@ -677,24 +674,24 @@ baidu.browser.isWebkit = /webkit/i.test(navigator.userAgent);
 
 
 
-if (/opera\/(\d+\.\d)/i.test(navigator.userAgent)) {
 /**
  * 判断是否为opera浏览器
  * @property opera opera版本号
  * @grammar baidu.browser.opera
  * @meta standard
- * @see baidu.browser.ie,baidu.browser.firefox,baidu.browser.safari,baidu.browser.chrome 
+ * @see baidu.browser.ie,baidu.browser.firefox,baidu.browser.safari,baidu.browser.chrome
+ * @returns {Number} opera版本号
  */
-    baidu.browser.opera = + RegExp['\x241'];
-}
+
+/**
+ * opera 从10开始不是用opera后面的字符串进行版本的判断
+ * 在Browser identification最后添加Version + 数字进行版本标识
+ * opera后面的数字保持在9.80不变
+ */
+baidu.browser.opera = /opera(\/| )(\d+(\.\d+)?)(.+?(version\/(\d+(\.\d+)?)))?/i.test(navigator.userAgent) ?  + ( RegExp["\x246"] || RegExp["\x242"] ) : undefined;
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
- * 
- * path: baidu/browser/safari.js
- * author: allstar, rocy
- * version: 1.1.0
- * date: 2009/11/23
  */
 
 
@@ -705,16 +702,15 @@ if (/opera\/(\d+\.\d)/i.test(navigator.userAgent)) {
      * 兼容浏览器为safari或ipad,其中,一段典型的ipad UA 如下:
      * Mozilla/5.0(iPad; U; CPU iPhone OS 3_2 like Mac OS X; en-us) AppleWebKit/531.21.10 (KHTML, like Gecko) Version/4.0.4 Mobile/7B314 Safari/531.21.10
      */
-    if(/(\d+\.\d)?(?:\.\d)?\s+safari\/?(\d+\.\d+)?/i.test(ua) && !/chrome/i.test(ua)){
-        /**
-         * 判断是否为safari浏览器, 支持ipad
-         * @property safari safari版本号
-         * @grammar baidu.browser.safari
-         * @meta standard
-         * @see baidu.browser.ie,baidu.browser.firefox,baidu.browser.opera,baidu.browser.chrome   
-         */
-    	baidu.browser.safari = + (RegExp['\x241'] || RegExp['\x242']);
-    }
+    
+    /**
+     * 判断是否为safari浏览器, 支持ipad
+     * @property safari safari版本号
+     * @grammar baidu.browser.safari
+     * @meta standard
+     * @see baidu.browser.ie,baidu.browser.firefox,baidu.browser.opera,baidu.browser.chrome   
+     */
+    baidu.browser.safari = /(\d+\.\d)?(?:\.\d)?\s+safari\/?(\d+\.\d+)?/i.test(ua) && !/chrome/i.test(ua) ? + (RegExp['\x241'] || RegExp['\x242']) : undefined;
 })();
 /*
  * Tangram
@@ -1637,7 +1633,7 @@ baidu.setAttrs = baidu.dom.setAttrs;
  * @param {Object} opt_attributes 元素创建时拥有的属性，如style和className.
  * @version 1.3
  * @meta standard
- * @return {HTMLElement} 创建的 Element 对象
+ * @returns {HTMLElement} 创建的 Element 对象
  */
 baidu.dom.create = function(tagName, opt_attributes) {
     var el = document.createElement(tagName),
@@ -2149,12 +2145,8 @@ baidu.dom.insertBefore = function (newElement, existElement) {
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
- * 
- * path: baidu/dom/insertHTML.js
- * author: allstar, erik, berg,wenyuxiang,lixiaopeng
- * version: 1.1.2
- * date: 2010-07-13
  */
+
 
 
 
@@ -2181,7 +2173,9 @@ baidu.dom.insertHTML = function (element, position, html) {
     element = baidu.dom.g(element);
     var range,begin;
 
-    if (element.insertAdjacentHTML) {
+    //在opera中insertAdjacentHTML方法实现不标准，如果DOMNodeInserted方法被监听则无法一次插入多element
+    //by lixiaopeng @ 2011-8-19
+    if (element.insertAdjacentHTML && !baidu.browser.opera) {
         element.insertAdjacentHTML(position, html);
     } else {
         // 这里不做"undefined" != typeof(HTMLElement) && !window.opera判断，其它浏览器将出错？！
@@ -2431,7 +2425,7 @@ baidu.q = baidu.Q = baidu.dom.q;
         bindReady();
 
         return function(callback) {
-            ready.isReady ? callback() : (readyList[readyList.length] = callback);
+            ready.isReady ? callback() : readyList.push(callback);
         };
     }();
 
@@ -2713,14 +2707,13 @@ baidu.event = baidu.event || {};
 /**
  * 事件对象构造器，屏蔽浏览器差异的事件类
  * @name baidu.event.EventArg
- * @function
+ * @class
  * @grammar baidu.event.EventArg(event[, win])
  * @param {Event}   event   事件对象
  * @param {Window}  [win]	窗口对象，默认为window
  * @meta standard
  * @remark 1.1.0开始支持
  * @see baidu.event.get
- * @constructor
  */
 baidu.event.EventArg = function (event, win) {
     win = win || window;
@@ -3317,8 +3310,8 @@ baidu.lang.isFunction = function (source) {
 
 
 /**
- * 
- * @class  Tangram继承机制提供的一个基类，用户可以通过继承baidu.lang.Class来获取它的属性及方法。
+ * Tangram继承机制提供的一个基类，用户可以通过继承baidu.lang.Class来获取它的属性及方法。
+ * @class
  * @name 	baidu.lang.Class
  * @grammar baidu.lang.Class(guid)
  * @param 	{string}	guid	对象的唯一标识
@@ -3374,8 +3367,8 @@ baidu.lang.Class.prototype.toString = function(){
 
 
 /**
- * 
- * @class   自定义的事件对象。
+ * 自定义的事件对象。
+ * @class
  * @name 	baidu.lang.Event
  * @grammar baidu.lang.Event(type[, target])
  * @param 	{string} type	 事件类型名称。为了方便区分事件和一个普通的方法，事件类型名称必须以"on"(小写)开头。
@@ -4088,8 +4081,8 @@ baidu.sio._createScriptTag = function(scr, url, charset){
  * @function
  * @grammar baidu.sio.callByBrowser(url, opt_callback, opt_options)
  * @param {string} url 加载数据的url
- * @param {Function=} opt_callback 数据加载结束时调用的函数
- * @param {Object=} opt_options 其他可选项
+ * @param {Function|string} opt_callback 数据加载结束时调用的函数或函数名
+ * @param {Object} opt_options 其他可选项
  * @config {String} [charset] script的字符集
  * @config {Integer} [timeOut] 超时时间，超过这个时间将不再响应本请求，并触发onfailure函数
  * @config {Function} [onfailure] timeOut设定后才生效，到达超时时间时触发本函数
@@ -4412,7 +4405,8 @@ baidu.swf = baidu.swf || {};
 /**
  * 浏览器支持的flash插件版本
  * @property version 浏览器支持的flash插件版本
- * @grammar baidu.swf.version 
+ * @grammar baidu.swf.version
+ * @return {String} 版本号
  * @meta standard
  */
 baidu.swf.version = (function () {
