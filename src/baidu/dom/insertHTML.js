@@ -31,7 +31,7 @@ baidu.dom.insertHTML = function (element, position, html) {
 
     //在opera中insertAdjacentHTML方法实现不标准，如果DOMNodeInserted方法被监听则无法一次插入多element
     //by lixiaopeng @ 2011-8-19
-    if (baidu.browser.ie) {
+    if (element.insertAdjacentHTML && !baidu.browser.opera) {
         element.insertAdjacentHTML(position, html);
     } else {
         // 这里不做"undefined" != typeof(HTMLElement) && !window.opera判断，其它浏览器将出错？！
