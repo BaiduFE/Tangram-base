@@ -200,15 +200,16 @@ test('dom的clone', function(){
 		clearTimeout(h);
 		ok(false, '貌似又超时了……');
 		start();
-	}, 500);
+	}, 1000);
 });
 
 test('没有hasOwnProperty的情况', function(){//这个貌似可以踩出来问题……
-	var b = baidu.object.clone(document.doctype);
-	equals(b, document.doctype);
 	var h = setTimeout(function(){
 		clearTimeout(h);
 		ok(false, '貌似又超时了……');
 		start();
 	}, 500);
+	var b = baidu.object.clone(document.doctype);
+	equals(b, document.doctype);
+	clearTimeout(h);
 });

@@ -15,5 +15,6 @@
  * @property isStrict 
  * @grammar baidu.browser.isStrict
  * @meta standard
+ * @returns {Boolean} 布尔值
  */
 baidu.browser.isStrict = document.compatMode == "CSS1Compat";

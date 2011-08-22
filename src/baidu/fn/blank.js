@@ -12,6 +12,7 @@
  * @function
  * @grammar baidu.fn.blank()
  * @meta standard
+ * @return {Function} 一个空函数
  * @version 1.3.3
  */
 baidu.fn.blank = function () {};
