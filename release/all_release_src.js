@@ -17,6 +17,12 @@
  * Copyright 2009 Baidu Inc. All rights reserved.
  */
 
+ /**
+ * @namespace T Tangram七巧板
+ * @name T
+ * @version 1.3.9
+*/
+
 /**
  * 声明baidu包
  * @author: allstar, erik, meizz, berg
@@ -75,6 +81,7 @@ baidu.fn = baidu.fn || {};
  * @function
  * @grammar baidu.fn.blank()
  * @meta standard
+ * @return {Function} 一个空函数
  * @version 1.3.3
  */
 baidu.fn.blank = function () {};
@@ -93,8 +100,7 @@ baidu.fn.blank = function () {};
  * @function
  * @grammar baidu.ajax.request(url[, options])
  * @param {string} 	url 发送请求的url
- * @param {Object} 	[options] 发送请求的选项参数
-				
+ * @param {Object} 	options 发送请求的选项参数
  * @config {String} 	[method] 			请求发送的类型。默认为GET
  * @config {Boolean}  [async] 			是否异步请求。默认为true（异步）
  * @config {String} 	[data] 				需要发送的数据。如果是GET请求的话，不需要这个属性
@@ -113,9 +119,9 @@ baidu.fn.blank = function () {};
  *             
  * @returns {XMLHttpRequest} 发送请求的XMLHttpRequest对象
  */
-baidu.ajax.request = function (url, options) {
-	options = options || {};
-    var data        = options.data || "",
+baidu.ajax.request = function (url, opt_options) {
+    var options     = opt_options || {},
+        data        = options.data || "",
         async       = !(options.async === false),
         username    = options.username || "",
         password    = options.password || "",
@@ -285,7 +291,8 @@ baidu.ajax.request = function (url, options) {
         // 在open之后再进行http请求头设定
         // FIXME 是否需要添加; charset=UTF-8呢
         if (method == 'POST') {
-            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            xhr.setRequestHeader("Content-Type",
+                (headers['Content-Type'] || "application/x-www-form-urlencoded"));
         }
         
         for (key in headers) {
@@ -524,7 +531,7 @@ baidu.array = baidu.array || {};
  * @function
  * @grammar baidu.array.indexOf(source, match[, fromIndex])
  * @param {Array} source 需要查询的数组
- * @param {Any|Function} match 查询项
+ * @param {Any} match 查询项
  * @param {number} [fromIndex] 查询的起始位索引位置，如果为负数，则从source.length+fromIndex往后开始查找
  * @see baidu.array.find,baidu.array.lastIndexOf
  *             
@@ -782,7 +789,7 @@ baidu.array.hash = function(keys, values) {
  * @function
  * @grammar baidu.array.lastIndexOf(source, match)
  * @param {Array} source 需要查询的数组
- * @param {Any|Function} match 查询项
+ * @param {Any} match 查询项
  * @param {number} [fromIndex] 查询的起始位索引位置，如果为负数，则从source.length+fromIndex往前开始查找
  * @see baidu.array.indexOf
  *             
@@ -896,7 +903,7 @@ baidu.array.reduce = function(source, iterator, initializer) {
  * @function
  * @grammar baidu.array.remove(source, match)
  * @param {Array} source 需要移除项的数组
- * @param {Any|Function} match 要移除的项
+ * @param {Any} match 要移除的项
  * @meta standard
  * @see baidu.array.removeAt
  *             
@@ -1017,6 +1024,362 @@ baidu.array.unique = function (source, compareFn) {
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
+ */
+
+
+/**
+ * @namespace baidu.async 对异步调用的封装。
+ * @author rocy
+ */
+baidu.async = baidu.async || {};
+/*
+ * Tangram
+ * Copyright 2009 Baidu Inc. All rights reserved.
+ * 
+ * path: baidu/object.js
+ * author: erik
+ * version: 1.1.0
+ * date: 2009/11/15
+ */
+
+
+/**
+ * @namespace baidu.object 操作原生对象的方法。
+ */
+baidu.object = baidu.object || {};
+/*
+ * Tangram
+ * Copyright 2009 Baidu Inc. All rights reserved.
+ */
+
+
+
+/**
+ * 将源对象的所有属性拷贝到目标对象中
+ * @author erik
+ * @name baidu.object.extend
+ * @function
+ * @grammar baidu.object.extend(target, source)
+ * @param {Object} target 目标对象
+ * @param {Object} source 源对象
+ * @see baidu.array.merge
+ * @remark
+ * 
+1.目标对象中，与源对象key相同的成员将会被覆盖。<br>
+2.源对象的prototype成员不会拷贝。
+		
+ * @shortcut extend
+ * @meta standard
+ *             
+ * @returns {Object} 目标对象
+ */
+baidu.extend =
+baidu.object.extend = function (target, source) {
+    for (var p in source) {
+        if (source.hasOwnProperty(p)) {
+            target[p] = source[p];
+        }
+    }
+    
+    return target;
+};
+/*
+ * Tangram
+ * Copyright 2009 Baidu Inc. All rights reserved.
+ * 
+ * path: baidu/lang.js
+ * author: erik
+ * version: 1.1.0
+ * date: 2009/12/02
+ */
+
+
+/**
+ * @namespace baidu.lang 对语言层面的封装，包括类型判断、模块扩展、继承基类以及对象自定义事件的支持。
+*/
+baidu.lang = baidu.lang || {};
+/*
+ * Tangram
+ * Copyright 2009 Baidu Inc. All rights reserved.
+ * 
+ * path: baidu/lang/isFunction.js
+ * author: rocy
+ * version: 1.1.2
+ * date: 2010/06/12
+ */
+
+
+
+/**
+ * 判断目标参数是否为function或Function实例
+ * @name baidu.lang.isFunction
+ * @function
+ * @grammar baidu.lang.isFunction(source)
+ * @param {Any} source 目标参数
+ * @version 1.2
+ * @see baidu.lang.isString,baidu.lang.isObject,baidu.lang.isNumber,baidu.lang.isArray,baidu.lang.isElement,baidu.lang.isBoolean,baidu.lang.isDate
+ * @meta standard
+ * @returns {boolean} 类型判断结果
+ */
+baidu.lang.isFunction = function (source) {
+    // chrome下,'function' == typeof /a/ 为true.
+    return '[object Function]' == Object.prototype.toString.call(source);
+};
+/*
+ * Tangram
+ * Copyright 2009 Baidu Inc. All rights reserved.
+ */
+
+
+
+/**
+ * 判断给定object是否包含Deferred主要特征.
+ * @param {Object} obj 待判定object.
+ * @return {Boolean} 判定结果, true 则该object符合Deferred特征.
+ * @private 
+ * @author rocy
+ */
+baidu.async._isDeferred = function(obj) {
+    var isFn = baidu.lang.isFunction;
+    return obj && isFn(obj.success) && isFn(obj.then)
+        && isFn(obj.fail) && isFn(obj.cancel);
+};
+/*
+ * Tangram
+ * Copyright 2009 Baidu Inc. All rights reserved.
+ */
+
+
+
+
+
+
+/**
+ * 用于支持异步处理, 使同步异步的调用风格统一.
+ * @class
+ * @private
+ * @grammar new baidu.async.Deferred()
+ * @remark
+ * 示例:
+    function someAsync(){
+        var deferred = new baidu.async.Deferred();
+        setTimeout(function(){
+            afterSomeOperation();
+            if(someReason){
+                deferred.resolve(someValue);
+            } else {
+                deferred.reject(someError);
+            }
+        },100);
+        return deferred;
+    }
+    //用类似同步的方式调用异步操作.
+    someAsync().then(onSuccess, onFail);
+    //onSuccess或onFail可以确保在正确的时间点执行.
+
+ * @author rocy
+ */
+baidu.async.Deferred = function() {
+    var me = this;
+    baidu.extend(me, {
+        _fired: 0,
+        _firing: 0,
+        _cancelled: 0,
+        _resolveChain: [],
+        _rejectChain: [],
+        _result: [],
+        _isError: 0
+    });
+
+    function fire() {
+        if (me._cancelled || me._firing) {
+            return;
+        }
+        //如果已有nextDeferred对象,则转移到nextDeferred上.
+        if (me._nextDeferred) {
+            me._nextDeferred.then(me._resolveChain[0], me._rejectChain[0]);
+            return;
+        }
+        me._firing = 1;
+        var chain = me._isError ? me._rejectChain : me._resolveChain,
+            result = me._result[me._isError ? 1 : 0];
+        // 此处使用while而非for循环,是为了避免firing时插入新函数.
+        while (chain[0] && (! me._cancelled)) {
+            //所有函数仅调用一次.
+            //TODO: 支持传入 this 和 arguments, 而不是仅仅一个值.
+            try {
+                var chainResult = chain.shift().call(me, result);
+                //若方法返回Deferred,则将剩余方法延至Deferred中执行
+                if (baidu.async._isDeferred(chainResult)) {
+                    me._nextDeferred = chainResult;
+                    [].push.apply(chainResult._resolveChain, me._resolveChain);
+                    [].push.apply(chainResult._rejectChain, me._rejectChain);
+                    chain = me._resolveChain = [];
+                    me._rejectChain = [];
+                }
+            } catch (error) {
+                throw error;
+            } finally {
+                me._fired = 1;
+                me._firing = 0;
+            }
+        }
+    }
+
+
+    /**
+     * 调用onSuccess链.使用给定的value作为函数参数.
+     * @param {*} value 成功结果.
+     * @return {baidu.async.Deferred} this.
+     */
+    me.resolve = me.fireSuccess = function(value) {
+        me._result[0] = value;
+        fire();
+        return me;
+    };
+
+    /**
+     * 调用onFail链. 使用给定的error作为函数参数.
+     * @param {Error} error 失败原因.
+     * @return {baidu.async.Deferred} this.
+     */
+    me.reject = me.fireFail = function(error) {
+        me._result[1] = error;
+        me._isError = 1;
+        fire();
+        return me;
+    };
+
+    /**
+     * 添加onSuccess和onFail方法到各自的链上. 如果该deferred已触发,则立即执行.
+     * @param {Function} onSuccess 该deferred成功时的回调函数.第一个形参为成功时结果.
+     * @param {Function} onFail 该deferred失败时的回调函数.第一个形参为失败时结果.
+     * @return {baidu.async.Deferred} this.
+     */
+    me.then = function(onSuccess, onFail) {
+        me._resolveChain.push(onSuccess);
+        me._rejectChain.push(onFail);
+        if (me._fired) {
+            fire();
+        }
+        return me;
+    };
+    
+    /**
+     * 添加方法到onSuccess链上. 如果该deferred已触发,则立即执行.
+     * @param {Function} onSuccess 该deferred成功时的回调函数.第一个形参为成功时结果.
+     * @return {baidu.async.Deferred} this.
+     */
+    me.success = function(onSuccess) {
+        return me.then(onSuccess, baidu.fn.blank);
+    };
+
+    /**
+     * 添加方法到onFail链上. 如果该deferred已触发,则立即执行.
+     * @param {Function} onFail 该deferred失败时的回调函数.第一个形参为失败时结果.
+     * @return {baidu.async.Deferred} this.
+     */
+    me.fail = function(onFail) {
+        return me.then(baidu.fn.blank, onFail);
+    };
+     
+    /**
+     * 中断该deferred, 使其失效.
+     */
+    me.cancel = function() {
+        me._cancelled = 1;
+    };
+};
+/*
+ * Tangram
+ * Copyright 2009 Baidu Inc. All rights reserved.
+ */
+
+
+
+
+/**
+ * 支持异步的ajax.get封装.
+ * @grammar baidu.async.Deferred(url)
+ * @param {String} url 请求地址.
+ * @version 1.3.9 
+ * @return {baidu.async.Deferred} Deferred对象,支持链式调用.
+ */
+baidu.async.get = function(url){
+    var deferred = new baidu.async.Deferred();
+    baidu.ajax.request(url, {
+        onsuccess: function(xhr, responseText) {
+            deferred.resolve({xhr: xhr, responseText: responseText}); 
+        },
+        onfailure: function(xhr) {
+            deferred.reject({xhr: xhr});
+        }
+    });
+    return deferred;
+};
+/*
+ * Tangram
+ * Copyright 2009 Baidu Inc. All rights reserved.
+ */
+
+
+
+
+/**
+ * 支持异步的ajax.post封装.
+ * @grammar baidu.async.post(url, data)
+ * @param {String} url 请求地址.
+ * @param {String} data 请求数据.
+ * @version 1.3.9 
+ * @return {baidu.async.Deferred} Deferred对象,支持链式调用.
+ */
+baidu.async.post = function(url, data){
+    var deferred = new baidu.async.Deferred();
+    baidu.ajax.request(url, {
+        method: 'POST',
+        data: data,
+        onsuccess: function(xhr, responseText) {
+            deferred.resolve({xhr: xhr, responseText: responseText}); 
+        },
+        onfailure: function(xhr) {
+            deferred.reject({xhr: xhr});
+        }
+    });
+    return deferred;
+};
+/*
+ * Tangram
+ * Copyright 2009 Baidu Inc. All rights reserved.
+ */
+
+
+
+
+/**
+ * 保证onResolve或onReject可以按序执行. 若第一个参数为deferred,则deferred完成后执行.否则立即执行onResolve,并传入第一个参数.
+ * @grammar baidu.async.when(deferredOrValue, onResolve, onReject)
+ * @param {baidu.async.Deferred|*} deferredOrValue deferred实例或任意值.
+ * @param {Function} onResolve 成功时的回调函数.若第一个参数不是Deferred实例,则立即执行此方法.
+ * @param {Function} onReject 失败时的回调函数.
+ * @version 1.3.9 
+ * @remark
+ * 示例一:异步调用: baidu.async.when(asyncLoad(), onResolve, onReject).then(nextSuccess, nextFail);
+ * 示例二:同步异步不确定的调用: baidu.async.when(syncOrNot(), onResolve, onReject).then(nextSuccess, nextFail);
+ * 示例三:同步接异步的调用: baidu.async.when(sync(), onResolve, onReject).then(asyncSuccess, asyncFail).then(afterAllSuccess, afterAllFail);
+ * @return {baidu.async.Deferred} deferred.
+ */
+baidu.async.when = function(deferredOrValue, onResolve, onReject) {
+    if (baidu.async._isDeferred(deferredOrValue)) {
+        deferredOrValue.then(onResolve, onReject);
+        return deferredOrValue;
+    }
+    var deferred = new baidu.async.Deferred();
+    deferred.then(onResolve, onReject).resolve(deferredOrValue);
+    return deferred;
+};
+/*
+ * Tangram
+ * Copyright 2009 Baidu Inc. All rights reserved.
  * 
  * path: baidu/browser.js
  * author: allstar, erik
@@ -1033,69 +1396,51 @@ baidu.browser = baidu.browser || {};
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
- * 
- * path: baidu/browser/chrome.js
- * author: allstar
- * version: 1.1.0
- * date: 2009/11/24
  */
 
 
-if (/chrome\/(\d+\.\d)/i.test(navigator.userAgent)) {
+
 /**
  * 判断是否为chrome浏览器
  * @grammar baidu.browser.chrome
  * @see baidu.browser.ie,baidu.browser.firefox,baidu.browser.safari,baidu.browser.opera   
  * @property chrome chrome版本号
+ * @return {Number} chrome版本号
  */
-    baidu.browser.chrome = + RegExp['\x241'];
-}
+baidu.browser.chrome = /chrome\/(\d+\.\d+)/i.test(navigator.userAgent) ? + RegExp['\x241'] : undefined;
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
- * 
- * path: baidu/browser/firefox.js
- * author: allstar
- * version: 1.1.0
- * date: 2009/11/23
  */
 
 
 
-if (/firefox\/(\d+\.\d)/i.test(navigator.userAgent)) {
 /**
  * 判断是否为firefox浏览器
  * @property firefox firefox版本号
  * @grammar baidu.browser.firefox
  * @meta standard
- * @see baidu.browser.ie,baidu.browser.safari,baidu.browser.opera,baidu.browser.chrome   
+ * @see baidu.browser.ie,baidu.browser.safari,baidu.browser.opera,baidu.browser.chrome
+ * @return {Number} firefox版本号
  */
-    baidu.browser.firefox = + RegExp['\x241'];
-}
+baidu.browser.firefox = /firefox\/(\d+\.\d+)/i.test(navigator.userAgent) ? + RegExp['\x241'] : undefined;
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
- * 
- * path: baidu/browser/ie.js
- * author: allstar
- * version: 1.1.0
- * date: 2009/11/23
  */
 
 
-if (/msie (\d+\.\d)/i.test(navigator.userAgent)) {
-    //IE 8下，以documentMode为准
-    //在百度模板中，可能会有$，防止冲突，将$1 写成 \x241
+
+//IE 8下，以documentMode为准
+//在百度模板中，可能会有$，防止冲突，将$1 写成 \x241
 /**
  * 判断是否为ie浏览器
- * @property ie ie版本号
+ * @name baidu.browser.ie
+ * @field
  * @grammar baidu.browser.ie
- * @meta standard
- * @shortcut ie
- * @see baidu.browser.firefox,baidu.browser.safari,baidu.browser.opera,baidu.browser.chrome,baidu.browser.maxthon 
+ * @returns {Number} IE版本号
  */
-   baidu.browser.ie = baidu.ie = document.documentMode || + RegExp['\x241'];
-}
+baidu.browser.ie = baidu.ie = /msie (\d+\.\d+)/i.test(navigator.userAgent) ? (document.documentMode || + RegExp['\x241']) : undefined;
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
@@ -1114,6 +1459,7 @@ if (/msie (\d+\.\d)/i.test(navigator.userAgent)) {
  * @grammar baidu.browser.isGecko
  * @meta standard
  * @see baidu.browser.isWebkit
+ * @returns {Boolean} 布尔值
  */
 baidu.browser.isGecko = /gecko/i.test(navigator.userAgent) && !/like gecko/i.test(navigator.userAgent);
 /*
@@ -1133,6 +1479,7 @@ baidu.browser.isGecko = /gecko/i.test(navigator.userAgent) && !/like gecko/i.tes
  * @property isStrict 
  * @grammar baidu.browser.isStrict
  * @meta standard
+ * @returns {Boolean} 布尔值
  */
 baidu.browser.isStrict = document.compatMode == "CSS1Compat";
 /*
@@ -1153,6 +1500,7 @@ baidu.browser.isStrict = document.compatMode == "CSS1Compat";
  * @grammar baidu.browser.isWebkit
  * @meta standard
  * @see baidu.browser.isGecko
+ * @returns {Boolean} 布尔值
  */
 baidu.browser.isWebkit = /webkit/i.test(navigator.userAgent);
 /*
@@ -1168,12 +1516,13 @@ baidu.browser.isWebkit = /webkit/i.test(navigator.userAgent);
 
 
 try {
-    if (/(\d+\.\d)/.test(external.max_version)) {
+    if (/(\d+\.\d+)/.test(external.max_version)) {
 /**
  * 判断是否为maxthon浏览器
  * @property maxthon maxthon版本号
  * @grammar baidu.browser.maxthon
- * @see baidu.browser.ie  
+ * @see baidu.browser.ie
+ * @returns {Number} maxthon版本号
  */
         baidu.browser.maxthon = + RegExp['\x241'];
     }
@@ -1190,24 +1539,24 @@ try {
 
 
 
-if (/opera\/(\d+\.\d)/i.test(navigator.userAgent)) {
 /**
  * 判断是否为opera浏览器
  * @property opera opera版本号
  * @grammar baidu.browser.opera
  * @meta standard
- * @see baidu.browser.ie,baidu.browser.firefox,baidu.browser.safari,baidu.browser.chrome 
+ * @see baidu.browser.ie,baidu.browser.firefox,baidu.browser.safari,baidu.browser.chrome
+ * @returns {Number} opera版本号
  */
-    baidu.browser.opera = + RegExp['\x241'];
-}
+
+/**
+ * opera 从10开始不是用opera后面的字符串进行版本的判断
+ * 在Browser identification最后添加Version + 数字进行版本标识
+ * opera后面的数字保持在9.80不变
+ */
+baidu.browser.opera = /opera(\/| )(\d+(\.\d+)?)(.+?(version\/(\d+(\.\d+)?)))?/i.test(navigator.userAgent) ?  + ( RegExp["\x246"] || RegExp["\x242"] ) : undefined;
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
- * 
- * path: baidu/browser/safari.js
- * author: allstar, rocy
- * version: 1.1.0
- * date: 2009/11/23
  */
 
 
@@ -1218,16 +1567,15 @@ if (/opera\/(\d+\.\d)/i.test(navigator.userAgent)) {
      * 兼容浏览器为safari或ipad,其中,一段典型的ipad UA 如下:
      * Mozilla/5.0(iPad; U; CPU iPhone OS 3_2 like Mac OS X; en-us) AppleWebKit/531.21.10 (KHTML, like Gecko) Version/4.0.4 Mobile/7B314 Safari/531.21.10
      */
-    if(/(\d+\.\d)?(?:\.\d)?\s+safari\/?(\d+\.\d+)?/i.test(ua) && !/chrome/i.test(ua)){
-        /**
-         * 判断是否为safari浏览器, 支持ipad
-         * @property safari safari版本号
-         * @grammar baidu.browser.safari
-         * @meta standard
-         * @see baidu.browser.ie,baidu.browser.firefox,baidu.browser.opera,baidu.browser.chrome   
-         */
-    	baidu.browser.safari = + (RegExp['\x241'] || RegExp['\x242']);
-    }
+    
+    /**
+     * 判断是否为safari浏览器, 支持ipad
+     * @property safari safari版本号
+     * @grammar baidu.browser.safari
+     * @meta standard
+     * @see baidu.browser.ie,baidu.browser.firefox,baidu.browser.opera,baidu.browser.chrome   
+     */
+    baidu.browser.safari = /(\d+\.\d)?(?:\.\d)?\s+safari\/?(\d+\.\d+)?/i.test(ua) && !/chrome/i.test(ua) ? + (RegExp['\x241'] || RegExp['\x242']) : undefined;
 })();
 /*
  * Tangram
@@ -1702,121 +2050,6 @@ baidu.dom = baidu.dom || {};
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
  * 
- * path: baidu/dom/_NAME_ATTRS.js
- * author: allstar, erik
- * version: 1.1.0
- * date: 2009/12/2
- */
-
-
-
-
-/**
- * 提供给setAttr与getAttr方法作名称转换使用
- * ie6,7下class要转换成className
- * @meta standard
- */
-
-baidu.dom._NAME_ATTRS = (function () {
-    var result = {
-        'cellpadding': 'cellPadding',
-        'cellspacing': 'cellSpacing',
-        'colspan': 'colSpan',
-        'rowspan': 'rowSpan',
-        'valign': 'vAlign',
-        'usemap': 'useMap',
-        'frameborder': 'frameBorder'
-    };
-    
-    if (baidu.browser.ie < 8) {
-        result['for'] = 'htmlFor';
-        result['class'] = 'className';
-    } else {
-        result['htmlFor'] = 'for';
-        result['className'] = 'class';
-    }
-    
-    return result;
-})();
-/*
- * Tangram
- * Copyright 2009 Baidu Inc. All rights reserved.
- * 
- * path: baidu/lang.js
- * author: erik
- * version: 1.1.0
- * date: 2009/12/02
- */
-
-
-/**
- * @namespace baidu.lang 对语言层面的封装，包括类型判断、模块扩展、继承基类以及对象自定义事件的支持。
-*/
-baidu.lang = baidu.lang || {};
-/*
- * Tangram
- * Copyright 2009 Baidu Inc. All rights reserved.
- * 
- * path: baidu/lang/isString.js
- * author: erik
- * version: 1.1.0
- * date: 2009/12/30
- */
-
-
-
-/**
- * 判断目标参数是否string类型或String对象
- * @name baidu.lang.isString
- * @function
- * @grammar baidu.lang.isString(source)
- * @param {Any} source 目标参数
- * @shortcut isString
- * @meta standard
- * @see baidu.lang.isObject,baidu.lang.isNumber,baidu.lang.isArray,baidu.lang.isElement,baidu.lang.isBoolean,baidu.lang.isDate
- *             
- * @returns {boolean} 类型判断结果
- */
-baidu.lang.isString = function (source) {
-    return '[object String]' == Object.prototype.toString.call(source);
-};
-
-// 声明快捷方法
-baidu.isString = baidu.lang.isString;
-/*
- * Tangram
- * Copyright 2009 Baidu Inc. All rights reserved.
- * 
- * path: baidu/dom/g.js
- * author: allstar, erik, berg
- * version: 1.3
- * date: 2010-07-07
- */
-
-
-
-
-/**
- * 从文档中获取指定的DOM元素
- * **内部方法**
- * 
- * @param {string|HTMLElement} id 元素的id或DOM元素
- * @meta standard
- * @return {HTMLElement} DOM元素，如果不存在，返回null，如果参数不合法，直接返回参数
- */
-baidu.dom._g = function (id) {
-    if (baidu.lang.isString(id)) {
-        return document.getElementById(id);
-    }
-    return id;
-};
-
-// 声明快捷方法
-baidu._g = baidu.dom._g;
-/*
- * Tangram
- * Copyright 2009 Baidu Inc. All rights reserved.
- * 
  * path: baidu/dom/g.js
  * author: allstar, erik
  * version: 1.1.0
@@ -1852,301 +2085,6 @@ baidu.g = baidu.G = baidu.dom.g;
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
  * 
- * path: baidu/dom/_matchNode.js
- * author: allstar
- * version: 1.1.0
- * date: 2009/11/18
- */
-
-
-
-
-/**
- * 从目标元素指定的方向搜索元素
- *
- * @param {HTMLElement|string} element   目标元素或目标元素的id
- * @param {string}             direction 遍历的方向名称，取值为previousSibling,nextSibling
- * @param {string}             start     遍历的开始位置，取值为firstChild,lastChild,previousSibling,nextSibling
- * @meta standard
- * @return {HTMLElement} 搜索到的元素，如果没有找到，返回 null
- */
-baidu.dom._matchNode = function (element, direction, start) {
-    element = baidu.dom.g(element);
-
-    for (var node = element[start]; node; node = node[direction]) {
-        if (node.nodeType == 1) {
-            return node;
-        }
-    }
-
-    return null;
-};
-/*
- * Tangram
- * Copyright 2009 Baidu Inc. All rights reserved.
- * 
- * path: baidu/dom/_styleFilters.js
- * author: allstar
- * version: 1.1.0
- * date: 2009/12/02
- */
-
-
-
-/**
- * 提供给setStyle与getStyle使用
- */
-baidu.dom._styleFilter = baidu.dom._styleFilter || [];
-
-/*
- * Tangram
- * Copyright 2009 Baidu Inc. All rights reserved.
- * 
- * path: baidu/dom/_styleFilter/color.js
- * author: allstar, erik
- * version: 1.1.0
- * date: 2009/12/02
- */
-
-
-
-/**
- * 提供给setStyle与getStyle使用
- * @meta standard
- */
-baidu.dom._styleFilter[baidu.dom._styleFilter.length] = {
-    get: function (key, value) {
-        if (/color/i.test(key) && value.indexOf("rgb(") != -1) {
-            var array = value.split(",");
-
-            value = "#";
-            for (var i = 0, color; color = array[i]; i++){
-                color = parseInt(color.replace(/[^\d]/gi, ''), 10).toString(16);
-                value += color.length == 1 ? "0" + color : color;
-            }
-
-            value = value.toUpperCase();
-        }
-
-        return value;
-    }
-};
-/*
- * Tangram
- * Copyright 2009 Baidu Inc. All rights reserved.
- * 
- * path: baidu/dom/_styleFilter/filter.js
- * author: allstar, erik
- * version: 1.1.0
- * date: 2009/12/02
- */
-
-
-
-/**
- * 为获取和设置样式的过滤器
- * @private
- * @meta standard
- */
-baidu.dom._styleFilter.filter = function (key, value, method) {
-    for (var i = 0, filters = baidu.dom._styleFilter, filter; filter = filters[i]; i++) {
-        if (filter = filter[method]) {
-            value = filter(key, value);
-        }
-    }
-
-    return value;
-};
-/*
- * Tangram
- * Copyright 2009 Baidu Inc. All rights reserved.
- * 
- * path: baidu/dom/_styleFilter/px.js
- * author: allstar, erik
- * version: 1.1.0
- * date: 2009/12/02
- */
-
-
-
-/**
- * 提供给setStyle与getStyle使用
- * @meta standard
- */
-baidu.dom._styleFilter[baidu.dom._styleFilter.length] = {
-    set: function (key, value) {
-        if (value.constructor == Number 
-            && !/zIndex|fontWeight|opacity|zoom|lineHeight/i.test(key)){
-            value = value + "px";
-        }
-
-        return value;
-    }
-};
-/*
- * Tangram
- * Copyright 2009 Baidu Inc. All rights reserved.
- * 
- * path: baidu/dom/_styleFixer.js
- * author: allstar
- * version: 1.1.0
- * date: 2009/11/17
- */
-
-
-
-/**
- * 提供给setStyle与getStyle使用
- */
-baidu.dom._styleFixer = baidu.dom._styleFixer || {};
-/*
- * Tangram
- * Copyright 2009 Baidu Inc. All rights reserved.
- * 
- * path: baidu/dom/_styleFixer/display.js
- * author: allstar
- * version: 1.1.0
- * date: 2009/11/24
- */
-
-
-
-
-
-/**
- * 提供给setStyle与getStyle使用
- * @meta standard
- */
-baidu.dom._styleFixer.display = baidu.browser.ie && baidu.browser.ie < 8 ? { // berg: 修改到<8，因为ie7同样存在这个问题，from 先伟
-    set: function (element, value) {
-        element = element.style;
-        if (value == 'inline-block') {
-            element.display = 'inline';
-            element.zoom = 1;
-        } else {
-            element.display = value;
-        }
-    }
-} : baidu.browser.firefox && baidu.browser.firefox < 3 ? {
-    set: function (element, value) {
-        element.style.display = value == 'inline-block' ? '-moz-inline-box' : value;
-    }
-} : null;
-/*
- * Tangram
- * Copyright 2009 Baidu Inc. All right reserved.
- * 
- * path: baidu/dom/_styleFixer/float.js
- * author: allstar
- * version: 1.1.0
- * date: 2009/11/17
- */
-
-
-
-/**
- * 提供给setStyle与getStyle使用
- * @meta standard
- */
-baidu.dom._styleFixer["float"] = baidu.browser.ie ? "styleFloat" : "cssFloat";
-/*
- * Tangram
- * Copyright 2009 Baidu Inc. All rights reserved.
- * 
- * path: baidu/dom/_styleFixer/opacity.js
- * author: allstar
- * version: 1.1.0
- * date: 2009/11/17
- */
-
-
-
-
-/**
- * 提供给setStyle与getStyle使用
- * @meta standard
- */
-baidu.dom._styleFixer.opacity = baidu.browser.ie ? {
-    get: function (element) {
-        var filter = element.style.filter;
-        return filter && filter.indexOf("opacity=") >= 0 ? (parseFloat(filter.match(/opacity=([^)]*)/)[1]) / 100) + "" : "1";
-    },
-
-    set: function (element, value) {
-        var style = element.style;
-        // 只能Quirks Mode下面生效??
-        style.filter = (style.filter || "").replace(/alpha\([^\)]*\)/gi, "") + (value == 1 ? "" : "alpha(opacity=" + value * 100 + ")");
-        // IE filters only apply to elements with "layout."
-        style.zoom = 1;
-    }
-} : null;
-/*
- * Tangram
- * Copyright 2009 Baidu Inc. All rights reserved.
- * 
- * path: baidu/dom/getDocument.js
- * author: allstar
- * version: 1.1.0
- * date: 2009/11/17
- */
-
-
-
-/**
- * 获取目标元素所属的document对象
- * @name baidu.dom.getDocument
- * @function
- * @grammar baidu.dom.getDocument(element)
- * @param {HTMLElement|string} element 目标元素或目标元素的id
- * @meta standard
- * @see baidu.dom.getWindow
- *             
- * @returns {HTMLDocument} 目标元素所属的document对象
- */
-baidu.dom.getDocument = function (element) {
-    element = baidu.dom.g(element);
-    return element.nodeType == 9 ? element : element.ownerDocument || element.document;
-};
-/*
- * Tangram
- * Copyright 2009 Baidu Inc. All rights reserved.
- */
-
-
-
-
-
-/**
- * 获取目标元素的computed style值。如果元素的样式值不能被浏览器计算，则会返回空字符串（IE）
- *
- * @author berg
- * @name baidu.dom.getComputedStyle
- * @function
- * @grammar baidu.dom.getComputedStyle(element, key)
- * @param {HTMLElement|string} element 目标元素或目标元素的id
- * @param {string} key 要获取的样式名
- *
- * @see baidu.dom.getStyle
- *             
- * @returns {string} 目标元素的computed style值
- */
-
-baidu.dom.getComputedStyle = function(element, key){
-    element = baidu.dom._g(element);
-    var doc = baidu.dom.getDocument(element),
-        styles;
-    if (doc.defaultView && doc.defaultView.getComputedStyle) {
-        styles = doc.defaultView.getComputedStyle(element, null);
-        if (styles) {
-            return styles[key] || styles.getPropertyValue(key);
-        }
-    }
-    return ''; 
-};
-/*
- * Tangram
- * Copyright 2009 Baidu Inc. All rights reserved.
- * 
  * path: baidu/string.js
  * author: erik
  * version: 1.1.0
@@ -2158,266 +2096,6 @@ baidu.dom.getComputedStyle = function(element, key){
  * @namespace baidu.string 操作字符串的方法。
  */
 baidu.string = baidu.string || {};
-/*
- * Tangram
- * Copyright 2009 Baidu Inc. All rights reserved.
- * 
- * path: baidu/string/toCamelCase.js
- * author: erik, berg
- * version: 1.2
- * date: 2010-06-22
- */
-
-
-
-/**
- * 将目标字符串进行驼峰化处理
- * @name baidu.string.toCamelCase
- * @function
- * @grammar baidu.string.toCamelCase(source)
- * @param {string} source 目标字符串
- * @remark
- * 支持单词以“-_”分隔
- * @meta standard
- *             
- * @returns {string} 驼峰化处理后的字符串
- */
- 
- //todo:考虑以后去掉下划线支持？
-baidu.string.toCamelCase = function (source) {
-    //提前判断，提高getStyle等的效率 thanks xianwei
-    if (source.indexOf('-') < 0 && source.indexOf('_') < 0) {
-        return source;
-    }
-    return source.replace(/[-_][^-_]/g, function (match) {
-        return match.charAt(1).toUpperCase();
-    });
-};
-/*
- * Tangram
- * Copyright 2009 Baidu Inc. All rights reserved.
- */
-
-
-
-
-
-
-
-/**
- * 获取目标元素的样式值
- * @name baidu.dom.getStyle
- * @function
- * @grammar baidu.dom.getStyle(element, key)
- * @param {HTMLElement|string} element 目标元素或目标元素的id
- * @param {string} key 要获取的样式名
- * @remark
- * 
- * 为了精简代码，本模块默认不对任何浏览器返回值进行归一化处理（如使用getStyle时，不同浏览器下可能返回rgb颜色或hex颜色），也不会修复浏览器的bug和差异性（如设置IE的float属性叫styleFloat，firefox则是cssFloat）。<br />
- * baidu.dom._styleFixer和baidu.dom._styleFilter可以为本模块提供支持。<br />
- * 其中_styleFilter能对颜色和px进行归一化处理，_styleFixer能对display，float，opacity，textOverflow的浏览器兼容性bug进行处理。	
- * @shortcut getStyle
- * @meta standard
- * @see baidu.dom.setStyle,baidu.dom.setStyles, baidu.dom.getComputedStyle
- *             
- * @returns {string} 目标元素的样式值
- */
-// TODO
-// 1. 无法解决px/em单位统一的问题（IE）
-// 2. 无法解决样式值为非数字值的情况（medium等 IE）
-baidu.dom.getStyle = function (element, key) {
-    var dom = baidu.dom;
-
-    element = dom.g(element);
-    key = baidu.string.toCamelCase(key);
-    //computed style, then cascaded style, then explicitly set style.
-    var value = element.style[key] ||
-                (element.currentStyle ? element.currentStyle[key] : "") || 
-                dom.getComputedStyle(element, key);
-
-    // 在取不到值的时候，用fixer进行修正
-    if (!value) {
-        var fixer = dom._styleFixer[key];
-        if(fixer){
-            value = fixer.get ? fixer.get(element) : baidu.dom.getStyle(element, fixer);
-        }
-    }
-    
-    /* 检查结果过滤器 */
-    if (fixer = dom._styleFilter) {
-        value = fixer.filter(key, value, 'get');
-    }
-
-    return value;
-};
-
-// 声明快捷方法
-baidu.getStyle = baidu.dom.getStyle;
-/*
- * Tangram
- * Copyright 2009 Baidu Inc. All rights reserved.
- * 
- * path: baidu/dom/_styleFixer/textOverflow.js
- * author: allstar
- * version: 1.1.0
- * date: 2009/11/17
- */
-
-
-
-
-
-
-/**
- * 提供给setStyle与getStyle使用，在做textOverflow时会向element对象中添加,_baiduOverflow, _baiduHTML两个属性保存原始的innerHTML信息
- */
-baidu.dom._styleFixer.textOverflow = (function () {
-    var fontSizeCache = {};
-
-    function pop(list) {
-        var o = list.length;
-        if (o > 0) {
-            o = list[o - 1];
-            list.length--;
-        } else {
-            o = null;
-        }
-        return o;
-    }
-
-    function setText(element, text) {
-        element[baidu.browser.firefox ? "textContent" : "innerText"] = text;
-    }
-
-    function count(element, width, ellipsis) {
-        /* 计算cache的名称 */
-        var o = baidu.browser.ie ? element.currentStyle || element.style : getComputedStyle(element, null),
-            fontWeight = o.fontWeight,
-            cacheName =
-                "font-family:" + o.fontFamily + ";font-size:" + o.fontSize
-                + ";word-spacing:" + o.wordSpacing + ";font-weight:" + ((parseInt(fontWeight) || 0) == 401 ? 700 : fontWeight)
-                + ";font-style:" + o.fontStyle + ";font-variant:" + o.fontVariant,
-            cache = fontSizeCache[cacheName];
-
-        if (!cache) {
-            o = element.appendChild(document.createElement("div"));
-
-            o.style.cssText = "float:left;" + cacheName;
-            cache = fontSizeCache[cacheName] = [];
-
-            /* 计算ASCII字符的宽度cache */
-            for (var i=0; i < 256; i++) {
-                i == 32 ? (o.innerHTML = "&nbsp;") : setText(o, String.fromCharCode(i));
-                cache[i] = o.offsetWidth;
-            }
-
-            /* 计算非ASCII字符的宽度、字符间距、省略号的宽度,\u4e00是汉字一的编码*/
-            setText(o, "\u4e00");
-            cache[256] = o.offsetWidth;
-            setText(o, "\u4e00\u4e00");
-            cache[257] = o.offsetWidth - cache[256] * 2;
-            cache[258] = cache[".".charCodeAt(0)] * 3 + cache[257] * 3;
-
-            element.removeChild(o);
-        }
-
-        for (
-            /* wordWidth是每个字符或子节点计算之前的宽度序列 */
-            var node = element.firstChild, charWidth = cache[256], wordSpacing = cache[257], ellipsisWidth = cache[258],
-                wordWidth = [], ellipsis = ellipsis ? ellipsisWidth : 0;
-            node;
-            node = node.nextSibling
-        ) {
-            if (width < ellipsis) {
-                element.removeChild(node);
-            }
-            else if (node.nodeType == 3) {
-                for (var i = 0, text = node.nodeValue, length = text.length; i < length; i++) {
-                    o = text.charCodeAt(i);
-                    /* 计算增加字符后剩余的长度 */
-                    wordWidth[wordWidth.length] = [width, node, i];
-                    width -= (i ? wordSpacing : 0) + (o < 256 ? cache[o] : charWidth);
-                    if (width < ellipsis) {
-                        break;
-                    }
-                }
-            }
-            else {
-                o = node.tagName;
-                if (o == "IMG" || o == "TABLE") {
-                    /* 特殊元素直接删除 */
-                    o = node;
-                    node = node.previousSibling;
-                    element.removeChild(o);
-                }
-                else {
-                    wordWidth[wordWidth.length] = [width, node];
-                    width -= node.offsetWidth;
-                }
-            }
-        }
-
-        if (width < ellipsis) {
-            /* 过滤直到能得到大于省略号宽度的位置 */
-            while (o = pop(wordWidth)) {
-                width = o[0];
-                node = o[1];
-                o = o[2];
-                if (node.nodeType == 3) {
-                    if (width >= ellipsisWidth) {
-                        node.nodeValue = node.nodeValue.substring(0, o) + "...";
-                        return true;
-                    }
-                    else if (!o) {
-                        element.removeChild(node);
-                    }
-                }
-                else if (count(node, width, true)) {
-                    return true;
-                }
-                else {
-                    element.removeChild(node);
-                }
-            }
-
-            /* 能显示的宽度小于省略号的宽度，直接不显示 */
-            element.innerHTML = "";
-        }
-    }
-
-    return {
-		get: function (element) {
-            var browser = baidu.browser,
-                getStyle = dom.getStyle;
-			return (browser.opera ?
-                        getStyle("OTextOverflow") :
-                        browser.firefox ?
-                            element._baiduOverflow :
-                            getStyle("textOverflow")) ||
-                   "clip";
-		},
-
-		set: function (element, value) {
-            var browser = baidu.browser;
-			if (element.tagName == "TD" || element.tagName == "TH" || browser.firefox) {
-				element._baiduHTML && (element.innerHTML = element._baiduHTML);
-
-				if (value == "ellipsis") {
-					element._baiduHTML = element.innerHTML;
-					var o = document.createElement("div"), width = element.appendChild(o).offsetWidth;
-					element.removeChild(o);
-					count(element, width);
-				}
-				else {
-					element._baiduHTML = "";
-				}
-			}
-
-			o = element.style;
-			browser.opera ? (o.OTextOverflow = value) : browser.firefox ? (element._baiduOverflow = value) : (o.textOverflow = value);
-		}
-    };
-})();
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
@@ -2542,6 +2220,66 @@ baidu.dom.children = function (element) {
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
  * 
+ * path: baidu/lang/isString.js
+ * author: erik
+ * version: 1.1.0
+ * date: 2009/12/30
+ */
+
+
+
+/**
+ * 判断目标参数是否string类型或String对象
+ * @name baidu.lang.isString
+ * @function
+ * @grammar baidu.lang.isString(source)
+ * @param {Any} source 目标参数
+ * @shortcut isString
+ * @meta standard
+ * @see baidu.lang.isObject,baidu.lang.isNumber,baidu.lang.isArray,baidu.lang.isElement,baidu.lang.isBoolean,baidu.lang.isDate
+ *             
+ * @returns {boolean} 类型判断结果
+ */
+baidu.lang.isString = function (source) {
+    return '[object String]' == Object.prototype.toString.call(source);
+};
+
+// 声明快捷方法
+baidu.isString = baidu.lang.isString;
+/*
+ * Tangram
+ * Copyright 2009 Baidu Inc. All rights reserved.
+ * 
+ * path: baidu/dom/g.js
+ * author: allstar, erik, berg
+ * version: 1.3
+ * date: 2010-07-07
+ */
+
+
+
+
+/**
+ * 从文档中获取指定的DOM元素
+ * **内部方法**
+ * 
+ * @param {string|HTMLElement} id 元素的id或DOM元素
+ * @meta standard
+ * @return {HTMLElement} DOM元素，如果不存在，返回null，如果参数不合法，直接返回参数
+ */
+baidu.dom._g = function (id) {
+    if (baidu.lang.isString(id)) {
+        return document.getElementById(id);
+    }
+    return id;
+};
+
+// 声明快捷方法
+baidu._g = baidu.dom._g;
+/*
+ * Tangram
+ * Copyright 2009 Baidu Inc. All rights reserved.
+ * 
  * path: baidu/dom/contains.js
  * author: allstar
  * version: 1.1.0
@@ -2573,6 +2311,46 @@ baidu.dom.contains = function (container, contained) {
         ? container != contained && container.contains(contained)
         : !!(container.compareDocumentPosition(contained) & 16);
 };
+/*
+ * Tangram
+ * Copyright 2009 Baidu Inc. All rights reserved.
+ * 
+ * path: baidu/dom/_NAME_ATTRS.js
+ * author: allstar, erik
+ * version: 1.1.0
+ * date: 2009/12/2
+ */
+
+
+
+
+/**
+ * 提供给setAttr与getAttr方法作名称转换使用
+ * ie6,7下class要转换成className
+ * @meta standard
+ */
+
+baidu.dom._NAME_ATTRS = (function () {
+    var result = {
+        'cellpadding': 'cellPadding',
+        'cellspacing': 'cellSpacing',
+        'colspan': 'colSpan',
+        'rowspan': 'rowSpan',
+        'valign': 'vAlign',
+        'usemap': 'useMap',
+        'frameborder': 'frameBorder'
+    };
+    
+    if (baidu.browser.ie < 8) {
+        result['for'] = 'htmlFor';
+        result['class'] = 'className';
+    } else {
+        result['htmlFor'] = 'for';
+        result['className'] = 'class';
+    }
+    
+    return result;
+})();
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
@@ -2673,7 +2451,7 @@ baidu.setAttrs = baidu.dom.setAttrs;
  * @param {Object} opt_attributes 元素创建时拥有的属性，如style和className.
  * @version 1.3
  * @meta standard
- * @return {HTMLElement} 创建的 Element 对象
+ * @returns {HTMLElement} 创建的 Element 对象
  */
 baidu.dom.create = function(tagName, opt_attributes) {
     var el = document.createElement(tagName),
@@ -2735,33 +2513,6 @@ window[baidu.guid]._instances = window[baidu.guid]._instances || {};
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
  * 
- * path: baidu/lang/isFunction.js
- * author: rocy
- * version: 1.1.2
- * date: 2010/06/12
- */
-
-
-
-/**
- * 判断目标参数是否为function或Function实例
- * @name baidu.lang.isFunction
- * @function
- * @grammar baidu.lang.isFunction(source)
- * @param {Any} source 目标参数
- * @version 1.2
- * @see baidu.lang.isString,baidu.lang.isObject,baidu.lang.isNumber,baidu.lang.isArray,baidu.lang.isElement,baidu.lang.isBoolean,baidu.lang.isDate
- * @meta standard
- * @returns {boolean} 类型判断结果
- */
-baidu.lang.isFunction = function (source) {
-    // chrome下,'function' == typeof /a/ 为true.
-    return '[object Function]' == Object.prototype.toString.call(source);
-};
-/*
- * Tangram
- * Copyright 2009 Baidu Inc. All rights reserved.
- * 
  * path: baidu/lang/Class.js
  * author: meizz, erik
  * version: 1.1.0
@@ -2773,8 +2524,8 @@ baidu.lang.isFunction = function (source) {
 
 
 /**
- * 
- * @class  Tangram继承机制提供的一个基类，用户可以通过继承baidu.lang.Class来获取它的属性及方法。
+ * Tangram继承机制提供的一个基类，用户可以通过继承baidu.lang.Class来获取它的属性及方法。
+ * @class
  * @name 	baidu.lang.Class
  * @grammar baidu.lang.Class(guid)
  * @param 	{string}	guid	对象的唯一标识
@@ -2830,8 +2581,8 @@ baidu.lang.Class.prototype.toString = function(){
 
 
 /**
- * 
- * @class   自定义的事件对象。
+ * 自定义的事件对象。
+ * @class
  * @name 	baidu.lang.Event
  * @grammar baidu.lang.Event(type[, target])
  * @param 	{string} type	 事件类型名称。为了方便区分事件和一个普通的方法，事件类型名称必须以"on"(小写)开头。
@@ -3001,10 +2752,228 @@ baidu.lang.createSingle = function (json) {
  * @param   {HTMLElement|ID}    element 被拖曳的元素
  * @param   {JSON}              options 拖曳配置项 {toggle, autoStop, interval, capture, range, ondragstart, ondragend, ondrag}
  * @return {DOMElement}                 可拖拽的元素
+ * @private
  */
 baidu.dom.ddManager = baidu.lang.createSingle({
 	_targetsDroppingOver:{}
 });
+/*
+ * Tangram
+ * Copyright 2009 Baidu Inc. All rights reserved.
+ * 
+ * path: baidu/dom/getDocument.js
+ * author: allstar
+ * version: 1.1.0
+ * date: 2009/11/17
+ */
+
+
+
+/**
+ * 获取目标元素所属的document对象
+ * @name baidu.dom.getDocument
+ * @function
+ * @grammar baidu.dom.getDocument(element)
+ * @param {HTMLElement|string} element 目标元素或目标元素的id
+ * @meta standard
+ * @see baidu.dom.getWindow
+ *             
+ * @returns {HTMLDocument} 目标元素所属的document对象
+ */
+baidu.dom.getDocument = function (element) {
+    element = baidu.dom.g(element);
+    return element.nodeType == 9 ? element : element.ownerDocument || element.document;
+};
+/*
+ * Tangram
+ * Copyright 2009 Baidu Inc. All rights reserved.
+ */
+
+
+
+
+
+/**
+ * 获取目标元素的computed style值。如果元素的样式值不能被浏览器计算，则会返回空字符串（IE）
+ *
+ * @author berg
+ * @name baidu.dom.getComputedStyle
+ * @function
+ * @grammar baidu.dom.getComputedStyle(element, key)
+ * @param {HTMLElement|string} element 目标元素或目标元素的id
+ * @param {string} key 要获取的样式名
+ *
+ * @see baidu.dom.getStyle
+ *             
+ * @returns {string} 目标元素的computed style值
+ */
+
+baidu.dom.getComputedStyle = function(element, key){
+    element = baidu.dom._g(element);
+    var doc = baidu.dom.getDocument(element),
+        styles;
+    if (doc.defaultView && doc.defaultView.getComputedStyle) {
+        styles = doc.defaultView.getComputedStyle(element, null);
+        if (styles) {
+            return styles[key] || styles.getPropertyValue(key);
+        }
+    }
+    return ''; 
+};
+/*
+ * Tangram
+ * Copyright 2009 Baidu Inc. All rights reserved.
+ * 
+ * path: baidu/dom/_styleFixer.js
+ * author: allstar
+ * version: 1.1.0
+ * date: 2009/11/17
+ */
+
+
+
+/**
+ * 提供给setStyle与getStyle使用
+ */
+baidu.dom._styleFixer = baidu.dom._styleFixer || {};
+/*
+ * Tangram
+ * Copyright 2009 Baidu Inc. All rights reserved.
+ * 
+ * path: baidu/dom/_styleFilters.js
+ * author: allstar
+ * version: 1.1.0
+ * date: 2009/12/02
+ */
+
+
+
+/**
+ * 提供给setStyle与getStyle使用
+ */
+baidu.dom._styleFilter = baidu.dom._styleFilter || [];
+
+/*
+ * Tangram
+ * Copyright 2009 Baidu Inc. All rights reserved.
+ * 
+ * path: baidu/dom/_styleFilter/filter.js
+ * author: allstar, erik
+ * version: 1.1.0
+ * date: 2009/12/02
+ */
+
+
+
+/**
+ * 为获取和设置样式的过滤器
+ * @private
+ * @meta standard
+ */
+baidu.dom._styleFilter.filter = function (key, value, method) {
+    for (var i = 0, filters = baidu.dom._styleFilter, filter; filter = filters[i]; i++) {
+        if (filter = filter[method]) {
+            value = filter(key, value);
+        }
+    }
+
+    return value;
+};
+/*
+ * Tangram
+ * Copyright 2009 Baidu Inc. All rights reserved.
+ * 
+ * path: baidu/string/toCamelCase.js
+ * author: erik, berg
+ * version: 1.2
+ * date: 2010-06-22
+ */
+
+
+
+/**
+ * 将目标字符串进行驼峰化处理
+ * @name baidu.string.toCamelCase
+ * @function
+ * @grammar baidu.string.toCamelCase(source)
+ * @param {string} source 目标字符串
+ * @remark
+ * 支持单词以“-_”分隔
+ * @meta standard
+ *             
+ * @returns {string} 驼峰化处理后的字符串
+ */
+ 
+ //todo:考虑以后去掉下划线支持？
+baidu.string.toCamelCase = function (source) {
+    //提前判断，提高getStyle等的效率 thanks xianwei
+    if (source.indexOf('-') < 0 && source.indexOf('_') < 0) {
+        return source;
+    }
+    return source.replace(/[-_][^-_]/g, function (match) {
+        return match.charAt(1).toUpperCase();
+    });
+};
+/*
+ * Tangram
+ * Copyright 2009 Baidu Inc. All rights reserved.
+ */
+
+
+
+
+
+
+
+/**
+ * 获取目标元素的样式值
+ * @name baidu.dom.getStyle
+ * @function
+ * @grammar baidu.dom.getStyle(element, key)
+ * @param {HTMLElement|string} element 目标元素或目标元素的id
+ * @param {string} key 要获取的样式名
+ * @remark
+ * 
+ * 为了精简代码，本模块默认不对任何浏览器返回值进行归一化处理（如使用getStyle时，不同浏览器下可能返回rgb颜色或hex颜色），也不会修复浏览器的bug和差异性（如设置IE的float属性叫styleFloat，firefox则是cssFloat）。<br />
+ * baidu.dom._styleFixer和baidu.dom._styleFilter可以为本模块提供支持。<br />
+ * 其中_styleFilter能对颜色和px进行归一化处理，_styleFixer能对display，float，opacity，textOverflow的浏览器兼容性bug进行处理。	
+ * @shortcut getStyle
+ * @meta standard
+ * @see baidu.dom.setStyle,baidu.dom.setStyles, baidu.dom.getComputedStyle
+ *             
+ * @returns {string} 目标元素的样式值
+ */
+// TODO
+// 1. 无法解决px/em单位统一的问题（IE）
+// 2. 无法解决样式值为非数字值的情况（medium等 IE）
+baidu.dom.getStyle = function (element, key) {
+    var dom = baidu.dom;
+
+    element = dom.g(element);
+    key = baidu.string.toCamelCase(key);
+    //computed style, then cascaded style, then explicitly set style.
+    var value = element.style[key] ||
+                (element.currentStyle ? element.currentStyle[key] : "") || 
+                dom.getComputedStyle(element, key);
+
+    // 在取不到值的时候，用fixer进行修正
+    if (!value) {
+        var fixer = dom._styleFixer[key];
+        if(fixer){
+            value = fixer.get ? fixer.get(element) : baidu.dom.getStyle(element, fixer);
+        }
+    }
+    
+    /* 检查结果过滤器 */
+    if (fixer = dom._styleFilter) {
+        value = fixer.filter(key, value, 'get');
+    }
+
+    return value;
+};
+
+// 声明快捷方法
+baidu.getStyle = baidu.dom.getStyle;
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
@@ -3203,57 +3172,6 @@ baidu.event.preventDefault = function (event) {
    } else {
        event.returnValue = false;
    }
-};
-/*
- * Tangram
- * Copyright 2009 Baidu Inc. All rights reserved.
- * 
- * path: baidu/object.js
- * author: erik
- * version: 1.1.0
- * date: 2009/11/15
- */
-
-
-/**
- * @namespace baidu.object 操作原生对象的方法。
- */
-baidu.object = baidu.object || {};
-/*
- * Tangram
- * Copyright 2009 Baidu Inc. All rights reserved.
- */
-
-
-
-/**
- * 将源对象的所有属性拷贝到目标对象中
- * @author erik
- * @name baidu.object.extend
- * @function
- * @grammar baidu.object.extend(target, source)
- * @param {Object} target 目标对象
- * @param {Object} source 源对象
- * @see baidu.array.merge
- * @remark
- * 
-1.目标对象中，与源对象key相同的成员将会被覆盖。<br>
-2.源对象的prototype成员不会拷贝。
-		
- * @shortcut extend
- * @meta standard
- *             
- * @returns {Object} 目标对象
- */
-baidu.extend =
-baidu.object.extend = function (target, source) {
-    for (var p in source) {
-        if (source.hasOwnProperty(p)) {
-            target[p] = source[p];
-        }
-    }
-    
-    return target;
 };
 /*
  * Tangram
@@ -3571,7 +3489,8 @@ baidu.dom.getPosition = function (element) {
         op = baidu.object.extend({
             autoStop:true   // false 用户手动结束拖曳 ｜ true 在mouseup时自动停止拖曳
             ,capture : true // 鼠标拖曳粘滞
-            ,interval : 20  // 拖曳行为的触发频度（时间：毫秒）
+            ,interval : 16  // 拖曳行为的触发频度（时间：毫秒）
+            ,handler : target
         }, options);
 
         offset_parent = baidu.dom.getPosition(target.offsetParent);
@@ -3595,17 +3514,18 @@ baidu.dom.getPosition = function (element) {
             oy = xy.y;
         }
 
-        timer = setInterval(render, op.interval);
+        //timer = setInterval(render, op.interval);
 
         // 这项为 true，缺省在 onmouseup 事件终止拖曳
-        op.autoStop && baidu.event.on(document, "mouseup", stop);
+        op.autoStop && baidu.event.on(op.handler, "mouseup", stop);
+        op.autoStop && baidu.event.on(window, "mouseup", stop);
         
         // 在拖曳过程中页面里的文字会被选中高亮显示，在这里修正
-        baidu.event.on(document.body, "selectstart", unselect);
+        baidu.event.on(document, "selectstart", unselect);
 
         // 设置鼠标粘滞
-        if (op.capture && target.setCapture) {
-            target.setCapture();
+        if (op.capture && op.handler.setCapture) {
+            op.handler.setCapture();
         } else if (op.capture && window.captureEvents) {
             window.captureEvents(Event.MOUSEMOVE|Event.MOUSEUP);
         }
@@ -3619,7 +3539,8 @@ baidu.dom.getPosition = function (element) {
         if(isFunction(op.ondragstart)){
             op.ondragstart(target, op);
         }
-
+        
+        timer = setInterval(render, op.interval);
         return {stop : stop, update : update};
     };
 
@@ -3634,19 +3555,20 @@ baidu.dom.getPosition = function (element) {
      * 手动停止拖拽
      */
     function stop() {
-        clearTimeout(timer);
+        clearInterval(timer);
 
         // 解除鼠标粘滞
-        if (op.capture && target.releaseCapture) {
-            target.releaseCapture();
+        if (op.capture && op.handler.releaseCapture) {
+            op.handler.releaseCapture();
         } else if (op.capture && window.releaseEvents) {
             window.releaseEvents(Event.MOUSEMOVE|Event.MOUSEUP);
         }
 
         // 拖曳时网页内容被框选
         document.body.style.MozUserSelect = mozUserSelect;
-        baidu.event.un(document.body, "selectstart", unselect);
-        op.autoStop && baidu.event.un(document, "mouseup", stop);
+        baidu.event.un(document, "selectstart", unselect);
+        op.autoStop && baidu.event.un(op.handler, "mouseup", stop);
+        op.autoStop && baidu.event.un(window, "mouseup", stop);
 
         // ondragend 事件
         if(isFunction(op.ondragend)){
@@ -3777,7 +3699,7 @@ baidu.setStyle = baidu.dom.setStyle;
  * @version 1.2
  * @remark    要拖拽的元素必须事先设定样式的postion值，如果postion为absloute，并且没有设定top和left，拖拽开始时，无法取得元素的top和left值，这时会从[0,0]点开始拖拽<br>如果要拖拽的元素是static定位，会被改成relative定位方式。
  * @see baidu.dom.drag
- * @return {Draggable Instance} 拖拽实例，包含cancel方法，可以停止拖拽.
+ * @returns {Draggable Instance} 拖拽实例，包含cancel方法，可以停止拖拽.
  */
 
 baidu.dom.draggable = function(element, options) {
@@ -4006,6 +3928,39 @@ baidu.dom.empty = function (element) {
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
  * 
+ * path: baidu/dom/_matchNode.js
+ * author: allstar
+ * version: 1.1.0
+ * date: 2009/11/18
+ */
+
+
+
+
+/**
+ * 从目标元素指定的方向搜索元素
+ *
+ * @param {HTMLElement|string} element   目标元素或目标元素的id
+ * @param {string}             direction 遍历的方向名称，取值为previousSibling,nextSibling
+ * @param {string}             start     遍历的开始位置，取值为firstChild,lastChild,previousSibling,nextSibling
+ * @meta standard
+ * @return {HTMLElement} 搜索到的元素，如果没有找到，返回 null
+ */
+baidu.dom._matchNode = function (element, direction, start) {
+    element = baidu.dom.g(element);
+
+    for (var node = element[start]; node; node = node[direction]) {
+        if (node.nodeType == 1) {
+            return node;
+        }
+    }
+
+    return null;
+};
+/*
+ * Tangram
+ * Copyright 2009 Baidu Inc. All rights reserved.
+ * 
  * path: baidu/dom/first.js
  * author: allstar, erik
  * version: 1.1.0
@@ -4026,6 +3981,343 @@ baidu.dom.empty = function (element) {
  */
 baidu.dom.first = function (element) {
     return baidu.dom._matchNode(element, 'nextSibling', 'firstChild');
+};
+/*
+ * Tangram
+ * Copyright 2009 Baidu Inc. All rights reserved.
+ * 
+ * path: baidu/dom/getAttr.js
+ * author: allstar, erik
+ * version: 1.1.0
+ * date: 2009/12/02
+ */
+
+
+
+
+/**
+ * 获取目标元素的属性值
+ * @name baidu.dom.getAttr
+ * @function
+ * @grammar baidu.dom.getAttr(element, key)
+ * @param {HTMLElement|string} element 目标元素或目标元素的id
+ * @param {string} key 要获取的attribute键名
+ * @shortcut getAttr
+ * @meta standard
+ * @see baidu.dom.setAttr,baidu.dom.setAttrs
+ *             
+ * @returns {string|null} 目标元素的attribute值，获取不到时返回null
+ */
+baidu.dom.getAttr = function (element, key) {
+    element = baidu.dom.g(element);
+
+    if ('style' == key){
+        return element.style.cssText;
+    }
+
+    key = baidu.dom._NAME_ATTRS[key] || key;
+    return element.getAttribute(key);
+};
+
+// 声明快捷方法
+baidu.getAttr = baidu.dom.getAttr;
+/*
+ * Tangram
+ * Copyright 2009 Baidu Inc. All rights reserved.
+ * 
+ * path: baidu/dom/setStyles.js
+ * author: allstar
+ * version: 1.1.0
+ * date: 2009/11/18
+ */
+
+
+
+
+/**
+ * 批量设置目标元素的style样式值
+ * @name baidu.dom.setStyles
+ * @function
+ * @grammar baidu.dom.setStyles(element, styles)
+ * @param {HTMLElement|string} element 目标元素或目标元素的id
+ * @param {Object} styles 要设置的样式集合
+ * @shortcut setStyles
+ * @meta standard
+ * @see baidu.dom.setStyle,baidu.dom.getStyle
+ *             
+ * @returns {HTMLElement} 目标元素
+ */
+baidu.dom.setStyles = function (element, styles) {
+    element = baidu.dom.g(element);
+
+    for (var key in styles) {
+        baidu.dom.setStyle(element, key, styles[key]);
+    }
+
+    return element;
+};
+
+// 声明快捷方法
+baidu.setStyles = baidu.dom.setStyles;
+/*
+ * Tangram
+ * Copyright 2009 Baidu Inc. All rights reserved.
+ * 
+ * path: baidu/page/getViewHeight.js
+ * author: allstar
+ * version: 1.1.0
+ * date: 2009/11/20
+ */
+
+
+
+/**
+ * 获取页面视觉区域高度
+ * @name baidu.page.getViewHeight
+ * @function
+ * @grammar baidu.page.getViewHeight()
+ * @see baidu.page.getViewWidth
+ * @meta standard
+ * @returns {number} 页面视觉区域高度
+ */
+baidu.page.getViewHeight = function () {
+    var doc = document,
+        client = doc.compatMode == 'BackCompat' ? doc.body : doc.documentElement;
+
+    return client.clientHeight;
+};
+/*
+ * Tangram
+ * Copyright 2009 Baidu Inc. All rights reserved.
+ * 
+ * path: baidu/page/getViewWidth.js
+ * author: allstar
+ * version: 1.1.0
+ * date: 2009/11/20
+ */
+
+
+
+/**
+ * 获取页面视觉区域宽度
+ * @name baidu.page.getViewWidth
+ * @function
+ * @grammar baidu.page.getViewWidth()
+ * @see baidu.page.getViewHeight
+ *             
+ * @returns {number} 页面视觉区域宽度
+ */
+baidu.page.getViewWidth = function () {
+    var doc = document,
+        client = doc.compatMode == 'BackCompat' ? doc.body : doc.documentElement;
+
+    return client.clientWidth;
+};
+/*
+ * Tangram
+ * Copyright 2009 Baidu Inc. All rights reserved.
+ * 
+ * path: baidu/dom/_styleFilter/px.js
+ * author: allstar, erik
+ * version: 1.1.0
+ * date: 2009/12/02
+ */
+
+
+
+/**
+ * 提供给setStyle与getStyle使用
+ * @meta standard
+ */
+baidu.dom._styleFilter[baidu.dom._styleFilter.length] = {
+    set: function (key, value) {
+        if (value.constructor == Number 
+            && !/zIndex|fontWeight|opacity|zoom|lineHeight/i.test(key)){
+            value = value + "px";
+        }
+
+        return value;
+    }
+};
+/*
+ * Tangram
+ * Copyright 2010 Baidu Inc. All right reserved.
+ */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/**
+ * 使目标元素拥有可进行与页面可见区域相对位置保持不变的移动的能力
+ * @name baidu.dom.fixable
+ * @function
+ * @grammar baidu.dom.fixable(element, options)
+ * @param {HTMLElement|String} element 目标元素或目标元素的id
+ * @param {Object} options 配置项
+ * @config {String} [vertival] 取值[top|bottom] 默认值 top
+ * @config {Strgin} [horizontal] 取值[left|right] 默认值 left
+ * @config {Object} [offset] {x:String|Number, y:String|Number}} 横向与纵向的取值
+ * @config {Boolean} [autofix] 是否自动进行fix，默认值为true
+ * @config {Function} [onrender] 当被渲染时候触发
+ * @config {Function} [onupdate] 当位置被更新的时候触发
+ * @config {Function} [onrelease] 当被释放的时候触发
+ * @returns {Object} 返回值一个对象，有三个方法：render、update、release
+ */
+
+baidu.dom.fixable = function(element, options){
+
+    var target  = baidu.g(element),
+        isUnderIE7 = baidu.browser.ie && baidu.browser.ie <= 7 ? true : false,
+        vertival = options.vertival || 'top',
+        horizontal = options.horizontal || 'left',
+        autofix = typeof options.autofix != 'undefined' ? options.autofix : true,
+        origPos,offset,isRender = false,
+        onrender = options.onrender || new Function(),
+        onupdate = options.onupdate || new Function(),
+        onrelease = options.onrelease || new Function();
+
+    if(!target) return;
+
+    //获取target原始值
+    origPos = _getOriginalStyle();
+    //设置offset值
+    offset = {
+        y: isUnderIE7 ? (origPos.position == "static" ? baidu.dom.getPosition(target).top :  baidu.dom.getPosition(target).top - baidu.dom.getPosition(target.parentNode).top) : target.offsetTop,
+        x: isUnderIE7 ? (origPos.position == "static" ? baidu.dom.getPosition(target).left :  baidu.dom.getPosition(target).left - baidu.dom.getPosition(target.parentNode).left) : target.offsetLeft
+    };
+    baidu.extend(offset, options.offset || {});
+
+    autofix && render();
+   
+    function _convert(){
+        return {
+            top : vertival == "top" ? offset.y : baidu.page.getViewHeight() - offset.y - origPos.height,
+            left: horizontal == "left" ? offset.x : baidu.page.getViewWidth() - offset.x - origPos.width
+        };
+    }
+
+    /**
+     * 
+     */
+    function _handleOnMove(){
+        var p = _convert(); 
+        
+        target.style.setExpression("left","eval((document.body.scrollLeft || document.documentElement.scrollLeft) + " + p.left + ") + 'px'");
+        target.style.setExpression("top", "eval((document.body.scrollTop || document.documentElement.scrollTop) + " + p.top + ") + 'px'");
+    }
+
+    /**
+     * 返回target原始position值
+     * @return {Object}
+     */
+    function _getOriginalStyle(){
+        var result = {
+            position: baidu.getStyle(target,"position"),
+            height: function(){
+                var h = baidu.getStyle(target,"height");
+                return (h != "auto") ? (/\d+/.exec(h)[0]) : target.offsetHeight;
+            }(),
+            width: function(){			
+                var w = baidu.getStyle(target,"width");
+                return (w != "auto") ? (/\d+/.exec(w)[0]) : target.offsetWidth;
+            }()
+        };
+
+        _getValue('top', result);
+        _getValue('left', result);
+        _getValue('bottom', result);
+        _getValue('right', result);
+        
+        return result;
+    }
+
+    function _getValue(position, options){
+        var result;
+
+        if(options.position == 'static'){
+            options[position] = '';   
+        }else{
+            result = baidu.getStyle(target, position);
+            if(result == 'auto' || result == '0px' ){
+                options[position] = '';
+            }else{
+                options[position] = result;
+            }
+        }
+    }
+
+    function render(){
+        if(isRender) return;
+
+        baidu.setStyles(target, {top:'', left:'', bottom:'', right:''});
+        
+        if(!isUnderIE7){
+            var style = {position:"fixed"};
+            style[vertival == "top" ? "top" : "bottom"] = offset.y + "px";
+            style[horizontal == "left" ? "left" : "right"] = offset.x + "px";
+
+            baidu.setStyles(target, style);
+        }else{
+            baidu.setStyle(target,"position","absolute");
+            _handleOnMove();
+        }
+
+        onrender();
+        isRender = true;
+    }
+
+    function release(){
+       if(!isRender) return;
+
+       var style = {
+           position: origPos.position,
+           left: origPos.left == '' ? 'auto' : origPos.left,
+           top: origPos.top == '' ? 'auto' : origPos.top,
+           bottom: origPos.bottom == '' ? 'auto' : origPos.bottom,
+           right: origPos.right == '' ?  'auto' : origPos.right
+       };
+
+        if(isUnderIE7){
+            target.style.removeExpression("left");
+            target.style.removeExpression("top");
+        }
+        baidu.setStyles(target, style);
+
+        onrelease();
+        isRender = false;
+    }
+
+    function update(options){
+        if(!options) return;
+
+        //更新事件
+        onrender = options.onrender || onrender;
+        onupdate = options.onupdate || onupdate;
+        onrelease = options.onrelease || onrelease;
+        
+        //更新设置
+        vertival = options.vertival || 'top';
+        horizontal = options.horizontal || 'left';
+
+        //更新offset
+        baidu.extend(offset, options.offset || {});
+
+        onupdate();
+    }
+
+    return {render: render, update: update, release:release};
 };
 /*
  * Tangram
@@ -4133,45 +4425,6 @@ baidu.dom.getAncestorByTag = function (element, tagName) {
 
     return null;
 };
-/*
- * Tangram
- * Copyright 2009 Baidu Inc. All rights reserved.
- * 
- * path: baidu/dom/getAttr.js
- * author: allstar, erik
- * version: 1.1.0
- * date: 2009/12/02
- */
-
-
-
-
-/**
- * 获取目标元素的属性值
- * @name baidu.dom.getAttr
- * @function
- * @grammar baidu.dom.getAttr(element, key)
- * @param {HTMLElement|string} element 目标元素或目标元素的id
- * @param {string} key 要获取的attribute键名
- * @shortcut getAttr
- * @meta standard
- * @see baidu.dom.setAttr,baidu.dom.setAttrs
- *             
- * @returns {string|null} 目标元素的attribute值，获取不到时返回null
- */
-baidu.dom.getAttr = function (element, key) {
-    element = baidu.dom.g(element);
-
-    if ('style' == key){
-        return element.style.cssText;
-    }
-
-    key = baidu.dom._NAME_ATTRS[key] || key;
-    return element.getAttribute(key);
-};
-
-// 声明快捷方法
-baidu.getAttr = baidu.dom.getAttr;
 
 /*
  * Tangram
@@ -4191,7 +4444,7 @@ baidu.getAttr = baidu.dom.getAttr;
  * @function
  * @grammar baidu.dom.getParent(element)
  * @param {HTMLElement|string} element   目标元素或目标元素的id
- * @return {HTMLElement|null} 父元素，如果找不到父元素，返回null
+ * @returns {HTMLElement|null} 父元素，如果找不到父元素，返回null
  */
 baidu.dom.getParent = function (element) {
     element = baidu.dom._g(element);
@@ -4449,12 +4702,8 @@ baidu.dom.insertBefore = function (newElement, existElement) {
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
- * 
- * path: baidu/dom/insertHTML.js
- * author: allstar, erik, berg,wenyuxiang,lixiaopeng
- * version: 1.1.2
- * date: 2010-07-13
  */
+
 
 
 
@@ -4481,7 +4730,9 @@ baidu.dom.insertHTML = function (element, position, html) {
     element = baidu.dom.g(element);
     var range,begin;
 
-    if (element.insertAdjacentHTML) {
+    //在opera中insertAdjacentHTML方法实现不标准，如果DOMNodeInserted方法被监听则无法一次插入多element
+    //by lixiaopeng @ 2011-8-19
+    if (element.insertAdjacentHTML && !baidu.browser.opera) {
         element.insertAdjacentHTML(position, html);
     } else {
         // 这里不做"undefined" != typeof(HTMLElement) && !window.opera判断，其它浏览器将出错？！
@@ -4691,13 +4942,13 @@ baidu.dom.q = function (className, element, tagName) {
 // 声明快捷方法
 baidu.q = baidu.Q = baidu.dom.q;
 /*
- * Tangram
+ * Tangram query
  *
- * code from sizzle
- * add by berg
+ * code from https://github.com/hackwaly/Q
  * 
  * version: 1.0.0
- * date: 20100525
+ * date: 20110801
+ * author: wenyuxiang
  */
 
 
@@ -4721,1346 +4972,714 @@ baidu.q = baidu.Q = baidu.dom.q;
  * @returns {Array}        包含所有筛选出的DOM元素的数组
  */
 
-/*!
- * Sizzle CSS Selector Engine - v1.0
- *  Copyright 2009, The Dojo Foundation
- *  Released under the MIT, BSD, and GPL Licenses.
- *  More information: http://sizzlejs.com/
- */
-(function(){
-
-var chunker = /((?:\((?:\([^()]+\)|[^()]+)+\)|\[(?:\[[^\[\]]*\]|['"][^'"]*['"]|[^\[\]'"]+)+\]|\\.|[^ >+~,(\[\\]+)+|[>+~])(\s*,\s*)?((?:.|\r|\n)*)/g,
-	done = 0,
-	toString = Object.prototype.toString,
-	hasDuplicate = false,
-	baseHasDuplicate = true;
-
-// Here we check if the JavaScript engine is using some sort of
-// optimization where it does not always call our comparision
-// function. If that is the case, discard the hasDuplicate value.
-//   Thus far that includes Google Chrome.
-[0, 0].sort(function() {
-	baseHasDuplicate = false;
-	return 0;
-});
-
-var Sizzle = function( selector, context, results, seed ) {
-	results = results || [];
-	context = context || document;
-
-	var origContext = context;
-
-	if ( context.nodeType !== 1 && context.nodeType !== 9 ) {
-		return [];
-	}
-	
-	if ( !selector || typeof selector !== "string" ) {
-		return results;
-	}
-
-	var m, set, checkSet, extra, ret, cur, pop, i,
-		prune = true,
-		contextXML = Sizzle.isXML( context ),
-		parts = [],
-		soFar = selector;
-	
-	// Reset the position of the chunker regexp (start from head)
-	do {
-		chunker.exec( "" );
-		m = chunker.exec( soFar );
-
-		if ( m ) {
-			soFar = m[3];
-		
-			parts.push( m[1] );
-		
-			if ( m[2] ) {
-				extra = m[3];
-				break;
-			}
-		}
-	} while ( m );
-
-	if ( parts.length > 1 && origPOS.exec( selector ) ) {
-
-		if ( parts.length === 2 && Expr.relative[ parts[0] ] ) {
-			set = posProcess( parts[0] + parts[1], context );
-
-		} else {
-			set = Expr.relative[ parts[0] ] ?
-				[ context ] :
-				Sizzle( parts.shift(), context );
-
-			while ( parts.length ) {
-				selector = parts.shift();
-
-				if ( Expr.relative[ selector ] ) {
-					selector += parts.shift();
-				}
-				
-				set = posProcess( selector, set );
-			}
-		}
-
-	} else {
-		// Take a shortcut and set the context if the root selector is an ID
-		// (but not if it'll be faster if the inner selector is an ID)
-		if ( !seed && parts.length > 1 && context.nodeType === 9 && !contextXML &&
-				Expr.match.ID.test(parts[0]) && !Expr.match.ID.test(parts[parts.length - 1]) ) {
-
-			ret = Sizzle.find( parts.shift(), context, contextXML );
-			context = ret.expr ?
-				Sizzle.filter( ret.expr, ret.set )[0] :
-				ret.set[0];
-		}
-
-		if ( context ) {
-			ret = seed ?
-				{ expr: parts.pop(), set: makeArray(seed) } :
-				Sizzle.find( parts.pop(), parts.length === 1 && (parts[0] === "~" || parts[0] === "+") && context.parentNode ? context.parentNode : context, contextXML );
-
-			set = ret.expr ?
-				Sizzle.filter( ret.expr, ret.set ) :
-				ret.set;
-
-			if ( parts.length > 0 ) {
-				checkSet = makeArray( set );
-
-			} else {
-				prune = false;
-			}
-
-			while ( parts.length ) {
-				cur = parts.pop();
-				pop = cur;
-
-				if ( !Expr.relative[ cur ] ) {
-					cur = "";
-				} else {
-					pop = parts.pop();
-				}
-
-				if ( pop == null ) {
-					pop = context;
-				}
-
-				Expr.relative[ cur ]( checkSet, pop, contextXML );
-			}
-
-		} else {
-			checkSet = parts = [];
-		}
-	}
-
-	if ( !checkSet ) {
-		checkSet = set;
-	}
-
-	if ( !checkSet ) {
-		Sizzle.error( cur || selector );
-	}
-
-	if ( toString.call(checkSet) === "[object Array]" ) {
-		if ( !prune ) {
-			results.push.apply( results, checkSet );
-
-		} else if ( context && context.nodeType === 1 ) {
-			for ( i = 0; checkSet[i] != null; i++ ) {
-				if ( checkSet[i] && (checkSet[i] === true || checkSet[i].nodeType === 1 && Sizzle.contains(context, checkSet[i])) ) {
-					results.push( set[i] );
-				}
-			}
-
-		} else {
-			for ( i = 0; checkSet[i] != null; i++ ) {
-				if ( checkSet[i] && checkSet[i].nodeType === 1 ) {
-					results.push( set[i] );
-				}
-			}
-		}
-
-	} else {
-		makeArray( checkSet, results );
-	}
-
-	if ( extra ) {
-		Sizzle( extra, origContext, results, seed );
-		Sizzle.uniqueSort( results );
-	}
-
-	return results;
-};
-
-Sizzle.uniqueSort = function( results ) {
-	if ( sortOrder ) {
-		hasDuplicate = baseHasDuplicate;
-		results.sort( sortOrder );
-
-		if ( hasDuplicate ) {
-			for ( var i = 1; i < results.length; i++ ) {
-				if ( results[i] === results[ i - 1 ] ) {
-					results.splice( i--, 1 );
-				}
-			}
-		}
-	}
-
-	return results;
-};
-
-Sizzle.matches = function( expr, set ) {
-	return Sizzle( expr, null, null, set );
-};
-
-Sizzle.matchesSelector = function( node, expr ) {
-	return Sizzle( expr, null, null, [node] ).length > 0;
-};
-
-Sizzle.find = function( expr, context, isXML ) {
-	var set;
-
-	if ( !expr ) {
-		return [];
-	}
-
-	for ( var i = 0, l = Expr.order.length; i < l; i++ ) {
-		var match,
-			type = Expr.order[i];
-		
-		if ( (match = Expr.leftMatch[ type ].exec( expr )) ) {
-			var left = match[1];
-			match.splice( 1, 1 );
-
-			if ( left.substr( left.length - 1 ) !== "\\" ) {
-				match[1] = (match[1] || "").replace(/\\/g, "");
-				set = Expr.find[ type ]( match, context, isXML );
-
-				if ( set != null ) {
-					expr = expr.replace( Expr.match[ type ], "" );
-					break;
-				}
-			}
-		}
-	}
-
-	if ( !set ) {
-		set = context.getElementsByTagName( "*" );
-	}
-
-	return { set: set, expr: expr };
-};
-
-Sizzle.filter = function( expr, set, inplace, not ) {
-	var match, anyFound,
-		old = expr,
-		result = [],
-		curLoop = set,
-		isXMLFilter = set && set[0] && Sizzle.isXML( set[0] );
-
-	while ( expr && set.length ) {
-		for ( var type in Expr.filter ) {
-			if ( (match = Expr.leftMatch[ type ].exec( expr )) != null && match[2] ) {
-				var found, item,
-					filter = Expr.filter[ type ],
-					left = match[1];
-
-				anyFound = false;
-
-				match.splice(1,1);
-
-				if ( left.substr( left.length - 1 ) === "\\" ) {
-					continue;
-				}
-
-				if ( curLoop === result ) {
-					result = [];
-				}
-
-				if ( Expr.preFilter[ type ] ) {
-					match = Expr.preFilter[ type ]( match, curLoop, inplace, result, not, isXMLFilter );
-
-					if ( !match ) {
-						anyFound = found = true;
-
-					} else if ( match === true ) {
-						continue;
-					}
-				}
-
-				if ( match ) {
-					for ( var i = 0; (item = curLoop[i]) != null; i++ ) {
-						if ( item ) {
-							found = filter( item, match, i, curLoop );
-							var pass = not ^ !!found;
-
-							if ( inplace && found != null ) {
-								if ( pass ) {
-									anyFound = true;
-
-								} else {
-									curLoop[i] = false;
-								}
-
-							} else if ( pass ) {
-								result.push( item );
-								anyFound = true;
-							}
-						}
-					}
-				}
-
-				if ( found !== undefined ) {
-					if ( !inplace ) {
-						curLoop = result;
-					}
-
-					expr = expr.replace( Expr.match[ type ], "" );
-
-					if ( !anyFound ) {
-						return [];
-					}
-
-					break;
-				}
-			}
-		}
-
-		// Improper expression
-		if ( expr === old ) {
-			if ( anyFound == null ) {
-				Sizzle.error( expr );
-
-			} else {
-				break;
-			}
-		}
-
-		old = expr;
-	}
-
-	return curLoop;
-};
-
-Sizzle.error = function( msg ) {
-	throw "Syntax error, unrecognized expression: " + msg;
-};
-
-var Expr = Sizzle.selectors = {
-	order: [ "ID", "NAME", "TAG" ],
-
-	match: {
-		ID: /#((?:[\w\u00c0-\uFFFF\-]|\\.)+)/,
-		CLASS: /\.((?:[\w\u00c0-\uFFFF\-]|\\.)+)/,
-		NAME: /\[name=['"]*((?:[\w\u00c0-\uFFFF\-]|\\.)+)['"]*\]/,
-		ATTR: /\[\s*((?:[\w\u00c0-\uFFFF\-]|\\.)+)\s*(?:(\S?=)\s*(['"]*)(.*?)\3|)\s*\]/,
-		TAG: /^((?:[\w\u00c0-\uFFFF\*\-]|\\.)+)/,
-		CHILD: /:(only|nth|last|first)-child(?:\(\s*(even|odd|(?:[+\-]?\d+|(?:[+\-]?\d*)?n\s*(?:[+\-]\s*\d+)?))\s*\))?/,
-		POS: /:(nth|eq|gt|lt|first|last|even|odd)(?:\((\d*)\))?(?=[^\-]|$)/,
-		PSEUDO: /:((?:[\w\u00c0-\uFFFF\-]|\\.)+)(?:\((['"]?)((?:\([^\)]+\)|[^\(\)]*)+)\2\))?/
-	},
-
-	leftMatch: {},
-
-	attrMap: {
-		"class": "className",
-		"for": "htmlFor"
-	},
-
-	attrHandle: {
-		href: function( elem ) {
-			return elem.getAttribute( "href" );
-		}
-	},
-
-	relative: {
-		"+": function(checkSet, part){
-			var isPartStr = typeof part === "string",
-				isTag = isPartStr && !/\W/.test( part ),
-				isPartStrNotTag = isPartStr && !isTag;
-
-			if ( isTag ) {
-				part = part.toLowerCase();
-			}
-
-			for ( var i = 0, l = checkSet.length, elem; i < l; i++ ) {
-				if ( (elem = checkSet[i]) ) {
-					while ( (elem = elem.previousSibling) && elem.nodeType !== 1 ) {}
-
-					checkSet[i] = isPartStrNotTag || elem && elem.nodeName.toLowerCase() === part ?
-						elem || false :
-						elem === part;
-				}
-			}
-
-			if ( isPartStrNotTag ) {
-				Sizzle.filter( part, checkSet, true );
-			}
-		},
-
-		">": function( checkSet, part ) {
-			var elem,
-				isPartStr = typeof part === "string",
-				i = 0,
-				l = checkSet.length;
-
-			if ( isPartStr && !/\W/.test( part ) ) {
-				part = part.toLowerCase();
-
-				for ( ; i < l; i++ ) {
-					elem = checkSet[i];
-
-					if ( elem ) {
-						var parent = elem.parentNode;
-						checkSet[i] = parent.nodeName.toLowerCase() === part ? parent : false;
-					}
-				}
-
-			} else {
-				for ( ; i < l; i++ ) {
-					elem = checkSet[i];
-
-					if ( elem ) {
-						checkSet[i] = isPartStr ?
-							elem.parentNode :
-							elem.parentNode === part;
-					}
-				}
-
-				if ( isPartStr ) {
-					Sizzle.filter( part, checkSet, true );
-				}
-			}
-		},
-
-		"": function(checkSet, part, isXML){
-			var nodeCheck,
-				doneName = done++,
-				checkFn = dirCheck;
-
-			if ( typeof part === "string" && !/\W/.test(part) ) {
-				part = part.toLowerCase();
-				nodeCheck = part;
-				checkFn = dirNodeCheck;
-			}
-
-			checkFn( "parentNode", part, doneName, checkSet, nodeCheck, isXML );
-		},
-
-		"~": function( checkSet, part, isXML ) {
-			var nodeCheck,
-				doneName = done++,
-				checkFn = dirCheck;
-
-			if ( typeof part === "string" && !/\W/.test( part ) ) {
-				part = part.toLowerCase();
-				nodeCheck = part;
-				checkFn = dirNodeCheck;
-			}
-
-			checkFn( "previousSibling", part, doneName, checkSet, nodeCheck, isXML );
-		}
-	},
-
-	find: {
-		ID: function( match, context, isXML ) {
-			if ( typeof context.getElementById !== "undefined" && !isXML ) {
-				var m = context.getElementById(match[1]);
-				// Check parentNode to catch when Blackberry 4.6 returns
-				// nodes that are no longer in the document #6963
-				return m && m.parentNode ? [m] : [];
-			}
-		},
-
-		NAME: function( match, context ) {
-			if ( typeof context.getElementsByName !== "undefined" ) {
-				var ret = [],
-					results = context.getElementsByName( match[1] );
-
-				for ( var i = 0, l = results.length; i < l; i++ ) {
-					if ( results[i].getAttribute("name") === match[1] ) {
-						ret.push( results[i] );
-					}
-				}
-
-				return ret.length === 0 ? null : ret;
-			}
-		},
-
-		TAG: function( match, context ) {
-			return context.getElementsByTagName( match[1] );
-		}
-	},
-	preFilter: {
-		CLASS: function( match, curLoop, inplace, result, not, isXML ) {
-			match = " " + match[1].replace(/\\/g, "") + " ";
-
-			if ( isXML ) {
-				return match;
-			}
-
-			for ( var i = 0, elem; (elem = curLoop[i]) != null; i++ ) {
-				if ( elem ) {
-					if ( not ^ (elem.className && (" " + elem.className + " ").replace(/[\t\n\r]/g, " ").indexOf(match) >= 0) ) {
-						if ( !inplace ) {
-							result.push( elem );
-						}
-
-					} else if ( inplace ) {
-						curLoop[i] = false;
-					}
-				}
-			}
-
-			return false;
-		},
-
-		ID: function( match ) {
-			return match[1].replace(/\\/g, "");
-		},
-
-		TAG: function( match, curLoop ) {
-			return match[1].toLowerCase();
-		},
-
-		CHILD: function( match ) {
-			if ( match[1] === "nth" ) {
-				if ( !match[2] ) {
-					Sizzle.error( match[0] );
-				}
-
-				match[2] = match[2].replace(/^\+|\s*/g, '');
-
-				// parse equations like 'even', 'odd', '5', '2n', '3n+2', '4n-1', '-n+6'
-				var test = /(-?)(\d*)(?:n([+\-]?\d*))?/.exec(
-					match[2] === "even" && "2n" || match[2] === "odd" && "2n+1" ||
-					!/\D/.test( match[2] ) && "0n+" + match[2] || match[2]);
-
-				// calculate the numbers (first)n+(last) including if they are negative
-				match[2] = (test[1] + (test[2] || 1)) - 0;
-				match[3] = test[3] - 0;
-			}
-			else if ( match[2] ) {
-				Sizzle.error( match[0] );
-			}
-
-			// TODO: Move to normal caching system
-			match[0] = done++;
-
-			return match;
-		},
-
-		ATTR: function( match, curLoop, inplace, result, not, isXML ) {
-			var name = match[1].replace(/\\/g, "");
-			
-			if ( !isXML && Expr.attrMap[name] ) {
-				match[1] = Expr.attrMap[name];
-			}
-
-			if ( match[2] === "~=" ) {
-				match[4] = " " + match[4] + " ";
-			}
-
-			return match;
-		},
-
-		PSEUDO: function( match, curLoop, inplace, result, not ) {
-			if ( match[1] === "not" ) {
-				// If we're dealing with a complex expression, or a simple one
-				if ( ( chunker.exec(match[3]) || "" ).length > 1 || /^\w/.test(match[3]) ) {
-					match[3] = Sizzle(match[3], null, null, curLoop);
-
-				} else {
-					var ret = Sizzle.filter(match[3], curLoop, inplace, true ^ not);
-
-					if ( !inplace ) {
-						result.push.apply( result, ret );
-					}
-
-					return false;
-				}
-
-			} else if ( Expr.match.POS.test( match[0] ) || Expr.match.CHILD.test( match[0] ) ) {
-				return true;
-			}
-			
-			return match;
-		},
-
-		POS: function( match ) {
-			match.unshift( true );
-
-			return match;
-		}
-	},
-	
-	filters: {
-		enabled: function( elem ) {
-			return elem.disabled === false && elem.type !== "hidden";
-		},
-
-		disabled: function( elem ) {
-			return elem.disabled === true;
-		},
-
-		checked: function( elem ) {
-			return elem.checked === true;
-		},
-		
-		selected: function( elem ) {
-			// Accessing this property makes selected-by-default
-			// options in Safari work properly
-			elem.parentNode.selectedIndex;
-			
-			return elem.selected === true;
-		},
-
-		parent: function( elem ) {
-			return !!elem.firstChild;
-		},
-
-		empty: function( elem ) {
-			return !elem.firstChild;
-		},
-
-		has: function( elem, i, match ) {
-			return !!Sizzle( match[3], elem ).length;
-		},
-
-		header: function( elem ) {
-			return (/h\d/i).test( elem.nodeName );
-		},
-
-		text: function( elem ) {
-			return "text" === elem.type;
-		},
-		radio: function( elem ) {
-			return "radio" === elem.type;
-		},
-
-		checkbox: function( elem ) {
-			return "checkbox" === elem.type;
-		},
-
-		file: function( elem ) {
-			return "file" === elem.type;
-		},
-		password: function( elem ) {
-			return "password" === elem.type;
-		},
-
-		submit: function( elem ) {
-			return "submit" === elem.type;
-		},
-
-		image: function( elem ) {
-			return "image" === elem.type;
-		},
-
-		reset: function( elem ) {
-			return "reset" === elem.type;
-		},
-
-		button: function( elem ) {
-			return "button" === elem.type || elem.nodeName.toLowerCase() === "button";
-		},
-
-		input: function( elem ) {
-			return (/input|select|textarea|button/i).test( elem.nodeName );
-		}
-	},
-	setFilters: {
-		first: function( elem, i ) {
-			return i === 0;
-		},
-
-		last: function( elem, i, match, array ) {
-			return i === array.length - 1;
-		},
-
-		even: function( elem, i ) {
-			return i % 2 === 0;
-		},
-
-		odd: function( elem, i ) {
-			return i % 2 === 1;
-		},
-
-		lt: function( elem, i, match ) {
-			return i < match[3] - 0;
-		},
-
-		gt: function( elem, i, match ) {
-			return i > match[3] - 0;
-		},
-
-		nth: function( elem, i, match ) {
-			return match[3] - 0 === i;
-		},
-
-		eq: function( elem, i, match ) {
-			return match[3] - 0 === i;
-		}
-	},
-	filter: {
-		PSEUDO: function( elem, match, i, array ) {
-			var name = match[1],
-				filter = Expr.filters[ name ];
-
-			if ( filter ) {
-				return filter( elem, i, match, array );
-
-			} else if ( name === "contains" ) {
-				return (elem.textContent || elem.innerText || Sizzle.getText([ elem ]) || "").indexOf(match[3]) >= 0;
-
-			} else if ( name === "not" ) {
-				var not = match[3];
-
-				for ( var j = 0, l = not.length; j < l; j++ ) {
-					if ( not[j] === elem ) {
-						return false;
-					}
-				}
-
-				return true;
-
-			} else {
-				Sizzle.error( name );
-			}
-		},
-
-		CHILD: function( elem, match ) {
-			var type = match[1],
-				node = elem;
-
-			switch ( type ) {
-				case "only":
-				case "first":
-					while ( (node = node.previousSibling) )	 {
-						if ( node.nodeType === 1 ) { 
-							return false; 
-						}
-					}
-
-					if ( type === "first" ) { 
-						return true; 
-					}
-
-					node = elem;
-
-				case "last":
-					while ( (node = node.nextSibling) )	 {
-						if ( node.nodeType === 1 ) { 
-							return false; 
-						}
-					}
-
-					return true;
-
-				case "nth":
-					var first = match[2],
-						last = match[3];
-
-					if ( first === 1 && last === 0 ) {
-						return true;
-					}
-					
-					var doneName = match[0],
-						parent = elem.parentNode;
-	
-					if ( parent && (parent.sizcache !== doneName || !elem.nodeIndex) ) {
-						var count = 0;
-						
-						for ( node = parent.firstChild; node; node = node.nextSibling ) {
-							if ( node.nodeType === 1 ) {
-								node.nodeIndex = ++count;
-							}
-						} 
-
-						parent.sizcache = doneName;
-					}
-					
-					var diff = elem.nodeIndex - last;
-
-					if ( first === 0 ) {
-						return diff === 0;
-
-					} else {
-						return ( diff % first === 0 && diff / first >= 0 );
-					}
-			}
-		},
-
-		ID: function( elem, match ) {
-			return elem.nodeType === 1 && elem.getAttribute("id") === match;
-		},
-
-		TAG: function( elem, match ) {
-			return (match === "*" && elem.nodeType === 1) || elem.nodeName.toLowerCase() === match;
-		},
-		
-		CLASS: function( elem, match ) {
-			return (" " + (elem.className || elem.getAttribute("class")) + " ")
-				.indexOf( match ) > -1;
-		},
-
-		ATTR: function( elem, match ) {
-			var name = match[1],
-				result = Expr.attrHandle[ name ] ?
-					Expr.attrHandle[ name ]( elem ) :
-					elem[ name ] != null ?
-						elem[ name ] :
-						elem.getAttribute( name ),
-				value = result + "",
-				type = match[2],
-				check = match[4];
-
-			return result == null ?
-				type === "!=" :
-				type === "=" ?
-				value === check :
-				type === "*=" ?
-				value.indexOf(check) >= 0 :
-				type === "~=" ?
-				(" " + value + " ").indexOf(check) >= 0 :
-				!check ?
-				value && result !== false :
-				type === "!=" ?
-				value !== check :
-				type === "^=" ?
-				value.indexOf(check) === 0 :
-				type === "$=" ?
-				value.substr(value.length - check.length) === check :
-				type === "|=" ?
-				value === check || value.substr(0, check.length + 1) === check + "-" :
-				false;
-		},
-
-		POS: function( elem, match, i, array ) {
-			var name = match[2],
-				filter = Expr.setFilters[ name ];
-
-			if ( filter ) {
-				return filter( elem, i, match, array );
-			}
-		}
-	}
-};
-
-var origPOS = Expr.match.POS,
-	fescape = function(all, num){
-		return "\\" + (num - 0 + 1);
-	};
-
-for ( var type in Expr.match ) {
-	Expr.match[ type ] = new RegExp( Expr.match[ type ].source + (/(?![^\[]*\])(?![^\(]*\))/.source) );
-	Expr.leftMatch[ type ] = new RegExp( /(^(?:.|\r|\n)*?)/.source + Expr.match[ type ].source.replace(/\\(\d+)/g, fescape) );
-}
-
-var makeArray = function( array, results ) {
-	array = Array.prototype.slice.call( array, 0 );
-
-	if ( results ) {
-		results.push.apply( results, array );
-		return results;
-	}
-	
-	return array;
-};
-
-// Perform a simple check to determine if the browser is capable of
-// converting a NodeList to an array using builtin methods.
-// Also verifies that the returned array holds DOM nodes
-// (which is not the case in the Blackberry browser)
-try {
-	Array.prototype.slice.call( document.documentElement.childNodes, 0 )[0].nodeType;
-
-// Provide a fallback method if it does not work
-} catch( e ) {
-	makeArray = function( array, results ) {
-		var i = 0,
-			ret = results || [];
-
-		if ( toString.call(array) === "[object Array]" ) {
-			Array.prototype.push.apply( ret, array );
-
-		} else {
-			if ( typeof array.length === "number" ) {
-				for ( var l = array.length; i < l; i++ ) {
-					ret.push( array[i] );
-				}
-
-			} else {
-				for ( ; array[i]; i++ ) {
-					ret.push( array[i] );
-				}
-			}
-		}
-
-		return ret;
-	};
-}
-
-var sortOrder, siblingCheck;
-
-if ( document.documentElement.compareDocumentPosition ) {
-	sortOrder = function( a, b ) {
-		if ( a === b ) {
-			hasDuplicate = true;
-			return 0;
-		}
-
-		if ( !a.compareDocumentPosition || !b.compareDocumentPosition ) {
-			return a.compareDocumentPosition ? -1 : 1;
-		}
-
-		return a.compareDocumentPosition(b) & 4 ? -1 : 1;
-	};
-
-} else {
-	sortOrder = function( a, b ) {
-		var al, bl,
-			ap = [],
-			bp = [],
-			aup = a.parentNode,
-			bup = b.parentNode,
-			cur = aup;
-
-		// The nodes are identical, we can exit early
-		if ( a === b ) {
-			hasDuplicate = true;
-			return 0;
-
-		// If the nodes are siblings (or identical) we can do a quick check
-		} else if ( aup === bup ) {
-			return siblingCheck( a, b );
-
-		// If no parents were found then the nodes are disconnected
-		} else if ( !aup ) {
-			return -1;
-
-		} else if ( !bup ) {
-			return 1;
-		}
-
-		// Otherwise they're somewhere else in the tree so we need
-		// to build up a full list of the parentNodes for comparison
-		while ( cur ) {
-			ap.unshift( cur );
-			cur = cur.parentNode;
-		}
-
-		cur = bup;
-
-		while ( cur ) {
-			bp.unshift( cur );
-			cur = cur.parentNode;
-		}
-
-		al = ap.length;
-		bl = bp.length;
-
-		// Start walking down the tree looking for a discrepancy
-		for ( var i = 0; i < al && i < bl; i++ ) {
-			if ( ap[i] !== bp[i] ) {
-				return siblingCheck( ap[i], bp[i] );
-			}
-		}
-
-		// We ended someplace up the tree so do a sibling check
-		return i === al ?
-			siblingCheck( a, bp[i], -1 ) :
-			siblingCheck( ap[i], b, 1 );
-	};
-
-	siblingCheck = function( a, b, ret ) {
-		if ( a === b ) {
-			return ret;
-		}
-
-		var cur = a.nextSibling;
-
-		while ( cur ) {
-			if ( cur === b ) {
-				return -1;
-			}
-
-			cur = cur.nextSibling;
-		}
-
-		return 1;
-	};
-}
-
-// Utility function for retreiving the text value of an array of DOM nodes
-Sizzle.getText = function( elems ) {
-	var ret = "", elem;
-
-	for ( var i = 0; elems[i]; i++ ) {
-		elem = elems[i];
-
-		// Get the text from text nodes and CDATA nodes
-		if ( elem.nodeType === 3 || elem.nodeType === 4 ) {
-			ret += elem.nodeValue;
-
-		// Traverse everything else, except comment nodes
-		} else if ( elem.nodeType !== 8 ) {
-			ret += Sizzle.getText( elem.childNodes );
-		}
-	}
-
-	return ret;
-};
-
-// Check to see if the browser returns elements by name when
-// querying by getElementById (and provide a workaround)
-(function(){
-	// We're going to inject a fake input element with a specified name
-	var form = document.createElement("div"),
-		id = "script" + (new Date()).getTime(),
-		root = document.documentElement;
-
-	form.innerHTML = "<a name='" + id + "'/>";
-
-	// Inject it into the root element, check its status, and remove it quickly
-	root.insertBefore( form, root.firstChild );
-
-	// The workaround has to do additional checks after a getElementById
-	// Which slows things down for other browsers (hence the branching)
-	if ( document.getElementById( id ) ) {
-		Expr.find.ID = function( match, context, isXML ) {
-			if ( typeof context.getElementById !== "undefined" && !isXML ) {
-				var m = context.getElementById(match[1]);
-
-				return m ?
-					m.id === match[1] || typeof m.getAttributeNode !== "undefined" && m.getAttributeNode("id").nodeValue === match[1] ?
-						[m] :
-						undefined :
-					[];
-			}
-		};
-
-		Expr.filter.ID = function( elem, match ) {
-			var node = typeof elem.getAttributeNode !== "undefined" && elem.getAttributeNode("id");
-
-			return elem.nodeType === 1 && node && node.nodeValue === match;
-		};
-	}
-
-	root.removeChild( form );
-
-	// release memory in IE
-	root = form = null;
-})();
-
-(function(){
-	// Check to see if the browser returns only elements
-	// when doing getElementsByTagName("*")
-
-	// Create a fake element
-	var div = document.createElement("div");
-
-    //2010/12/28 berg:
-    //add try-catch
-    //in IE 5.5, createComment cause a JS error
-    try{
-	div.appendChild( document.createComment("") );
-    }catch(e){}
-
-	// Make sure no comments are found
-	if ( div.getElementsByTagName("*").length > 0 ) {
-		Expr.find.TAG = function( match, context ) {
-			var results = context.getElementsByTagName( match[1] );
-
-			// Filter out possible comments
-			if ( match[1] === "*" ) {
-				var tmp = [];
-
-				for ( var i = 0; results[i]; i++ ) {
-					if ( results[i].nodeType === 1 ) {
-						tmp.push( results[i] );
-					}
-				}
-
-				results = tmp;
-			}
-
-			return results;
-		};
-	}
-
-	// Check to see if an attribute returns normalized href attributes
-	div.innerHTML = "<a href='#'></a>";
-
-	if ( div.firstChild && typeof div.firstChild.getAttribute !== "undefined" &&
-			div.firstChild.getAttribute("href") !== "#" ) {
-
-		Expr.attrHandle.href = function( elem ) {
-			return elem.getAttribute( "href", 2 );
-		};
-	}
-
-	// release memory in IE
-	div = null;
-})();
-
-if ( document.querySelectorAll ) {
-	(function(){
-		var oldSizzle = Sizzle,
-			div = document.createElement("div"),
-			id = "__sizzle__";
-
-		div.innerHTML = "<p class='TEST'></p>";
-
-		// Safari can't handle uppercase or unicode characters when
-		// in quirks mode.
-		if ( div.querySelectorAll && div.querySelectorAll(".TEST").length === 0 ) {
-			return;
-		}
-	
-		Sizzle = function( query, context, extra, seed ) {
-			context = context || document;
-
-			// Make sure that attribute selectors are quoted
-			query = query.replace(/\=\s*([^'"\]]*)\s*\]/g, "='$1']");
-
-			// Only use querySelectorAll on non-XML documents
-			// (ID selectors don't work in non-HTML documents)
-			if ( !seed && !Sizzle.isXML(context) ) {
-				if ( context.nodeType === 9 ) {
-					try {
-						return makeArray( context.querySelectorAll(query), extra );
-					} catch(qsaError) {}
-
-				// qSA works strangely on Element-rooted queries
-				// We can work around this by specifying an extra ID on the root
-				// and working up from there (Thanks to Andrew Dupont for the technique)
-				// IE 8 doesn't work on object elements
-				} else if ( context.nodeType === 1 && context.nodeName.toLowerCase() !== "object" ) {
-					var old = context.getAttribute( "id" ),
-						nid = old || id,
-						hasParent = context.parentNode,
-						relativeHierarchySelector = /^\s*[+~]/.test( query );
-
-					if ( !old ) {
-						context.setAttribute( "id", nid );
-					} else {
-						nid = nid.replace( /'/g, "\\$&" );
-					}
-					if ( relativeHierarchySelector && hasParent ) {
-						context = context.parentNode;
-					}
-
-					try {
-						if ( !relativeHierarchySelector || hasParent ) {
-							return makeArray( context.querySelectorAll( "[id='" + nid + "'] " + query ), extra );
-						}
-
-					} catch(pseudoError) {
-					} finally {
-						if ( !old ) {
-							context.removeAttribute( "id" );
-						}
-					}
-				}
-			}
-		
-			return oldSizzle(query, context, extra, seed);
-		};
-
-		for ( var prop in oldSizzle ) {
-			Sizzle[ prop ] = oldSizzle[ prop ];
-		}
-
-		// release memory in IE
-		div = null;
-	})();
-}
-
-(function(){
-	var html = document.documentElement,
-		matches = html.matchesSelector || html.mozMatchesSelector || html.webkitMatchesSelector || html.msMatchesSelector,
-		pseudoWorks = false;
-
-	try {
-		// This should fail with an exception
-		// Gecko does not error, returns false instead
-		matches.call( document.documentElement, "[test!='']:sizzle" );
-	
-	} catch( pseudoError ) {
-		pseudoWorks = true;
-	}
-
-	if ( matches ) {
-		Sizzle.matchesSelector = function( node, expr ) {
-			// Make sure that attribute selectors are quoted
-			expr = expr.replace(/\=\s*([^'"\]]*)\s*\]/g, "='$1']");
-
-			if ( !Sizzle.isXML( node ) ) {
-				try { 
-					if ( pseudoWorks || !Expr.match.PSEUDO.test( expr ) && !/!=/.test( expr ) ) {
-						return matches.call( node, expr );
-					}
-				} catch(e) {}
-			}
-
-			return Sizzle(expr, null, null, [node]).length > 0;
-		};
-	}
-})();
-
-(function(){
-	var div = document.createElement("div");
-
-	div.innerHTML = "<div class='test e'></div><div class='test'></div>";
-
-	// Opera can't find a second classname (in 9.6)
-	// Also, make sure that getElementsByClassName actually exists
-	if ( !div.getElementsByClassName || div.getElementsByClassName("e").length === 0 ) {
-		return;
-	}
-
-	// Safari caches class attributes, doesn't catch changes (in 3.2)
-	div.lastChild.className = "e";
-
-	if ( div.getElementsByClassName("e").length === 1 ) {
-		return;
-	}
-	
-	Expr.order.splice(1, 0, "CLASS");
-	Expr.find.CLASS = function( match, context, isXML ) {
-		if ( typeof context.getElementsByClassName !== "undefined" && !isXML ) {
-			return context.getElementsByClassName(match[1]);
-		}
-	};
-
-	// release memory in IE
-	div = null;
-})();
-
-function dirNodeCheck( dir, cur, doneName, checkSet, nodeCheck, isXML ) {
-	for ( var i = 0, l = checkSet.length; i < l; i++ ) {
-		var elem = checkSet[i];
-
-		if ( elem ) {
-			var match = false;
-
-			elem = elem[dir];
-
-			while ( elem ) {
-				if ( elem.sizcache === doneName ) {
-					match = checkSet[elem.sizset];
-					break;
-				}
-
-				if ( elem.nodeType === 1 && !isXML ){
-					elem.sizcache = doneName;
-					elem.sizset = i;
-				}
-
-				if ( elem.nodeName.toLowerCase() === cur ) {
-					match = elem;
-					break;
-				}
-
-				elem = elem[dir];
-			}
-
-			checkSet[i] = match;
-		}
-	}
-}
-
-function dirCheck( dir, cur, doneName, checkSet, nodeCheck, isXML ) {
-	for ( var i = 0, l = checkSet.length; i < l; i++ ) {
-		var elem = checkSet[i];
-
-		if ( elem ) {
-			var match = false;
-			
-			elem = elem[dir];
-
-			while ( elem ) {
-				if ( elem.sizcache === doneName ) {
-					match = checkSet[elem.sizset];
-					break;
-				}
-
-				if ( elem.nodeType === 1 ) {
-					if ( !isXML ) {
-						elem.sizcache = doneName;
-						elem.sizset = i;
-					}
-
-					if ( typeof cur !== "string" ) {
-						if ( elem === cur ) {
-							match = true;
-							break;
-						}
-
-					} else if ( Sizzle.filter( cur, [elem] ).length > 0 ) {
-						match = elem;
-						break;
-					}
-				}
-
-				elem = elem[dir];
-			}
-
-			checkSet[i] = match;
-		}
-	}
-}
-
-if ( document.documentElement.contains ) {
-	Sizzle.contains = function( a, b ) {
-		return a !== b && (a.contains ? a.contains(b) : true);
-	};
-
-} else if ( document.documentElement.compareDocumentPosition ) {
-	Sizzle.contains = function( a, b ) {
-		return !!(a.compareDocumentPosition(b) & 16);
-	};
-
-} else {
-	Sizzle.contains = function() {
-		return false;
-	};
-}
-
-Sizzle.isXML = function( elem ) {
-	// documentElement is verified for cases where it doesn't yet exist
-	// (such as loading iframes in IE - #4833) 
-	var documentElement = (elem ? elem.ownerDocument || elem : 0).documentElement;
-
-	return documentElement ? documentElement.nodeName !== "HTML" : false;
-};
-
-var posProcess = function( selector, context ) {
-	var match,
-		tmpSet = [],
-		later = "",
-		root = context.nodeType ? [context] : context;
-
-	// Position selectors must be done after the filter
-	// And so must :not(positional) so we move all PSEUDOs to the end
-	while ( (match = Expr.match.PSEUDO.exec( selector )) ) {
-		later += match[0];
-		selector = selector.replace( Expr.match.PSEUDO, "" );
-	}
-
-	selector = Expr.relative[selector] ? selector + "*" : selector;
-
-	for ( var i = 0, l = root.length; i < l; i++ ) {
-		Sizzle( selector, root[i], tmpSet );
-	}
-
-	return Sizzle.filter( later, tmpSet );
-};
-
-// EXPOSE
-
-baidu.dom.query = Sizzle;
-
+baidu.dom.query = (function (){
+    var d = document;
+    d._Q_rev = 0;
+
+    var MUTATION = false;
+    var _onMu = function (){
+        d._Q_rev ++;
+        MUTATION = true;
+    };
+    if (d.addEventListener) {
+        d.addEventListener('DOMNodeInserted', _onMu, false);
+        d.addEventListener('DOMNodeRemoved', _onMu, false);
+    }
+
+    var BY_ID1;
+    var BY_CLASS;
+    var IE678 = window.ActiveXObject && !d.addEventListener;
+    (function (){
+        var div = d.createElement('div');
+        div.innerHTML = '<a name="d"></a><div id="d"></div>';
+        BY_ID1 = div.getElementsByTagName('*')["d"] === div.lastChild;
+        div.innerHTML = '<div class="t e"></div><div class="t"></div>';
+        div.lastChild.className = 'e';
+        BY_CLASS = div.getElementsByClassName && div.getElementsByClassName('e').length == 2;
+    })();
+    var BY_NAME = !!d.getElementsByName;
+    var BY_ELEMENT = typeof d.documentElement.nextElementSibling !== 'undefined';
+    var BY_CHILDREN = !!d.documentElement.children;
+    var BY_CHILDREN_TAG = BY_CHILDREN && !!d.documentElement.children.tags;
+
+    var PATTERN = /(?:\s*([ ~+>,])\s*)?(?:([:.#]?)((?:[\w\u00A1-\uFFFF-]|\\.)+|\*)|\[\s*((?:[\w\u00A1-\uFFFF-]|\\.)+)(?:\s*([~^$|*!]?=)\s*((['"]).*?\7|[^\]]*))?\s*\])/g;
+
+    function trim(str){
+        return str.replace(/^\s*|\s*$/, '');
+    }
+    function make(kind, array){
+        return (array.kind = kind, array);
+    }
+    var parse = function (){
+        var text;
+        var index;
+
+        function match(regex){
+            var mc = (regex.lastIndex = index, regex.exec(text));
+            return mc && mc.index == index ? (index = regex.lastIndex, mc) : null;
+        }
+        function dequote(str){
+            var ch = str.charAt(0);
+            return ch == '"' || ch == "'" ? str.slice(1, -1) : str;
+        }
+        function error(){ throw ['ParseError', text, index]; }
+
+        function parse(){
+            var mc, simple, seq = [], chain = [seq], group = [chain];
+            while (mc = match(PATTERN)) {
+                if (mc[1]) {
+                    if (mc[1] == ',') group.push(chain = []);
+                    if (seq.length) chain.push(seq = []);
+                    if (mc[1] != ',') seq.comb = mc[1];
+                }
+                simple = [mc[4] || mc[3]];
+                if (mc[6]) simple.push(dequote(mc[6]));
+                simple.kind = mc[5] || (mc[4] ? '[' : mc[2] || 'T');
+                if (simple[0] == '*' && simple.kind != 'T') error();
+                if (mc[2] == ':') {
+                    simple.kind = ':' + mc[3];
+                    if (text.charAt(index) == '(') {
+                        index ++;
+                        if (mc[3] == 'not' || mc[3] == 'has') {
+                            var t = index;
+                            simple[0] = parse();
+                            simple[1] = text.slice(t, index);
+                            if (text.charAt(index) == ')') index ++; else error();
+                        } else {
+                            var tmpIndex = text.indexOf(')', index);
+                            if (tmpIndex != -1) {
+                                simple[0] = trim(text.slice(index, tmpIndex));
+                                index = tmpIndex + 1;
+                            } else error();
+
+                            if (mc[3].indexOf('nth') == 0) {
+                                var tmp = simple[0];
+                                tmp = (tmp == 'even' ? '2n' : tmp == 'odd' ? '2n+1' :
+                                    (tmp.indexOf('n') == -1 ? '0n': '') + tmp.replace(/\s*/g, '')).split('n');
+                                simple[0] = !tmp[0] ? 1 : Number(tmp[0]) | 0;
+                                simple[1] = Number(tmp[1]) | 0;
+                            } else if (mc[3] == 'contains') {
+                                simple[0] = dequote(simple[0]);
+                            }
+                        }
+                    }
+                }
+                seq.push(simple);
+            }
+            return group;
+        }
+
+        return function (selector){
+            return (text = selector, index = 0, selector = parse(), match(/\s*/g), index < text.length) ? error() : selector;
+        };
+
+    }();
+
+    var fRMap = { '#': 9, 'N': BY_NAME ? 7 : 0, '.': BY_CLASS ? 6 : 0, 'T': 5 };
+    var tRMap = { '#': 9, '=': 9, '[': 8, 'N': 9, 'T': 8, '.': 5,  '~=': 3, '|=': 3, '*=': 3,
+        ':not': 6, ':has': 1, ':contains': 3, ':nth-child': 2, ':nth-last-child': 2,
+        ':first-child': 3, ':last-child': 3, ':only-child': 3, ':not-ex': 7 };
+    var efMap = { id: '#', name: 'N' };
+    var testingOrder = function (a, b){ return a.tR - b.tR; };
+    var regPos = /:(nth|eq|gt|lt|first|last|even|odd)$/;
+
+    function process(seq){
+        var finder, t;
+        var k = seq.length;
+        while (k --) {
+            var simple = seq[k];
+            // 转化[id="xxx"][name="xxx"][tagName="xxx"][className~="xxx"]之类的选择器
+            // 识别:root,html|head|body|title等全局仅一个的标签的选择器，忽略*选择器
+            // 合并类选择器以便于使用getElementsByClassName
+            if (simple.kind == ':html') simple = make('T', 'html');
+            if (simple.kind == '=') {
+                if (efMap[simple[0]]) simple = make(efMap[simple[0]], [simple[1]]);
+            } else if (simple.kind == '~=' && simple[0] == 'className') simple = make('.', [simple[1]]);
+            if (simple.kind == 'T') {
+                if (simple[0] == '*') simple.kind = '*'; else seq.tag = simple;
+                t = simple[0].toLowerCase();
+            } else if (simple.kind == '.') {
+                if (!seq.classes) seq.classes = simple; else {
+                    seq.classes.push(simple[0]);
+                    simple.kind = '*';
+                }
+            }
+            if (simple.kind == ':not' && !((t=simple[0],t.length==1)&&(t=t[0],t.length==1))) {
+                simple.kind = ':not-ex';
+            }
+            //remark: 这里是为了支持sizzle的setFilter系列
+            if (regPos.test(simple.kind)) {
+                simple[0] = Number(simple[0]) | 0;
+                var newSimple = make(simple.kind, simple.slice(0));
+                simple.kind = '*';
+                if (!seq.allPoses) {
+                    seq.allPoses = [newSimple];
+                } else {
+                    seq.allPoses.push(newSimple);
+                }
+            }
+            // 计算选择器的得分用于优先级排序等策略
+            simple.fR = fRMap[simple.kind] | 0;
+            simple.tR = tRMap[simple.kind] | 0;
+            if (simple.fR && (!finder || simple.fR > finder.fR)) finder = simple;
+            seq[k] = simple;
+        }
+        // 按照优先级对用于测试的选择器进行排序
+        seq.sort(testingOrder);
+        // 记录用于getElementXXX的最佳的选择器
+        seq.$ = finder;
+        return seq;
+    }
+    // 对chain进行处理
+    // 注意为了处理方便, 返回的数组是倒序的
+    // div p a => [div] [p] [a]
+    // div p>a => [div] [p>a]
+    function slice(chain){
+        var part = [];
+        var parts = [part];
+        var k = chain.length;
+        while (k --) {
+            var seq = chain[k];
+            seq = process(seq);
+            seq.N = 'node' + k;
+            //remark: 这里是为了支持sizzle的setFilter.
+            if (seq.allPoses) {
+                if (!chain.allPoses) {
+                    chain.allPoses = [];
+                }
+                chain.allPoses.push.apply(chain.allPoses, seq.allPoses);
+            }
+            if (seq.$ && (!part.fR || seq.$.fR > part.fR || (seq.$.fR == part.fR && parts.length == 1))) {
+                part.fR = seq.$.fR;
+                part.fI = part.length;
+            }
+            part.push(seq);
+            if (seq.comb == ' ' && k && part.fI != null) {
+                parts.push(part = []);
+                part.fR = 0;
+            }
+            if (k == chain.length - 1 && seq.tag) chain.tag = seq.tag;
+        }
+        for (var i=0; i<parts.length; i++) {
+            part = parts[i];
+            var part1 = parts[i + 1];
+            if (part1 != null) {
+                if (part.fR > part1.fR || (part.fR == part1.fR && part1.fI != 0)){
+                    parts.splice(i + 1, 1);
+                    part.push.apply(part, part1);
+                    i --;
+                } else {
+                    part.R = part1[0].N;
+                }
+            } else {
+                part.R = 'root';
+            }
+        }
+        // 如果没有找到任何一个可以用于find的seq.
+        if (parts[0].fI == null) {
+            parts[0].fI = 0;
+            parts[0][0].$ = make('*', ['*']);
+        }
+        return parts;
+    }
+
+    function format(tpl, params){
+        return tpl.replace(/#\{([^}]+)\}/g, function (m, p){
+            return params[p] == null ? m : params[p] + '';
+        });
+    }
+
+    var CTX_NGEN = 0;
+
+    var TPL_DOC = '/*^var doc=root.ownerDocument||root;^*/';
+    var TPL_XHTML = TPL_DOC + '/*^var xhtml=Q._isXHTML(doc);^*/';
+    var TPL_CONTAINS = IE678 ? '#{0}.contains(#{1})' : '#{0}.compareDocumentPosition(#{1})&16';
+    var TPL_QID = '#{N}._Q_id||(#{N}._Q_id=++qid)';
+    var TPL_FIND = {
+        '#': 'var #{N}=Q._byId("#{P}", #{R});if(#{N}){#{X}}',
+        'N': TPL_DOC + 'var #{N}A=doc.getElementsByName("#{P}");for(var #{N}I=0,#{N};#{N}=#{N}A[#{N}I];#{N}I++){if(#{R}===doc||' + format(TPL_CONTAINS, ['#{R}', '#{N}']) +'){#{X}}}',
+        'T': 'var #{N}A=#{R}.getElementsByTagName("#{P}");for(var #{N}I=0,#{N};#{N}=#{N}A[#{N}I];#{N}I++){#{X}}',
+        '.': 'var #{N}A=#{R}.getElementsByClassName("#{P}");for(var #{N}I=0,#{N};#{N}=#{N}A[#{N}I];#{N}I++){#{X}}',
+        '*': 'var #{N}A=#{R}.getElementsByTagName("*");for(var #{N}I=0,#{N};#{N}=#{N}A[#{N}I];#{N}I++){#{X}}',
+        '+': BY_ELEMENT ? '/*^var #{N};^*/if(#{N}=#{R}.nextElementSibling){#{X}}' : 'var #{N}=#{R};while(#{N}=#{N}.nextSibling){if(#{N}.nodeType==1){#{X}break;}}',
+        '~': BY_ELEMENT ? '/*^var #{N}H={};^*/var #{N}=#{R};while(#{N}=#{N}.nextElementSibling){if(#{N}H[' + TPL_QID + '])break;#{N}H[' + TPL_QID + ']=1;#{X}}' : '/*^var #{N}H={};^*/var #{N}=#{R};while(#{N}=#{N}.nextSibling){if(#{N}.nodeType==1){if(#{N}H[' + TPL_QID + '])break;#{N}H[' + TPL_QID + ']=1;#{X}}}',
+        '>': 'var #{N}A=#{R}.children||#{R}.childNodes;for(var #{N}I=0,#{N};#{N}=#{N}A[#{N}I];#{N}I++){if(#{N}.nodeType==1){#{X}}}',
+        '>T': 'var #{N}A=#{R}.children.tags("#{P}");for(var #{N}I=0,#{N};#{N}=#{N}A[#{N}I];#{N}I++){#{X}}'
+    };
+    var TPL_LEFT = 'var #{R}V={_:false};NP_#{R}:{P_#{R}:{#{X}break NP_#{R};}#{R}V._=true;#{Y}}';
+    var TPL_TOPASS = 'if(t=#{N}H[' + TPL_QID + ']){if(t._){break P_#{R};}else{break NP_#{R};}}#{N}H[' + TPL_QID + ']=#{R}V;#{X}';
+    var TPL_TOPASS_UP = format(TPL_TOPASS, { X: 'if(#{N}!==#{R}){#{X}}' });
+    var TPL_PASSED = 'break P_#{R};';
+    var TPL_PASS = {
+        '>': '/*^var #{N}H={};^*/var #{N}=#{C}.parentNode;' + TPL_TOPASS_UP,
+        ' ': '/*^var #{N}H={};^*/var #{N}=#{C};while(#{N}=#{N}.parentNode){' + TPL_TOPASS_UP + '}',
+        '+': BY_ELEMENT ? '/*^var #{N}H={};var #{N};^*/if(#{N}=#{C}.previousElementSibling){#{X}}' : '/*^var #{N}H={};^*/var #{N}=#{C};while(#{N}=#{N}.previousSibling){#{X}break;}',
+        '~': BY_ELEMENT ? '/*^var #{N}H={};^*/var #{N}=#{C};while(#{N}=#{N}.previousElementSibling){' + TPL_TOPASS + '}' : '/*^var #{N}H={};^*/var #{N}=#{C};while(#{N}=#{N}.previousSibling){' + TPL_TOPASS + '}'
+    };
+    var TPL_MAIN = 'function(root){var result=[];var qid=Q.qid,t,l=result.length;BQ:{#{X}}Q.qid=qid;return result;}';
+    var TPL_HELP = '/*^var #{N}L;^*/if(!#{N}L||!(' + format(TPL_CONTAINS, ['#{N}L', '#{N}']) +')){#{X}#{N}L=#{N};}';
+    var TPL_PUSH = 'result[l++]=#{N};';
+    var TPL_INPUT_T = TPL_XHTML + '/*^var input_t=!xhtml?"INPUT":"input";^*/';
+    var TPL_POS = '/*^var pos=-1;^*/';
+    var TPL_TEST = {
+        'T': TPL_XHTML +'/*^var #{N}T=!xhtml?("#{0}").toUpperCase():"#{0}";^*/#{N}.nodeName==#{N}T',
+        '#': '#{N}.id=="#{0}"',
+        'N': '#{N}.name=="#{0}"',
+
+        '[': IE678 ? '(t=#{N}.getAttributeNode("#{0}"))&&(t.specified)' : '#{N}.hasAttribute("#{0}")',
+        '=': '#{A}=="#{1}"',
+        '!=': '#{A}!="#{1}"',
+        '^=': '(t=#{A})&&t.slice(0,#{L})=="#{1}"',
+        '$=': '(t=#{A})&&t.slice(-#{L})=="#{1}"',
+        '*=': '(t=#{A})&&t.indexOf("#{1}")!==-1',
+        '|=': '(t=#{A})&&(t=="#{1}"||t.slice(0,#{L})=="#{P}")',
+        '~=': '(t=#{A})&&(" "+t+" ").indexOf("#{P}")!==-1',
+
+        ':element': '#{N}.nodeType==1',
+        ':contains': '(#{N}.textContent||#{N}.innerText).indexOf("#{0}")!==-1',
+        ':first-child': BY_ELEMENT ? '#{N}.parentNode.firstElementChild===#{N}' : 'Q._isFirstChild(#{N})',
+        ':nth-child': TPL_DOC + '/*^var rev=doc._Q_rev||(doc._Q_rev=Q.qid++);^*/Q._index(#{N},#{0},#{1},rev)',
+        ':last-child': BY_ELEMENT ? '#{N}.parentNode.lastElementChild===#{N}' : 'Q._isLastChild(#{N})',
+        ':only-child': BY_ELEMENT ? '(t=#{N}.parentNode)&&(t.firstElementChild===#{N}&&t.lastElementChild===#{N})' : 'Q._isOnlyChild(#{N})',
+
+        ':not-ex': '/*^var _#{G}=Q._hash(Q("#{1}",root));qid=Q.qid;^*/!_#{G}[' + TPL_QID + ']',
+        ':has': '(t=Q("#{1}", #{N}),qid=Q.qid,t.length>0)',
+        ':parent': '!!#{N}.firstChild',
+        ':empty': '!#{N}.firstChild',
+
+        ':header': '/h\\d/i.test(#{N}.nodeName)',
+        ':input': '/input|select|textarea|button/i.test(#{N}.nodeName)',
+        ':enabled': '#{N}.disabled===false&&#{N}.type!=="hidden"',
+        ':disabled': '#{N}.disabled===true',
+        ':checked': '#{N}.checked===true',
+        ':selected': '(#{N}.parentNode.selectedIndex,#{N}.selected===true)',
+
+        // TODO: 这些伪类可以转化成为标签选择器加以优化！
+        ':focus': TPL_DOC + '#{N}===doc.activeElement',
+        ':button': TPL_INPUT_T + '#{N}.nodeName==="button"||(#{N}.nodeName===input_t&&#{N}.type==="button")',
+        ':submit': TPL_INPUT_T + '#{N}.nodeName===input_t&&#{N}.type==="submit"',
+        ':reset': TPL_INPUT_T + '#{N}.nodeName===input_t&&#{N}.type==="reset"',
+        ':text': TPL_INPUT_T + '#{N}.nodeName===input_t&&#{N}.type==="text"&&(t=#{N}.getAttribute("type"),t==="text"||t===null)',
+        ':radio': TPL_INPUT_T + '#{N}.nodeName===input_t&&#{N}.type==="radio"',
+        ':checkbox': TPL_INPUT_T + '#{N}.nodeName===input_t&&#{N}.type==="checkbox"',
+        ':file': TPL_INPUT_T + '#{N}.nodeName===input_t&&#{N}.type==="file"',
+        ':password': TPL_INPUT_T + '#{N}.nodeName===input_t&&#{N}.type==="password"',
+        ':image': TPL_INPUT_T + '#{N}.nodeName===input_t&&#{N}.type==="image"'
+    };
+
+    function genAttrCode(attr){
+        if (attr == 'for') return '#{N}.htmlFor';
+        if (attr == 'class') return '#{N}.className';
+        if (attr == 'type') return '#{N}.getAttribute("type")';
+        if (attr == 'href') return '#{N}.getAttribute("href",2)';
+        return '(#{N}["' + attr + '"]||#{N}.getAttribute("' + attr + '"))';
+    }
+
+    function genTestCode(simple){
+        if (simple.kind.indexOf('=') !== -1) {
+            simple.A = genAttrCode(simple[0]);
+        }
+        var t;
+        switch (simple.kind) {
+        case '.':
+            var k = simple.length;
+            var buff = [];
+            while (k --) {
+                buff.push('t.indexOf(" #{'+ k +'} ")!==-1');
+            }
+            return format('(t=#{N}.className)&&((t=" "+t+" "),(' + buff.join(' && ') + '))', simple);
+        case '^=':
+        case '$=':
+            simple.L = simple[1].length;
+            break;
+        case '|=':
+            simple.L = simple[1].length + 1;
+            simple.P = simple[1] + '-';
+            break;
+        case '~=':
+            simple.P = ' ' + simple[1] + ' ';
+            break;
+        case ':nth-child':
+//        case ':nth-last-child':
+            if (simple[0] == 1 && simple[1] == 0) return '';
+            break;
+        case ':not':
+            t = genCondCode(simple[0][0][0]);
+            return t ? '!(' + t + ')' : 'false';
+        case ':not-ex':
+        case ':has':
+            simple.G = CTX_NGEN ++;
+            break;
+        case '*':
+            return '';
+        }
+        return format(TPL_TEST[simple.kind], simple);
+    }
+    function genCondCode(seq){
+        var buff = [];
+        var k = seq.length;
+        var code;
+        while (k --) {
+            var simple = seq[k];
+            if (code = genTestCode(simple)) {
+                buff.push(code);
+            }
+        }
+        return buff.join(' && ');
+    }
+    function genThenCode(seq){
+        var code = genCondCode(seq);
+        return code ? format('if('+code+'){#{X}}', { N: seq.N }) : '#{X}';
+    }
+    var NEEDNOT_ELEMENT_CHECK = { '#': 1, 'T': 1, '.': 1, 'N': 1, ':element': 1 };
+    function genFindCode(seq, R, comb){
+        comb = comb || seq.comb;
+        var tpl;
+        if (comb == ' ') {
+            var finder = seq.$;
+            if (finder) {
+                tpl = TPL_FIND[finder.kind];
+                // 有hack的嫌疑, 让产生test代码时忽略已经用于find的seq.
+                finder.kind = '*';
+            } else {
+                tpl = TPL_FIND['*'];
+                if (IE678 && !NEEDNOT_ELEMENT_CHECK[seq[seq.length - 1].kind]) {
+                    seq.push(make(':element', []));
+                }
+            }
+        } else if (BY_CHILDREN_TAG && comb == '>' && seq.tag) {
+            tpl = TPL_FIND['>T'];
+            finder = seq.tag;
+            seq.tag.kind = '*';
+        } else {
+//            if (!BY_ELEMENT && (comb == '+' || comb == '~') && !NEEDNOT_ELEMENT_CHECK[seq[seq.length - 1].kind]) {
+//                seq.push(make(':element', []));
+//            }
+            tpl = TPL_FIND[comb];
+        }
+        return format(tpl, {
+            P: finder && (finder.kind == '.' ? finder.join(' ') : finder[0]),
+            N: seq.N,
+            R: R,
+            X: genThenCode(seq)
+        });
+    }
+    function genNextCode(part, thenCode){
+        var code = '#{X}';
+        var k = part.fI;
+        while (k --) {
+            code = format(code, { X: genFindCode(part[k], part[k+1].N) });
+        }
+        var nextCode;
+        if (!thenCode) {
+            if (part.fI == 0 && (k = part[0].$.kind) && (k != 'S' && k != '#')) {
+                nextCode = format(TPL_HELP, { N: part[0].N });
+                code = format(code, { X: nextCode })
+            }
+        } else {
+            nextCode = format(thenCode, { N: part[0].N });
+            code = format(code, { X: nextCode });
+        }
+        return code;
+    }
+    function genPassCode(seq, C, comb){
+        return format(TPL_PASS[comb], {
+            N: seq.N,
+            C: C,
+            X: genThenCode(seq)
+        });
+    }
+    function genLeftCode(part){
+        var code = TPL_LEFT;
+        for (var i=part.fI+1,l=part.length; i<l; i++) {
+            var seq = part[i];
+            var lastSeq = part[i-1];
+            code = format(code, { X: genPassCode(seq, lastSeq.N, part[i-1].comb) });
+        }
+        code = format(code, { X: TPL_PASSED });
+        code = format(code, { R: part.R });
+        return code;
+    }
+    function genPartCode(part, thenCode){
+        var code = genFindCode(part[part.fI], part.R, ' ');
+        var nextCode = genNextCode(part, thenCode);
+        if (part.fI < part.length - 1) {
+            var passCode = genLeftCode(part);
+            nextCode = format(passCode, { Y: nextCode });
+        }
+        return format(code, { X: nextCode });
+    }
+
+    function genThatCode(seq){
+        var obj = {};
+        var k = seq.length;
+        while (k --) {
+            var simple = seq[k];
+            if (simple.kind == ':first') {
+                simple = make(':nth', [0]);
+            } else if (simple.kind == ':last') {
+                obj.last = 1;
+            }
+            if (simple.kind == ':lt') {
+                obj.lt = obj.lt === undefined ? simple[0] : Math.min(obj.lt, simple[0]);
+            } else if (simple.kind == ':gt') {
+                obj.gt = obj.gt === undefined ? simple[0] : Math.max(obj.gt, simple[0]);
+            } else if (simple.kind == ':eq' || simple.kind == ':nth') {
+                if (obj.eq && obj.eq !== simple[0]) {
+                    obj.no = true;
+                } else obj.eq = simple[0];
+            } else if (simple.kind == ':even' || simple.kind == ':odd') {
+                obj[simple.kind.slice(1)] = 1;
+            }
+        }
+        if ((obj.lt != null && obj.eq != null && obj.eq >= obj.lt) || (obj.lt != null && obj.gt != null && obj.lt <= obj.gt) || (obj.even && obj.odd)) {
+            obj.no = 1;
+        }
+
+        if (obj.no) {
+            return '/*^break BQ;^*/';
+        }
+        var buff = [];
+        if (obj.even) {
+            buff.push('pos%2===0');
+        } else if (obj.odd) {
+            buff.push('pos%2===1');
+        }
+        var code = obj.eq == null ? TPL_PUSH : 'if(pos===' + obj.eq + '){result=[#{N}];break BQ;}';
+        if (obj.gt != null) {
+            buff.push('pos>'+obj.gt);
+        }
+        code = buff.length ? 'if (' + buff.join('&&') + '){' + code + '}' : code;
+        code = obj.lt != null ? 'if (pos<' + obj.lt + '){' + code + '}else break BQ;' : code;
+        if (obj.last) {
+            code += '/*$result=result.slice(-1);$*/';
+        }
+        return code;
+    }
+    function genCode(chain){
+        var parts = slice(chain);
+
+        var thenCode = chain.allPoses ? TPL_POS + 'pos++;' + genThatCode(chain.allPoses) : TPL_PUSH;
+        CTX_NGEN = 0;
+        var code = '#{X}';
+
+        var k = parts.length;
+        while (k --) {
+            var part = parts[k];
+            code = format(code, { X: genPartCode(part, k == 0 ? thenCode : false ) });
+        }
+        return code;
+    }
+
+    var documentOrder;
+    if (d.documentElement.sourceIndex) {
+        documentOrder = function (nodeA, nodeB){ return nodeA === nodeB ? 0 : nodeA.sourceIndex - nodeB.sourceIndex; };
+    } else if (d.compareDocumentPosition) {
+        documentOrder = function (nodeA, nodeB){ return nodeA === nodeB ? 0 : nodeB.compareDocumentPosition(nodeA) & 0x02 ? -1 : 1; };
+    }
+    function uniqueSort(nodeSet, notUnique){
+        if (!nodeSet.length) return nodeSet;
+        nodeSet.sort(documentOrder);
+        if (notUnique) return nodeSet;
+        var resultSet = [nodeSet[0]];
+        var node, j = 0;
+        for (var i=1, l=nodeSet.length; i<l; i++) {
+            if (resultSet[j] !== (node = nodeSet[i])) {
+                resultSet[++ j] = node;
+            }
+        }
+        return resultSet;
+    }
+
+    function compile(expr){
+        var group = parse(expr);
+        var tags = {};
+        var k = group.length;
+        while (k --) {
+            var chain = group[k];
+            var code = genCode(chain);
+            if (tags && chain.tag && !tags[chain.tag[0]]) {
+                tags[chain.tag[0]] = 1;
+            } else {
+                tags = null;
+            }
+            var hash = {};
+            var pres = [];
+            var posts = [];
+            code = code.replace(/\/\*\^(.*?)\^\*\//g, function (m, p){
+                return (hash[p] || (hash[p] = pres.push(p)), '');
+            });
+            code = code.replace(/\/\*\$(.*?)\$\*\//g, function (m, p){
+                return (hash[p] || (hash[p] = posts.push(p)), '');
+            });
+            code = format(TPL_MAIN, { X: pres.join('') + code + posts.join('') });
+            group[k] = new Function('Q', 'return(' + code + ')')(Q);
+        }
+        if (group.length == 1) {
+            return group[0];
+        }
+        return function (root){
+            var k = group.length;
+            var result = [];
+            while (k --) {
+                result.push.apply(result, group[k](root));
+            }
+            return uniqueSort(result, tags != null);
+        };
+    }
+
+    Q._hash = function (result){
+        var hash = result._Q_hash;
+        if (hash == null) {
+            hash = result._Q_hash = {};
+            var k = result.length;
+            var qid = Q.qid;
+            while (k --) {
+                var el = result[k];
+                hash[el._Q_id||(el._Q_id=++qid)] = 1;
+            }
+            Q.qid = qid;
+        }
+        return hash;
+    };
+    var _slice = Array.prototype.slice;
+    Q._toArray1 = function (staticNodeList){
+        var k = staticNodeList.length;
+        var a = new Array(k);
+        while (k --) {
+            a[k] = staticNodeList[k];
+        }
+        return a;
+    };
+    Q._toArray = function (staticNodeList){
+        try {
+            return _slice.call(staticNodeList, 0);
+        } catch(ex){}
+        return (Q._toArray = Q._toArray1)(staticNodeList);
+    };
+
+    function queryXML(expr, root){
+        throw ['NotImpl'];
+    }
+    var cache = {};
+    var inQuery = false;
+    function query(expr, root){
+        var doc = root.ownerDocument || root;
+        var ret;
+        if (!doc.getElementById) {
+            return queryXML(expr, root);
+        }
+        if (root === doc && doc.querySelectorAll && !/#/.test(expr)) {
+            try { return Q._toArray(doc.querySelectorAll(expr)); } catch(ex){}
+        }
+        var fn  = cache[expr] || (cache[expr] = compile(expr));
+        if (!inQuery) {
+            inQuery = true;
+            if (!MUTATION) {
+                doc._Q_rev = Q.qid ++;
+            }
+            ret = fn(root);
+            inQuery = false;
+        } else {
+            ret = fn(root);
+        }
+        return ret;
+    }
+
+    Q.qid = 1;
+    Q._byId = function (id, root){
+        if (BY_ID1) {
+            return root.getElementsByTagName('*')[id];
+        }
+        var doc = root.ownerDocument || root;
+        var node = doc.getElementById(id);
+        if (node && ((root === doc) || Q.contains(root, node)) && (!IE678 || (node.id === id || node.getAttributeNode('id').nodeValue === id))) {
+            return node;
+        }
+        return null;
+    };
+    Q._in = function (nodes, nodeSet){
+        var hash = Q._hash(nodeSet);
+        var ret = [];
+        for (var i=0; i<nodes.length; i++) {
+            var node = nodes[i];
+            if (hash[node._Q_id||(node._Q_id=++Q.qid)]) {
+                ret.push(node);
+            }
+        }
+        return ret;
+    };
+    Q.matches = function (expr, set){
+        return Q(expr, null, null, set);
+    };
+    Q.contains = d.documentElement.contains ? function (a, b){
+        return a !== b && a.contains(b);
+    } : function (a, b) {
+        return a !== b && a.compareDocumentPosition(b) & 16;
+    };
+    Q._has = function (node, nodes){
+        for (var i=0, tnode; tnode=nodes[i++];) {
+            if (!Q.contains(node, tnode)) return false;
+        }
+        return true;
+    };
+    Q._index = function (node, a, b, rev){
+        var parent = node.parentNode;
+        if (parent._Q_magic !== rev) {
+            var tnode;
+            var count = 1;
+            if (BY_ELEMENT) {
+                tnode = parent.firstElementChild;
+                while (tnode) {
+                    tnode._Q_index = count ++;
+                    tnode = tnode.nextElementSibling;
+                }
+            } else {
+                var nodes = parent.children || parent.childNodes;
+                for (var i=0; tnode=nodes[i]; i++) {
+                    if (tnode.nodeType == 1) {
+                        tnode._Q_index = count ++;
+                    }
+                    tnode = tnode.nextSibling;
+                }
+            }
+            parent._Q_count1 = count;
+            parent._Q_magic = rev;
+        }
+        return a ? (node._Q_index - b) % a == 0 : node._Q_index == b;
+    };
+    Q._isOnlyChild = function (node){
+        return Q._isFirstChild(node) && Q._isLastChild(node);
+    };
+    Q._isFirstChild = function (node){
+        while (node = node.previousSibling) {
+            if (node.nodeType == 1) return false;
+        }
+        return true;
+    };
+    Q._isLastChild = function (node){
+        while (node = node.nextSibling) {
+            if (node.nodeType == 1) return false;
+        }
+        return true;
+    };
+    Q._isXHTML = function (doc){
+        return doc.documentElement.nodeName == 'html';
+    };
+    function Q(expr, root, result, seed){
+        root = root || d;
+        var ret = query(expr, root);
+        if (seed) {
+            ret = Q._in(seed, ret);
+        }
+        if (result) {
+            ret.push.apply(result, ret);
+        } else {
+            result = ret;
+        }
+        return result;
+    }
+    return Q;
 })();
 /*
  * Tangram
@@ -6154,7 +5773,7 @@ baidu.dom.query = Sizzle;
         bindReady();
 
         return function(callback) {
-            ready.isReady ? callback() : (readyList[readyList.length] = callback);
+            ready.isReady ? callback() : readyList.push(callback);
         };
     }();
 
@@ -6329,44 +5948,6 @@ baidu.object.each = function (source, iterator) {
     }
     return source;
 };
-/*
- * Tangram
- * Copyright 2009 Baidu Inc. All rights reserved.
- * 
- * path: baidu/dom/setStyles.js
- * author: allstar
- * version: 1.1.0
- * date: 2009/11/18
- */
-
-
-
-
-/**
- * 批量设置目标元素的style样式值
- * @name baidu.dom.setStyles
- * @function
- * @grammar baidu.dom.setStyles(element, styles)
- * @param {HTMLElement|string} element 目标元素或目标元素的id
- * @param {Object} styles 要设置的样式集合
- * @shortcut setStyles
- * @meta standard
- * @see baidu.dom.setStyle,baidu.dom.getStyle
- *             
- * @returns {HTMLElement} 目标元素
- */
-baidu.dom.setStyles = function (element, styles) {
-    element = baidu.dom.g(element);
-
-    for (var key in styles) {
-        baidu.dom.setStyle(element, key, styles[key]);
-    }
-
-    return element;
-};
-
-// 声明快捷方法
-baidu.setStyles = baidu.dom.setStyles;
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
@@ -6720,7 +6301,7 @@ baidu.dom.resizable = function(element,options) {
          */
         orgCursor = baidu.getStyle(document.body, 'cursor');
         baidu.setStyle(document.body, 'cursor', key + '-resize');
-        baidu.on(document, 'mouseup',stop);
+        baidu.on(ele, 'mouseup',stop);
         baidu.on(document.body, 'selectstart', unselect);
         mozUserSelect = document.body.style.MozUserSelect;
         document.body.style.MozUserSelect = 'none';
@@ -6755,7 +6336,7 @@ baidu.dom.resizable = function(element,options) {
          * 删除事件监听
          * 还原css属性设置
          */
-        baidu.un(document, 'mouseup',stop);
+        baidu.un(currentEle, 'mouseup',stop);
         baidu.un(document, 'selectstart', unselect);
         document.body.style.MozUserSelect = mozUserSelect;
         baidu.un(document.body, 'selectstart', unselect);
@@ -6995,6 +6576,285 @@ baidu.dom.toggleClass = function (element, className) {
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
  * 
+ * path: baidu/dom/_styleFilter/color.js
+ * author: allstar, erik
+ * version: 1.1.0
+ * date: 2009/12/02
+ */
+
+
+
+/**
+ * 提供给setStyle与getStyle使用
+ * @meta standard
+ */
+baidu.dom._styleFilter[baidu.dom._styleFilter.length] = {
+    get: function (key, value) {
+        if (/color/i.test(key) && value.indexOf("rgb(") != -1) {
+            var array = value.split(",");
+
+            value = "#";
+            for (var i = 0, color; color = array[i]; i++){
+                color = parseInt(color.replace(/[^\d]/gi, ''), 10).toString(16);
+                value += color.length == 1 ? "0" + color : color;
+            }
+
+            value = value.toUpperCase();
+        }
+
+        return value;
+    }
+};
+/*
+ * Tangram
+ * Copyright 2009 Baidu Inc. All rights reserved.
+ * 
+ * path: baidu/dom/_styleFixer/display.js
+ * author: allstar
+ * version: 1.1.0
+ * date: 2009/11/24
+ */
+
+
+
+
+
+/**
+ * 提供给setStyle与getStyle使用
+ * @meta standard
+ */
+baidu.dom._styleFixer.display = baidu.browser.ie && baidu.browser.ie < 8 ? { // berg: 修改到<8，因为ie7同样存在这个问题，from 先伟
+    set: function (element, value) {
+        element = element.style;
+        if (value == 'inline-block') {
+            element.display = 'inline';
+            element.zoom = 1;
+        } else {
+            element.display = value;
+        }
+    }
+} : baidu.browser.firefox && baidu.browser.firefox < 3 ? {
+    set: function (element, value) {
+        element.style.display = value == 'inline-block' ? '-moz-inline-box' : value;
+    }
+} : null;
+/*
+ * Tangram
+ * Copyright 2009 Baidu Inc. All right reserved.
+ * 
+ * path: baidu/dom/_styleFixer/float.js
+ * author: allstar
+ * version: 1.1.0
+ * date: 2009/11/17
+ */
+
+
+
+/**
+ * 提供给setStyle与getStyle使用
+ * @meta standard
+ */
+baidu.dom._styleFixer["float"] = baidu.browser.ie ? "styleFloat" : "cssFloat";
+/*
+ * Tangram
+ * Copyright 2009 Baidu Inc. All rights reserved.
+ * 
+ * path: baidu/dom/_styleFixer/opacity.js
+ * author: allstar
+ * version: 1.1.0
+ * date: 2009/11/17
+ */
+
+
+
+
+/**
+ * 提供给setStyle与getStyle使用
+ * @meta standard
+ */
+baidu.dom._styleFixer.opacity = baidu.browser.ie ? {
+    get: function (element) {
+        var filter = element.style.filter;
+        return filter && filter.indexOf("opacity=") >= 0 ? (parseFloat(filter.match(/opacity=([^)]*)/)[1]) / 100) + "" : "1";
+    },
+
+    set: function (element, value) {
+        var style = element.style;
+        // 只能Quirks Mode下面生效??
+        style.filter = (style.filter || "").replace(/alpha\([^\)]*\)/gi, "") + (value == 1 ? "" : "alpha(opacity=" + value * 100 + ")");
+        // IE filters only apply to elements with "layout."
+        style.zoom = 1;
+    }
+} : null;
+/*
+ * Tangram
+ * Copyright 2009 Baidu Inc. All rights reserved.
+ * 
+ * path: baidu/dom/_styleFixer/textOverflow.js
+ * author: allstar
+ * version: 1.1.0
+ * date: 2009/11/17
+ */
+
+
+
+
+
+
+/**
+ * 提供给setStyle与getStyle使用，在做textOverflow时会向element对象中添加,_baiduOverflow, _baiduHTML两个属性保存原始的innerHTML信息
+ */
+baidu.dom._styleFixer.textOverflow = (function () {
+    var fontSizeCache = {};
+
+    function pop(list) {
+        var o = list.length;
+        if (o > 0) {
+            o = list[o - 1];
+            list.length--;
+        } else {
+            o = null;
+        }
+        return o;
+    }
+
+    function setText(element, text) {
+        element[baidu.browser.firefox ? "textContent" : "innerText"] = text;
+    }
+
+    function count(element, width, ellipsis) {
+        /* 计算cache的名称 */
+        var o = baidu.browser.ie ? element.currentStyle || element.style : getComputedStyle(element, null),
+            fontWeight = o.fontWeight,
+            cacheName =
+                "font-family:" + o.fontFamily + ";font-size:" + o.fontSize
+                + ";word-spacing:" + o.wordSpacing + ";font-weight:" + ((parseInt(fontWeight) || 0) == 401 ? 700 : fontWeight)
+                + ";font-style:" + o.fontStyle + ";font-variant:" + o.fontVariant,
+            cache = fontSizeCache[cacheName];
+
+        if (!cache) {
+            o = element.appendChild(document.createElement("div"));
+
+            o.style.cssText = "float:left;" + cacheName;
+            cache = fontSizeCache[cacheName] = [];
+
+            /* 计算ASCII字符的宽度cache */
+            for (var i=0; i < 256; i++) {
+                i == 32 ? (o.innerHTML = "&nbsp;") : setText(o, String.fromCharCode(i));
+                cache[i] = o.offsetWidth;
+            }
+
+            /* 计算非ASCII字符的宽度、字符间距、省略号的宽度,\u4e00是汉字一的编码*/
+            setText(o, "\u4e00");
+            cache[256] = o.offsetWidth;
+            setText(o, "\u4e00\u4e00");
+            cache[257] = o.offsetWidth - cache[256] * 2;
+            cache[258] = cache[".".charCodeAt(0)] * 3 + cache[257] * 3;
+
+            element.removeChild(o);
+        }
+
+        for (
+            /* wordWidth是每个字符或子节点计算之前的宽度序列 */
+            var node = element.firstChild, charWidth = cache[256], wordSpacing = cache[257], ellipsisWidth = cache[258],
+                wordWidth = [], ellipsis = ellipsis ? ellipsisWidth : 0;
+            node;
+            node = node.nextSibling
+        ) {
+            if (width < ellipsis) {
+                element.removeChild(node);
+            }
+            else if (node.nodeType == 3) {
+                for (var i = 0, text = node.nodeValue, length = text.length; i < length; i++) {
+                    o = text.charCodeAt(i);
+                    /* 计算增加字符后剩余的长度 */
+                    wordWidth[wordWidth.length] = [width, node, i];
+                    width -= (i ? wordSpacing : 0) + (o < 256 ? cache[o] : charWidth);
+                    if (width < ellipsis) {
+                        break;
+                    }
+                }
+            }
+            else {
+                o = node.tagName;
+                if (o == "IMG" || o == "TABLE") {
+                    /* 特殊元素直接删除 */
+                    o = node;
+                    node = node.previousSibling;
+                    element.removeChild(o);
+                }
+                else {
+                    wordWidth[wordWidth.length] = [width, node];
+                    width -= node.offsetWidth;
+                }
+            }
+        }
+
+        if (width < ellipsis) {
+            /* 过滤直到能得到大于省略号宽度的位置 */
+            while (o = pop(wordWidth)) {
+                width = o[0];
+                node = o[1];
+                o = o[2];
+                if (node.nodeType == 3) {
+                    if (width >= ellipsisWidth) {
+                        node.nodeValue = node.nodeValue.substring(0, o) + "...";
+                        return true;
+                    }
+                    else if (!o) {
+                        element.removeChild(node);
+                    }
+                }
+                else if (count(node, width, true)) {
+                    return true;
+                }
+                else {
+                    element.removeChild(node);
+                }
+            }
+
+            /* 能显示的宽度小于省略号的宽度，直接不显示 */
+            element.innerHTML = "";
+        }
+    }
+
+    return {
+		get: function (element) {
+            var browser = baidu.browser,
+                getStyle = dom.getStyle;
+			return (browser.opera ?
+                        getStyle("OTextOverflow") :
+                        browser.firefox ?
+                            element._baiduOverflow :
+                            getStyle("textOverflow")) ||
+                   "clip";
+		},
+
+		set: function (element, value) {
+            var browser = baidu.browser;
+			if (element.tagName == "TD" || element.tagName == "TH" || browser.firefox) {
+				element._baiduHTML && (element.innerHTML = element._baiduHTML);
+
+				if (value == "ellipsis") {
+					element._baiduHTML = element.innerHTML;
+					var o = document.createElement("div"), width = element.appendChild(o).offsetWidth;
+					element.removeChild(o);
+					count(element, width);
+				}
+				else {
+					element._baiduHTML = "";
+				}
+			}
+
+			o = element.style;
+			browser.opera ? (o.OTextOverflow = value) : browser.firefox ? (element._baiduOverflow = value) : (o.textOverflow = value);
+		}
+    };
+})();
+/*
+ * Tangram
+ * Copyright 2009 Baidu Inc. All rights reserved.
+ * 
  * path: baidu/lang/isArray.js
  * author: erik
  * version: 1.1.0
@@ -7202,13 +7062,15 @@ baidu.fn.multize = function (func, recursive, joinArray) {
 /**
  * @namespace baidu.element 通过该方法封装的对象可使用dom、event方法集合以及each方法进行链式调用。
  */
-baidu.element = baidu.e = function(node){
+baidu.element = function(node){
     var gNode = baidu._g(node);
     if(!gNode && baidu.dom.query){
         gNode = baidu.dom.query(node);
     }
     return new baidu.element.Element(gNode);
 };
+// 声明快捷方法
+baidu.e = baidu.element;
 
 /**
  * Element类，所有扩展到链条上的方法都会被放在这里面
@@ -7277,7 +7139,7 @@ baidu.element._makeChain = function(){ //将dom/event包下的东西挂到protot
         fnTransformer = baidu.element._toChainFunction;
 
     //返回值是第一个参数的包装
-    baidu.each(("draggable droppable resizable").split(' '),
+    baidu.each(("draggable droppable resizable fixable").split(' '),
               function(fn){
                   proto[fn] =  fnTransformer(baidu.dom[fn], 1);
               });
@@ -7392,14 +7254,13 @@ baidu.element.extend = function(json){
 /**
  * 事件对象构造器，屏蔽浏览器差异的事件类
  * @name baidu.event.EventArg
- * @function
+ * @class
  * @grammar baidu.event.EventArg(event[, win])
  * @param {Event}   event   事件对象
  * @param {Window}  [win]	窗口对象，默认为window
  * @meta standard
  * @remark 1.1.0开始支持
  * @see baidu.event.get
- * @constructor
  */
 baidu.event.EventArg = function (event, win) {
     win = win || window;
@@ -7466,199 +7327,6 @@ baidu.event.EventArg.prototype.stopPropagation = function () {
 baidu.event.EventArg.prototype.stop = function () {
     return this.stopPropagation().preventDefault();
 };
-/*
- * Tangram
- * Copyright 2009 Baidu Inc. All rights reserved.
- * 
- * path: baidu/event/_eventFilter.js
- * author: rocy
- * version: 1.0.0
- * date: 2010/10/29
- */
-
-
-baidu.event._eventFilter = baidu.event._eventFilter || {};
-
-/*
- * Tangram
- * Copyright 2009 Baidu Inc. All rights reserved.
- * 
- * path: baidu/event/_eventFilter/_crossElementBoundary.js
- * author: Rocy, berg
- * version: 1.0.0
- * date: 2010/12/16
- */
-
-
-
-
-
-/**
- * 事件仅在鼠标进入/离开元素区域触发一次，当鼠标在元素区域内部移动的时候不会触发，用于为非IE浏览器添加mouseleave/mouseenter支持。
- * 
- * @name baidu.event._eventFilter._crossElementBoundary
- * @function
- * @grammar baidu.event._eventFilter._crossElementBoundary(listener, e)
- * 
- * @param {function} listener	要触发的函数
- * @param {DOMEvent} e 			DOM事件
- */
-
-baidu.event._eventFilter._crossElementBoundary = function(listener, e){
-    var related = e.relatedTarget,
-        current = e.currentTarget;
-    if(
-       related === false || 
-       // 如果current和related都是body，contains函数会返回false
-       current == related ||
-       // Firefox有时会把XUL元素作为relatedTarget
-       // 这些元素不能访问parentNode属性
-       // thanks jquery & mootools
-       (related && (related.prefix == 'xul' ||
-       //如果current包含related，说明没有经过current的边界
-       baidu.dom.contains(current, related)))
-      ){
-        return ;
-    }
-    return listener.call(current, e);
-};
-/*
- * Tangram
- * Copyright 2009 Baidu Inc. All rights reserved.
- * 
- * path: baidu/fn/bind.js
- * author: berg
- * version: 1.0.0
- * date: 2010/11/02 
- */
-
-
-
-
-
-/** 
- * 为对象绑定方法和作用域
- * @name baidu.fn.bind
- * @function
- * @grammar baidu.fn.bind(handler[, obj, args])
- * @param {Function|String} handler 要绑定的函数，或者一个在作用域下可用的函数名
- * @param {Object} obj 执行运行时this，如果不传入则运行时this为函数本身
- * @param {args* 0..n} args 函数执行时附加到执行时函数前面的参数
- * @version 1.3
- *
- * @returns {Function} 封装后的函数
- */
-baidu.fn.bind = function(func, scope) {
-    var xargs = arguments.length > 2 ? [].slice.call(arguments, 2) : null;
-    return function () {
-        var fn = baidu.lang.isString(func) ? scope[func] : func,
-            args = (xargs) ? xargs.concat([].slice.call(arguments, 0)) : arguments;
-        return fn.apply(scope || fn, args);
-    };
-};
-/*
- * Tangram
- * Copyright 2009 Baidu Inc. All rights reserved.
- * 
- * path: baidu/event/_eventFilter/mouseenter.js
- * author: Rocy
- * version: 1.0.0
- * date: 2010/11/09
- */
-
-
-
-
-
-/**
- * 用于为非IE浏览器添加mouseenter的支持;
- * mouseenter事件仅在鼠标进入元素区域触发一次,
- *    当鼠标在元素内部移动的时候不会多次触发.
- */
-baidu.event._eventFilter.mouseenter = window.attachEvent ? null : function(element,type, listener){
-	return {
-		type: "mouseover",
-		listener: baidu.fn.bind(baidu.event._eventFilter._crossElementBoundary, this, listener)
-	}
-};
-/*
- * Tangram
- * Copyright 2009 Baidu Inc. All rights reserved.
- * 
- * path: baidu/event/_eventFilter/mouseleave.js
- * author: Rocy, berg
- * version: 1.0.0
- * date: 2010/11/09
- */
-
-
-
-
-/**
- * 用于为非IE浏览器添加mouseleave的支持;
- * mouseleave事件仅在鼠标移出元素区域触发一次,
- *    当鼠标在元素区域内部移动的时候不会触发.
- */
-baidu.event._eventFilter.mouseleave = window.attachEvent ? null : function(element,type, listener){
-	return {
-		type: "mouseout",
-		listener: baidu.fn.bind(baidu.event._eventFilter._crossElementBoundary, this, listener)
-	}
-};
-/*
- * Tangram
- * Copyright 2009 Baidu Inc. All rights reserved.
- *
- * path: baidu/event/_unload.js
- * author: erik, berg
- * version: 1.1.0
- * date: 2009/12/16
- */
-
-
-
-
-/**
- * 卸载所有事件监听器
- * @private
- */
-baidu.event._unload = function() {
-    var lis = baidu.event._listeners,
-        len = lis.length,
-        standard = !!window.removeEventListener,
-        item, el;
-
-    while (len--) {
-        item = lis[len];
-        //20100409 berg: 不解除unload的绑定，保证用户的事件一定会被执行
-        //否则用户挂载进入的unload事件也可能会在这里被删除
-        if (item[1] == 'unload') {
-            continue;
-        }
-        //如果el被移除，不做判断将导致js报错
-        if (!(el = item[0])) {
-            continue;
-        }
-        if (el.removeEventListener) {
-            el.removeEventListener(item[1], item[3], false);
-        } else if (el.detachEvent) {
-            el.detachEvent('on' + item[1], item[3]);
-        }
-    }
-
-    if (standard) {
-        window.removeEventListener('unload', baidu.event._unload, false);
-    } else {
-        window.detachEvent('onunload', baidu.event._unload);
-    }
-};
-
-// 在页面卸载的时候，将所有事件监听器移除
-if (window.attachEvent) {
-    window.attachEvent('onunload', baidu.event._unload);
-} else {
-    window.addEventListener('unload', baidu.event._unload, false);
-}
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
@@ -8120,6 +7788,199 @@ baidu.event.stop = function (event) {
 };
 /*
  * Tangram
+ * Copyright 2009 Baidu Inc. All rights reserved.
+ * 
+ * path: baidu/event/_eventFilter.js
+ * author: rocy
+ * version: 1.0.0
+ * date: 2010/10/29
+ */
+
+
+baidu.event._eventFilter = baidu.event._eventFilter || {};
+
+/*
+ * Tangram
+ * Copyright 2009 Baidu Inc. All rights reserved.
+ * 
+ * path: baidu/event/_eventFilter/_crossElementBoundary.js
+ * author: Rocy, berg
+ * version: 1.0.0
+ * date: 2010/12/16
+ */
+
+
+
+
+
+/**
+ * 事件仅在鼠标进入/离开元素区域触发一次，当鼠标在元素区域内部移动的时候不会触发，用于为非IE浏览器添加mouseleave/mouseenter支持。
+ * 
+ * @name baidu.event._eventFilter._crossElementBoundary
+ * @function
+ * @grammar baidu.event._eventFilter._crossElementBoundary(listener, e)
+ * 
+ * @param {function} listener	要触发的函数
+ * @param {DOMEvent} e 			DOM事件
+ */
+
+baidu.event._eventFilter._crossElementBoundary = function(listener, e){
+    var related = e.relatedTarget,
+        current = e.currentTarget;
+    if(
+       related === false || 
+       // 如果current和related都是body，contains函数会返回false
+       current == related ||
+       // Firefox有时会把XUL元素作为relatedTarget
+       // 这些元素不能访问parentNode属性
+       // thanks jquery & mootools
+       (related && (related.prefix == 'xul' ||
+       //如果current包含related，说明没有经过current的边界
+       baidu.dom.contains(current, related)))
+      ){
+        return ;
+    }
+    return listener.call(current, e);
+};
+/*
+ * Tangram
+ * Copyright 2009 Baidu Inc. All rights reserved.
+ * 
+ * path: baidu/fn/bind.js
+ * author: berg
+ * version: 1.0.0
+ * date: 2010/11/02 
+ */
+
+
+
+
+
+/** 
+ * 为对象绑定方法和作用域
+ * @name baidu.fn.bind
+ * @function
+ * @grammar baidu.fn.bind(handler[, obj, args])
+ * @param {Function|String} handler 要绑定的函数，或者一个在作用域下可用的函数名
+ * @param {Object} obj 执行运行时this，如果不传入则运行时this为函数本身
+ * @param {args* 0..n} args 函数执行时附加到执行时函数前面的参数
+ * @version 1.3
+ *
+ * @returns {Function} 封装后的函数
+ */
+baidu.fn.bind = function(func, scope) {
+    var xargs = arguments.length > 2 ? [].slice.call(arguments, 2) : null;
+    return function () {
+        var fn = baidu.lang.isString(func) ? scope[func] : func,
+            args = (xargs) ? xargs.concat([].slice.call(arguments, 0)) : arguments;
+        return fn.apply(scope || fn, args);
+    };
+};
+/*
+ * Tangram
+ * Copyright 2009 Baidu Inc. All rights reserved.
+ * 
+ * path: baidu/event/_eventFilter/mouseenter.js
+ * author: Rocy
+ * version: 1.0.0
+ * date: 2010/11/09
+ */
+
+
+
+
+
+/**
+ * 用于为非IE浏览器添加mouseenter的支持;
+ * mouseenter事件仅在鼠标进入元素区域触发一次,
+ *    当鼠标在元素内部移动的时候不会多次触发.
+ */
+baidu.event._eventFilter.mouseenter = window.attachEvent ? null : function(element,type, listener){
+	return {
+		type: "mouseover",
+		listener: baidu.fn.bind(baidu.event._eventFilter._crossElementBoundary, this, listener)
+	}
+};
+/*
+ * Tangram
+ * Copyright 2009 Baidu Inc. All rights reserved.
+ * 
+ * path: baidu/event/_eventFilter/mouseleave.js
+ * author: Rocy, berg
+ * version: 1.0.0
+ * date: 2010/11/09
+ */
+
+
+
+
+/**
+ * 用于为非IE浏览器添加mouseleave的支持;
+ * mouseleave事件仅在鼠标移出元素区域触发一次,
+ *    当鼠标在元素区域内部移动的时候不会触发.
+ */
+baidu.event._eventFilter.mouseleave = window.attachEvent ? null : function(element,type, listener){
+	return {
+		type: "mouseout",
+		listener: baidu.fn.bind(baidu.event._eventFilter._crossElementBoundary, this, listener)
+	}
+};
+/*
+ * Tangram
+ * Copyright 2009 Baidu Inc. All rights reserved.
+ *
+ * path: baidu/event/_unload.js
+ * author: erik, berg
+ * version: 1.1.0
+ * date: 2009/12/16
+ */
+
+
+
+
+/**
+ * 卸载所有事件监听器
+ * @private
+ */
+baidu.event._unload = function() {
+    var lis = baidu.event._listeners,
+        len = lis.length,
+        standard = !!window.removeEventListener,
+        item, el;
+
+    while (len--) {
+        item = lis[len];
+        //20100409 berg: 不解除unload的绑定，保证用户的事件一定会被执行
+        //否则用户挂载进入的unload事件也可能会在这里被删除
+        if (item[1] == 'unload') {
+            continue;
+        }
+        //如果el被移除，不做判断将导致js报错
+        if (!(el = item[0])) {
+            continue;
+        }
+        if (el.removeEventListener) {
+            el.removeEventListener(item[1], item[3], false);
+        } else if (el.detachEvent) {
+            el.detachEvent('on' + item[1], item[3]);
+        }
+    }
+
+    if (standard) {
+        window.removeEventListener('unload', baidu.event._unload, false);
+    } else {
+        window.detachEvent('onunload', baidu.event._unload);
+    }
+};
+
+// 在页面卸载的时候，将所有事件监听器移除
+if (window.attachEvent) {
+    window.attachEvent('onunload', baidu.event._unload);
+} else {
+    window.addEventListener('unload', baidu.event._unload, false);
+}
+/*
+ * Tangram
  * Copyright 2011 Baidu Inc. All rights reserved.
  *
  * path: baidu/fn/abstractMethod.js
@@ -8140,28 +8001,6 @@ baidu.event.stop = function (event) {
 baidu.fn.abstractMethod = function() {
     throw Error('unimplemented abstract method');
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* vim: set ts=4 sw=4 sts=4 tw=100 noet: */
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
@@ -8564,7 +8403,7 @@ baidu.lang.decontrol = function(guid) {
 
 /**
  * 事件中心
- * @class 事件中心
+ * @class
  * @name baidu.lang.eventCenter
  * @author rocy
  */
@@ -8583,7 +8422,9 @@ baidu.lang.eventCenter = baidu.lang.eventCenter || baidu.lang.createSingle();
 
 /**
  * 移除全局事件监听器。
+ * @name baidu.lang.eventCenter.removeEventListener
  * @grammar baidu.lang.eventCenter.removeEventListener(type, handler)
+ * @function
  * @param {string}   type     事件类型
  * @param {Function|string} handler  要移除的事件监听函数或者监听函数的key
  * @remark 	如果第二个参数handler没有被绑定到对应的自定义事件中，什么也不做。
@@ -8591,7 +8432,9 @@ baidu.lang.eventCenter = baidu.lang.eventCenter || baidu.lang.createSingle();
 
 /**
  * 派发全局自定义事件，使得绑定到全局自定义事件上面的函数都会被执行。
+ * @name baidu.lang.eventCenter.dispatchEvent
  * @grammar baidu.lang.eventCenter.dispatchEvent(event, options)
+ * @function
  * @param {baidu.lang.Event|String} event 	Event对象，或事件名称(1.1.1起支持)
  * @param {Object} 					options 扩展参数,所含属性键值会扩展到Event对象上(1.2起支持)
  */
@@ -8609,10 +8452,12 @@ baidu.lang.eventCenter = baidu.lang.eventCenter || baidu.lang.createSingle();
 
 /**
  * 根据变量名或者命名空间来查找对象
+ * @function
+ * @grammar baidu.lang.getModule(name, opt_obj)
  * @param {string} name 变量或者命名空间的名字.
  * @param {Object=} opt_obj 从这个对象开始查找，默认是window;
  * @return {?Object} 返回找到的对象，如果没有找到返回null.
- * @see goog.getModule
+ * @see goog.getObjectByName
  */
 baidu.lang.getModule = function(name, opt_obj) {
     var parts = name.split('.'),
@@ -9052,11 +8897,9 @@ baidu.object.clone  = function (source) {
 
 
 /**
- * 检测一个对象是否是空的.
- * 需要注意的是：
- * 如果污染了Object.prototype或者Array.prototype，那么
- * baidu.object.isEmpty({})或者
- * baidu.object.isEmpty([])可能返回的就是false.
+ * 检测一个对象是否是空的，需要注意的是：如果污染了Object.prototype或者Array.prototype，那么baidu.object.isEmpty({})或者baidu.object.isEmpty([])可能返回的就是false.
+ * @function
+ * @grammar baidu.object.isEmpty(obj)
  * @param {Object} obj 需要检测的对象.
  * @return {boolean} 如果是空的对象就返回true.
  */
@@ -9067,29 +8910,6 @@ baidu.object.isEmpty = function(obj) {
     
     return true;
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* vim: set ts=4 sw=4 sts=4 tw=100 noet: */
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
@@ -9340,60 +9160,6 @@ baidu.page.getHeight = function () {
         client = doc.compatMode == 'BackCompat' ? body : doc.documentElement;
 
     return Math.max(html.scrollHeight, body.scrollHeight, client.clientHeight);
-};
-/*
- * Tangram
- * Copyright 2009 Baidu Inc. All rights reserved.
- * 
- * path: baidu/page/getViewHeight.js
- * author: allstar
- * version: 1.1.0
- * date: 2009/11/20
- */
-
-
-
-/**
- * 获取页面视觉区域高度
- * @name baidu.page.getViewHeight
- * @function
- * @grammar baidu.page.getViewHeight()
- * @see baidu.page.getViewWidth
- * @meta standard
- * @returns {number} 页面视觉区域高度
- */
-baidu.page.getViewHeight = function () {
-    var doc = document,
-        client = doc.compatMode == 'BackCompat' ? doc.body : doc.documentElement;
-
-    return client.clientHeight;
-};
-/*
- * Tangram
- * Copyright 2009 Baidu Inc. All rights reserved.
- * 
- * path: baidu/page/getViewWidth.js
- * author: allstar
- * version: 1.1.0
- * date: 2009/11/20
- */
-
-
-
-/**
- * 获取页面视觉区域宽度
- * @name baidu.page.getViewWidth
- * @function
- * @grammar baidu.page.getViewWidth()
- * @see baidu.page.getViewHeight
- *             
- * @returns {number} 页面视觉区域宽度
- */
-baidu.page.getViewWidth = function () {
-    var doc = document,
-        client = doc.compatMode == 'BackCompat' ? doc.body : doc.documentElement;
-
-    return client.clientWidth;
 };
 /*
  * Tangram
@@ -9794,6 +9560,7 @@ baidu.platform = baidu.platform || {};
  * @grammar baidu.platform.android
  * @meta standard
  * @see baidu.platform.x11,baidu.platform.windows,baidu.platform.macintosh,baidu.platform.iphone,baidu.platform.ipad
+ * @return {Boolean} 布尔值
  * @author jz
  */
 baidu.platform.isAndroid = /android/i.test(navigator.userAgent);
@@ -9809,7 +9576,8 @@ baidu.platform.isAndroid = /android/i.test(navigator.userAgent);
  * @property ipad 是否为ipad平台
  * @grammar baidu.platform.ipad
  * @meta standard
- * @see baidu.platform.x11,baidu.platform.windows,baidu.platform.macintosh,baidu.platform.iphone,baidu.platform.android   
+ * @see baidu.platform.x11,baidu.platform.windows,baidu.platform.macintosh,baidu.platform.iphone,baidu.platform.android
+ * @return {Boolean} 布尔值 
  * @author jz
  */
 baidu.platform.isIpad = /ipad/i.test(navigator.userAgent);
@@ -9826,6 +9594,7 @@ baidu.platform.isIpad = /ipad/i.test(navigator.userAgent);
  * @grammar baidu.platform.iphone
  * @meta standard
  * @see baidu.platform.x11,baidu.platform.windows,baidu.platform.macintosh,baidu.platform.ipad,baidu.platform.android
+ * @return {Boolean} 布尔值
  * @author jz
  */
 baidu.platform.isIphone = /iphone/i.test(navigator.userAgent);
@@ -9841,7 +9610,8 @@ baidu.platform.isIphone = /iphone/i.test(navigator.userAgent);
  * @property macintosh 是否为macintosh平台
  * @grammar baidu.platform.macintosh
  * @meta standard
- * @see baidu.platform.x11,baidu.platform.windows,baidu.platform.iphone,baidu.platform.ipad,baidu.platform.android 
+ * @see baidu.platform.x11,baidu.platform.windows,baidu.platform.iphone,baidu.platform.ipad,baidu.platform.android
+ * @return {Boolean} 布尔值 
  * @author jz
  */
 baidu.platform.isMacintosh = /macintosh/i.test(navigator.userAgent);
@@ -9857,7 +9627,8 @@ baidu.platform.isMacintosh = /macintosh/i.test(navigator.userAgent);
  * @property windows 是否为windows平台
  * @grammar baidu.platform.windows
  * @meta standard
- * @see baidu.platform.x11,baidu.platform.macintosh,baidu.platform.iphone,baidu.platform.ipad,baidu.platform.android 
+ * @see baidu.platform.x11,baidu.platform.macintosh,baidu.platform.iphone,baidu.platform.ipad,baidu.platform.android
+ * @return {Boolean} 布尔值 
  * @author jz
  */
 baidu.platform.isWindows = /windows/i.test(navigator.userAgent);
@@ -9873,7 +9644,8 @@ baidu.platform.isWindows = /windows/i.test(navigator.userAgent);
  * @property x11 是否为x11平台
  * @grammar baidu.platform.x11
  * @meta standard
- * @see baidu.platform.windows,baidu.platform.macintosh,baidu.platform.iphone,baidu.platform.ipad,baidu.platform.android 
+ * @see baidu.platform.windows,baidu.platform.macintosh,baidu.platform.iphone,baidu.platform.ipad,baidu.platform.android
+ * @return {Boolean} 布尔值 
  * @author jz
  */
 baidu.platform.isX11 = /x11/i.test(navigator.userAgent);
@@ -9953,8 +9725,8 @@ baidu.sio._removeScriptTag = function(scr){
  * @function
  * @grammar baidu.sio.callByBrowser(url, opt_callback, opt_options)
  * @param {string} url 加载数据的url
- * @param {Function=} opt_callback 数据加载结束时调用的函数
- * @param {Object=} opt_options 其他可选项
+ * @param {Function|string} opt_callback 数据加载结束时调用的函数或函数名
+ * @param {Object} opt_options 其他可选项
  * @config {String} [charset] script的字符集
  * @config {Integer} [timeOut] 超时时间，超过这个时间将不再响应本请求，并触发onfailure函数
  * @config {Function} [onfailure] timeOut设定后才生效，到达超时时间时触发本函数
@@ -10104,8 +9876,10 @@ baidu.sio.callByServer = function(url, callback, opt_options) {
 
 /**
  * 通过请求一个图片的方式令服务器存储一条日志
- * author: int08h,leeight
+ * @function
+ * @grammar baidu.sio.log(url)
  * @param {string} url 要发送的地址.
+ * @author: int08h,leeight
  */
 baidu.sio.log = function(url) {
   var img = new Image(),
@@ -10520,8 +10294,10 @@ baidu.string.getByteLength = function (source) {
 
 /**
  * 去掉字符串中的html标签
+ * @function
+ * @grammar baidu.string.stripTags(source)
  * @param {string} source 要处理的字符串.
- * @return {string}
+ * @return {String}
  */
 baidu.string.stripTags = function(source) {
     return String(source || '').replace(/<[^>]+>/g, '');
@@ -10744,118 +10520,6 @@ baidu.swf = baidu.swf || {};
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
  * 
- * path: baidu/swf/getMovie.js
- * author: erik
- * version: 1.1.0
- * date: 2009/11/16
- */
-
-
-
-
-
-/**
- * 获得flash对象的实例
- * @name baidu.swf.getMovie
- * @function
- * @grammar baidu.swf.getMovie(name)
- * @param {string} name flash对象的名称
- * @see baidu.swf.create
- * @meta standard
- * @returns {HTMLElement} flash对象的实例
- */
-baidu.swf.getMovie = function (name) {
-	//ie9下, Object标签和embed标签嵌套的方式生成flash时,
-	//会导致document[name]多返回一个Object元素,而起作用的只有embed标签
-	var movie = document[name], ret;
-    return baidu.browser.ie == 9 ?
-    	movie && movie.length ? 
-    		(ret = baidu.array.remove(baidu.lang.toArray(movie),function(item){
-    			return item.tagName.toLowerCase() != "embed";
-    		})).length == 1 ? ret[0] : ret
-    		: movie
-    	: movie || window[name];
-};
-/*
- * Tangram
- * Copyright 2011 Baidu Inc. All rights reserved.
- */
-
-
-
-
-
-
-/**
- * Js 调用 Flash方法的代理类.
- * @function
- * @name baidu.swf.Proxy
- * @grammar new baidu.swf.Proxy(id, property, [, loadedHandler])
- * @param {string} id Flash的元素id.object标签id, embed标签name.
- * @param {string} property Flash的方法或者属性名称，用来检测Flash是否初始化好了.
- * @param {Function} loadedHandler 初始化之后的回调函数.
- * @remark Flash对应的DOM元素必须已经存在, 否则抛错. 可以使用baidu.swf.create预先创建Flash对应的DOM元素.
- * @author liyubei@baidu.com (leeight)
- */
-baidu.swf.Proxy = function(id, property, loadedHandler) {
-    /**
-     * 页面上的Flash对象
-     * @type {HTMLElement}
-     */
-    var me = this,
-        flash = this._flash = baidu.swf.getMovie(id),
-        timer;
-    if (! property) {
-        return this;
-    }
-    timer = setInterval(function() {
-        try {
-            /** @preserveTry */
-            if (flash[property]) {
-                me._initialized = true;
-                clearInterval(timer);
-                if (loadedHandler) {
-                    loadedHandler();
-                }
-            }
-        } catch (e) {
-        }
-    }, 100);
-};
-/**
- * 获取flash对象.
- * @return {HTMLElement} Flash对象.
- */
-baidu.swf.Proxy.prototype.getFlash = function() {
-    return this._flash;
-};
-/**
- * 判断Flash是否初始化完成,可以与js进行交互.
- */
-baidu.swf.Proxy.prototype.isReady = function() {
-    return !! this._initialized;
-};
-/**
- * 调用Flash中的某个方法
- * @param {string} methodName 方法名.
- * @param {...*} var_args 方法的参数.
- */
-baidu.swf.Proxy.prototype.call = function(methodName, var_args) {
-    try {
-        var flash = this.getFlash(),
-            args = Array.prototype.slice.call(arguments);
-
-        args.shift();
-        if (flash[methodName]) {
-            flash[methodName].apply(flash, args);
-        }
-    } catch (e) {
-    }
-};
-/*
- * Tangram
- * Copyright 2009 Baidu Inc. All rights reserved.
- * 
  * path: baidu/swf/version.js
  * author: erik
  * version: 1.1.0
@@ -10867,7 +10531,8 @@ baidu.swf.Proxy.prototype.call = function(methodName, var_args) {
 /**
  * 浏览器支持的flash插件版本
  * @property version 浏览器支持的flash插件版本
- * @grammar baidu.swf.version 
+ * @grammar baidu.swf.version
+ * @return {String} 版本号
  * @meta standard
  */
 baidu.swf.version = (function () {
@@ -11129,6 +10794,118 @@ baidu.swf.create = function (options, target) {
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
  * 
+ * path: baidu/swf/getMovie.js
+ * author: erik
+ * version: 1.1.0
+ * date: 2009/11/16
+ */
+
+
+
+
+
+/**
+ * 获得flash对象的实例
+ * @name baidu.swf.getMovie
+ * @function
+ * @grammar baidu.swf.getMovie(name)
+ * @param {string} name flash对象的名称
+ * @see baidu.swf.create
+ * @meta standard
+ * @returns {HTMLElement} flash对象的实例
+ */
+baidu.swf.getMovie = function (name) {
+	//ie9下, Object标签和embed标签嵌套的方式生成flash时,
+	//会导致document[name]多返回一个Object元素,而起作用的只有embed标签
+	var movie = document[name], ret;
+    return baidu.browser.ie == 9 ?
+    	movie && movie.length ? 
+    		(ret = baidu.array.remove(baidu.lang.toArray(movie),function(item){
+    			return item.tagName.toLowerCase() != "embed";
+    		})).length == 1 ? ret[0] : ret
+    		: movie
+    	: movie || window[name];
+};
+/*
+ * Tangram
+ * Copyright 2011 Baidu Inc. All rights reserved.
+ */
+
+
+
+
+
+
+/**
+ * Js 调用 Flash方法的代理类.
+ * @function
+ * @name baidu.swf.Proxy
+ * @grammar new baidu.swf.Proxy(id, property, [, loadedHandler])
+ * @param {string} id Flash的元素id.object标签id, embed标签name.
+ * @param {string} property Flash的方法或者属性名称，用来检测Flash是否初始化好了.
+ * @param {Function} loadedHandler 初始化之后的回调函数.
+ * @remark Flash对应的DOM元素必须已经存在, 否则抛错. 可以使用baidu.swf.create预先创建Flash对应的DOM元素.
+ * @author liyubei@baidu.com (leeight)
+ */
+baidu.swf.Proxy = function(id, property, loadedHandler) {
+    /**
+     * 页面上的Flash对象
+     * @type {HTMLElement}
+     */
+    var me = this,
+        flash = this._flash = baidu.swf.getMovie(id),
+        timer;
+    if (! property) {
+        return this;
+    }
+    timer = setInterval(function() {
+        try {
+            /** @preserveTry */
+            if (flash[property]) {
+                me._initialized = true;
+                clearInterval(timer);
+                if (loadedHandler) {
+                    loadedHandler();
+                }
+            }
+        } catch (e) {
+        }
+    }, 100);
+};
+/**
+ * 获取flash对象.
+ * @return {HTMLElement} Flash对象.
+ */
+baidu.swf.Proxy.prototype.getFlash = function() {
+    return this._flash;
+};
+/**
+ * 判断Flash是否初始化完成,可以与js进行交互.
+ */
+baidu.swf.Proxy.prototype.isReady = function() {
+    return !! this._initialized;
+};
+/**
+ * 调用Flash中的某个方法
+ * @param {string} methodName 方法名.
+ * @param {...*} var_args 方法的参数.
+ */
+baidu.swf.Proxy.prototype.call = function(methodName, var_args) {
+    try {
+        var flash = this.getFlash(),
+            args = Array.prototype.slice.call(arguments);
+
+        args.shift();
+        if (flash[methodName]) {
+            flash[methodName].apply(flash, args);
+        }
+    } catch (e) {
+    }
+};
+/*
+ * Tangram
+ * Copyright 2009 Baidu Inc. All rights reserved.
+ * 
  * path: baidu/url.js
  * author: erik
  * version: 1.1.0
@@ -11143,35 +10920,30 @@ baidu.url = baidu.url || {};
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
- * 
- * path: baidu/url/escapeSymbol.js
- * author: erik
- * version: 1.1.0
- * date: 2009/11/16
  */
 
 
 
 /**
- * 对字符串进行%&+/#=和空格七个字符进行url转义
+ * 对字符串进行%#&+=以及和\s匹配的所有字符进行url转义
  * @name baidu.url.escapeSymbol
  * @function
  * @grammar baidu.url.escapeSymbol(source)
- * @param {string} source 需要转义的字符串
+ * @param {string} source 需要转义的字符串.
  * @return {string} 转义之后的字符串.
  * @remark
  * 用于get请求转义。在服务器只接受gbk，并且页面是gbk编码时，可以经过本转义后直接发get请求。
- *             
- * @returns {string} 转义后的字符串
+ *
+ * @return {string} 转义后的字符串
  */
-baidu.url.escapeSymbol = function (source) {
-    return String(source).replace(/\%/g, "%25")
-                        .replace(/&/g, "%26")
-                        .replace(/\+/g, "%2B")
-                        .replace(/\ /g, "%20")
-                        .replace(/\//g, "%2F")
-                        .replace(/\#/g, "%23")
-                        .replace(/\=/g, "%3D");
+baidu.url.escapeSymbol = function(source) {
+    
+    //TODO: 之前使用\s来匹配任意空白符
+    //发现在ie下无法匹配中文全角空格和纵向指标符\v，所以改\s为\f\r\n\t\v以及中文全角空格和英文空格
+    //但是由于ie本身不支持纵向指标符\v,故去掉对其的匹配，保证各浏览器下效果一致
+    return String(source).replace(/[#%&+=\/\\\ \　\f\r\n\t]/g, function(all) {
+        return '%' + (0x100 + all.charCodeAt()).toString(16).substring(1).toUpperCase();
+    });
 };
 /*
  * Tangram
@@ -11247,7 +11019,8 @@ baidu.url.jsonToQuery = function (json, replacer_opt) {
         // 这里只考虑item为数组、字符串、数字类型，不考虑嵌套的object
         if (baidu.lang.isArray(item)) {
             itemLen = item.length;
-            // FIXME value的值需要encodeURIComponent转义吗？
+            // value的值需要encodeURIComponent转义吗？
+            // FIXED 优化了escapeSymbol函数
             while (itemLen--) {
                 result.push(key + '=' + replacer(item[itemLen], key));
             }
@@ -11308,259 +11081,4 @@ baidu.url.queryToJson = function (url) {
     }
     
     return result;
-};
-/*
- * Tangram
- * Copyright 2009 Baidu Inc. All rights reserved.
- */
-
-
-/**
- * @namespace baidu.async 对异步调用的封装。
- * @author rocy
- */
-baidu.async = baidu.async || {};
-/*
- * Tangram
- * Copyright 2009 Baidu Inc. All rights reserved.
- */
-
-
-
-/**
- * 判断给定object是否包含Deferred主要特征.
- * @param {Object} obj 待判定object.
- * @return {Boolean} 判定结果, true 则该object符合Deferred特征.
- * @author rocy
- */
-baidu.async._isDeferred = function(obj) {
-    var isFn = baidu.lang.isFunction;
-    return obj && isFn(obj.success) && isFn(obj.then)
-        && isFn(obj.fail) && isFn(obj.cancel);
-};
-/*
- * Tangram
- * Copyright 2009 Baidu Inc. All rights reserved.
- */
-
-
-
-
-
-
-/**
- * 用于支持异步处理, 使同步异步的调用风格统一.
- * @class
- * @grammar new baidu.async.Deferred()
- * @remark
- * 示例:
-    function someAsync(){
-        var deferred = new baidu.async.Deferred();
-        setTimeout(function(){
-            afterSomeOperation();
-            if(someReason){
-                deferred.resolve(someValue);
-            } else {
-                deferred.reject(someError);
-            }
-        },100);
-        return deferred;
-    }
-    //用类似同步的方式调用异步操作.
-    someAsync().then(onSuccess, onFail);
-    //onSuccess或onFail可以确保在正确的时间点执行.
-
- * @author rocy
- */
-baidu.async.Deferred = function() {
-    var me = this;
-    baidu.extend(me, {
-        _fired: 0,
-        _firing: 0,
-        _cancelled: 0,
-        _resolveChain: [],
-        _rejectChain: [],
-        _result: [],
-        _isError: 0
-    });
-
-    function fire() {
-        if (me._cancelled || me._firing) {
-            return;
-        }
-        //如果已有nextDeferred对象,则转移到nextDeferred上.
-        if (me._nextDeferred) {
-            me._nextDeferred.then(me._resolveChain[0], me._rejectChain[0]);
-            return;
-        }
-        me._firing = 1;
-        var chain = me._isError ? me._rejectChain : me._resolveChain,
-            result = me._result[me._isError ? 1 : 0];
-        // 此处使用while而非for循环,是为了避免firing时插入新函数.
-        while (chain[0] && (! me._cancelled)) {
-            //所有函数仅调用一次.
-            //TODO: 支持传入 this 和 arguments, 而不是仅仅一个值.
-            try {
-                var chainResult = chain.shift().call(me, result);
-                //若方法返回Deferred,则将剩余方法延至Deferred中执行
-                if (baidu.async._isDeferred(chainResult)) {
-                    me._nextDeferred = chainResult;
-                    [].push.apply(chainResult._resolveChain, me._resolveChain);
-                    [].push.apply(chainResult._rejectChain, me._rejectChain);
-                    chain = me._resolveChain = [];
-                    me._rejectChain = [];
-                }
-            } catch (error) {
-                throw error;
-            } finally {
-                me._fired = 1;
-                me._firing = 0;
-            }
-        }
-    }
-
-
-    /**
-     * 调用onSuccess链.使用给定的value作为函数参数.
-     * @param {*} value 成功结果.
-     * @return {baidu.async.Deferred} this.
-     */
-    me.resolve = me.fireSuccess = function(value) {
-        me._result[0] = value;
-        fire();
-        return me;
-    };
-
-    /**
-     * 调用onFail链. 使用给定的error作为函数参数.
-     * @param {Error} error 失败原因.
-     * @return {baidu.async.Deferred} this.
-     */
-    me.reject = me.fireFail = function(error) {
-        me._result[1] = error;
-        me._isError = 1;
-        fire();
-        return me;
-    };
-
-    /**
-     * 添加onSuccess和onFail方法到各自的链上. 如果该deferred已触发,则立即执行.
-     * @param {Function} onSuccess 该deferred成功时的回调函数.第一个形参为成功时结果.
-     * @param {Function} onFail 该deferred失败时的回调函数.第一个形参为失败时结果.
-     * @return {baidu.async.Deferred} this.
-     */
-    me.then = function(onSuccess, onFail) {
-        me._resolveChain.push(onSuccess);
-        me._rejectChain.push(onFail);
-        if (me._fired) {
-            fire();
-        }
-        return me;
-    };
-    
-    /**
-     * 添加方法到onSuccess链上. 如果该deferred已触发,则立即执行.
-     * @param {Function} onSuccess 该deferred成功时的回调函数.第一个形参为成功时结果.
-     * @return {baidu.async.Deferred} this.
-     */
-    me.success = function(onSuccess) {
-        return me.then(onSuccess, baidu.fn.blank);
-    };
-
-    /**
-     * 添加方法到onFail链上. 如果该deferred已触发,则立即执行.
-     * @param {Function} onFail 该deferred失败时的回调函数.第一个形参为失败时结果.
-     * @return {baidu.async.Deferred} this.
-     */
-    me.fail = function(onFail) {
-        return me.then(baidu.fn.blank, onFail);
-    };
-     
-    /**
-     * 中断该deferred, 使其失效.
-     */
-    me.cancel = function() {
-        me._cancelled = 1;
-    };
-};
-/*
- * Tangram
- * Copyright 2009 Baidu Inc. All rights reserved.
- */
-
-
-
-
-/**
- * 支持异步的ajax.get封装.
- * @param {String} url 请求地址.
- * @return {baidu.async.Deferred} Deferred对象,支持链式调用.
- */
-baidu.async.get = function(url){
-    var deferred = new baidu.async.Deferred();
-    baidu.ajax.request(url, {
-        onsuccess: function(xhr, responseText) {
-            deferred.resolve({xhr: xhr, responseText: responseText}); 
-        },
-        onfailure: function(xhr) {
-            deferred.reject({xhr: xhr});
-        }
-    });
-    return deferred;
-};
-/*
- * Tangram
- * Copyright 2009 Baidu Inc. All rights reserved.
- */
-
-
-
-
-/**
- * 支持异步的ajax.post封装.
- * @param {String} url 请求地址.
- * @param {String} data 请求数据.
- * @return {baidu.async.Deferred} Deferred对象,支持链式调用.
- */
-baidu.async.post = function(url, data){
-    var deferred = new baidu.async.Deferred();
-    baidu.ajax.request(url, {
-        method: 'POST',
-        data: data,
-        onsuccess: function(xhr, responseText) {
-            deferred.resolve({xhr: xhr, responseText: responseText}); 
-        },
-        onfailure: function(xhr) {
-            deferred.reject({xhr: xhr});
-        }
-    });
-    return deferred;
-};
-/*
- * Tangram
- * Copyright 2009 Baidu Inc. All rights reserved.
- */
-
-
-
-
-/**
- * 保证onResolve或onReject可以按序执行. 若第一个参数为deferred,则deferred完成后执行.否则立即执行onResolve,并传入第一个参数.
- * @param {baidu.async.Deferred|*} deferredOrValue deferred实例或任意值.
- * @param {Function} onResolve 成功时的回调函数.若第一个参数不是Deferred实例,则立即执行此方法.
- * @param {Function} onReject 失败时的回调函数.
- * @remark
- * 示例一:异步调用: baidu.async.when(asyncLoad(), onResolve, onReject).then(nextSuccess, nextFail);
- * 示例二:同步异步不确定的调用: baidu.async.when(syncOrNot(), onResolve, onReject).then(nextSuccess, nextFail);
- * 示例三:同步接异步的调用: baidu.async.when(sync(), onResolve, onReject).then(asyncSuccess, asyncFail).then(afterAllSuccess, afterAllFail);
- * @return {baidu.async.Deferred} deferred.
- */
-baidu.async.when = function(deferredOrValue, onResolve, onReject) {
-    if (baidu.async._isDeferred(deferredOrValue)) {
-        deferredOrValue.then(onResolve, onReject);
-        return deferredOrValue;
-    }
-    var deferred = new baidu.async.Deferred();
-    deferred.then(onResolve, onReject).resolve(deferredOrValue);
-    return deferred;
 };
