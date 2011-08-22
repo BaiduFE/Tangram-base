@@ -22,7 +22,7 @@
  *
  * @returns {Function} 已集化的函数
  */
-baidu.fn.multize = function (func, recursive, joinArray) {
+baidu.fn.multize = /**@function*/function (func, recursive, joinArray) {
     var newFunc = function(){
         var list = arguments[0],
             fn = recursive ? newFunc : func,
