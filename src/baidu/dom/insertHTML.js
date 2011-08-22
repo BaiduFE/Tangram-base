@@ -4,7 +4,7 @@
  */
 
 ///import baidu.dom.g;
-///import baidu.browser.ie;
+///import baidu.browser.opera;
 
 /**
  * 在目标元素的指定位置插入HTML代码
