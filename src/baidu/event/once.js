@@ -25,7 +25,7 @@
  *             
  * @returns {HTMLElement} 目标元素
  */
-baidu.event.once = function(element, type, listener){
+baidu.event.once = /**@function*/function(element, type, listener){
     element = baidu.dom._g(element);
     function onceListener(event){
         listener.call(element,event);

@@ -24,7 +24,7 @@
  *
  * @return {HTMLElement}  设置好的元素
  */
-baidu.dom.setBorderBoxSize= function (element, size) {
+baidu.dom.setBorderBoxSize = /**@function*/function (element, size) {
     var result = {};
     size.width && (result.width = parseFloat(size.width));
     size.height && (result.height = parseFloat(size.height));

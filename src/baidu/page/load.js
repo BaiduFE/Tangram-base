@@ -72,7 +72,7 @@
  *      onload : fnWhenEverythingIsOK
  * });
  */
-baidu.page.load = function(resources, options, ignoreAllLoaded) {
+baidu.page.load = /**@function*/function(resources, options, ignoreAllLoaded) {
     //TODO failure, 整体onload能不能每个都调用; resources.charset
     options = options || {};
     var self = baidu.page.load,

@@ -46,7 +46,7 @@
  * @author lixiaopeng
  * @version 1.3
  */
-baidu.dom.resizable = function(element,options) {
+baidu.dom.resizable = /**@function*/function(element,options) {
     var target,
         op,
         resizeHandle = {},

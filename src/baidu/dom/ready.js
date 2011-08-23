@@ -40,7 +40,9 @@
                 }
             };
         }
-
+        /**
+         * @private
+         */
         function ready() {
             if (!ready.isReady) {
                 ready.isReady = true;
@@ -49,7 +51,9 @@
                 }
             }
         }
-
+        /**
+         * @private
+         */
         function doScrollCheck(){
             try {
                 document.documentElement.doScroll("left");
@@ -59,7 +63,9 @@
             }   
             ready();
         }
-
+        /**
+         * @private
+         */
         function bindReady() {
             if (readyBound) {
                 return;
