@@ -31,7 +31,7 @@
  * @returns {Object} 一个类对象
  */
 
-baidu.lang.createClass = function(constructor, options) {
+baidu.lang.createClass = /**@function*/function(constructor, options) {
     options = options || {};
     var superClass = options.superClass || baidu.lang.Class;
 

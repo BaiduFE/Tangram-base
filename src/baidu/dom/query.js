@@ -29,7 +29,7 @@
  * @returns {Array}        包含所有筛选出的DOM元素的数组
  */
 
-baidu.dom.query = (function (){
+baidu.dom.query = (/**@function*/function (){
     var d = document;
     d._Q_rev = 0;
 

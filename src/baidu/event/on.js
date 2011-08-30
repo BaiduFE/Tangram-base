@@ -27,10 +27,9 @@
  * @shortcut on
  * @meta standard
  * @see baidu.event.un
- *             
  * @returns {HTMLElement|window} 目标元素
  */
-baidu.event.on = function (element, type, listener) {
+baidu.event.on = /**@function*/function (element, type, listener) {
     type = type.replace(/^on/i, '');
     element = baidu.dom._g(element);
 

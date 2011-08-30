@@ -26,7 +26,7 @@
  * @meta standard
  * @see baidu.sio.callByBrowser
  */
-baidu.sio.callByServer = function(url, callback, opt_options) {
+baidu.sio.callByServer = /**@function*/function(url, callback, opt_options) {
     var scr = document.createElement('SCRIPT'),
         prefix = 'bd__cbs__',
         callbackName,
