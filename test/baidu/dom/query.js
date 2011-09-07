@@ -26,9 +26,14 @@ test('selector', function() {
 	p.className = 'test_class_p'
 	p = document.body.appendChild(p);
 	
-	var link = document.createElement('a');
+	try{
+		var link = document.createElement('<a name="test_name_a">');
+	}catch(e){
+		var link = document.createElement('a');
+		link.name = 'test_name_a';
+	}
+	
 	link.id = 'test_a';
-	link.name = 'test_name_a';
 	link.className = 'test_class_a';
 	link.href = 'http://www.baidu.com';
 	link = p.appendChild(link);
@@ -247,9 +252,13 @@ test('baidu.dom.query.matches', function() {
 	input.id = 'test_input';
 	input = p.appendChild(input);
 	
-	var link = document.createElement('a');
+	try{
+		var link = document.createElement('<a name="test_name_a">');
+	}catch(e){
+		var link = document.createElement('a');
+		link.name = 'test_name_a';
+	}
 	link.id = 'test_a';
-	link.name = 'test_name_a';
 	link.className = 'test_class_a';
 	link.href = 'http://www.baidu.com';
 	link = p.appendChild(link);
