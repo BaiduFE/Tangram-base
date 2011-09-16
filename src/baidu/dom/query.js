@@ -395,7 +395,7 @@ baidu.dom.query = (function (){
     }
     var NEEDNOT_ELEMENT_CHECK = { '#': 1, 'T': 1, '.': 1, 'N': 1, ':element': 1 };
     function genFindCode(seq, R, comb){
-        comb = comb || seq.comb;
+        comb = comb || seq.comb || ' ';
         var tpl;
         if (comb == ' ') {
             var finder = seq.$;
