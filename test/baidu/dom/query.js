@@ -49,13 +49,17 @@ test('selector', function() {
 	var span = document.createElement('span');
 	span = link.appendChild(span);
 	
+
+	var h11 = document.createElement('h1');
+	h11 = document.body.appendChild(h11);
+	
 	var h1 = document.createElement('h1');
 	h1 = document.body.appendChild(h1);
 	h1.innerHTML = 'hello';
 	
 	var start_date = new Date();
 	
-	equals(baidu.dom.query('*').length, total + 8, '*')
+	equals(baidu.dom.query('*').length, total + 9, '*')
 	equals(baidu.dom.query('input')[input_len], input, 'div');
 	equals(baidu.dom.query('#test_input')[input_len], input, '#title');
 	equals(baidu.dom.query('input[id]')[0], input, 'div[class]');
