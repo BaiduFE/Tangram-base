@@ -22,7 +22,8 @@
 
 
 /**
- * @namespace baidu.element 通过该方法封装的对象可使用dom、event方法集合以及each方法进行链式调用。
+ * 通过该方法封装的对象可使用dom、event方法集合以及each方法进行链式调用
+ * @namespace baidu.element
  */
 baidu.element = function(node){
     var gNode = baidu._g(node);
