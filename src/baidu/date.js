@@ -10,6 +10,7 @@
 
 ///import baidu;
 /**
- * @namespace baidu.date 操作日期的方法。
+ * 操作日期的方法
+ * @namespace baidu.date
  */
 baidu.date = baidu.date || {};

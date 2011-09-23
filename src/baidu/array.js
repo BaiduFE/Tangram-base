@@ -11,7 +11,8 @@
 ///import baidu;
 
 /**
- * @namespace baidu.array 操作数组的方法。
+ * 操作数组的方法
+ * @namespace baidu.array
  */
 
 baidu.array = baidu.array || {};

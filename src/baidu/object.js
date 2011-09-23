@@ -10,6 +10,7 @@
 
 ///import baidu;
 /**
- * @namespace baidu.object 操作原生对象的方法。
+ * 操作原生对象的方法
+ * @namespace baidu.object
  */
 baidu.object = baidu.object || {};

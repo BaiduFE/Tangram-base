@@ -10,6 +10,7 @@
 
 ///import baidu;
 /**
- * @namespace baidu.number 操作number的方法。
+ * 操作number的方法
+ * @namespace baidu.number
  */
 baidu.number = baidu.number || {};

@@ -10,6 +10,7 @@
 
 ///import baidu;
 /**
- * @namespace baidu.ajax 对XMLHttpRequest请求的封装。
-*/
+ * 对XMLHttpRequest请求的封装
+ * @namespace baidu.ajax
+ */
 baidu.ajax = baidu.ajax || {};
