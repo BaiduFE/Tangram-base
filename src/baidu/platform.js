@@ -6,7 +6,8 @@
 ///import baidu;
 
 /**
- * @namespace baidu.platform 判断平台类型和特性的属性。
+ * 判断平台类型和特性的属性
+ * @namespace baidu.platform
  * @author jz
  */
 baidu.platform = baidu.platform || {};

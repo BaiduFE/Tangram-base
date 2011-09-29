@@ -10,6 +10,7 @@
 
 ///import baidu;
 /**
- * @namespace baidu.lang 对语言层面的封装，包括类型判断、模块扩展、继承基类以及对象自定义事件的支持。
-*/
+ * 对语言层面的封装，包括类型判断、模块扩展、继承基类以及对象自定义事件的支持。
+ * @namespace baidu.lang
+ */
 baidu.lang = baidu.lang || {};

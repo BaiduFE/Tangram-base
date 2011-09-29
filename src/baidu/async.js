@@ -5,7 +5,8 @@
 
 ///import baidu;
 /**
- * @namespace baidu.async 对异步调用的封装。
+ * 对异步调用的封装
+ * @namespace baidu.async
  * @author rocy
  */
 baidu.async = baidu.async || {};

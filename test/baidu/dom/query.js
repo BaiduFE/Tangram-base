@@ -26,9 +26,14 @@ test('selector', function() {
 	p.className = 'test_class_p'
 	p = document.body.appendChild(p);
 	
-	var link = document.createElement('a');
+	try{
+		var link = document.createElement('<a name="test_name_a">');
+	}catch(e){
+		var link = document.createElement('a');
+		link.name = 'test_name_a';
+	}
+	
 	link.id = 'test_a';
-	link.name = 'test_name_a';
 	link.className = 'test_class_a';
 	link.href = 'http://www.baidu.com';
 	link = p.appendChild(link);
@@ -44,13 +49,17 @@ test('selector', function() {
 	var span = document.createElement('span');
 	span = link.appendChild(span);
 	
+
+	var h11 = document.createElement('h1');
+	h11 = document.body.appendChild(h11);
+	
 	var h1 = document.createElement('h1');
 	h1 = document.body.appendChild(h1);
 	h1.innerHTML = 'hello';
 	
 	var start_date = new Date();
 	
-	equals(baidu.dom.query('*').length, total + 8, '*')
+	equals(baidu.dom.query('*').length, total + 9, '*')
 	equals(baidu.dom.query('input')[input_len], input, 'div');
 	equals(baidu.dom.query('#test_input')[input_len], input, '#title');
 	equals(baidu.dom.query('input[id]')[0], input, 'div[class]');
@@ -247,9 +256,13 @@ test('baidu.dom.query.matches', function() {
 	input.id = 'test_input';
 	input = p.appendChild(input);
 	
-	var link = document.createElement('a');
+	try{
+		var link = document.createElement('<a name="test_name_a">');
+	}catch(e){
+		var link = document.createElement('a');
+		link.name = 'test_name_a';
+	}
 	link.id = 'test_a';
-	link.name = 'test_name_a';
 	link.className = 'test_class_a';
 	link.href = 'http://www.baidu.com';
 	link = p.appendChild(link);

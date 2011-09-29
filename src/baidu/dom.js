@@ -10,6 +10,7 @@
 
 ///import baidu;
 /**
- * @namespace baidu.dom 操作dom的方法。
+ * 操作dom的方法
+ * @namespace baidu.dom 
  */
 baidu.dom = baidu.dom || {};

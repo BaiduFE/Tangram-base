@@ -29,10 +29,10 @@
  * @returns {Array}        包含所有筛选出的DOM元素的数组
  */
 
-baidu.dom.query = (/**@function*/function (){
+baidu.dom.query = (/**function*/function (){
     var d = document;
     d._Q_rev = 0;
-
+    
     var MUTATION = false;
     var _onMu = function (){
         d._Q_rev ++;
@@ -45,10 +45,12 @@ baidu.dom.query = (/**@function*/function (){
 
     var BY_ID1;
     var BY_CLASS;
+    var HAS_TEXT_CONTENT = false;
     var IE678 = window.ActiveXObject && !d.addEventListener;
     (function (){
         var div = d.createElement('div');
-        div.innerHTML = '<a name="d"></a><div id="d"></div>';
+        div.innerHTML = '.<a name="d"></a><div id="d"></div>';
+        HAS_TEXT_CONTENT = !!div.textContent;
         BY_ID1 = div.getElementsByTagName('*')["d"] === div.lastChild;
         div.innerHTML = '<div class="t e"></div><div class="t"></div>';
         div.lastChild.className = 'e';
@@ -60,7 +62,7 @@ baidu.dom.query = (/**@function*/function (){
     var BY_CHILDREN_TAG = BY_CHILDREN && !!d.documentElement.children.tags;
 
     var PATTERN = /(?:\s*([ ~+>,])\s*)?(?:([:.#]?)((?:[\w\u00A1-\uFFFF-]|\\.)+|\*)|\[\s*((?:[\w\u00A1-\uFFFF-]|\\.)+)(?:\s*([~^$|*!]?=)\s*((['"]).*?\7|[^\]]*))?\s*\])/g;
-
+    
     function trim(str){
         return str.replace(/^\s*|\s*$/, '');
     }
@@ -139,7 +141,7 @@ baidu.dom.query = (/**@function*/function (){
     var efMap = { id: '#', name: 'N' };
     var testingOrder = function (a, b){ return a.tR - b.tR; };
     var regPos = /:(nth|eq|gt|lt|first|last|even|odd)$/;
-
+    
     function process(seq){
         var finder, t;
         var k = seq.length;
@@ -230,6 +232,11 @@ baidu.dom.query = (/**@function*/function (){
                 }
             } else {
                 part.R = 'root';
+                part.isFirst = true;
+//                // 如果属于Q("~ span._result", el)这种情况
+//                if (part[part.length - 1].comb !== ' ') {
+//                    part.fI = part.length - 1;
+//                }
             }
         }
         // 如果没有找到任何一个可以用于find的seq.
@@ -282,7 +289,7 @@ baidu.dom.query = (/**@function*/function (){
         'T': TPL_XHTML +'/*^var #{N}T=!xhtml?("#{0}").toUpperCase():"#{0}";^*/#{N}.nodeName==#{N}T',
         '#': '#{N}.id=="#{0}"',
         'N': '#{N}.name=="#{0}"',
-
+        
         '[': IE678 ? '(t=#{N}.getAttributeNode("#{0}"))&&(t.specified)' : '#{N}.hasAttribute("#{0}")',
         '=': '#{A}=="#{1}"',
         '!=': '#{A}!="#{1}"',
@@ -291,26 +298,26 @@ baidu.dom.query = (/**@function*/function (){
         '*=': '(t=#{A})&&t.indexOf("#{1}")!==-1',
         '|=': '(t=#{A})&&(t=="#{1}"||t.slice(0,#{L})=="#{P}")',
         '~=': '(t=#{A})&&(" "+t+" ").indexOf("#{P}")!==-1',
-
+        
         ':element': '#{N}.nodeType==1',
-        ':contains': '(#{N}.textContent||#{N}.innerText).indexOf("#{0}")!==-1',
+        ':contains': '(#{N}.' + (HAS_TEXT_CONTENT ? 'textContent' : 'innerText') + '||"").indexOf("#{0}")!==-1',
         ':first-child': BY_ELEMENT ? '#{N}.parentNode.firstElementChild===#{N}' : 'Q._isFirstChild(#{N})',
         ':nth-child': TPL_DOC + '/*^var rev=doc._Q_rev||(doc._Q_rev=Q.qid++);^*/Q._index(#{N},#{0},#{1},rev)',
         ':last-child': BY_ELEMENT ? '#{N}.parentNode.lastElementChild===#{N}' : 'Q._isLastChild(#{N})',
         ':only-child': BY_ELEMENT ? '(t=#{N}.parentNode)&&(t.firstElementChild===#{N}&&t.lastElementChild===#{N})' : 'Q._isOnlyChild(#{N})',
-
+        
         ':not-ex': '/*^var _#{G}=Q._hash(Q("#{1}",root));qid=Q.qid;^*/!_#{G}[' + TPL_QID + ']',
         ':has': '(t=Q("#{1}", #{N}),qid=Q.qid,t.length>0)',
         ':parent': '!!#{N}.firstChild',
         ':empty': '!#{N}.firstChild',
-
+        
         ':header': '/h\\d/i.test(#{N}.nodeName)',
         ':input': '/input|select|textarea|button/i.test(#{N}.nodeName)',
         ':enabled': '#{N}.disabled===false&&#{N}.type!=="hidden"',
         ':disabled': '#{N}.disabled===true',
         ':checked': '#{N}.checked===true',
         ':selected': '(#{N}.parentNode.selectedIndex,#{N}.selected===true)',
-
+        
         // TODO: 这些伪类可以转化成为标签选择器加以优化！
         ':focus': TPL_DOC + '#{N}===doc.activeElement',
         ':button': TPL_INPUT_T + '#{N}.nodeName==="button"||(#{N}.nodeName===input_t&&#{N}.type==="button")',
@@ -390,7 +397,7 @@ baidu.dom.query = (/**@function*/function (){
     }
     var NEEDNOT_ELEMENT_CHECK = { '#': 1, 'T': 1, '.': 1, 'N': 1, ':element': 1 };
     function genFindCode(seq, R, comb){
-        comb = comb || seq.comb;
+        comb = comb || seq.comb || ' ';
         var tpl;
         if (comb == ' ') {
             var finder = seq.$;
@@ -458,7 +465,7 @@ baidu.dom.query = (/**@function*/function (){
         return code;
     }
     function genPartCode(part, thenCode){
-        var code = genFindCode(part[part.fI], part.R, ' ');
+        var code = genFindCode(part[part.fI], part.R, !part.isFirst ? ' ' : null);
         var nextCode = genNextCode(part, thenCode);
         if (part.fI < part.length - 1) {
             var passCode = genLeftCode(part);
@@ -466,7 +473,7 @@ baidu.dom.query = (/**@function*/function (){
         }
         return format(code, { X: nextCode });
     }
-
+    
     function genThatCode(seq){
         var obj = {};
         var k = seq.length;
@@ -478,9 +485,9 @@ baidu.dom.query = (/**@function*/function (){
                 obj.last = 1;
             }
             if (simple.kind == ':lt') {
-                obj.lt = obj.lt === undefined ? simple[0] : Math.min(obj.lt, simple[0]);
+                obj.lt = obj.lt == null ? simple[0] : Math.min(obj.lt, simple[0]);
             } else if (simple.kind == ':gt') {
-                obj.gt = obj.gt === undefined ? simple[0] : Math.max(obj.gt, simple[0]);
+                obj.gt = obj.gt == null ? simple[0] : Math.max(obj.gt, simple[0]);
             } else if (simple.kind == ':eq' || simple.kind == ':nth') {
                 if (obj.eq && obj.eq !== simple[0]) {
                     obj.no = true;
@@ -492,7 +499,7 @@ baidu.dom.query = (/**@function*/function (){
         if ((obj.lt != null && obj.eq != null && obj.eq >= obj.lt) || (obj.lt != null && obj.gt != null && obj.lt <= obj.gt) || (obj.even && obj.odd)) {
             obj.no = 1;
         }
-
+        
         if (obj.no) {
             return '/*^break BQ;^*/';
         }
@@ -519,7 +526,7 @@ baidu.dom.query = (/**@function*/function (){
         var thenCode = chain.allPoses ? TPL_POS + 'pos++;' + genThatCode(chain.allPoses) : TPL_PUSH;
         CTX_NGEN = 0;
         var code = '#{X}';
-
+        
         var k = parts.length;
         while (k --) {
             var part = parts[k];
@@ -614,7 +621,7 @@ baidu.dom.query = (/**@function*/function (){
         } catch(ex){}
         return (Q._toArray = Q._toArray1)(staticNodeList);
     };
-
+    
     function queryXML(expr, root){
         throw ['NotImpl'];
     }
