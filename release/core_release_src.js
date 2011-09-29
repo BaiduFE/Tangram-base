@@ -49,8 +49,9 @@ window[baidu.guid] = window[baidu.guid] || {};
 
 
 /**
- * @namespace baidu.ajax 对XMLHttpRequest请求的封装。
-*/
+ * 对XMLHttpRequest请求的封装
+ * @namespace baidu.ajax
+ */
 baidu.ajax = baidu.ajax || {};
 /*
  * Tangram
@@ -64,7 +65,8 @@ baidu.ajax = baidu.ajax || {};
 
 
 /**
- * @namespace baidu.fn 对方法的操作，解决内存泄露问题。
+ * 对方法的操作，解决内存泄露问题
+ * @namespace baidu.fn
  */
 baidu.fn = baidu.fn || {};
 /*
@@ -398,7 +400,8 @@ baidu.ajax.post = function (url, data, onsuccess) {
 
 
 /**
- * @namespace baidu.array 操作数组的方法。
+ * 操作数组的方法
+ * @namespace baidu.array
  */
 
 baidu.array = baidu.array || {};
@@ -564,7 +567,8 @@ baidu.array.removeAt = function (source, index) {
 
 
 /**
- * @namespace baidu.browser 判断浏览器类型和特性的属性。
+ * 判断浏览器类型和特性的属性
+ * @namespace baidu.browser
  */
 baidu.browser = baidu.browser || {};
 /*
@@ -724,7 +728,8 @@ baidu.browser.opera = /opera(\/| )(\d+(\.\d+)?)(.+?(version\/(\d+(\.\d+)?)))?/i.
 
 
 /**
- * @namespace baidu.cookie 操作cookie的方法。
+ * 操作cookie的方法
+ * @namespace baidu.cookie
  */
 baidu.cookie = baidu.cookie || {};
 /*
@@ -978,7 +983,8 @@ baidu.cookie.set = function (key, value, options) {
 
 
 /**
- * @namespace baidu.dom 操作dom的方法。
+ * 操作dom的方法
+ * @namespace baidu.dom 
  */
 baidu.dom = baidu.dom || {};
 /*
@@ -1033,8 +1039,9 @@ baidu.dom._NAME_ATTRS = (function () {
 
 
 /**
- * @namespace baidu.lang 对语言层面的封装，包括类型判断、模块扩展、继承基类以及对象自定义事件的支持。
-*/
+ * 对语言层面的封装，包括类型判断、模块扩展、继承基类以及对象自定义事件的支持。
+ * @namespace baidu.lang
+ */
 baidu.lang = baidu.lang || {};
 /*
  * Tangram
@@ -1375,7 +1382,8 @@ baidu.dom._styleFixer.opacity = baidu.browser.ie ? {
 
 
 /**
- * @namespace baidu.string 操作字符串的方法。
+ * 操作字符串的方法
+ * @namespace baidu.string
  */
 baidu.string = baidu.string || {};
 /*
@@ -2375,7 +2383,9 @@ baidu.q = baidu.Q = baidu.dom.q;
                 }
             };
         }
-
+        /**
+         * @private
+         */
         function ready() {
             if (!ready.isReady) {
                 ready.isReady = true;
@@ -2384,7 +2394,9 @@ baidu.q = baidu.Q = baidu.dom.q;
                 }
             }
         }
-
+        /**
+         * @private
+         */
         function doScrollCheck(){
             try {
                 document.documentElement.doScroll("left");
@@ -2394,7 +2406,9 @@ baidu.q = baidu.Q = baidu.dom.q;
             }   
             ready();
         }
-
+        /**
+         * @private
+         */
         function bindReady() {
             if (readyBound) {
                 return;
@@ -2685,7 +2699,8 @@ baidu.dom.toggle = function (element) {
 
 
 /**
- * @namespace baidu.event 屏蔽浏览器差异性的事件封装。
+ * 屏蔽浏览器差异性的事件封装
+ * @namespace baidu.event
  * @property target 	事件的触发元素
  * @property pageX 		鼠标事件的鼠标x坐标
  * @property pageY 		鼠标事件的鼠标y坐标
@@ -2879,10 +2894,9 @@ baidu.event.getTarget = function (event) {
  * @shortcut on
  * @meta standard
  * @see baidu.event.un
- *             
  * @returns {HTMLElement|window} 目标元素
  */
-baidu.event.on = function (element, type, listener) {
+baidu.event.on = /**@function*/function (element, type, listener) {
     type = type.replace(/^on/i, '');
     element = baidu.dom._g(element);
 
@@ -3023,7 +3037,8 @@ baidu.un = baidu.event.un;
 
 
 /**
- * @namespace baidu.json 操作json对象的方法。
+ * 操作json对象的方法
+ * @namespace baidu.json
  */
 baidu.json = baidu.json || {};
 /*
@@ -3777,7 +3792,8 @@ baidu.lang.toArray = function (source) {
 
 
 /**
- * @namespace baidu.object 操作原生对象的方法。
+ * 操作原生对象的方法
+ * @namespace baidu.object
  */
 baidu.object = baidu.object || {};
 /*
@@ -3923,7 +3939,8 @@ baidu.object.extend = function (target, source) {
 
 
 /**
- * @namespace baidu.page 对页面层面的封装，包括页面的高宽属性、以及外部css和js的动态添加。
+ * 对页面层面的封装，包括页面的高宽属性、以及外部css和js的动态添加
+ * @namespace baidu.page
  */
 baidu.page = baidu.page || {};
 /*
@@ -4017,7 +4034,8 @@ baidu.page.getViewWidth = function () {
 
 
 /**
- * @namespace baidu.sio 使用动态script标签请求服务器资源，包括由服务器端的回调和浏览器端的回调。
+ * 使用动态script标签请求服务器资源，包括由服务器端的回调和浏览器端的回调
+ * @namespace baidu.sio
  */
 baidu.sio = baidu.sio || {};
 /*
@@ -4162,7 +4180,7 @@ baidu.sio.callByBrowser = function (url, opt_callback, opt_options) {
  * @meta standard
  * @see baidu.sio.callByBrowser
  */
-baidu.sio.callByServer = function(url, callback, opt_options) {
+baidu.sio.callByServer = /**@function*/function(url, callback, opt_options) {
     var scr = document.createElement('SCRIPT'),
         prefix = 'bd__cbs__',
         callbackName,
@@ -4387,8 +4405,9 @@ baidu.string.getByteLength = function (source) {
 
 
 /**
- * @namespace baidu.swf 操作flash对象的方法，包括创建flash对象、获取flash对象以及判断flash插件的版本号。
-*/
+ * 操作flash对象的方法，包括创建flash对象、获取flash对象以及判断flash插件的版本号
+ * @namespace baidu.swf
+ */
 baidu.swf = baidu.swf || {};
 /*
  * Tangram
@@ -4712,7 +4731,8 @@ baidu.swf.getMovie = function (name) {
 
 
 /**
- * @namespace baidu.url 操作url的方法。
+ * 操作url的方法
+ * @namespace baidu.url
  */
 baidu.url = baidu.url || {};
 /*

@@ -49,8 +49,9 @@ window[baidu.guid] = window[baidu.guid] || {};
 
 
 /**
- * @namespace baidu.ajax 对XMLHttpRequest请求的封装。
-*/
+ * 对XMLHttpRequest请求的封装
+ * @namespace baidu.ajax
+ */
 baidu.ajax = baidu.ajax || {};
 /*
  * Tangram
@@ -64,7 +65,8 @@ baidu.ajax = baidu.ajax || {};
 
 
 /**
- * @namespace baidu.fn 对方法的操作，解决内存泄露问题。
+ * 对方法的操作，解决内存泄露问题
+ * @namespace baidu.fn
  */
 baidu.fn = baidu.fn || {};
 /*
@@ -509,7 +511,8 @@ baidu.ajax.post = function (url, data, onsuccess) {
 
 
 /**
- * @namespace baidu.array 操作数组的方法。
+ * 操作数组的方法
+ * @namespace baidu.array
  */
 
 baidu.array = baidu.array || {};
@@ -1028,7 +1031,8 @@ baidu.array.unique = function (source, compareFn) {
 
 
 /**
- * @namespace baidu.async 对异步调用的封装。
+ * 对异步调用的封装
+ * @namespace baidu.async
  * @author rocy
  */
 baidu.async = baidu.async || {};
@@ -1044,7 +1048,8 @@ baidu.async = baidu.async || {};
 
 
 /**
- * @namespace baidu.object 操作原生对象的方法。
+ * 操作原生对象的方法
+ * @namespace baidu.object
  */
 baidu.object = baidu.object || {};
 /*
@@ -1095,8 +1100,9 @@ baidu.object.extend = function (target, source) {
 
 
 /**
- * @namespace baidu.lang 对语言层面的封装，包括类型判断、模块扩展、继承基类以及对象自定义事件的支持。
-*/
+ * 对语言层面的封装，包括类型判断、模块扩展、继承基类以及对象自定义事件的支持。
+ * @namespace baidu.lang
+ */
 baidu.lang = baidu.lang || {};
 /*
  * Tangram
@@ -1390,7 +1396,8 @@ baidu.async.when = function(deferredOrValue, onResolve, onReject) {
 
 
 /**
- * @namespace baidu.browser 判断浏览器类型和特性的属性。
+ * 判断浏览器类型和特性的属性
+ * @namespace baidu.browser
  */
 baidu.browser = baidu.browser || {};
 /*
@@ -1589,7 +1596,8 @@ baidu.browser.opera = /opera(\/| )(\d+(\.\d+)?)(.+?(version\/(\d+(\.\d+)?)))?/i.
 
 
 /**
- * @namespace baidu.cookie 操作cookie的方法。
+ * 操作cookie的方法
+ * @namespace baidu.cookie
  */
 baidu.cookie = baidu.cookie || {};
 /*
@@ -1843,7 +1851,8 @@ baidu.cookie.set = function (key, value, options) {
 
 
 /**
- * @namespace baidu.date 操作日期的方法。
+ * 操作日期的方法
+ * @namespace baidu.date
  */
 baidu.date = baidu.date || {};
 /*
@@ -1858,7 +1867,8 @@ baidu.date = baidu.date || {};
 
 
 /**
- * @namespace baidu.number 操作number的方法。
+ * 操作number的方法
+ * @namespace baidu.number
  */
 baidu.number = baidu.number || {};
 /*
@@ -2043,7 +2053,8 @@ baidu.date.parse = function (source) {
 
 
 /**
- * @namespace baidu.dom 操作dom的方法。
+ * 操作dom的方法
+ * @namespace baidu.dom 
  */
 baidu.dom = baidu.dom || {};
 /*
@@ -2093,7 +2104,8 @@ baidu.g = baidu.G = baidu.dom.g;
 
 
 /**
- * @namespace baidu.string 操作字符串的方法。
+ * 操作字符串的方法
+ * @namespace baidu.string
  */
 baidu.string = baidu.string || {};
 /*
@@ -2987,7 +2999,8 @@ baidu.getStyle = baidu.dom.getStyle;
 
 
 /**
- * @namespace baidu.event 屏蔽浏览器差异性的事件封装。
+ * 屏蔽浏览器差异性的事件封装
+ * @namespace baidu.event
  * @property target 	事件的触发元素
  * @property pageX 		鼠标事件的鼠标x坐标
  * @property pageY 		鼠标事件的鼠标y坐标
@@ -3041,10 +3054,9 @@ baidu.event._listeners = baidu.event._listeners || [];
  * @shortcut on
  * @meta standard
  * @see baidu.event.un
- *             
  * @returns {HTMLElement|window} 目标元素
  */
-baidu.event.on = function (element, type, listener) {
+baidu.event.on = /**@function*/function (element, type, listener) {
     type = type.replace(/^on/i, '');
     element = baidu.dom._g(element);
 
@@ -3185,7 +3197,8 @@ baidu.event.preventDefault = function (event) {
 
 
 /**
- * @namespace baidu.page 对页面层面的封装，包括页面的高宽属性、以及外部css和js的动态添加。
+ * 对页面层面的封装，包括页面的高宽属性、以及外部css和js的动态添加
+ * @namespace baidu.page
  */
 baidu.page = baidu.page || {};
 /*
@@ -4162,7 +4175,6 @@ baidu.dom._styleFilter[baidu.dom._styleFilter.length] = {
 /**
  * 使目标元素拥有可进行与页面可见区域相对位置保持不变的移动的能力
  * @name baidu.dom.fixable
- * @function
  * @grammar baidu.dom.fixable(element, options)
  * @param {HTMLElement|String} element 目标元素或目标元素的id
  * @param {Object} options 配置项
@@ -4175,8 +4187,7 @@ baidu.dom._styleFilter[baidu.dom._styleFilter.length] = {
  * @config {Function} [onrelease] 当被释放的时候触发
  * @returns {Object} 返回值一个对象，有三个方法：render、update、release
  */
-
-baidu.dom.fixable = function(element, options){
+baidu.dom.fixable = /**@function*/function(element, options){
 
     var target  = baidu.g(element),
         isUnderIE7 = baidu.browser.ie && baidu.browser.ie <= 7 ? true : false,
@@ -4972,10 +4983,10 @@ baidu.q = baidu.Q = baidu.dom.q;
  * @returns {Array}        包含所有筛选出的DOM元素的数组
  */
 
-baidu.dom.query = (function (){
+baidu.dom.query = (/**function*/function (){
     var d = document;
     d._Q_rev = 0;
-
+    
     var MUTATION = false;
     var _onMu = function (){
         d._Q_rev ++;
@@ -4988,10 +4999,12 @@ baidu.dom.query = (function (){
 
     var BY_ID1;
     var BY_CLASS;
+    var HAS_TEXT_CONTENT = false;
     var IE678 = window.ActiveXObject && !d.addEventListener;
     (function (){
         var div = d.createElement('div');
-        div.innerHTML = '<a name="d"></a><div id="d"></div>';
+        div.innerHTML = '.<a name="d"></a><div id="d"></div>';
+        HAS_TEXT_CONTENT = !!div.textContent;
         BY_ID1 = div.getElementsByTagName('*')["d"] === div.lastChild;
         div.innerHTML = '<div class="t e"></div><div class="t"></div>';
         div.lastChild.className = 'e';
@@ -5003,7 +5016,7 @@ baidu.dom.query = (function (){
     var BY_CHILDREN_TAG = BY_CHILDREN && !!d.documentElement.children.tags;
 
     var PATTERN = /(?:\s*([ ~+>,])\s*)?(?:([:.#]?)((?:[\w\u00A1-\uFFFF-]|\\.)+|\*)|\[\s*((?:[\w\u00A1-\uFFFF-]|\\.)+)(?:\s*([~^$|*!]?=)\s*((['"]).*?\7|[^\]]*))?\s*\])/g;
-
+    
     function trim(str){
         return str.replace(/^\s*|\s*$/, '');
     }
@@ -5082,7 +5095,7 @@ baidu.dom.query = (function (){
     var efMap = { id: '#', name: 'N' };
     var testingOrder = function (a, b){ return a.tR - b.tR; };
     var regPos = /:(nth|eq|gt|lt|first|last|even|odd)$/;
-
+    
     function process(seq){
         var finder, t;
         var k = seq.length;
@@ -5173,6 +5186,11 @@ baidu.dom.query = (function (){
                 }
             } else {
                 part.R = 'root';
+                part.isFirst = true;
+//                // 如果属于Q("~ span._result", el)这种情况
+//                if (part[part.length - 1].comb !== ' ') {
+//                    part.fI = part.length - 1;
+//                }
             }
         }
         // 如果没有找到任何一个可以用于find的seq.
@@ -5225,7 +5243,7 @@ baidu.dom.query = (function (){
         'T': TPL_XHTML +'/*^var #{N}T=!xhtml?("#{0}").toUpperCase():"#{0}";^*/#{N}.nodeName==#{N}T',
         '#': '#{N}.id=="#{0}"',
         'N': '#{N}.name=="#{0}"',
-
+        
         '[': IE678 ? '(t=#{N}.getAttributeNode("#{0}"))&&(t.specified)' : '#{N}.hasAttribute("#{0}")',
         '=': '#{A}=="#{1}"',
         '!=': '#{A}!="#{1}"',
@@ -5234,26 +5252,26 @@ baidu.dom.query = (function (){
         '*=': '(t=#{A})&&t.indexOf("#{1}")!==-1',
         '|=': '(t=#{A})&&(t=="#{1}"||t.slice(0,#{L})=="#{P}")',
         '~=': '(t=#{A})&&(" "+t+" ").indexOf("#{P}")!==-1',
-
+        
         ':element': '#{N}.nodeType==1',
-        ':contains': '(#{N}.textContent||#{N}.innerText).indexOf("#{0}")!==-1',
+        ':contains': '(#{N}.' + (HAS_TEXT_CONTENT ? 'textContent' : 'innerText') + '||"").indexOf("#{0}")!==-1',
         ':first-child': BY_ELEMENT ? '#{N}.parentNode.firstElementChild===#{N}' : 'Q._isFirstChild(#{N})',
         ':nth-child': TPL_DOC + '/*^var rev=doc._Q_rev||(doc._Q_rev=Q.qid++);^*/Q._index(#{N},#{0},#{1},rev)',
         ':last-child': BY_ELEMENT ? '#{N}.parentNode.lastElementChild===#{N}' : 'Q._isLastChild(#{N})',
         ':only-child': BY_ELEMENT ? '(t=#{N}.parentNode)&&(t.firstElementChild===#{N}&&t.lastElementChild===#{N})' : 'Q._isOnlyChild(#{N})',
-
+        
         ':not-ex': '/*^var _#{G}=Q._hash(Q("#{1}",root));qid=Q.qid;^*/!_#{G}[' + TPL_QID + ']',
         ':has': '(t=Q("#{1}", #{N}),qid=Q.qid,t.length>0)',
         ':parent': '!!#{N}.firstChild',
         ':empty': '!#{N}.firstChild',
-
+        
         ':header': '/h\\d/i.test(#{N}.nodeName)',
         ':input': '/input|select|textarea|button/i.test(#{N}.nodeName)',
         ':enabled': '#{N}.disabled===false&&#{N}.type!=="hidden"',
         ':disabled': '#{N}.disabled===true',
         ':checked': '#{N}.checked===true',
         ':selected': '(#{N}.parentNode.selectedIndex,#{N}.selected===true)',
-
+        
         // TODO: 这些伪类可以转化成为标签选择器加以优化！
         ':focus': TPL_DOC + '#{N}===doc.activeElement',
         ':button': TPL_INPUT_T + '#{N}.nodeName==="button"||(#{N}.nodeName===input_t&&#{N}.type==="button")',
@@ -5333,7 +5351,7 @@ baidu.dom.query = (function (){
     }
     var NEEDNOT_ELEMENT_CHECK = { '#': 1, 'T': 1, '.': 1, 'N': 1, ':element': 1 };
     function genFindCode(seq, R, comb){
-        comb = comb || seq.comb;
+        comb = comb || seq.comb || ' ';
         var tpl;
         if (comb == ' ') {
             var finder = seq.$;
@@ -5401,7 +5419,7 @@ baidu.dom.query = (function (){
         return code;
     }
     function genPartCode(part, thenCode){
-        var code = genFindCode(part[part.fI], part.R, ' ');
+        var code = genFindCode(part[part.fI], part.R, !part.isFirst ? ' ' : null);
         var nextCode = genNextCode(part, thenCode);
         if (part.fI < part.length - 1) {
             var passCode = genLeftCode(part);
@@ -5409,7 +5427,7 @@ baidu.dom.query = (function (){
         }
         return format(code, { X: nextCode });
     }
-
+    
     function genThatCode(seq){
         var obj = {};
         var k = seq.length;
@@ -5421,9 +5439,9 @@ baidu.dom.query = (function (){
                 obj.last = 1;
             }
             if (simple.kind == ':lt') {
-                obj.lt = obj.lt === undefined ? simple[0] : Math.min(obj.lt, simple[0]);
+                obj.lt = obj.lt == null ? simple[0] : Math.min(obj.lt, simple[0]);
             } else if (simple.kind == ':gt') {
-                obj.gt = obj.gt === undefined ? simple[0] : Math.max(obj.gt, simple[0]);
+                obj.gt = obj.gt == null ? simple[0] : Math.max(obj.gt, simple[0]);
             } else if (simple.kind == ':eq' || simple.kind == ':nth') {
                 if (obj.eq && obj.eq !== simple[0]) {
                     obj.no = true;
@@ -5435,7 +5453,7 @@ baidu.dom.query = (function (){
         if ((obj.lt != null && obj.eq != null && obj.eq >= obj.lt) || (obj.lt != null && obj.gt != null && obj.lt <= obj.gt) || (obj.even && obj.odd)) {
             obj.no = 1;
         }
-
+        
         if (obj.no) {
             return '/*^break BQ;^*/';
         }
@@ -5462,7 +5480,7 @@ baidu.dom.query = (function (){
         var thenCode = chain.allPoses ? TPL_POS + 'pos++;' + genThatCode(chain.allPoses) : TPL_PUSH;
         CTX_NGEN = 0;
         var code = '#{X}';
-
+        
         var k = parts.length;
         while (k --) {
             var part = parts[k];
@@ -5557,7 +5575,7 @@ baidu.dom.query = (function (){
         } catch(ex){}
         return (Q._toArray = Q._toArray1)(staticNodeList);
     };
-
+    
     function queryXML(expr, root){
         throw ['NotImpl'];
     }
@@ -5723,7 +5741,9 @@ baidu.dom.query = (function (){
                 }
             };
         }
-
+        /**
+         * @private
+         */
         function ready() {
             if (!ready.isReady) {
                 ready.isReady = true;
@@ -5732,7 +5752,9 @@ baidu.dom.query = (function (){
                 }
             }
         }
-
+        /**
+         * @private
+         */
         function doScrollCheck(){
             try {
                 document.documentElement.doScroll("left");
@@ -5742,7 +5764,9 @@ baidu.dom.query = (function (){
             }   
             ready();
         }
-
+        /**
+         * @private
+         */
         function bindReady() {
             if (readyBound) {
                 return;
@@ -6021,7 +6045,7 @@ baidu.event.getTarget = function (event) {
  *
  * @return {HTMLElement}  设置好的元素
  */
-baidu.dom.setBorderBoxSize= function (element, size) {
+baidu.dom.setBorderBoxSize = /**@function*/function (element, size) {
     var result = {};
     size.width && (result.width = parseFloat(size.width));
     size.height && (result.height = parseFloat(size.height));
@@ -6152,7 +6176,7 @@ baidu.dom.setBorderBoxWidth = function (element, width) {
  * @author lixiaopeng
  * @version 1.3
  */
-baidu.dom.resizable = function(element,options) {
+baidu.dom.resizable = /**@function*/function(element,options) {
     var target,
         op,
         resizeHandle = {},
@@ -7006,7 +7030,7 @@ baidu.fn.wrapReturnValue = function (func, wrapper, mode) {
  *
  * @returns {Function} 已集化的函数
  */
-baidu.fn.multize = function (func, recursive, joinArray) {
+baidu.fn.multize = /**@function*/function (func, recursive, joinArray) {
     var newFunc = function(){
         var list = arguments[0],
             fn = recursive ? newFunc : func,
@@ -7060,7 +7084,8 @@ baidu.fn.multize = function (func, recursive, joinArray) {
 
 
 /**
- * @namespace baidu.element 通过该方法封装的对象可使用dom、event方法集合以及each方法进行链式调用。
+ * 通过该方法封装的对象可使用dom、event方法集合以及each方法进行链式调用
+ * @namespace baidu.element
  */
 baidu.element = function(node){
     var gNode = baidu._g(node);
@@ -7723,7 +7748,7 @@ baidu.event.getPageY = function (event) {
  *             
  * @returns {HTMLElement} 目标元素
  */
-baidu.event.once = function(element, type, listener){
+baidu.event.once = /**@function*/function(element, type, listener){
     element = baidu.dom._g(element);
     function onceListener(event){
         listener.call(element,event);
@@ -8013,7 +8038,8 @@ baidu.fn.abstractMethod = function() {
 
 
 /**
- * @namespace baidu.json 操作json对象的方法。
+ * 操作json对象的方法
+ * @namespace baidu.json
  */
 baidu.json = baidu.json || {};
 /*
@@ -8327,7 +8353,7 @@ baidu.lang.Class.prototype.addEventListeners = function (events, fn) {
  * @returns {Object} 一个类对象
  */
 
-baidu.lang.createClass = function(constructor, options) {
+baidu.lang.createClass = /**@function*/function(constructor, options) {
     options = options || {};
     var superClass = options.superClass || baidu.lang.Class;
 
@@ -9348,7 +9374,7 @@ baidu.page.lazyLoadImage = function(options) {
  *      onload : fnWhenEverythingIsOK
  * });
  */
-baidu.page.load = function(resources, options, ignoreAllLoaded) {
+baidu.page.load = /**@function*/function(resources, options, ignoreAllLoaded) {
     //TODO failure, 整体onload能不能每个都调用; resources.charset
     options = options || {};
     var self = baidu.page.load,
@@ -9543,7 +9569,8 @@ baidu.page.loadJsFile = function (path) {
 
 
 /**
- * @namespace baidu.platform 判断平台类型和特性的属性。
+ * 判断平台类型和特性的属性
+ * @namespace baidu.platform
  * @author jz
  */
 baidu.platform = baidu.platform || {};
@@ -9661,7 +9688,8 @@ baidu.platform.isX11 = /x11/i.test(navigator.userAgent);
 
 
 /**
- * @namespace baidu.sio 使用动态script标签请求服务器资源，包括由服务器端的回调和浏览器端的回调。
+ * 使用动态script标签请求服务器资源，包括由服务器端的回调和浏览器端的回调
+ * @namespace baidu.sio
  */
 baidu.sio = baidu.sio || {};
 /*
@@ -9806,7 +9834,7 @@ baidu.sio.callByBrowser = function (url, opt_callback, opt_options) {
  * @meta standard
  * @see baidu.sio.callByBrowser
  */
-baidu.sio.callByServer = function(url, callback, opt_options) {
+baidu.sio.callByServer = /**@function*/function(url, callback, opt_options) {
     var scr = document.createElement('SCRIPT'),
         prefix = 'bd__cbs__',
         callbackName,
@@ -10513,8 +10541,9 @@ baidu.string.wbr = function (source) {
 
 
 /**
- * @namespace baidu.swf 操作flash对象的方法，包括创建flash对象、获取flash对象以及判断flash插件的版本号。
-*/
+ * 操作flash对象的方法，包括创建flash对象、获取flash对象以及判断flash插件的版本号
+ * @namespace baidu.swf
+ */
 baidu.swf = baidu.swf || {};
 /*
  * Tangram
@@ -10914,7 +10943,8 @@ baidu.swf.Proxy.prototype.call = function(methodName, var_args) {
 
 
 /**
- * @namespace baidu.url 操作url的方法。
+ * 操作url的方法
+ * @namespace baidu.url
  */
 baidu.url = baidu.url || {};
 /*
