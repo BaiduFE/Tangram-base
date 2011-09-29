@@ -49,8 +49,9 @@ window[baidu.guid] = window[baidu.guid] || {};
 
 
 /**
- * @namespace baidu.ajax 对XMLHttpRequest请求的封装。
-*/
+ * 对XMLHttpRequest请求的封装
+ * @namespace baidu.ajax
+ */
 baidu.ajax = baidu.ajax || {};
 /*
  * Tangram
@@ -64,7 +65,8 @@ baidu.ajax = baidu.ajax || {};
 
 
 /**
- * @namespace baidu.fn 对方法的操作，解决内存泄露问题。
+ * 对方法的操作，解决内存泄露问题
+ * @namespace baidu.fn
  */
 baidu.fn = baidu.fn || {};
 /*
@@ -509,7 +511,8 @@ baidu.ajax.post = function (url, data, onsuccess) {
 
 
 /**
- * @namespace baidu.array 操作数组的方法。
+ * 操作数组的方法
+ * @namespace baidu.array
  */
 
 baidu.array = baidu.array || {};
@@ -1028,7 +1031,8 @@ baidu.array.unique = function (source, compareFn) {
 
 
 /**
- * @namespace baidu.async 对异步调用的封装。
+ * 对异步调用的封装
+ * @namespace baidu.async
  * @author rocy
  */
 baidu.async = baidu.async || {};
@@ -1044,7 +1048,8 @@ baidu.async = baidu.async || {};
 
 
 /**
- * @namespace baidu.object 操作原生对象的方法。
+ * 操作原生对象的方法
+ * @namespace baidu.object
  */
 baidu.object = baidu.object || {};
 /*
@@ -1095,8 +1100,9 @@ baidu.object.extend = function (target, source) {
 
 
 /**
- * @namespace baidu.lang 对语言层面的封装，包括类型判断、模块扩展、继承基类以及对象自定义事件的支持。
-*/
+ * 对语言层面的封装，包括类型判断、模块扩展、继承基类以及对象自定义事件的支持。
+ * @namespace baidu.lang
+ */
 baidu.lang = baidu.lang || {};
 /*
  * Tangram
@@ -1390,7 +1396,8 @@ baidu.async.when = function(deferredOrValue, onResolve, onReject) {
 
 
 /**
- * @namespace baidu.browser 判断浏览器类型和特性的属性。
+ * 判断浏览器类型和特性的属性
+ * @namespace baidu.browser
  */
 baidu.browser = baidu.browser || {};
 /*
@@ -1589,7 +1596,8 @@ baidu.browser.opera = /opera(\/| )(\d+(\.\d+)?)(.+?(version\/(\d+(\.\d+)?)))?/i.
 
 
 /**
- * @namespace baidu.cookie 操作cookie的方法。
+ * 操作cookie的方法
+ * @namespace baidu.cookie
  */
 baidu.cookie = baidu.cookie || {};
 /*
@@ -1843,7 +1851,8 @@ baidu.cookie.set = function (key, value, options) {
 
 
 /**
- * @namespace baidu.date 操作日期的方法。
+ * 操作日期的方法
+ * @namespace baidu.date
  */
 baidu.date = baidu.date || {};
 /*
@@ -1858,7 +1867,8 @@ baidu.date = baidu.date || {};
 
 
 /**
- * @namespace baidu.number 操作number的方法。
+ * 操作number的方法
+ * @namespace baidu.number
  */
 baidu.number = baidu.number || {};
 /*
@@ -2043,7 +2053,8 @@ baidu.date.parse = function (source) {
 
 
 /**
- * @namespace baidu.dom 操作dom的方法。
+ * 操作dom的方法
+ * @namespace baidu.dom 
  */
 baidu.dom = baidu.dom || {};
 /*
@@ -2093,7 +2104,8 @@ baidu.g = baidu.G = baidu.dom.g;
 
 
 /**
- * @namespace baidu.string 操作字符串的方法。
+ * 操作字符串的方法
+ * @namespace baidu.string
  */
 baidu.string = baidu.string || {};
 /*
@@ -2987,7 +2999,8 @@ baidu.getStyle = baidu.dom.getStyle;
 
 
 /**
- * @namespace baidu.event 屏蔽浏览器差异性的事件封装。
+ * 屏蔽浏览器差异性的事件封装
+ * @namespace baidu.event
  * @property target 	事件的触发元素
  * @property pageX 		鼠标事件的鼠标x坐标
  * @property pageY 		鼠标事件的鼠标y坐标
@@ -3041,10 +3054,9 @@ baidu.event._listeners = baidu.event._listeners || [];
  * @shortcut on
  * @meta standard
  * @see baidu.event.un
- *             
  * @returns {HTMLElement|window} 目标元素
  */
-baidu.event.on = function (element, type, listener) {
+baidu.event.on = /**@function*/function (element, type, listener) {
     type = type.replace(/^on/i, '');
     element = baidu.dom._g(element);
 
@@ -3185,7 +3197,8 @@ baidu.event.preventDefault = function (event) {
 
 
 /**
- * @namespace baidu.page 对页面层面的封装，包括页面的高宽属性、以及外部css和js的动态添加。
+ * 对页面层面的封装，包括页面的高宽属性、以及外部css和js的动态添加
+ * @namespace baidu.page
  */
 baidu.page = baidu.page || {};
 /*
@@ -4162,7 +4175,6 @@ baidu.dom._styleFilter[baidu.dom._styleFilter.length] = {
 /**
  * 使目标元素拥有可进行与页面可见区域相对位置保持不变的移动的能力
  * @name baidu.dom.fixable
- * @function
  * @grammar baidu.dom.fixable(element, options)
  * @param {HTMLElement|String} element 目标元素或目标元素的id
  * @param {Object} options 配置项
@@ -4175,8 +4187,7 @@ baidu.dom._styleFilter[baidu.dom._styleFilter.length] = {
  * @config {Function} [onrelease] 当被释放的时候触发
  * @returns {Object} 返回值一个对象，有三个方法：render、update、release
  */
-
-baidu.dom.fixable = function(element, options){
+baidu.dom.fixable = /**@function*/function(element, options){
 
     var target  = baidu.g(element),
         isUnderIE7 = baidu.browser.ie && baidu.browser.ie <= 7 ? true : false,
@@ -4972,10 +4983,10 @@ baidu.q = baidu.Q = baidu.dom.q;
  * @returns {Array}        包含所有筛选出的DOM元素的数组
  */
 
-baidu.dom.query = (function (){
+baidu.dom.query = (/**function*/function (){
     var d = document;
     d._Q_rev = 0;
-
+    
     var MUTATION = false;
     var _onMu = function (){
         d._Q_rev ++;
@@ -4988,10 +4999,12 @@ baidu.dom.query = (function (){
 
     var BY_ID1;
     var BY_CLASS;
+    var HAS_TEXT_CONTENT = false;
     var IE678 = window.ActiveXObject && !d.addEventListener;
     (function (){
         var div = d.createElement('div');
-        div.innerHTML = '<a name="d"></a><div id="d"></div>';
+        div.innerHTML = '.<a name="d"></a><div id="d"></div>';
+        HAS_TEXT_CONTENT = !!div.textContent;
         BY_ID1 = div.getElementsByTagName('*')["d"] === div.lastChild;
         div.innerHTML = '<div class="t e"></div><div class="t"></div>';
         div.lastChild.className = 'e';
@@ -5003,7 +5016,7 @@ baidu.dom.query = (function (){
     var BY_CHILDREN_TAG = BY_CHILDREN && !!d.documentElement.children.tags;
 
     var PATTERN = /(?:\s*([ ~+>,])\s*)?(?:([:.#]?)((?:[\w\u00A1-\uFFFF-]|\\.)+|\*)|\[\s*((?:[\w\u00A1-\uFFFF-]|\\.)+)(?:\s*([~^$|*!]?=)\s*((['"]).*?\7|[^\]]*))?\s*\])/g;
-
+    
     function trim(str){
         return str.replace(/^\s*|\s*$/, '');
     }
@@ -5082,7 +5095,7 @@ baidu.dom.query = (function (){
     var efMap = { id: '#', name: 'N' };
     var testingOrder = function (a, b){ return a.tR - b.tR; };
     var regPos = /:(nth|eq|gt|lt|first|last|even|odd)$/;
-
+    
     function process(seq){
         var finder, t;
         var k = seq.length;
@@ -5173,6 +5186,11 @@ baidu.dom.query = (function (){
                 }
             } else {
                 part.R = 'root';
+                part.isFirst = true;
+//                // 如果属于Q("~ span._result", el)这种情况
+//                if (part[part.length - 1].comb !== ' ') {
+//                    part.fI = part.length - 1;
+//                }
             }
         }
         // 如果没有找到任何一个可以用于find的seq.
@@ -5225,7 +5243,7 @@ baidu.dom.query = (function (){
         'T': TPL_XHTML +'/*^var #{N}T=!xhtml?("#{0}").toUpperCase():"#{0}";^*/#{N}.nodeName==#{N}T',
         '#': '#{N}.id=="#{0}"',
         'N': '#{N}.name=="#{0}"',
-
+        
         '[': IE678 ? '(t=#{N}.getAttributeNode("#{0}"))&&(t.specified)' : '#{N}.hasAttribute("#{0}")',
         '=': '#{A}=="#{1}"',
         '!=': '#{A}!="#{1}"',
@@ -5234,26 +5252,26 @@ baidu.dom.query = (function (){
         '*=': '(t=#{A})&&t.indexOf("#{1}")!==-1',
         '|=': '(t=#{A})&&(t=="#{1}"||t.slice(0,#{L})=="#{P}")',
         '~=': '(t=#{A})&&(" "+t+" ").indexOf("#{P}")!==-1',
-
+        
         ':element': '#{N}.nodeType==1',
-        ':contains': '(#{N}.textContent||#{N}.innerText).indexOf("#{0}")!==-1',
+        ':contains': '(#{N}.' + (HAS_TEXT_CONTENT ? 'textContent' : 'innerText') + '||"").indexOf("#{0}")!==-1',
         ':first-child': BY_ELEMENT ? '#{N}.parentNode.firstElementChild===#{N}' : 'Q._isFirstChild(#{N})',
         ':nth-child': TPL_DOC + '/*^var rev=doc._Q_rev||(doc._Q_rev=Q.qid++);^*/Q._index(#{N},#{0},#{1},rev)',
         ':last-child': BY_ELEMENT ? '#{N}.parentNode.lastElementChild===#{N}' : 'Q._isLastChild(#{N})',
         ':only-child': BY_ELEMENT ? '(t=#{N}.parentNode)&&(t.firstElementChild===#{N}&&t.lastElementChild===#{N})' : 'Q._isOnlyChild(#{N})',
-
+        
         ':not-ex': '/*^var _#{G}=Q._hash(Q("#{1}",root));qid=Q.qid;^*/!_#{G}[' + TPL_QID + ']',
         ':has': '(t=Q("#{1}", #{N}),qid=Q.qid,t.length>0)',
         ':parent': '!!#{N}.firstChild',
         ':empty': '!#{N}.firstChild',
-
+        
         ':header': '/h\\d/i.test(#{N}.nodeName)',
         ':input': '/input|select|textarea|button/i.test(#{N}.nodeName)',
         ':enabled': '#{N}.disabled===false&&#{N}.type!=="hidden"',
         ':disabled': '#{N}.disabled===true',
         ':checked': '#{N}.checked===true',
         ':selected': '(#{N}.parentNode.selectedIndex,#{N}.selected===true)',
-
+        
         // TODO: 这些伪类可以转化成为标签选择器加以优化！
         ':focus': TPL_DOC + '#{N}===doc.activeElement',
         ':button': TPL_INPUT_T + '#{N}.nodeName==="button"||(#{N}.nodeName===input_t&&#{N}.type==="button")',
@@ -5333,7 +5351,7 @@ baidu.dom.query = (function (){
     }
     var NEEDNOT_ELEMENT_CHECK = { '#': 1, 'T': 1, '.': 1, 'N': 1, ':element': 1 };
     function genFindCode(seq, R, comb){
-        comb = comb || seq.comb;
+        comb = comb || seq.comb || ' ';
         var tpl;
         if (comb == ' ') {
             var finder = seq.$;
@@ -5401,7 +5419,7 @@ baidu.dom.query = (function (){
         return code;
     }
     function genPartCode(part, thenCode){
-        var code = genFindCode(part[part.fI], part.R, ' ');
+        var code = genFindCode(part[part.fI], part.R, !part.isFirst ? ' ' : null);
         var nextCode = genNextCode(part, thenCode);
         if (part.fI < part.length - 1) {
             var passCode = genLeftCode(part);
@@ -5409,7 +5427,7 @@ baidu.dom.query = (function (){
         }
         return format(code, { X: nextCode });
     }
-
+    
     function genThatCode(seq){
         var obj = {};
         var k = seq.length;
@@ -5421,9 +5439,9 @@ baidu.dom.query = (function (){
                 obj.last = 1;
             }
             if (simple.kind == ':lt') {
-                obj.lt = obj.lt === undefined ? simple[0] : Math.min(obj.lt, simple[0]);
+                obj.lt = obj.lt == null ? simple[0] : Math.min(obj.lt, simple[0]);
             } else if (simple.kind == ':gt') {
-                obj.gt = obj.gt === undefined ? simple[0] : Math.max(obj.gt, simple[0]);
+                obj.gt = obj.gt == null ? simple[0] : Math.max(obj.gt, simple[0]);
             } else if (simple.kind == ':eq' || simple.kind == ':nth') {
                 if (obj.eq && obj.eq !== simple[0]) {
                     obj.no = true;
@@ -5435,7 +5453,7 @@ baidu.dom.query = (function (){
         if ((obj.lt != null && obj.eq != null && obj.eq >= obj.lt) || (obj.lt != null && obj.gt != null && obj.lt <= obj.gt) || (obj.even && obj.odd)) {
             obj.no = 1;
         }
-
+        
         if (obj.no) {
             return '/*^break BQ;^*/';
         }
@@ -5462,7 +5480,7 @@ baidu.dom.query = (function (){
         var thenCode = chain.allPoses ? TPL_POS + 'pos++;' + genThatCode(chain.allPoses) : TPL_PUSH;
         CTX_NGEN = 0;
         var code = '#{X}';
-
+        
         var k = parts.length;
         while (k --) {
             var part = parts[k];
@@ -5557,7 +5575,7 @@ baidu.dom.query = (function (){
         } catch(ex){}
         return (Q._toArray = Q._toArray1)(staticNodeList);
     };
-
+    
     function queryXML(expr, root){
         throw ['NotImpl'];
     }
@@ -5723,7 +5741,9 @@ baidu.dom.query = (function (){
                 }
             };
         }
-
+        /**
+         * @private
+         */
         function ready() {
             if (!ready.isReady) {
                 ready.isReady = true;
@@ -5732,7 +5752,9 @@ baidu.dom.query = (function (){
                 }
             }
         }
-
+        /**
+         * @private
+         */
         function doScrollCheck(){
             try {
                 document.documentElement.doScroll("left");
@@ -5742,7 +5764,9 @@ baidu.dom.query = (function (){
             }   
             ready();
         }
-
+        /**
+         * @private
+         */
         function bindReady() {
             if (readyBound) {
                 return;
@@ -6021,7 +6045,7 @@ baidu.event.getTarget = function (event) {
  *
  * @return {HTMLElement}  设置好的元素
  */
-baidu.dom.setBorderBoxSize= function (element, size) {
+baidu.dom.setBorderBoxSize = /**@function*/function (element, size) {
     var result = {};
     size.width && (result.width = parseFloat(size.width));
     size.height && (result.height = parseFloat(size.height));
@@ -6152,7 +6176,7 @@ baidu.dom.setBorderBoxWidth = function (element, width) {
  * @author lixiaopeng
  * @version 1.3
  */
-baidu.dom.resizable = function(element,options) {
+baidu.dom.resizable = /**@function*/function(element,options) {
     var target,
         op,
         resizeHandle = {},
@@ -7006,7 +7030,7 @@ baidu.fn.wrapReturnValue = function (func, wrapper, mode) {
  *
  * @returns {Function} 已集化的函数
  */
-baidu.fn.multize = function (func, recursive, joinArray) {
+baidu.fn.multize = /**@function*/function (func, recursive, joinArray) {
     var newFunc = function(){
         var list = arguments[0],
             fn = recursive ? newFunc : func,
@@ -7060,7 +7084,8 @@ baidu.fn.multize = function (func, recursive, joinArray) {
 
 
 /**
- * @namespace baidu.element 通过该方法封装的对象可使用dom、event方法集合以及each方法进行链式调用。
+ * 通过该方法封装的对象可使用dom、event方法集合以及each方法进行链式调用
+ * @namespace baidu.element
  */
 baidu.element = function(node){
     var gNode = baidu._g(node);
@@ -7723,7 +7748,7 @@ baidu.event.getPageY = function (event) {
  *             
  * @returns {HTMLElement} 目标元素
  */
-baidu.event.once = function(element, type, listener){
+baidu.event.once = /**@function*/function(element, type, listener){
     element = baidu.dom._g(element);
     function onceListener(event){
         listener.call(element,event);
@@ -8013,7 +8038,8 @@ baidu.fn.abstractMethod = function() {
 
 
 /**
- * @namespace baidu.json 操作json对象的方法。
+ * 操作json对象的方法
+ * @namespace baidu.json
  */
 baidu.json = baidu.json || {};
 /*
@@ -8327,7 +8353,7 @@ baidu.lang.Class.prototype.addEventListeners = function (events, fn) {
  * @returns {Object} 一个类对象
  */
 
-baidu.lang.createClass = function(constructor, options) {
+baidu.lang.createClass = /**@function*/function(constructor, options) {
     options = options || {};
     var superClass = options.superClass || baidu.lang.Class;
 
@@ -9348,7 +9374,7 @@ baidu.page.lazyLoadImage = function(options) {
  *      onload : fnWhenEverythingIsOK
  * });
  */
-baidu.page.load = function(resources, options, ignoreAllLoaded) {
+baidu.page.load = /**@function*/function(resources, options, ignoreAllLoaded) {
     //TODO failure, 整体onload能不能每个都调用; resources.charset
     options = options || {};
     var self = baidu.page.load,
@@ -9543,7 +9569,8 @@ baidu.page.loadJsFile = function (path) {
 
 
 /**
- * @namespace baidu.platform 判断平台类型和特性的属性。
+ * 判断平台类型和特性的属性
+ * @namespace baidu.platform
  * @author jz
  */
 baidu.platform = baidu.platform || {};
@@ -9661,7 +9688,8 @@ baidu.platform.isX11 = /x11/i.test(navigator.userAgent);
 
 
 /**
- * @namespace baidu.sio 使用动态script标签请求服务器资源，包括由服务器端的回调和浏览器端的回调。
+ * 使用动态script标签请求服务器资源，包括由服务器端的回调和浏览器端的回调
+ * @namespace baidu.sio
  */
 baidu.sio = baidu.sio || {};
 /*
@@ -9806,7 +9834,7 @@ baidu.sio.callByBrowser = function (url, opt_callback, opt_options) {
  * @meta standard
  * @see baidu.sio.callByBrowser
  */
-baidu.sio.callByServer = function(url, callback, opt_options) {
+baidu.sio.callByServer = /**@function*/function(url, callback, opt_options) {
     var scr = document.createElement('SCRIPT'),
         prefix = 'bd__cbs__',
         callbackName,
@@ -10513,8 +10541,9 @@ baidu.string.wbr = function (source) {
 
 
 /**
- * @namespace baidu.swf 操作flash对象的方法，包括创建flash对象、获取flash对象以及判断flash插件的版本号。
-*/
+ * 操作flash对象的方法，包括创建flash对象、获取flash对象以及判断flash插件的版本号
+ * @namespace baidu.swf
+ */
 baidu.swf = baidu.swf || {};
 /*
  * Tangram
@@ -10914,7 +10943,8 @@ baidu.swf.Proxy.prototype.call = function(methodName, var_args) {
 
 
 /**
- * @namespace baidu.url 操作url的方法。
+ * 操作url的方法
+ * @namespace baidu.url
  */
 baidu.url = baidu.url || {};
 /*
@@ -11088,7 +11118,10 @@ baidu.url.queryToJson = function (url) {
  */
 
 
-/** @namespace */
+/**
+ * 对一些数据处理提供的类
+ * @namespace baidu.data
+ */
 baidu.data = baidu.data || {};
 /**
  * Tangram
@@ -11402,7 +11435,7 @@ baidu.data.dataSource.sio = function(url, options){
 /**
  * 一个本地存储对象，使用key-value的方式来存值，不具备夸浏览器通信功能，根据浏览器的不同自动选择userData或是localStorage或是cookie来存值.
  * @Object
- * @grammar baidu.data.storage.get(key, callback)
+ * @grammar baidu.data.storage
  * @return {baidu.data.storage}
  */
 baidu.data.storage = (function(){
@@ -11602,7 +11635,7 @@ baidu.data.storage = (function(){
     }
     
     
-    return {
+    return /**@lends baidu.data.storage.prototype*/{
         /**
          * 将一个键值对存入到本地存储中
          * @function
@@ -11726,7 +11759,9 @@ baidu.data.XPC = baidu.lang.createClass(function(isParent, url, options) {
             this.dispatchEvent(this._createEvent('error', e.message));
         }
     }
-}).extend({
+}).extend(
+/**@lends baidu.data.XPC.prototype*/
+{
     //创建iframe，并返回DOM引用
     _createIframe: function(url) {
         var ifrm = document.createElement('IFRAME');
@@ -11819,7 +11854,10 @@ baidu.data.XPC = baidu.lang.createClass(function(isParent, url, options) {
  */
 
 
-/** @namespace */
+/**
+ * 使用flash资源封装的一些功能
+ * @namespace baidu.flash
+ */
 baidu.flash = baidu.flash || {};
 /*
  * Tangram
@@ -12033,20 +12071,20 @@ baidu.flash._Base = (function(){
 
 /**
  * 创建flash based avatarMaker
- * @function
+ * @class
  * @grammar baidu.flash.avatarMaker(options)
  * @param {Object} createOptions 创建flash时需要的参数，请参照baidu.swf.create文档
  * @config {Object} vars 创建avatarMaker时所需要的参数
  * @config {String} [vars.locale] 地区,现在支持vi、th、ar三种，分别是越南语、泰语和阿拉伯语，当使用阿拉伯语时，界面会变成rtl形式,默认为[zh-cn]
  * @config {String} [vars.bigFileName] 80*80图片文件数据字段名，默认为'bigFile'
  * @config {String} [vars.middleFileName] 60*60图片文件数据字段名，默认为'middleFile'
- * @config {String} [vars.smallFileName] 60*60图片文件数据字段名，默认为’middleFile‘
+ * @config {String} [vars.smallFileName] 60*60图片文件数据字段名，默认为’smallFile‘
  * @config {Number} [vars.imageQuality] 图片的压缩质量0-100， 默认为 80
  * @config {String} uploadURL 上传图片到的url地址
  * @config {Function|String} tipHandler js提示函数，当flash发生异常，调用此函数显示出错信息。该函数接收一个String类型的参数，为需要显示的文字 
  * @config {Function|String} uploadCallBack 上传之后的回调函数
  */
-baidu.flash.avatarMaker = function(options){
+baidu.flash.avatarMaker = baidu.flash.avatarMaker || function(options){
     var me = this,
         options = options || {},
         _uploadURL = options.uploadURL,
@@ -12080,20 +12118,22 @@ baidu.flash.avatarMaker = function(options){
 
 /**
  * 创建flash based fileUploader
- * @function
+ * @class
  * @grammar baidu.flash.fileUploader(options)
- * @param {Object} createOptions 创建flash时需要的参数，请参照baidu.swf.create文档
- * @param {String} width
- * @param {String} height
- * @param {Function|String} selectiFile
- * @param {Function|String} exceedMaxSize
- * @param {Function|String} deleteFile
- * @param {Function|String} uploadStart
- * @param {Function|String} uploadComplete
- * @param {Function|String} uploadError
- * @param {Function|String} uploadProgress
+ * @param {Object} options
+ * @config {Object} createOptions 创建flash时需要的参数，请参照baidu.swf.create文档
+ * @config {String} createOptions.width
+ * @config {String} createOptions.height
+ * @config {Number} maxNum 最大可选文件数
+ * @config {Function|String} selectFile
+ * @config {Function|String} exceedMaxSize
+ * @config {Function|String} deleteFile
+ * @config {Function|String} uploadStart
+ * @config {Function|String} uploadComplete
+ * @config {Function|String} uploadError
+ * @config {Function|String} uploadProgress
  */
-baidu.flash.fileUploader = function(options){
+baidu.flash.fileUploader = baidu.flash.fileUploader || function(options){
     var me = this,
         options = options || {};
     
@@ -12102,7 +12142,7 @@ baidu.flash.fileUploader = function(options){
     },options.createOptions || {});
     
     var _flash = new baidu.flash._Base(options, [
-        'selectiFile',
+        'selectFile',
         'exceedMaxSize',
         'deleteFile',
         'uploadStart',
@@ -12110,6 +12150,8 @@ baidu.flash.fileUploader = function(options){
         'uploadError', 
         'uploadProgress'
     ]);
+
+    _flash.call('setMaxNum', options.maxNum ? [options.maxNum] : [1]);
 
     /**
      * 设置当鼠标移动到flash上时，是否变成手型
@@ -12168,7 +12210,7 @@ baidu.flash.fileUploader = function(options){
     me.deleteFile = function(index, callBack){
 
         var callBackAll = function(list){
-                callBack(list);
+                callBack && callBack(list);
             };
 
         if(typeof index === 'undefined'){
@@ -12192,7 +12234,10 @@ baidu.flash.fileUploader = function(options){
      * @return {Null};
      */
     me.addFileType = function(type){
-        if(typeof type !== 'Array') type = [type];
+        var type = type || [[]];
+        
+        if(type instanceof Array) type = [type];
+        else type = [[type]];
         _flash.call('addFileTypes', type);
     };
     
@@ -12203,8 +12248,11 @@ baidu.flash.fileUploader = function(options){
      * @return {Null};
      */
     me.setFileType = function(type){
-        if(typeof type !== 'Array') type = [type];
-        _flash.call('setFileTypes', type); 
+        var type = type || [[]];
+        
+        if(type instanceof Array) type = [type];
+        else type = [[type]];
+        _flash.call('setFileTypes', type);
     };
 
     /**
@@ -12264,32 +12312,49 @@ baidu.flash.fileUploader = function(options){
 
 /**
  * 创建flash based imageUploader
- * @function
+ * @class
  * @grammar baidu.flash.imageUploader(options)
  * @param {Object} createOptions 创建flash时需要的参数，请参照baidu.swf.create文档
  * @config {Object} vars 创建imageUploader时所需要的参数
- * @config {String} [vars.url] 图片上传的url地址,默认值'Upload.php'
- * @config {String} [vars.fileType] 可上传的图片的类型字符串，默认值
- *                  '{"description":"图片", "extension":"*.gif; *.jpeg; *.png; *.jpg; *.bmp"}'
- * @config {Number} [vars.maxNum] 允许上传的最大图片数量，默认值32
- * @config {Number} [vars.maxSize] 允许上传的单张图片的最大体积,默认值3MB
- * @config {Number} [vars.compressSize] 超过多少MB的图片需要压缩,默认值3MB
- * @config {Number} [vars.compressLength] 允许上传的图片最大尺寸,默认值1200px
- * @config {String} [vars.uploadDataFieldName] 上传的图片数据在POST请求中的key值,默认值'uploadDataField'
- * @config {String} [vars.picDescFieldName] 图片的描述信息在POST请求中的key值,默认值'uploadDescField'
- * @config {object} [vars.ext] 其他需要通过post上传的参数，默认值null
- * @config {Number} [vars.supportGif] 是否支持动态gif图片,取值范围[0,1]，默认值为0
+ * @config {Number} vars.gridWidth 每一个预览图片所占的宽度，应该为flash寛的整除
+ * @config {Number} vars.gridHeight 每一个预览图片所占的高度，应该为flash高的整除
+ * @config {Number} vars.picWidth 单张预览图片的宽度
+ * @config {Number} vars.picHeight 单张预览图片的高度
+ * @config {String} vars.uploadDataFieldName POST请求中图片数据的key,默认值'picdata'
+ * @config {String} vars.picDescFieldName POST请求中图片描述的key,默认值'picDesc'
+ * @config {Number} vars.maxSize 文件的最大体积,单位'MB'
+ * @config {Number} vars.compressSize 上传前如果图片体积超过该值，会先压缩
+ * @config {Number} vars.maxNum:32 最大上传多少个文件
+ * @config {Number} vars.compressLength 能接受的最大边长，超过该值会等比压缩
+ * @config {String} vars.url 上传的url地址
+ * @config {Number} vars.mode mode == 0时，是使用滚动条，mode == 1时，拉伸flash, 默认值为0
+ * @see baidu.swf.createHTML
+ * @param {String} backgroundUrl 背景图片路径
+ * @param {String} listBacgroundkUrl 布局控件背景
+ * @param {String} buttonUrl 按钮图片不背景
+ * @param {String|Function} selectFileCallback 选择文件的回调
+ * @param {String|Function} exceedFileCallback文件超出限制的最大体积时的回调
+ * @param {String|Function} deleteFileCallback 删除文件的回调
+ * @param {String|Function} startUploadCallback 开始上传某个文件时的回调
+ * @param {String|Function} uploadCompleteCallback 某个文件上传完成的回调
+ * @param {String|Function} uploadErrorCallback 某个文件上传失败的回调
+ * @param {String|Function} allCompleteCallback 全部上传完成时的回调
+ * @param {String|Function} changeFlashHeight 改变Flash的高度，mode==1的时候才有用
  */ 
-baidu.flash.imageUploader = function(options){
+baidu.flash.imageUploader = baidu.flash.imageUploader || function(options){
    
     var me = this,
         options = options || {},
         _flash = new baidu.flash._Base(options, [
-                'single',    
-                'allComplete',
-                'changeHigh'
-            ]);
-
+            'selectFileCallback', 
+            'exceedFileCallback', 
+            'deleteFileCallback', 
+            'startUploadCallback',
+            'uploadCompleteCallback',
+            'uploadErrorCallback',
+            'allCompleteCallback',
+            'changeFlashHeight'
+        ]);
     /**
      * 开始或回复上传图片
      * @public
@@ -12314,7 +12379,10 @@ baidu.flash.imageUploader = function(options){
  */
 
 
-/** @namespace */
+/**
+ * 和表单相关的数据验证
+ * @namespace baidu.form
+ */
 baidu.form = baidu.form || {};
 /*
  * Tangram
@@ -12693,7 +12761,10 @@ baidu.object.extend(baidu.form.Validator.prototype,
  */
 
 
-/** @namespace */
+/**
+ * 提供各种公共的动画功能
+ * @namespace baidu.fx
+ */
 baidu.fx = baidu.fx || {} ;
 /*
  * Tangram
@@ -14406,7 +14477,10 @@ baidu.fx.zoomIn = function(element, options) {
  */
 
 
-/** @namespace */
+/**
+ * 提供对浏览器处理浏览历史的功能
+ * @namespace baidu.history
+ */
 baidu.history = baidu.history || {};
 /*
  * Tangram
@@ -14510,7 +14584,10 @@ baidu.history = baidu.history || {};
  * Copyright 2009 Baidu Inc. All rights reserved.
  */
 
-/** @namespace */
+/**
+ * 提供国际的一些接口
+ * @namespace baidu.i18n
+ */
 baidu.i18n = baidu.i18n || {};
 /*
  * Tangram
@@ -14626,11 +14703,10 @@ baidu.i18n.currentLocale = baidu.i18n.currentLocale || 'zh-CN';
  * @Object
  * @grammar baidu.i18n.number
  */
-baidu.i18n.number = baidu.i18n.number || {
+baidu.i18n.number = baidu.i18n.number || /**@lends baidu.i18n.number.prototype*/{
 
     /**
-     * 将传入的数字或者文字某种语言的格式进行格式化\
-     * @name baidu.i18n.number.format
+     * 将传入的数字或者文字某种语言的格式进行格式化
      * @grammar baidu.i18n.number.format(number, sLocale, tLocale)
      * @param {String|Number} number 需要进行格式化的数字或者文字
      * @param {String} [sLocale] 可选参数，若传入的number格式为字符串，则该参数必须传入
@@ -14660,7 +14736,7 @@ baidu.i18n.number = baidu.i18n.number || {
         }
         number = parseFloat(number);
         if(isNaN(number)){
-            return 'Not a number'; 
+            return 'NAN'; 
         }
         
         return tOpt._format ? tOpt._format(number, isNegative) : me._format(number, {
@@ -14705,17 +14781,17 @@ baidu.i18n.number = baidu.i18n.number || {
 
 
 
+
 /**
  * currency
  * @name baidu.i18n.currency
  * @Object
  * @grammar baidu.i18n.currency
  */
-baidu.i18n.currency = baidu.i18n.currency || {
+baidu.i18n.currency = baidu.i18n.currency || /** @lends baidu.i18n.currency.prototype */{
     
     /**
      * 将传入的数字或者文字某种语言的货币格式进行格式化
-     * @name baidu.i18n.currency.format
      * @grammar baidu.i18n.currency.format(number, sLocale, tLocale)
      * @param {String|Number} number 需要进行格式化的数字或者文字
      * @param {String} [sLocale] 可选参数，若传入的number格式为字符串，则该参数必须传入
@@ -14759,11 +14835,10 @@ baidu.i18n.currency = baidu.i18n.currency || {
  * @Object
  * @grammar baidu.i18n.date
  */
-baidu.i18n.date = baidu.i18n.date || {
+baidu.i18n.date = baidu.i18n.date || /**@lends baidu.i18n.date.prototype*/{
 
     /**
      * 获取某年某个月的天数
-     * @name baidu.i18n.date.getDaysInMonth
      * @grammar baidu.i18n.date.getDaysInMonth(year, month)
      * @param {Number} year 年份.
      * @param {Number} month 月份.
@@ -14780,7 +14855,6 @@ baidu.i18n.date = baidu.i18n.date || {
 
     /**
      * 判断传入年份是否时润年
-     * @name baidu.i18n.date.isLeapYear
      * @grammar baidu.i18n.date.isLeapYear(year)
      * @param {Number} year 年份.
      * @return {Boolean}
@@ -14791,7 +14865,6 @@ baidu.i18n.date = baidu.i18n.date || {
 
     /**
      * 将传入的date对象转换成指定地区的date对象
-     * @name baidu.i18n.date.toLocaleDate
      * @grammar baidu.i18n.date.toLocaleDate(dateObject, sLocale, tLocale)
      * @param {Date} dateObject
      * @param {String} sLocale dateObject 的地区标识，可选参数，传则以dateObject中获取的为准
@@ -14837,11 +14910,10 @@ baidu.i18n.date = baidu.i18n.date || {
  * @Object
  * @grammar baidu.i18n.string
  */
-baidu.i18n.string = baidu.i18n.string || {
+baidu.i18n.string = baidu.i18n.string || /**@lends baidu.i18n.string.prototype*/{
     
     /**
      * 按照某种语言的格式去掉字符串两边的空白字符
-     * @name baidu.i18n.string.trim
      * @grammar baidu.i18n.string.trim(source, locale)
      * @param {String} source 需要格式化的语言
      * @param {String} [locale] 目标语言
@@ -14854,7 +14926,6 @@ baidu.i18n.string = baidu.i18n.string || {
 
     /**
      * 将传入的字符串翻译成目标语言
-     * @name baidu.i18n.string.translation
      * @grammar baidu.i18n.string.translation(source, locale)
      * @param {String} source 需要进行翻译的字符串
      * @param {String} [locale] 目标语言
@@ -14868,7 +14939,10 @@ baidu.i18n.string = baidu.i18n.string || {
 
 };
 
-/** @namespace */
+/**
+ * 各种页面的UI组件
+ * @namespace baidu.ui
+ */
 baidu.ui = baidu.ui || { version: '1.3.9' };
 /*
  * Tangram UI
@@ -17008,7 +17082,10 @@ baidu.ui.Tab = baidu.ui.createUI( function (options) {
  */
 
 
-/** @namespace */
+/**
+ * 提供一些公共工具，如log日志等
+ * @namespace baidu.tools
+ */
 baidu.tools = baidu.tools || {};
 /*
  * Tangram
@@ -17061,7 +17138,7 @@ baidu.tools = baidu.tools || {};
 
     /**
      * 打印error
-     * @public
+     * @memberOf baidu.tools.log.prototype
      * @param {Object} data 需要打印的内容
      * @return {Null}
      */
@@ -17071,7 +17148,7 @@ baidu.tools = baidu.tools || {};
 
     /**
      * 打印info
-     * @public
+     * @memberOf baidu.tools.log.prototype
      * @param {Object} data 需要打印的内容
      * @return {Null}
      */
@@ -17081,7 +17158,7 @@ baidu.tools = baidu.tools || {};
 
     /**
      * 打印warn
-     * @public
+     * @memberOf baidu.tools.log.prototype
      * @param {Object} data 需要打印的内容
      * @return {Null}
      */
@@ -17093,7 +17170,7 @@ baidu.tools = baidu.tools || {};
      * 设置timer
      * 若此时一寸在相同名称的计时器，则立即输出，并重新初始化
      * 若不存在，则初始化计时器
-     * @public
+     * @memberOf baidu.tools.log.prototype
      * @param {String} name timer的标识名称
      * @return {Null}
      */
@@ -17109,7 +17186,7 @@ baidu.tools = baidu.tools || {};
 
     /**
      * 终止timer,并打印
-     * @public
+     * @memberOf baidu.tools.log.prototype
      * @param {String} name timer的标识名称
      * @return {Null}
      */
@@ -17127,14 +17204,14 @@ baidu.tools = baidu.tools || {};
 
     /**
      * 开启dialog进行输出
-     * @public
+     * @memberOf baidu.tools.log.prototype
      * @return {Null}
      */
     log.enableDialog = function(){
         
         _enableDialg = true;
         if(!_dialog && baidu.tools.log.Dialog){
-            _dialog = new baidu.tools.log.Dialog();
+            baidu.tools.log.DInstance = _dialog = new baidu.tools.log.Dialog();
         }else{
             _dialog.open();
         }
@@ -17142,7 +17219,7 @@ baidu.tools = baidu.tools || {};
 
     /**
      * 关闭dialog
-     * @public
+     * @memberOf baidu.tools.log.prototype
      * @return {Null}
      */
     log.disableDialog = function(){
@@ -17153,7 +17230,7 @@ baidu.tools = baidu.tools || {};
    
     /**
      * 输出log
-     * @public
+     * @private
      * @param {String} data 需要打印的内容
      * @return {Null}
      */
@@ -17186,7 +17263,7 @@ baidu.tools = baidu.tools || {};
         _logStack = [];
         _dialog && _dialog.push(data);
 
-        me.callBack.call(data);
+        me.callBack(data);
     };
 
     /**
@@ -17196,6 +17273,7 @@ baidu.tools = baidu.tools || {};
      * 默认值为0
      * @param {Number} ts timeInterval
      * @return {Null}
+     * @memberOf baidu.tools.log.prototype
      */
     log.setTimeInterval = function(ti){
         
@@ -17213,6 +17291,7 @@ baidu.tools = baidu.tools || {};
     * 设置所要记录的log的level
     * @param {String} 'log','error','info','warn'中一个或多个
     * @return {Null}
+    * @memberOf baidu.tools.log.prototype
     */ 
     log.setLogLevel = function(){
         var me = log,
@@ -17235,7 +17314,6 @@ baidu.tools = baidu.tools || {};
 
     //回调函数
     log.callBack = baidu.fn.blank;
-
 
     baidu.log = baidu.tools.log = log;
 })();
@@ -18140,7 +18218,7 @@ baidu.ui.behavior.posable.setPositionByMouse = function(element, options) {
      * @param {Array}  sortElements 被排序的元素数组.
      * @param {Array}  sortParentElement 被排序的元素的父元素，用来做事件代理的。.
      * @param {Object} options 可子定义参数.
-     * sortHandlers {Array} 默认值[]  拖拽手柄数组，这个需要与elements一一对应.
+     * sortHandlers {Array} 默认值[]  拖拽句柄数组，这个需要与elements一一对应.
      *                  如果handlers为空,那么整个sortElement都是可以进行拖拽。.
      *
      * sortDisabled {Boolean} 默认值
@@ -18878,7 +18956,7 @@ baidu.ui.Calendar = baidu.ui.createUI(function(options){
      * @return {Date} 返回一个本地当天的时间
      */
     getToday: function(){
-        return me._toLocalDate(new Date());
+        return this._toLocalDate(new Date());
     },
     
     /**
@@ -21528,16 +21606,24 @@ baidu.ui.ColorPicker.register(function(me) {
 
 
 
-baidu.ui.Dialog.register(function(me){
-    me.addEventListener("onload",function(){
 
-        //默认自动dispose
-        if (typeof me.autoDispose == 'undefined' || me.autoDispose) {
-            me.addEventListener('onclose', function() {
-                me.dispose();
-            });
-        }
-    });
+baidu.extend(baidu.ui.Dialog.prototype,{
+    autoDispose: true
+});
+
+baidu.ui.Dialog.register(function(me){
+
+    if(me.autoDispose){
+        me.addEventListener("onload",function(){
+
+            //默认自动dispose
+            if (typeof me.autoDispose == 'undefined' || me.autoDispose) {
+                me.addEventListener('onclose', function() {
+                    me.dispose();
+                });
+            }
+        });
+    }
 });
 /*
  * Tangram
@@ -23784,8 +23870,6 @@ baidu.ui.Dialog.register(function(me){
 
 /**
  *  从指定的dom元素中获取ui控件的属性值
- *
- *  todo: &datasource支持
  */
 
 baidu.ui.getAttribute = function(element){
@@ -25592,53 +25676,6 @@ baidu.ui.ScrollPanel = baidu.ui.createUI(function(options) {
     }
 });
 /*
- * Tangram UI
- * Copyright 2009 Baidu Inc. All rights reserved.
- * 
- * path: baidu/ui/setup.js
- * author: berg
- * version: 1.0.0
- * date: 2010/07/27 00:38:11
- */
-
-
-
-
-
-
-/**
- * 从当前页面批量setup所有控件（DOM - 控件）
- * @function
- * @grammar baidu.ui.setup(element)
- * @param {DOMElement} element 渲染查找的根元素
- */
-baidu.ui.setup = function(element){
-    var i = 0,
-        len = 0,
-        o = element.getElementsByTagName('*'),
-        elements = [element],
-        instance,
-        type,
-        uiPackage;
-
-    for (; element = o[i]; ) {
-        elements[++i] = element;
-    }
-
-    for (i = 0; element = elements[i++]; ) {
-        if (baidu.dom.getParent(element)) { 
-            o = baidu.ui.getAttribute(element);
-            if (type = o.ui) { //0907修改此处为ui，berg
-                uiPackage = baidu.ui[type];
-                if(typeof uiPackage.setup == 'function'){
-                    //如果有setup静态方法，直接调用
-                    uiPackage.setup(element, o);
-                }
-            }
-        }
-    }
-};
-/*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
  *
@@ -25853,6 +25890,7 @@ baidu.ui.StarRate = baidu.ui.createUI(function(options){
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
+ * update 2011.08.23 by zhaochengyang 'add holdHighLight option'
  */
 
 
@@ -25898,6 +25936,7 @@ baidu.ui.StarRate = baidu.ui.createUI(function(options){
  * @config {Function} getData          在需要获取数据的时候会调用此函数来获取数据，传入的参数word是用户在input中输入的数据。
  * @config {String}   prependHTML      写在下拉框列表前面的html
  * @config {String}   appendHTML       写在下拉框列表后面的html
+ * @config {Boolean}  holdHighLight    鼠标移出待选项区域后，是否保持高亮元素的状态
  */
 baidu.ui.Suggestion = baidu.ui.createUI(function(options) {
     var me = this;
@@ -25943,7 +25982,7 @@ baidu.ui.Suggestion = baidu.ui.createUI(function(options) {
 
     tplDOM: "<div id='#{0}' class='#{1}' style='position:relative; top:0px; left:0px'></div>",
     tplPrependAppend: "<div id='#{0}' class='#{1}'>#{2}</div>",
-    tplBody: "<table cellspacing='0' cellpadding='2'><tbody>#{0}</tbody></table>",
+    tplBody: '<table cellspacing="0" cellpadding="2"><tbody>#{0}</tbody></table>',
     tplRow: '<tr><td id="#{0}" onmouseover="#{2}" onmouseout="#{3}" onmousedown="#{4}" onclick="#{5}" class="#{6}">#{1}</td></tr>',
 
     /**
@@ -26003,7 +26042,7 @@ baidu.ui.Suggestion = baidu.ui.createUI(function(options) {
     /**
      * 把某个词放到input框中
      * @public
-	 * @param {String} index 条目索引.
+     * @param {String} index 条目索引.
      * @return {Null}
      */
     pick: function(index) {
@@ -26031,7 +26070,6 @@ baidu.ui.Suggestion = baidu.ui.createUI(function(options) {
      * @return {Null}
      */
     show: function(word, data, showEmpty) {
-
         var i = 0,
             len = data.length,
             me = this;
@@ -26074,7 +26112,23 @@ baidu.ui.Suggestion = baidu.ui.createUI(function(options) {
         //如果已经是隐藏状态就不用派发后面的事件了
         if (!me._isShowing())
             return;
-
+        
+        //如果当前有选中的条目，将其放到input中
+        if(me.currentIndex >= 0 && me.holdHighLight){
+            console.log(me.currentIndex);
+            console.log(me.currentData);
+            var currentData = me.currentData,
+                j = -1;
+            for(var i=0, len=currentData.length; i<len; i++){
+                if(typeof currentData[i].disable == 'undefined' || currentData[i].disable == false){
+                    j++;
+                    console.log(j +  "    " + i);
+                    if(j == me.currentIndex)
+                        me.pick(i);
+                }
+            }
+        }
+        
         me.getMain().style.display = 'none';
         me.dispatchEvent('onhide');
     },
@@ -26082,7 +26136,7 @@ baidu.ui.Suggestion = baidu.ui.createUI(function(options) {
     /**
      * 高亮某个条目
      * @public
-	 * @param {String} index 条目索引.
+     * @param {String} index 条目索引.
      * @return {Null}
      */
     highLight: function(index) {
@@ -26143,7 +26197,7 @@ baidu.ui.Suggestion = baidu.ui.createUI(function(options) {
 
     /**
      * confirm指定的条目
-	 * @public
+     * @public
      * @param {Number|String} index or item.
      * @param {String} source 事件来源.
      * @return {Null}
@@ -26191,7 +26245,7 @@ baidu.ui.Suggestion = baidu.ui.createUI(function(options) {
     /**
      * 获得input框元素
      * @public
-	 * @return {HTMLElement}
+     * @return {HTMLElement}
      */
     getTarget: function() {
         return baidu.g(this.targetId);
@@ -26245,7 +26299,10 @@ baidu.ui.Suggestion = baidu.ui.createUI(function(options) {
             ));
         }
 
-        html += baidu.format(me.tplBody, itemsHTML.join(''));
+        html += baidu.format(
+            me.tplBody, 
+            itemsHTML.join('')
+        );
         html += getPrependAppend('append');
         return html;
     },
@@ -26278,7 +26335,8 @@ baidu.ui.Suggestion = baidu.ui.createUI(function(options) {
     _itemOut: function(e, index) {
         var me = this;
         baidu.event.stop(e || window.event);
-        me._isEnable(index) && me.clearHighLight();
+        if(!me.holdHighLight)
+            me._isEnable(index) && me.clearHighLight();
 
         me.dispatchEvent('onmouseoutitem', {
             index: index,
@@ -28566,62 +28624,44 @@ baidu.ui.Tooltip.register(function(me) {
 
 
 
-
-
 baidu.ui.Tooltip.extend({
     hideDelay: 500
 });
 
 baidu.ui.Tooltip.register(function(me) {
     
-    if (me.type == 'hover') {
+    if (me.type != 'hover') {return;}//断言句式
 
-        var hideHandle = null;
+    var hideHandle = null,
+        mouseInContainer = false;//用标识鼠标是否落在Tooltip容器内
 
-        //onload时绑定显示方法
-        me.addEventListener("onload",function(){
-            baidu.each(me.target,function(target){
-                baidu.on(target, 'mouseover', showFn);
-            });
+    //onload时绑定显示方法
+    me.addEventListener("onload", function(){
+        baidu.each(me.target,function(target){
+            me.on(target, 'mouseenter', showFn);
+            me.on(target, 'mouseleave', hideFn);
         });
+        me.on(me.getBody(), 'mouseover', setMouseInContainer);
+        me.on(me.getBody(), 'mouseout', setMouseInContainer);
+    });
+    
+    //用于设置鼠标在移入和移出Tooltip-body时标识状态
+    function setMouseInContainer(evt){
+        mouseInContainer = (evt.type.toLowerCase() == 'mouseover');
+        !mouseInContainer && hideFn(evt);
+    }
+    
+    //显示tooltip
+    function showFn(e){
+        hideHandle && clearTimeout(hideHandle);
+        me.open(this);
+    }
 
-        //dispose时接触事件绑定
-        me.addEventListener("ondispose",function(){
-            baidu.each(me.target,function(target){
-                baidu.un(target, 'mouseover', showFn);
-                baidu.un(target, 'mouseout', hideFn);
-            });
-        });
-
-        //tooltip打开时，绑定和解除方法
-        me.addEventListener('onopen', function(){
-            baidu.on(me.currentTarget, 'mouseout', hideFn);
-        });
-
-        //tooltip隐藏时，绑定和解除方法
-        me.addEventListener('onclose', function(){
-            baidu.on(me.currentTarget, 'mouseover', showFn);
-            baidu.un(me.currentTarget, 'mouseout', hideFn);
-        });
-
-        //显示tooltip
-        function showFn(e){
-            hideHandle && clearTimeout(hideHandle);
-            me.open(this);
-
-            //停止默认事件及事件传播
-            baidu.event.stop(e || window.event);
-        }
-
-        //隐藏tooltip
-        function hideFn(e){
-            hideHandle = setTimeout(function(){
-                me.close();
-            },me.hideDelay);
-
-            //停止默认事件及事件传播
-            baidu.event.stop(e || window.event); 
-        }
+    //隐藏tooltip
+    function hideFn(e){
+        hideHandle = setTimeout(function(){
+            !mouseInContainer && me.close();
+        }, me.hideDelay);
     }
 });
 
@@ -29707,7 +29747,8 @@ baidu.ui.Tree.extend(
 
 
 /**
- * @namespace baidu.widget widget机制, 用于模块化开发.
+ * widget机制, 用于模块化开发.
+ * @namespace baidu.widget
  * @remark
  *     widget是指一个包含它依赖信息的完整功能块. 
  * widget机制是通过一些api封装,解决widget的依赖管理,通信机制以及部署支持.
