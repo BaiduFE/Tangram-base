@@ -32,3 +32,26 @@ test('ready before onload', function() {
 		start();
 	}, 1000);
 });
+
+test('ready after onload', function() {
+	expect(2);
+	stop();
+	setTimeout(function() {
+		var script = document.createElement('script');
+		script.src = '../../tools/br/import.php?f=baidu.dom.ready';
+		var fun = function(){
+			ok(true, "onload");
+			baidu.dom.ready(function() {
+				ok(true, "dom ready");
+				start();
+			});
+		};
+		if(ua.browser.ie){
+			script.onreadystatechange = fun; //IE中不能用onload
+		}
+		else{
+			script.onload = fun;	
+		}
+		document.getElementsByTagName('head')[0].insertBefore(script, document.getElementsByTagName('head')[0].lastChild);
+	}, 100);
+});
