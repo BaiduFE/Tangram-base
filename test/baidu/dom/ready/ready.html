@@ -1,0 +1,27 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<style type="text/css">
+    
+</style>
+</head>
+<body>
+baidu.dom.ready
+</body>
+<script>
+setTimeout(function() {
+	var script = document.createElement('script');
+	script.src = '../../../tools/br/import.php?f=baidu.dom.ready';
+	//script.onreadystatechange = function(){ //IE中不能用onload
+	script.onload = function(){
+		alert('onload');
+		baidu.dom.ready(function() {
+			alert('ok!'); // 这个不会执行
+		});
+	};
+	document.getElementsByTagName('head')[0].insertBefore(script, document.getElementsByTagName('head')[0].lastChild);
+}, 1000);
+</script>
+</html>

@@ -27,7 +27,7 @@ function createForm() {
 	text1.value = "disable";
 
 	text2.type = "text";
-	text2.value = "param1";
+	text2.value = "param&1";
 	text2.name = "param1";
 
 	hid.type = "hidden";
@@ -98,7 +98,7 @@ function check(method, sync, ajax_options, result) {
 	f.action = (upath || '') + 'form.php';
 	f.method = method || 'get';
 	var result = result
-			|| ('param1=param1&param2=param2&cb=cb1&'
+			|| ('param1=param&1&param2=param2&cb=cb1&'
 					+ 'rb=rb2&pwd=pwd&ta=textarea&sel=3&selmul=3');
 	!sync && QUnit.stop();
 
