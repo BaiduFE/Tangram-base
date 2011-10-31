@@ -327,11 +327,56 @@ baidu.ajax.request = function (url, opt_options) {
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
  * 
+ * path: baidu/url.js
+ * author: erik
+ * version: 1.1.0
+ * date: 2009/11/16
+ */
+
+
+/**
+ * 操作url的方法
+ * @namespace baidu.url
+ */
+baidu.url = baidu.url || {};
+/*
+ * Tangram
+ * Copyright 2009 Baidu Inc. All rights reserved.
+ */
+
+
+
+/**
+ * 对字符串进行%#&+=以及和\s匹配的所有字符进行url转义
+ * @name baidu.url.escapeSymbol
+ * @function
+ * @grammar baidu.url.escapeSymbol(source)
+ * @param {string} source 需要转义的字符串.
+ * @return {string} 转义之后的字符串.
+ * @remark
+ * 用于get请求转义。在服务器只接受gbk，并且页面是gbk编码时，可以经过本转义后直接发get请求。
+ *
+ * @return {string} 转义后的字符串
+ */
+baidu.url.escapeSymbol = function(source) {
+    
+    //TODO: 之前使用\s来匹配任意空白符
+    //发现在ie下无法匹配中文全角空格和纵向指标符\v，所以改\s为\f\r\n\t\v以及中文全角空格和英文空格
+    //但是由于ie本身不支持纵向指标符\v,故去掉对其的匹配，保证各浏览器下效果一致
+    return String(source).replace(/[#%&+=\/\\\ \　\f\r\n\t]/g, function(all) {
+        return '%' + (0x100 + all.charCodeAt()).toString(16).substring(1).toUpperCase();
+    });
+};
+/*
+ * Tangram
+ * Copyright 2009 Baidu Inc. All rights reserved.
+ * 
  * path: baidu/ajax/form.js
  * author: allstar, erik
  * version: 1.1.0
  * date: 2009/12/02
  */
+
 
 
 
@@ -393,7 +438,7 @@ baidu.ajax.form = function (form, options) {
         // 处理：可用并包含表单name的表单项
         if (!item.disabled && itemName) {
             itemType = item.type;
-            itemValue = item.value;
+            itemValue = baidu.url.escapeSymbol(item.value);
         
             switch (itemType) {
             // radio和checkbox被选中时，拼装queryString数据
@@ -4952,752 +4997,1467 @@ baidu.dom.q = function (className, element, tagName) {
 
 // 声明快捷方法
 baidu.q = baidu.Q = baidu.dom.q;
-/*
- * Tangram query
- *
- * code from https://github.com/hackwaly/Q
- * 
- * version: 1.0.0
- * date: 20110801
- * author: wenyuxiang
+
+
+/*!
+ * Sizzle CSS Selector Engine
+ *  Copyright 2011, The Dojo Foundation
+ *  Released under the MIT, BSD, and GPL Licenses.
+ *  More information: http://sizzlejs.com/
  */
 
 
-
-
 /**
- * 提供css选择器功能
+ * 提供css选择器功能   选择器支持所有的<a href="http://www.w3.org/TR/css3-selectors/">css3选择器</a> ，核心实现采用sizzle。baidu.dom.query.matches 请参考<a href="http://wiki.github.com/jeresig/sizzle/" target="_blank">sizzle 文档</a> 
  * @name baidu.dom.query
  * @function
  * @grammar baidu.dom.query(selector[, context, results])
  * @param {String} selector 选择器定义
  * @param {HTMLElement | DOMDocument} [context] 查找的上下文
  * @param {Array} [results] 查找的结果会追加到这个数组中
- * @version 1.2
+ * @version 1.5
  * @remark
  * 
-            选择器支持所有的<a href="http://www.w3.org/TR/css3-selectors/">css3选择器</a> ，核心实现采用sizzle。可参考<a href="http://wiki.github.com/jeresig/sizzle/" target="_blank">sizzle 文档</a>
+            选择器支持所有的<a href="http://www.w3.org/TR/css3-selectors/">css3选择器</a> ，核心实现采用sizzle。可参考<a href="https://github.com/jquery/sizzle/wiki/Sizzle-Home" target="_blank">sizzle 文档</a>
         
- * @see baidu.dom.g, baidu.dom.q, baidu.dom.query.matches
- *             
+ * @see baidu.dom.g, baidu.dom.q,
  * @returns {Array}        包含所有筛选出的DOM元素的数组
  */
 
-baidu.dom.query = (/**function*/function (){
-    var d = document;
-    d._Q_rev = 0;
-    
-    var MUTATION = false;
-    var _onMu = function (){
-        d._Q_rev ++;
-        MUTATION = true;
-    };
-    if (d.addEventListener) {
-        d.addEventListener('DOMNodeInserted', _onMu, false);
-        d.addEventListener('DOMNodeRemoved', _onMu, false);
-    }
+(function(){
 
-    var BY_ID1;
-    var BY_CLASS;
-    var HAS_TEXT_CONTENT = false;
-    var IE678 = window.ActiveXObject && !d.addEventListener;
-    (function (){
-        var div = d.createElement('div');
-        div.innerHTML = '.<a name="d"></a><div id="d"></div>';
-        HAS_TEXT_CONTENT = !!div.textContent;
-        BY_ID1 = div.getElementsByTagName('*')["d"] === div.lastChild;
-        div.innerHTML = '<div class="t e"></div><div class="t"></div>';
-        div.lastChild.className = 'e';
-        BY_CLASS = div.getElementsByClassName && div.getElementsByClassName('e').length == 2;
-    })();
-    var BY_NAME = !!d.getElementsByName;
-    var BY_ELEMENT = typeof d.documentElement.nextElementSibling !== 'undefined';
-    var BY_CHILDREN = !!d.documentElement.children;
-    var BY_CHILDREN_TAG = BY_CHILDREN && !!d.documentElement.children.tags;
+var chunker = /((?:\((?:\([^()]+\)|[^()]+)+\)|\[(?:\[[^\[\]]*\]|['"][^'"]*['"]|[^\[\]'"]+)+\]|\\.|[^ >+~,(\[\\]+)+|[>+~])(\s*,\s*)?((?:.|\r|\n)*)/g,
+	expando = "sizcache" + (Math.random() + '').replace('.', ''),
+	done = 0,
+	toString = Object.prototype.toString,
+	hasDuplicate = false,
+	baseHasDuplicate = true,
+	rBackslash = /\\/g,
+	rReturn = /\r\n/g,
+	rNonWord = /\W/;
 
-    var PATTERN = /(?:\s*([ ~+>,])\s*)?(?:([:.#]?)((?:[\w\u00A1-\uFFFF-]|\\.)+|\*)|\[\s*((?:[\w\u00A1-\uFFFF-]|\\.)+)(?:\s*([~^$|*!]?=)\s*((['"]).*?\7|[^\]]*))?\s*\])/g;
-    
-    function trim(str){
-        return str.replace(/^\s*|\s*$/, '');
-    }
-    function make(kind, array){
-        return (array.kind = kind, array);
-    }
-    var parse = function (){
-        var text;
-        var index;
+// Here we check if the JavaScript engine is using some sort of
+// optimization where it does not always call our comparision
+// function. If that is the case, discard the hasDuplicate value.
+//   Thus far that includes Google Chrome.
+[0, 0].sort(function() {
+	baseHasDuplicate = false;
+	return 0;
+});
 
-        function match(regex){
-            var mc = (regex.lastIndex = index, regex.exec(text));
-            return mc && mc.index == index ? (index = regex.lastIndex, mc) : null;
-        }
-        function dequote(str){
-            var ch = str.charAt(0);
-            return ch == '"' || ch == "'" ? str.slice(1, -1) : str;
-        }
-        function error(){ throw ['ParseError', text, index]; }
+var Sizzle = function( selector, context, results, seed ) {
+	results = results || [];
+	context = context || document;
 
-        function parse(){
-            var mc, simple, seq = [], chain = [seq], group = [chain];
-            while (mc = match(PATTERN)) {
-                if (mc[1]) {
-                    if (mc[1] == ',') group.push(chain = []);
-                    if (seq.length) chain.push(seq = []);
-                    if (mc[1] != ',') seq.comb = mc[1];
-                }
-                simple = [mc[4] || mc[3]];
-                if (mc[6]) simple.push(dequote(mc[6]));
-                simple.kind = mc[5] || (mc[4] ? '[' : mc[2] || 'T');
-                if (simple[0] == '*' && simple.kind != 'T') error();
-                if (mc[2] == ':') {
-                    simple.kind = ':' + mc[3];
-                    if (text.charAt(index) == '(') {
-                        index ++;
-                        if (mc[3] == 'not' || mc[3] == 'has') {
-                            var t = index;
-                            simple[0] = parse();
-                            simple[1] = text.slice(t, index);
-                            if (text.charAt(index) == ')') index ++; else error();
-                        } else {
-                            var tmpIndex = text.indexOf(')', index);
-                            if (tmpIndex != -1) {
-                                simple[0] = trim(text.slice(index, tmpIndex));
-                                index = tmpIndex + 1;
-                            } else error();
+	var origContext = context;
 
-                            if (mc[3].indexOf('nth') == 0) {
-                                var tmp = simple[0];
-                                tmp = (tmp == 'even' ? '2n' : tmp == 'odd' ? '2n+1' :
-                                    (tmp.indexOf('n') == -1 ? '0n': '') + tmp.replace(/\s*/g, '')).split('n');
-                                simple[0] = !tmp[0] ? 1 : Number(tmp[0]) | 0;
-                                simple[1] = Number(tmp[1]) | 0;
-                            } else if (mc[3] == 'contains') {
-                                simple[0] = dequote(simple[0]);
-                            }
-                        }
-                    }
-                }
-                seq.push(simple);
-            }
-            return group;
-        }
+	if ( context.nodeType !== 1 && context.nodeType !== 9 ) {
+		return [];
+	}
+	
+	if ( !selector || typeof selector !== "string" ) {
+		return results;
+	}
 
-        return function (selector){
-            return (text = selector, index = 0, selector = parse(), match(/\s*/g), index < text.length) ? error() : selector;
-        };
+	var m, set, checkSet, extra, ret, cur, pop, i,
+		prune = true,
+		contextXML = Sizzle.isXML( context ),
+		parts = [],
+		soFar = selector;
+	
+	// Reset the position of the chunker regexp (start from head)
+	do {
+		chunker.exec( "" );
+		m = chunker.exec( soFar );
 
-    }();
+		if ( m ) {
+			soFar = m[3];
+		
+			parts.push( m[1] );
+		
+			if ( m[2] ) {
+				extra = m[3];
+				break;
+			}
+		}
+	} while ( m );
 
-    var fRMap = { '#': 9, 'N': BY_NAME ? 7 : 0, '.': BY_CLASS ? 6 : 0, 'T': 5 };
-    var tRMap = { '#': 9, '=': 9, '[': 8, 'N': 9, 'T': 8, '.': 5,  '~=': 3, '|=': 3, '*=': 3,
-        ':not': 6, ':has': 1, ':contains': 3, ':nth-child': 2, ':nth-last-child': 2,
-        ':first-child': 3, ':last-child': 3, ':only-child': 3, ':not-ex': 7 };
-    var efMap = { id: '#', name: 'N' };
-    var testingOrder = function (a, b){ return a.tR - b.tR; };
-    var regPos = /:(nth|eq|gt|lt|first|last|even|odd)$/;
-    
-    function process(seq){
-        var finder, t;
-        var k = seq.length;
-        while (k --) {
-            var simple = seq[k];
-            // 转化[id="xxx"][name="xxx"][tagName="xxx"][className~="xxx"]之类的选择器
-            // 识别:root,html|head|body|title等全局仅一个的标签的选择器，忽略*选择器
-            // 合并类选择器以便于使用getElementsByClassName
-            if (simple.kind == ':html') simple = make('T', 'html');
-            if (simple.kind == '=') {
-                if (efMap[simple[0]]) simple = make(efMap[simple[0]], [simple[1]]);
-            } else if (simple.kind == '~=' && simple[0] == 'className') simple = make('.', [simple[1]]);
-            if (simple.kind == 'T') {
-                if (simple[0] == '*') simple.kind = '*'; else seq.tag = simple;
-                t = simple[0].toLowerCase();
-            } else if (simple.kind == '.') {
-                if (!seq.classes) seq.classes = simple; else {
-                    seq.classes.push(simple[0]);
-                    simple.kind = '*';
-                }
-            }
-            if (simple.kind == ':not' && !((t=simple[0],t.length==1)&&(t=t[0],t.length==1))) {
-                simple.kind = ':not-ex';
-            }
-            //remark: 这里是为了支持sizzle的setFilter系列
-            if (regPos.test(simple.kind)) {
-                simple[0] = Number(simple[0]) | 0;
-                var newSimple = make(simple.kind, simple.slice(0));
-                simple.kind = '*';
-                if (!seq.allPoses) {
-                    seq.allPoses = [newSimple];
-                } else {
-                    seq.allPoses.push(newSimple);
-                }
-            }
-            // 计算选择器的得分用于优先级排序等策略
-            simple.fR = fRMap[simple.kind] | 0;
-            simple.tR = tRMap[simple.kind] | 0;
-            if (simple.fR && (!finder || simple.fR > finder.fR)) finder = simple;
-            seq[k] = simple;
-        }
-        // 按照优先级对用于测试的选择器进行排序
-        seq.sort(testingOrder);
-        // 记录用于getElementXXX的最佳的选择器
-        seq.$ = finder;
-        return seq;
-    }
-    // 对chain进行处理
-    // 注意为了处理方便, 返回的数组是倒序的
-    // div p a => [div] [p] [a]
-    // div p>a => [div] [p>a]
-    function slice(chain){
-        var part = [];
-        var parts = [part];
-        var k = chain.length;
-        while (k --) {
-            var seq = chain[k];
-            seq = process(seq);
-            seq.N = 'node' + k;
-            //remark: 这里是为了支持sizzle的setFilter.
-            if (seq.allPoses) {
-                if (!chain.allPoses) {
-                    chain.allPoses = [];
-                }
-                chain.allPoses.push.apply(chain.allPoses, seq.allPoses);
-            }
-            if (seq.$ && (!part.fR || seq.$.fR > part.fR || (seq.$.fR == part.fR && parts.length == 1))) {
-                part.fR = seq.$.fR;
-                part.fI = part.length;
-            }
-            part.push(seq);
-            if (seq.comb == ' ' && k && part.fI != null) {
-                parts.push(part = []);
-                part.fR = 0;
-            }
-            if (k == chain.length - 1 && seq.tag) chain.tag = seq.tag;
-        }
-        for (var i=0; i<parts.length; i++) {
-            part = parts[i];
-            var part1 = parts[i + 1];
-            if (part1 != null) {
-                if (part.fR > part1.fR || (part.fR == part1.fR && part1.fI != 0)){
-                    parts.splice(i + 1, 1);
-                    part.push.apply(part, part1);
-                    i --;
-                } else {
-                    part.R = part1[0].N;
-                }
-            } else {
-                part.R = 'root';
-                part.isFirst = true;
-//                // 如果属于Q("~ span._result", el)这种情况
-//                if (part[part.length - 1].comb !== ' ') {
-//                    part.fI = part.length - 1;
-//                }
-            }
-        }
-        // 如果没有找到任何一个可以用于find的seq.
-        if (parts[0].fI == null) {
-            parts[0].fI = 0;
-            parts[0][0].$ = make('*', ['*']);
-        }
-        return parts;
-    }
+	if ( parts.length > 1 && origPOS.exec( selector ) ) {
 
-    function format(tpl, params){
-        return tpl.replace(/#\{([^}]+)\}/g, function (m, p){
-            return params[p] == null ? m : params[p] + '';
-        });
-    }
+		if ( parts.length === 2 && Expr.relative[ parts[0] ] ) {
+			set = posProcess( parts[0] + parts[1], context, seed );
 
-    var CTX_NGEN = 0;
+		} else {
+			set = Expr.relative[ parts[0] ] ?
+				[ context ] :
+				Sizzle( parts.shift(), context );
 
-    var TPL_DOC = '/*^var doc=root.ownerDocument||root;^*/';
-    var TPL_XHTML = TPL_DOC + '/*^var xhtml=Q._isXHTML(doc);^*/';
-    var TPL_CONTAINS = IE678 ? '#{0}.contains(#{1})' : '#{0}.compareDocumentPosition(#{1})&16';
-    var TPL_QID = '#{N}._Q_id||(#{N}._Q_id=++qid)';
-    var TPL_FIND = {
-        '#': 'var #{N}=Q._byId("#{P}", #{R});if(#{N}){#{X}}',
-        'N': TPL_DOC + 'var #{N}A=doc.getElementsByName("#{P}");for(var #{N}I=0,#{N};#{N}=#{N}A[#{N}I];#{N}I++){if(#{R}===doc||' + format(TPL_CONTAINS, ['#{R}', '#{N}']) +'){#{X}}}',
-        'T': 'var #{N}A=#{R}.getElementsByTagName("#{P}");for(var #{N}I=0,#{N};#{N}=#{N}A[#{N}I];#{N}I++){#{X}}',
-        '.': 'var #{N}A=#{R}.getElementsByClassName("#{P}");for(var #{N}I=0,#{N};#{N}=#{N}A[#{N}I];#{N}I++){#{X}}',
-        '*': 'var #{N}A=#{R}.getElementsByTagName("*");for(var #{N}I=0,#{N};#{N}=#{N}A[#{N}I];#{N}I++){#{X}}',
-        '+': BY_ELEMENT ? '/*^var #{N};^*/if(#{N}=#{R}.nextElementSibling){#{X}}' : 'var #{N}=#{R};while(#{N}=#{N}.nextSibling){if(#{N}.nodeType==1){#{X}break;}}',
-        '~': BY_ELEMENT ? '/*^var #{N}H={};^*/var #{N}=#{R};while(#{N}=#{N}.nextElementSibling){if(#{N}H[' + TPL_QID + '])break;#{N}H[' + TPL_QID + ']=1;#{X}}' : '/*^var #{N}H={};^*/var #{N}=#{R};while(#{N}=#{N}.nextSibling){if(#{N}.nodeType==1){if(#{N}H[' + TPL_QID + '])break;#{N}H[' + TPL_QID + ']=1;#{X}}}',
-        '>': 'var #{N}A=#{R}.children||#{R}.childNodes;for(var #{N}I=0,#{N};#{N}=#{N}A[#{N}I];#{N}I++){if(#{N}.nodeType==1){#{X}}}',
-        '>T': 'var #{N}A=#{R}.children.tags("#{P}");for(var #{N}I=0,#{N};#{N}=#{N}A[#{N}I];#{N}I++){#{X}}'
-    };
-    var TPL_LEFT = 'var #{R}V={_:false};NP_#{R}:{P_#{R}:{#{X}break NP_#{R};}#{R}V._=true;#{Y}}';
-    var TPL_TOPASS = 'if(t=#{N}H[' + TPL_QID + ']){if(t._){break P_#{R};}else{break NP_#{R};}}#{N}H[' + TPL_QID + ']=#{R}V;#{X}';
-    var TPL_TOPASS_UP = format(TPL_TOPASS, { X: 'if(#{N}!==#{R}){#{X}}' });
-    var TPL_PASSED = 'break P_#{R};';
-    var TPL_PASS = {
-        '>': '/*^var #{N}H={};^*/var #{N}=#{C}.parentNode;' + TPL_TOPASS_UP,
-        ' ': '/*^var #{N}H={};^*/var #{N}=#{C};while(#{N}=#{N}.parentNode){' + TPL_TOPASS_UP + '}',
-        '+': BY_ELEMENT ? '/*^var #{N}H={};var #{N};^*/if(#{N}=#{C}.previousElementSibling){#{X}}' : '/*^var #{N}H={};^*/var #{N}=#{C};while(#{N}=#{N}.previousSibling){#{X}break;}',
-        '~': BY_ELEMENT ? '/*^var #{N}H={};^*/var #{N}=#{C};while(#{N}=#{N}.previousElementSibling){' + TPL_TOPASS + '}' : '/*^var #{N}H={};^*/var #{N}=#{C};while(#{N}=#{N}.previousSibling){' + TPL_TOPASS + '}'
-    };
-    var TPL_MAIN = 'function(root){var result=[];var qid=Q.qid,t,l=result.length;BQ:{#{X}}Q.qid=qid;return result;}';
-    var TPL_HELP = '/*^var #{N}L;^*/if(!#{N}L||!(' + format(TPL_CONTAINS, ['#{N}L', '#{N}']) +')){#{X}#{N}L=#{N};}';
-    var TPL_PUSH = 'result[l++]=#{N};';
-    var TPL_INPUT_T = TPL_XHTML + '/*^var input_t=!xhtml?"INPUT":"input";^*/';
-    var TPL_POS = '/*^var pos=-1;^*/';
-    var TPL_TEST = {
-        'T': TPL_XHTML +'/*^var #{N}T=!xhtml?("#{0}").toUpperCase():"#{0}";^*/#{N}.nodeName==#{N}T',
-        '#': '#{N}.id=="#{0}"',
-        'N': '#{N}.name=="#{0}"',
-        
-        '[': IE678 ? '(t=#{N}.getAttributeNode("#{0}"))&&(t.specified)' : '#{N}.hasAttribute("#{0}")',
-        '=': '#{A}=="#{1}"',
-        '!=': '#{A}!="#{1}"',
-        '^=': '(t=#{A})&&t.slice(0,#{L})=="#{1}"',
-        '$=': '(t=#{A})&&t.slice(-#{L})=="#{1}"',
-        '*=': '(t=#{A})&&t.indexOf("#{1}")!==-1',
-        '|=': '(t=#{A})&&(t=="#{1}"||t.slice(0,#{L})=="#{P}")',
-        '~=': '(t=#{A})&&(" "+t+" ").indexOf("#{P}")!==-1',
-        
-        ':element': '#{N}.nodeType==1',
-        ':contains': '(#{N}.' + (HAS_TEXT_CONTENT ? 'textContent' : 'innerText') + '||"").indexOf("#{0}")!==-1',
-        ':first-child': BY_ELEMENT ? '#{N}.parentNode.firstElementChild===#{N}' : 'Q._isFirstChild(#{N})',
-        ':nth-child': TPL_DOC + '/*^var rev=doc._Q_rev||(doc._Q_rev=Q.qid++);^*/Q._index(#{N},#{0},#{1},rev)',
-        ':last-child': BY_ELEMENT ? '#{N}.parentNode.lastElementChild===#{N}' : 'Q._isLastChild(#{N})',
-        ':only-child': BY_ELEMENT ? '(t=#{N}.parentNode)&&(t.firstElementChild===#{N}&&t.lastElementChild===#{N})' : 'Q._isOnlyChild(#{N})',
-        
-        ':not-ex': '/*^var _#{G}=Q._hash(Q("#{1}",root));qid=Q.qid;^*/!_#{G}[' + TPL_QID + ']',
-        ':has': '(t=Q("#{1}", #{N}),qid=Q.qid,t.length>0)',
-        ':parent': '!!#{N}.firstChild',
-        ':empty': '!#{N}.firstChild',
-        
-        ':header': '/h\\d/i.test(#{N}.nodeName)',
-        ':input': '/input|select|textarea|button/i.test(#{N}.nodeName)',
-        ':enabled': '#{N}.disabled===false&&#{N}.type!=="hidden"',
-        ':disabled': '#{N}.disabled===true',
-        ':checked': '#{N}.checked===true',
-        ':selected': '(#{N}.parentNode.selectedIndex,#{N}.selected===true)',
-        
-        // TODO: 这些伪类可以转化成为标签选择器加以优化！
-        ':focus': TPL_DOC + '#{N}===doc.activeElement',
-        ':button': TPL_INPUT_T + '#{N}.nodeName==="button"||(#{N}.nodeName===input_t&&#{N}.type==="button")',
-        ':submit': TPL_INPUT_T + '#{N}.nodeName===input_t&&#{N}.type==="submit"',
-        ':reset': TPL_INPUT_T + '#{N}.nodeName===input_t&&#{N}.type==="reset"',
-        ':text': TPL_INPUT_T + '#{N}.nodeName===input_t&&#{N}.type==="text"&&(t=#{N}.getAttribute("type"),t==="text"||t===null)',
-        ':radio': TPL_INPUT_T + '#{N}.nodeName===input_t&&#{N}.type==="radio"',
-        ':checkbox': TPL_INPUT_T + '#{N}.nodeName===input_t&&#{N}.type==="checkbox"',
-        ':file': TPL_INPUT_T + '#{N}.nodeName===input_t&&#{N}.type==="file"',
-        ':password': TPL_INPUT_T + '#{N}.nodeName===input_t&&#{N}.type==="password"',
-        ':image': TPL_INPUT_T + '#{N}.nodeName===input_t&&#{N}.type==="image"'
-    };
+			while ( parts.length ) {
+				selector = parts.shift();
 
-    function genAttrCode(attr){
-        if (attr == 'for') return '#{N}.htmlFor';
-        if (attr == 'class') return '#{N}.className';
-        if (attr == 'type') return '#{N}.getAttribute("type")';
-        if (attr == 'href') return '#{N}.getAttribute("href",2)';
-        return '(#{N}["' + attr + '"]||#{N}.getAttribute("' + attr + '"))';
-    }
+				if ( Expr.relative[ selector ] ) {
+					selector += parts.shift();
+				}
+				
+				set = posProcess( selector, set, seed );
+			}
+		}
 
-    function genTestCode(simple){
-        if (simple.kind.indexOf('=') !== -1) {
-            simple.A = genAttrCode(simple[0]);
-        }
-        var t;
-        switch (simple.kind) {
-        case '.':
-            var k = simple.length;
-            var buff = [];
-            while (k --) {
-                buff.push('t.indexOf(" #{'+ k +'} ")!==-1');
-            }
-            return format('(t=#{N}.className)&&((t=" "+t+" "),(' + buff.join(' && ') + '))', simple);
-        case '^=':
-        case '$=':
-            simple.L = simple[1].length;
-            break;
-        case '|=':
-            simple.L = simple[1].length + 1;
-            simple.P = simple[1] + '-';
-            break;
-        case '~=':
-            simple.P = ' ' + simple[1] + ' ';
-            break;
-        case ':nth-child':
-//        case ':nth-last-child':
-            if (simple[0] == 1 && simple[1] == 0) return '';
-            break;
-        case ':not':
-            t = genCondCode(simple[0][0][0]);
-            return t ? '!(' + t + ')' : 'false';
-        case ':not-ex':
-        case ':has':
-            simple.G = CTX_NGEN ++;
-            break;
-        case '*':
-            return '';
-        }
-        return format(TPL_TEST[simple.kind], simple);
-    }
-    function genCondCode(seq){
-        var buff = [];
-        var k = seq.length;
-        var code;
-        while (k --) {
-            var simple = seq[k];
-            if (code = genTestCode(simple)) {
-                buff.push(code);
-            }
-        }
-        return buff.join(' && ');
-    }
-    function genThenCode(seq){
-        var code = genCondCode(seq);
-        return code ? format('if('+code+'){#{X}}', { N: seq.N }) : '#{X}';
-    }
-    var NEEDNOT_ELEMENT_CHECK = { '#': 1, 'T': 1, '.': 1, 'N': 1, ':element': 1 };
-    function genFindCode(seq, R, comb){
-        comb = comb || seq.comb || ' ';
-        var tpl;
-        if (comb == ' ') {
-            var finder = seq.$;
-            if (finder) {
-                tpl = TPL_FIND[finder.kind];
-                // 有hack的嫌疑, 让产生test代码时忽略已经用于find的seq.
-                finder.kind = '*';
-            } else {
-                tpl = TPL_FIND['*'];
-                if (IE678 && !NEEDNOT_ELEMENT_CHECK[seq[seq.length - 1].kind]) {
-                    seq.push(make(':element', []));
-                }
-            }
-        } else if (BY_CHILDREN_TAG && comb == '>' && seq.tag) {
-            tpl = TPL_FIND['>T'];
-            finder = seq.tag;
-            seq.tag.kind = '*';
-        } else {
-//            if (!BY_ELEMENT && (comb == '+' || comb == '~') && !NEEDNOT_ELEMENT_CHECK[seq[seq.length - 1].kind]) {
-//                seq.push(make(':element', []));
-//            }
-            tpl = TPL_FIND[comb];
-        }
-        return format(tpl, {
-            P: finder && (finder.kind == '.' ? finder.join(' ') : finder[0]),
-            N: seq.N,
-            R: R,
-            X: genThenCode(seq)
-        });
-    }
-    function genNextCode(part, thenCode){
-        var code = '#{X}';
-        var k = part.fI;
-        while (k --) {
-            code = format(code, { X: genFindCode(part[k], part[k+1].N) });
-        }
-        var nextCode;
-        if (!thenCode) {
-            if (part.fI == 0 && (k = part[0].$.kind) && (k != 'S' && k != '#')) {
-                nextCode = format(TPL_HELP, { N: part[0].N });
-                code = format(code, { X: nextCode })
-            }
-        } else {
-            nextCode = format(thenCode, { N: part[0].N });
-            code = format(code, { X: nextCode });
-        }
-        return code;
-    }
-    function genPassCode(seq, C, comb){
-        return format(TPL_PASS[comb], {
-            N: seq.N,
-            C: C,
-            X: genThenCode(seq)
-        });
-    }
-    function genLeftCode(part){
-        var code = TPL_LEFT;
-        for (var i=part.fI+1,l=part.length; i<l; i++) {
-            var seq = part[i];
-            var lastSeq = part[i-1];
-            code = format(code, { X: genPassCode(seq, lastSeq.N, part[i-1].comb) });
-        }
-        code = format(code, { X: TPL_PASSED });
-        code = format(code, { R: part.R });
-        return code;
-    }
-    function genPartCode(part, thenCode){
-        var code = genFindCode(part[part.fI], part.R, !part.isFirst ? ' ' : null);
-        var nextCode = genNextCode(part, thenCode);
-        if (part.fI < part.length - 1) {
-            var passCode = genLeftCode(part);
-            nextCode = format(passCode, { Y: nextCode });
-        }
-        return format(code, { X: nextCode });
-    }
-    
-    function genThatCode(seq){
-        var obj = {};
-        var k = seq.length;
-        while (k --) {
-            var simple = seq[k];
-            if (simple.kind == ':first') {
-                simple = make(':nth', [0]);
-            } else if (simple.kind == ':last') {
-                obj.last = 1;
-            }
-            if (simple.kind == ':lt') {
-                obj.lt = obj.lt == null ? simple[0] : Math.min(obj.lt, simple[0]);
-            } else if (simple.kind == ':gt') {
-                obj.gt = obj.gt == null ? simple[0] : Math.max(obj.gt, simple[0]);
-            } else if (simple.kind == ':eq' || simple.kind == ':nth') {
-                if (obj.eq && obj.eq !== simple[0]) {
-                    obj.no = true;
-                } else obj.eq = simple[0];
-            } else if (simple.kind == ':even' || simple.kind == ':odd') {
-                obj[simple.kind.slice(1)] = 1;
-            }
-        }
-        if ((obj.lt != null && obj.eq != null && obj.eq >= obj.lt) || (obj.lt != null && obj.gt != null && obj.lt <= obj.gt) || (obj.even && obj.odd)) {
-            obj.no = 1;
-        }
-        
-        if (obj.no) {
-            return '/*^break BQ;^*/';
-        }
-        var buff = [];
-        if (obj.even) {
-            buff.push('pos%2===0');
-        } else if (obj.odd) {
-            buff.push('pos%2===1');
-        }
-        var code = obj.eq == null ? TPL_PUSH : 'if(pos===' + obj.eq + '){result=[#{N}];break BQ;}';
-        if (obj.gt != null) {
-            buff.push('pos>'+obj.gt);
-        }
-        code = buff.length ? 'if (' + buff.join('&&') + '){' + code + '}' : code;
-        code = obj.lt != null ? 'if (pos<' + obj.lt + '){' + code + '}else break BQ;' : code;
-        if (obj.last) {
-            code += '/*$result=result.slice(-1);$*/';
-        }
-        return code;
-    }
-    function genCode(chain){
-        var parts = slice(chain);
+	} else {
+		// Take a shortcut and set the context if the root selector is an ID
+		// (but not if it'll be faster if the inner selector is an ID)
+		if ( !seed && parts.length > 1 && context.nodeType === 9 && !contextXML &&
+				Expr.match.ID.test(parts[0]) && !Expr.match.ID.test(parts[parts.length - 1]) ) {
 
-        var thenCode = chain.allPoses ? TPL_POS + 'pos++;' + genThatCode(chain.allPoses) : TPL_PUSH;
-        CTX_NGEN = 0;
-        var code = '#{X}';
-        
-        var k = parts.length;
-        while (k --) {
-            var part = parts[k];
-            code = format(code, { X: genPartCode(part, k == 0 ? thenCode : false ) });
-        }
-        return code;
-    }
+			ret = Sizzle.find( parts.shift(), context, contextXML );
+			context = ret.expr ?
+				Sizzle.filter( ret.expr, ret.set )[0] :
+				ret.set[0];
+		}
 
-    var documentOrder;
-    if (d.documentElement.sourceIndex) {
-        documentOrder = function (nodeA, nodeB){ return nodeA === nodeB ? 0 : nodeA.sourceIndex - nodeB.sourceIndex; };
-    } else if (d.compareDocumentPosition) {
-        documentOrder = function (nodeA, nodeB){ return nodeA === nodeB ? 0 : nodeB.compareDocumentPosition(nodeA) & 0x02 ? -1 : 1; };
-    }
-    function uniqueSort(nodeSet, notUnique){
-        if (!nodeSet.length) return nodeSet;
-        nodeSet.sort(documentOrder);
-        if (notUnique) return nodeSet;
-        var resultSet = [nodeSet[0]];
-        var node, j = 0;
-        for (var i=1, l=nodeSet.length; i<l; i++) {
-            if (resultSet[j] !== (node = nodeSet[i])) {
-                resultSet[++ j] = node;
-            }
-        }
-        return resultSet;
-    }
+		if ( context ) {
+			ret = seed ?
+				{ expr: parts.pop(), set: makeArray(seed) } :
+				Sizzle.find( parts.pop(), parts.length === 1 && (parts[0] === "~" || parts[0] === "+") && context.parentNode ? context.parentNode : context, contextXML );
 
-    function compile(expr){
-        var group = parse(expr);
-        var tags = {};
-        var k = group.length;
-        while (k --) {
-            var chain = group[k];
-            var code = genCode(chain);
-            if (tags && chain.tag && !tags[chain.tag[0]]) {
-                tags[chain.tag[0]] = 1;
-            } else {
-                tags = null;
-            }
-            var hash = {};
-            var pres = [];
-            var posts = [];
-            code = code.replace(/\/\*\^(.*?)\^\*\//g, function (m, p){
-                return (hash[p] || (hash[p] = pres.push(p)), '');
-            });
-            code = code.replace(/\/\*\$(.*?)\$\*\//g, function (m, p){
-                return (hash[p] || (hash[p] = posts.push(p)), '');
-            });
-            code = format(TPL_MAIN, { X: pres.join('') + code + posts.join('') });
-            group[k] = new Function('Q', 'return(' + code + ')')(Q);
-        }
-        if (group.length == 1) {
-            return group[0];
-        }
-        return function (root){
-            var k = group.length;
-            var result = [];
-            while (k --) {
-                result.push.apply(result, group[k](root));
-            }
-            return uniqueSort(result, tags != null);
-        };
-    }
+			set = ret.expr ?
+				Sizzle.filter( ret.expr, ret.set ) :
+				ret.set;
 
-    Q._hash = function (result){
-        var hash = result._Q_hash;
-        if (hash == null) {
-            hash = result._Q_hash = {};
-            var k = result.length;
-            var qid = Q.qid;
-            while (k --) {
-                var el = result[k];
-                hash[el._Q_id||(el._Q_id=++qid)] = 1;
-            }
-            Q.qid = qid;
-        }
-        return hash;
-    };
-    var _slice = Array.prototype.slice;
-    Q._toArray1 = function (staticNodeList){
-        var k = staticNodeList.length;
-        var a = new Array(k);
-        while (k --) {
-            a[k] = staticNodeList[k];
-        }
-        return a;
-    };
-    Q._toArray = function (staticNodeList){
-        try {
-            return _slice.call(staticNodeList, 0);
-        } catch(ex){}
-        return (Q._toArray = Q._toArray1)(staticNodeList);
-    };
-    
-    function queryXML(expr, root){
-        throw ['NotImpl'];
-    }
-    var cache = {};
-    var inQuery = false;
-    function query(expr, root){
-        var doc = root.ownerDocument || root;
-        var ret;
-        if (!doc.getElementById) {
-            return queryXML(expr, root);
-        }
-        if (root === doc && doc.querySelectorAll && !/#/.test(expr)) {
-            try { return Q._toArray(doc.querySelectorAll(expr)); } catch(ex){}
-        }
-        var fn  = cache[expr] || (cache[expr] = compile(expr));
-        if (!inQuery) {
-            inQuery = true;
-            if (!MUTATION) {
-                doc._Q_rev = Q.qid ++;
-            }
-            ret = fn(root);
-            inQuery = false;
-        } else {
-            ret = fn(root);
-        }
-        return ret;
-    }
+			if ( parts.length > 0 ) {
+				checkSet = makeArray( set );
 
-    Q.qid = 1;
-    Q._byId = function (id, root){
-        if (BY_ID1) {
-            return root.getElementsByTagName('*')[id];
-        }
-        var doc = root.ownerDocument || root;
-        var node = doc.getElementById(id);
-        if (node && ((root === doc) || Q.contains(root, node)) && (!IE678 || (node.id === id || node.getAttributeNode('id').nodeValue === id))) {
-            return node;
-        }
-        return null;
-    };
-    Q._in = function (nodes, nodeSet){
-        var hash = Q._hash(nodeSet);
-        var ret = [];
-        for (var i=0; i<nodes.length; i++) {
-            var node = nodes[i];
-            if (hash[node._Q_id||(node._Q_id=++Q.qid)]) {
-                ret.push(node);
-            }
-        }
-        return ret;
-    };
-    Q.matches = function (expr, set){
-        return Q(expr, null, null, set);
-    };
-    Q.contains = d.documentElement.contains ? function (a, b){
-        return a !== b && a.contains(b);
-    } : function (a, b) {
-        return a !== b && a.compareDocumentPosition(b) & 16;
-    };
-    Q._has = function (node, nodes){
-        for (var i=0, tnode; tnode=nodes[i++];) {
-            if (!Q.contains(node, tnode)) return false;
-        }
-        return true;
-    };
-    Q._index = function (node, a, b, rev){
-        var parent = node.parentNode;
-        if (parent._Q_magic !== rev) {
-            var tnode;
-            var count = 1;
-            if (BY_ELEMENT) {
-                tnode = parent.firstElementChild;
-                while (tnode) {
-                    tnode._Q_index = count ++;
-                    tnode = tnode.nextElementSibling;
-                }
-            } else {
-                var nodes = parent.children || parent.childNodes;
-                for (var i=0; tnode=nodes[i]; i++) {
-                    if (tnode.nodeType == 1) {
-                        tnode._Q_index = count ++;
-                    }
-                    tnode = tnode.nextSibling;
-                }
-            }
-            parent._Q_count1 = count;
-            parent._Q_magic = rev;
-        }
-        return a ? (node._Q_index - b) % a == 0 : node._Q_index == b;
-    };
-    Q._isOnlyChild = function (node){
-        return Q._isFirstChild(node) && Q._isLastChild(node);
-    };
-    Q._isFirstChild = function (node){
-        while (node = node.previousSibling) {
-            if (node.nodeType == 1) return false;
-        }
-        return true;
-    };
-    Q._isLastChild = function (node){
-        while (node = node.nextSibling) {
-            if (node.nodeType == 1) return false;
-        }
-        return true;
-    };
-    Q._isXHTML = function (doc){
-        return doc.documentElement.nodeName == 'html';
-    };
-    function Q(expr, root, result, seed){
-        root = root || d;
-        var ret = query(expr, root);
-        if (seed) {
-            ret = Q._in(seed, ret);
-        }
-        if (result) {
-            ret.push.apply(result, ret);
-        } else {
-            result = ret;
-        }
-        return result;
-    }
-    return Q;
+			} else {
+				prune = false;
+			}
+
+			while ( parts.length ) {
+				cur = parts.pop();
+				pop = cur;
+
+				if ( !Expr.relative[ cur ] ) {
+					cur = "";
+				} else {
+					pop = parts.pop();
+				}
+
+				if ( pop == null ) {
+					pop = context;
+				}
+
+				Expr.relative[ cur ]( checkSet, pop, contextXML );
+			}
+
+		} else {
+			checkSet = parts = [];
+		}
+	}
+
+	if ( !checkSet ) {
+		checkSet = set;
+	}
+
+	if ( !checkSet ) {
+		Sizzle.error( cur || selector );
+	}
+
+	if ( toString.call(checkSet) === "[object Array]" ) {
+		if ( !prune ) {
+			results.push.apply( results, checkSet );
+
+		} else if ( context && context.nodeType === 1 ) {
+			for ( i = 0; checkSet[i] != null; i++ ) {
+				if ( checkSet[i] && (checkSet[i] === true || checkSet[i].nodeType === 1 && Sizzle.contains(context, checkSet[i])) ) {
+					results.push( set[i] );
+				}
+			}
+
+		} else {
+			for ( i = 0; checkSet[i] != null; i++ ) {
+				if ( checkSet[i] && checkSet[i].nodeType === 1 ) {
+					results.push( set[i] );
+				}
+			}
+		}
+
+	} else {
+		makeArray( checkSet, results );
+	}
+
+	if ( extra ) {
+		Sizzle( extra, origContext, results, seed );
+		Sizzle.uniqueSort( results );
+	}
+
+	return results;
+};
+
+Sizzle.uniqueSort = function( results ) {
+	if ( sortOrder ) {
+		hasDuplicate = baseHasDuplicate;
+		results.sort( sortOrder );
+
+		if ( hasDuplicate ) {
+			for ( var i = 1; i < results.length; i++ ) {
+				if ( results[i] === results[ i - 1 ] ) {
+					results.splice( i--, 1 );
+				}
+			}
+		}
+	}
+
+	return results;
+};
+
+Sizzle.matches = function( expr, set ) {
+	return Sizzle( expr, null, null, set );
+};
+
+Sizzle.matchesSelector = function( node, expr ) {
+	return Sizzle( expr, null, null, [node] ).length > 0;
+};
+
+Sizzle.find = function( expr, context, isXML ) {
+	var set, i, len, match, type, left;
+
+	if ( !expr ) {
+		return [];
+	}
+
+	for ( i = 0, len = Expr.order.length; i < len; i++ ) {
+		type = Expr.order[i];
+		
+		if ( (match = Expr.leftMatch[ type ].exec( expr )) ) {
+			left = match[1];
+			match.splice( 1, 1 );
+
+			if ( left.substr( left.length - 1 ) !== "\\" ) {
+				match[1] = (match[1] || "").replace( rBackslash, "" );
+				set = Expr.find[ type ]( match, context, isXML );
+
+				if ( set != null ) {
+					expr = expr.replace( Expr.match[ type ], "" );
+					break;
+				}
+			}
+		}
+	}
+
+	if ( !set ) {
+		set = typeof context.getElementsByTagName !== "undefined" ?
+			context.getElementsByTagName( "*" ) :
+			[];
+	}
+
+	return { set: set, expr: expr };
+};
+
+Sizzle.filter = function( expr, set, inplace, not ) {
+	var match, anyFound,
+		type, found, item, filter, left,
+		i, pass,
+		old = expr,
+		result = [],
+		curLoop = set,
+		isXMLFilter = set && set[0] && Sizzle.isXML( set[0] );
+
+	while ( expr && set.length ) {
+		for ( type in Expr.filter ) {
+			if ( (match = Expr.leftMatch[ type ].exec( expr )) != null && match[2] ) {
+				filter = Expr.filter[ type ];
+				left = match[1];
+
+				anyFound = false;
+
+				match.splice(1,1);
+
+				if ( left.substr( left.length - 1 ) === "\\" ) {
+					continue;
+				}
+
+				if ( curLoop === result ) {
+					result = [];
+				}
+
+				if ( Expr.preFilter[ type ] ) {
+					match = Expr.preFilter[ type ]( match, curLoop, inplace, result, not, isXMLFilter );
+
+					if ( !match ) {
+						anyFound = found = true;
+
+					} else if ( match === true ) {
+						continue;
+					}
+				}
+
+				if ( match ) {
+					for ( i = 0; (item = curLoop[i]) != null; i++ ) {
+						if ( item ) {
+							found = filter( item, match, i, curLoop );
+							pass = not ^ found;
+
+							if ( inplace && found != null ) {
+								if ( pass ) {
+									anyFound = true;
+
+								} else {
+									curLoop[i] = false;
+								}
+
+							} else if ( pass ) {
+								result.push( item );
+								anyFound = true;
+							}
+						}
+					}
+				}
+
+				if ( found !== undefined ) {
+					if ( !inplace ) {
+						curLoop = result;
+					}
+
+					expr = expr.replace( Expr.match[ type ], "" );
+
+					if ( !anyFound ) {
+						return [];
+					}
+
+					break;
+				}
+			}
+		}
+
+		// Improper expression
+		if ( expr === old ) {
+			if ( anyFound == null ) {
+				Sizzle.error( expr );
+
+			} else {
+				break;
+			}
+		}
+
+		old = expr;
+	}
+
+	return curLoop;
+};
+
+Sizzle.error = function( msg ) {
+	throw "Syntax error, unrecognized expression: " + msg;
+};
+
+/**
+ * Utility function for retreiving the text value of an array of DOM nodes
+ * @param {Array|Element} elem
+ */
+var getText = Sizzle.getText = function( elem ) {
+    var i, node,
+		nodeType = elem.nodeType,
+		ret = "";
+
+	if ( nodeType ) {
+		if ( nodeType === 1 ) {
+			// Use textContent || innerText for elements
+			if ( typeof elem.textContent === 'string' ) {
+				return elem.textContent;
+			} else if ( typeof elem.innerText === 'string' ) {
+				// Replace IE's carriage returns
+				return elem.innerText.replace( rReturn, '' );
+			} else {
+				// Traverse it's children
+				for ( elem = elem.firstChild; elem; elem = elem.nextSibling) {
+					ret += getText( elem );
+				}
+			}
+		} else if ( nodeType === 3 || nodeType === 4 ) {
+			return elem.nodeValue;
+		}
+	} else {
+
+		// If no nodeType, this is expected to be an array
+		for ( i = 0; (node = elem[i]); i++ ) {
+			// Do not traverse comment nodes
+			if ( node.nodeType !== 8 ) {
+				ret += getText( node );
+			}
+		}
+	}
+	return ret;
+};
+
+var Expr = Sizzle.selectors = {
+	order: [ "ID", "NAME", "TAG" ],
+
+	match: {
+		ID: /#((?:[\w\u00c0-\uFFFF\-]|\\.)+)/,
+		CLASS: /\.((?:[\w\u00c0-\uFFFF\-]|\\.)+)/,
+		NAME: /\[name=['"]*((?:[\w\u00c0-\uFFFF\-]|\\.)+)['"]*\]/,
+		ATTR: /\[\s*((?:[\w\u00c0-\uFFFF\-]|\\.)+)\s*(?:(\S?=)\s*(?:(['"])(.*?)\3|(#?(?:[\w\u00c0-\uFFFF\-]|\\.)*)|)|)\s*\]/,
+		TAG: /^((?:[\w\u00c0-\uFFFF\*\-]|\\.)+)/,
+		CHILD: /:(only|nth|last|first)-child(?:\(\s*(even|odd|(?:[+\-]?\d+|(?:[+\-]?\d*)?n\s*(?:[+\-]\s*\d+)?))\s*\))?/,
+		POS: /:(nth|eq|gt|lt|first|last|even|odd)(?:\((\d*)\))?(?=[^\-]|$)/,
+		PSEUDO: /:((?:[\w\u00c0-\uFFFF\-]|\\.)+)(?:\((['"]?)((?:\([^\)]+\)|[^\(\)]*)+)\2\))?/
+	},
+
+	leftMatch: {},
+
+	attrMap: {
+		"class": "className",
+		"for": "htmlFor"
+	},
+
+	attrHandle: {
+		href: function( elem ) {
+			return elem.getAttribute( "href" );
+		},
+		type: function( elem ) {
+			return elem.getAttribute( "type" );
+		}
+	},
+
+	relative: {
+		"+": function(checkSet, part){
+			var isPartStr = typeof part === "string",
+				isTag = isPartStr && !rNonWord.test( part ),
+				isPartStrNotTag = isPartStr && !isTag;
+
+			if ( isTag ) {
+				part = part.toLowerCase();
+			}
+
+			for ( var i = 0, l = checkSet.length, elem; i < l; i++ ) {
+				if ( (elem = checkSet[i]) ) {
+					while ( (elem = elem.previousSibling) && elem.nodeType !== 1 ) {}
+
+					checkSet[i] = isPartStrNotTag || elem && elem.nodeName.toLowerCase() === part ?
+						elem || false :
+						elem === part;
+				}
+			}
+
+			if ( isPartStrNotTag ) {
+				Sizzle.filter( part, checkSet, true );
+			}
+		},
+
+		">": function( checkSet, part ) {
+			var elem,
+				isPartStr = typeof part === "string",
+				i = 0,
+				l = checkSet.length;
+
+			if ( isPartStr && !rNonWord.test( part ) ) {
+				part = part.toLowerCase();
+
+				for ( ; i < l; i++ ) {
+					elem = checkSet[i];
+
+					if ( elem ) {
+						var parent = elem.parentNode;
+						checkSet[i] = parent.nodeName.toLowerCase() === part ? parent : false;
+					}
+				}
+
+			} else {
+				for ( ; i < l; i++ ) {
+					elem = checkSet[i];
+
+					if ( elem ) {
+						checkSet[i] = isPartStr ?
+							elem.parentNode :
+							elem.parentNode === part;
+					}
+				}
+
+				if ( isPartStr ) {
+					Sizzle.filter( part, checkSet, true );
+				}
+			}
+		},
+
+		"": function(checkSet, part, isXML){
+			var nodeCheck,
+				doneName = done++,
+				checkFn = dirCheck;
+
+			if ( typeof part === "string" && !rNonWord.test( part ) ) {
+				part = part.toLowerCase();
+				nodeCheck = part;
+				checkFn = dirNodeCheck;
+			}
+
+			checkFn( "parentNode", part, doneName, checkSet, nodeCheck, isXML );
+		},
+
+		"~": function( checkSet, part, isXML ) {
+			var nodeCheck,
+				doneName = done++,
+				checkFn = dirCheck;
+
+			if ( typeof part === "string" && !rNonWord.test( part ) ) {
+				part = part.toLowerCase();
+				nodeCheck = part;
+				checkFn = dirNodeCheck;
+			}
+
+			checkFn( "previousSibling", part, doneName, checkSet, nodeCheck, isXML );
+		}
+	},
+
+	find: {
+		ID: function( match, context, isXML ) {
+			if ( typeof context.getElementById !== "undefined" && !isXML ) {
+				var m = context.getElementById(match[1]);
+				// Check parentNode to catch when Blackberry 4.6 returns
+				// nodes that are no longer in the document #6963
+				return m && m.parentNode ? [m] : [];
+			}
+		},
+
+		NAME: function( match, context ) {
+			if ( typeof context.getElementsByName !== "undefined" ) {
+				var ret = [],
+					results = context.getElementsByName( match[1] );
+
+				for ( var i = 0, l = results.length; i < l; i++ ) {
+					if ( results[i].getAttribute("name") === match[1] ) {
+						ret.push( results[i] );
+					}
+				}
+
+				return ret.length === 0 ? null : ret;
+			}
+		},
+
+		TAG: function( match, context ) {
+			if ( typeof context.getElementsByTagName !== "undefined" ) {
+				return context.getElementsByTagName( match[1] );
+			}
+		}
+	},
+	preFilter: {
+		CLASS: function( match, curLoop, inplace, result, not, isXML ) {
+			match = " " + match[1].replace( rBackslash, "" ) + " ";
+
+			if ( isXML ) {
+				return match;
+			}
+
+			for ( var i = 0, elem; (elem = curLoop[i]) != null; i++ ) {
+				if ( elem ) {
+					if ( not ^ (elem.className && (" " + elem.className + " ").replace(/[\t\n\r]/g, " ").indexOf(match) >= 0) ) {
+						if ( !inplace ) {
+							result.push( elem );
+						}
+
+					} else if ( inplace ) {
+						curLoop[i] = false;
+					}
+				}
+			}
+
+			return false;
+		},
+
+		ID: function( match ) {
+			return match[1].replace( rBackslash, "" );
+		},
+
+		TAG: function( match, curLoop ) {
+			return match[1].replace( rBackslash, "" ).toLowerCase();
+		},
+
+		CHILD: function( match ) {
+			if ( match[1] === "nth" ) {
+				if ( !match[2] ) {
+					Sizzle.error( match[0] );
+				}
+
+				match[2] = match[2].replace(/^\+|\s*/g, '');
+
+				// parse equations like 'even', 'odd', '5', '2n', '3n+2', '4n-1', '-n+6'
+				var test = /(-?)(\d*)(?:n([+\-]?\d*))?/.exec(
+					match[2] === "even" && "2n" || match[2] === "odd" && "2n+1" ||
+					!/\D/.test( match[2] ) && "0n+" + match[2] || match[2]);
+
+				// calculate the numbers (first)n+(last) including if they are negative
+				match[2] = (test[1] + (test[2] || 1)) - 0;
+				match[3] = test[3] - 0;
+			}
+			else if ( match[2] ) {
+				Sizzle.error( match[0] );
+			}
+
+			// TODO: Move to normal caching system
+			match[0] = done++;
+
+			return match;
+		},
+
+		ATTR: function( match, curLoop, inplace, result, not, isXML ) {
+			var name = match[1] = match[1].replace( rBackslash, "" );
+			
+			if ( !isXML && Expr.attrMap[name] ) {
+				match[1] = Expr.attrMap[name];
+			}
+
+			// Handle if an un-quoted value was used
+			match[4] = ( match[4] || match[5] || "" ).replace( rBackslash, "" );
+
+			if ( match[2] === "~=" ) {
+				match[4] = " " + match[4] + " ";
+			}
+
+			return match;
+		},
+
+		PSEUDO: function( match, curLoop, inplace, result, not ) {
+			if ( match[1] === "not" ) {
+				// If we're dealing with a complex expression, or a simple one
+				if ( ( chunker.exec(match[3]) || "" ).length > 1 || /^\w/.test(match[3]) ) {
+					match[3] = Sizzle(match[3], null, null, curLoop);
+
+				} else {
+					var ret = Sizzle.filter(match[3], curLoop, inplace, true ^ not);
+
+					if ( !inplace ) {
+						result.push.apply( result, ret );
+					}
+
+					return false;
+				}
+
+			} else if ( Expr.match.POS.test( match[0] ) || Expr.match.CHILD.test( match[0] ) ) {
+				return true;
+			}
+			
+			return match;
+		},
+
+		POS: function( match ) {
+			match.unshift( true );
+
+			return match;
+		}
+	},
+	
+	filters: {
+		enabled: function( elem ) {
+			return elem.disabled === false && elem.type !== "hidden";
+		},
+
+		disabled: function( elem ) {
+			return elem.disabled === true;
+		},
+
+		checked: function( elem ) {
+			return elem.checked === true;
+		},
+		
+		selected: function( elem ) {
+			// Accessing this property makes selected-by-default
+			// options in Safari work properly
+			if ( elem.parentNode ) {
+				elem.parentNode.selectedIndex;
+			}
+			
+			return elem.selected === true;
+		},
+
+		parent: function( elem ) {
+			return !!elem.firstChild;
+		},
+
+		empty: function( elem ) {
+			return !elem.firstChild;
+		},
+
+		has: function( elem, i, match ) {
+			return !!Sizzle( match[3], elem ).length;
+		},
+
+		header: function( elem ) {
+			return (/h\d/i).test( elem.nodeName );
+		},
+
+		text: function( elem ) {
+			var attr = elem.getAttribute( "type" ), type = elem.type;
+			// IE6 and 7 will map elem.type to 'text' for new HTML5 types (search, etc) 
+			// use getAttribute instead to test this case
+			return elem.nodeName.toLowerCase() === "input" && "text" === type && ( attr === type || attr === null );
+		},
+
+		radio: function( elem ) {
+			return elem.nodeName.toLowerCase() === "input" && "radio" === elem.type;
+		},
+
+		checkbox: function( elem ) {
+			return elem.nodeName.toLowerCase() === "input" && "checkbox" === elem.type;
+		},
+
+		file: function( elem ) {
+			return elem.nodeName.toLowerCase() === "input" && "file" === elem.type;
+		},
+
+		password: function( elem ) {
+			return elem.nodeName.toLowerCase() === "input" && "password" === elem.type;
+		},
+
+		submit: function( elem ) {
+			var name = elem.nodeName.toLowerCase();
+			return (name === "input" || name === "button") && "submit" === elem.type;
+		},
+
+		image: function( elem ) {
+			return elem.nodeName.toLowerCase() === "input" && "image" === elem.type;
+		},
+
+		reset: function( elem ) {
+			var name = elem.nodeName.toLowerCase();
+			return (name === "input" || name === "button") && "reset" === elem.type;
+		},
+
+		button: function( elem ) {
+			var name = elem.nodeName.toLowerCase();
+			return name === "input" && "button" === elem.type || name === "button";
+		},
+
+		input: function( elem ) {
+			return (/input|select|textarea|button/i).test( elem.nodeName );
+		},
+
+		focus: function( elem ) {
+			return elem === elem.ownerDocument.activeElement;
+		}
+	},
+	setFilters: {
+		first: function( elem, i ) {
+			return i === 0;
+		},
+
+		last: function( elem, i, match, array ) {
+			return i === array.length - 1;
+		},
+
+		even: function( elem, i ) {
+			return i % 2 === 0;
+		},
+
+		odd: function( elem, i ) {
+			return i % 2 === 1;
+		},
+
+		lt: function( elem, i, match ) {
+			return i < match[3] - 0;
+		},
+
+		gt: function( elem, i, match ) {
+			return i > match[3] - 0;
+		},
+
+		nth: function( elem, i, match ) {
+			return match[3] - 0 === i;
+		},
+
+		eq: function( elem, i, match ) {
+			return match[3] - 0 === i;
+		}
+	},
+	filter: {
+		PSEUDO: function( elem, match, i, array ) {
+			var name = match[1],
+				filter = Expr.filters[ name ];
+
+			if ( filter ) {
+				return filter( elem, i, match, array );
+
+			} else if ( name === "contains" ) {
+				return (elem.textContent || elem.innerText || getText([ elem ]) || "").indexOf(match[3]) >= 0;
+
+			} else if ( name === "not" ) {
+				var not = match[3];
+
+				for ( var j = 0, l = not.length; j < l; j++ ) {
+					if ( not[j] === elem ) {
+						return false;
+					}
+				}
+
+				return true;
+
+			} else {
+				Sizzle.error( name );
+			}
+		},
+
+		CHILD: function( elem, match ) {
+			var first, last,
+				doneName, parent, cache,
+				count, diff,
+				type = match[1],
+				node = elem;
+
+			switch ( type ) {
+				case "only":
+				case "first":
+					while ( (node = node.previousSibling) )	 {
+						if ( node.nodeType === 1 ) { 
+							return false; 
+						}
+					}
+
+					if ( type === "first" ) { 
+						return true; 
+					}
+
+					node = elem;
+
+				case "last":
+					while ( (node = node.nextSibling) )	 {
+						if ( node.nodeType === 1 ) { 
+							return false; 
+						}
+					}
+
+					return true;
+
+				case "nth":
+					first = match[2];
+					last = match[3];
+
+					if ( first === 1 && last === 0 ) {
+						return true;
+					}
+					
+					doneName = match[0];
+					parent = elem.parentNode;
+	
+					if ( parent && (parent[ expando ] !== doneName || !elem.nodeIndex) ) {
+						count = 0;
+						
+						for ( node = parent.firstChild; node; node = node.nextSibling ) {
+							if ( node.nodeType === 1 ) {
+								node.nodeIndex = ++count;
+							}
+						} 
+
+						parent[ expando ] = doneName;
+					}
+					
+					diff = elem.nodeIndex - last;
+
+					if ( first === 0 ) {
+						return diff === 0;
+
+					} else {
+						return ( diff % first === 0 && diff / first >= 0 );
+					}
+			}
+		},
+
+		ID: function( elem, match ) {
+			return elem.nodeType === 1 && elem.getAttribute("id") === match;
+		},
+
+		TAG: function( elem, match ) {
+			return (match === "*" && elem.nodeType === 1) || !!elem.nodeName && elem.nodeName.toLowerCase() === match;
+		},
+		
+		CLASS: function( elem, match ) {
+			return (" " + (elem.className || elem.getAttribute("class")) + " ")
+				.indexOf( match ) > -1;
+		},
+
+		ATTR: function( elem, match ) {
+			var name = match[1],
+				result = Sizzle.attr ?
+					Sizzle.attr( elem, name ) :
+					Expr.attrHandle[ name ] ?
+					Expr.attrHandle[ name ]( elem ) :
+					elem[ name ] != null ?
+						elem[ name ] :
+						elem.getAttribute( name ),
+				value = result + "",
+				type = match[2],
+				check = match[4];
+
+			return result == null ?
+				type === "!=" :
+				!type && Sizzle.attr ?
+				result != null :
+				type === "=" ?
+				value === check :
+				type === "*=" ?
+				value.indexOf(check) >= 0 :
+				type === "~=" ?
+				(" " + value + " ").indexOf(check) >= 0 :
+				!check ?
+				value && result !== false :
+				type === "!=" ?
+				value !== check :
+				type === "^=" ?
+				value.indexOf(check) === 0 :
+				type === "$=" ?
+				value.substr(value.length - check.length) === check :
+				type === "|=" ?
+				value === check || value.substr(0, check.length + 1) === check + "-" :
+				false;
+		},
+
+		POS: function( elem, match, i, array ) {
+			var name = match[2],
+				filter = Expr.setFilters[ name ];
+
+			if ( filter ) {
+				return filter( elem, i, match, array );
+			}
+		}
+	}
+};
+
+var origPOS = Expr.match.POS,
+	fescape = function(all, num){
+		return "\\" + (num - 0 + 1);
+	};
+
+for ( var type in Expr.match ) {
+	Expr.match[ type ] = new RegExp( Expr.match[ type ].source + (/(?![^\[]*\])(?![^\(]*\))/.source) );
+	Expr.leftMatch[ type ] = new RegExp( /(^(?:.|\r|\n)*?)/.source + Expr.match[ type ].source.replace(/\\(\d+)/g, fescape) );
+}
+
+var makeArray = function( array, results ) {
+	array = Array.prototype.slice.call( array, 0 );
+
+	if ( results ) {
+		results.push.apply( results, array );
+		return results;
+	}
+	
+	return array;
+};
+
+// Perform a simple check to determine if the browser is capable of
+// converting a NodeList to an array using builtin methods.
+// Also verifies that the returned array holds DOM nodes
+// (which is not the case in the Blackberry browser)
+try {
+	Array.prototype.slice.call( document.documentElement.childNodes, 0 )[0].nodeType;
+
+// Provide a fallback method if it does not work
+} catch( e ) {
+	makeArray = function( array, results ) {
+		var i = 0,
+			ret = results || [];
+
+		if ( toString.call(array) === "[object Array]" ) {
+			Array.prototype.push.apply( ret, array );
+
+		} else {
+			if ( typeof array.length === "number" ) {
+				for ( var l = array.length; i < l; i++ ) {
+					ret.push( array[i] );
+				}
+
+			} else {
+				for ( ; array[i]; i++ ) {
+					ret.push( array[i] );
+				}
+			}
+		}
+
+		return ret;
+	};
+}
+
+var sortOrder, siblingCheck;
+
+if ( document.documentElement.compareDocumentPosition ) {
+	sortOrder = function( a, b ) {
+		if ( a === b ) {
+			hasDuplicate = true;
+			return 0;
+		}
+
+		if ( !a.compareDocumentPosition || !b.compareDocumentPosition ) {
+			return a.compareDocumentPosition ? -1 : 1;
+		}
+
+		return a.compareDocumentPosition(b) & 4 ? -1 : 1;
+	};
+
+} else {
+	sortOrder = function( a, b ) {
+		// The nodes are identical, we can exit early
+		if ( a === b ) {
+			hasDuplicate = true;
+			return 0;
+
+		// Fallback to using sourceIndex (in IE) if it's available on both nodes
+		} else if ( a.sourceIndex && b.sourceIndex ) {
+			return a.sourceIndex - b.sourceIndex;
+		}
+
+		var al, bl,
+			ap = [],
+			bp = [],
+			aup = a.parentNode,
+			bup = b.parentNode,
+			cur = aup;
+
+		// If the nodes are siblings (or identical) we can do a quick check
+		if ( aup === bup ) {
+			return siblingCheck( a, b );
+
+		// If no parents were found then the nodes are disconnected
+		} else if ( !aup ) {
+			return -1;
+
+		} else if ( !bup ) {
+			return 1;
+		}
+
+		// Otherwise they're somewhere else in the tree so we need
+		// to build up a full list of the parentNodes for comparison
+		while ( cur ) {
+			ap.unshift( cur );
+			cur = cur.parentNode;
+		}
+
+		cur = bup;
+
+		while ( cur ) {
+			bp.unshift( cur );
+			cur = cur.parentNode;
+		}
+
+		al = ap.length;
+		bl = bp.length;
+
+		// Start walking down the tree looking for a discrepancy
+		for ( var i = 0; i < al && i < bl; i++ ) {
+			if ( ap[i] !== bp[i] ) {
+				return siblingCheck( ap[i], bp[i] );
+			}
+		}
+
+		// We ended someplace up the tree so do a sibling check
+		return i === al ?
+			siblingCheck( a, bp[i], -1 ) :
+			siblingCheck( ap[i], b, 1 );
+	};
+
+	siblingCheck = function( a, b, ret ) {
+		if ( a === b ) {
+			return ret;
+		}
+
+		var cur = a.nextSibling;
+
+		while ( cur ) {
+			if ( cur === b ) {
+				return -1;
+			}
+
+			cur = cur.nextSibling;
+		}
+
+		return 1;
+	};
+}
+
+// Check to see if the browser returns elements by name when
+// querying by getElementById (and provide a workaround)
+(function(){
+	// We're going to inject a fake input element with a specified name
+	var form = document.createElement("div"),
+		id = "script" + (new Date()).getTime(),
+		root = document.documentElement;
+
+	form.innerHTML = "<a name='" + id + "'/>";
+
+	// Inject it into the root element, check its status, and remove it quickly
+	root.insertBefore( form, root.firstChild );
+
+	// The workaround has to do additional checks after a getElementById
+	// Which slows things down for other browsers (hence the branching)
+	if ( document.getElementById( id ) ) {
+		Expr.find.ID = function( match, context, isXML ) {
+			if ( typeof context.getElementById !== "undefined" && !isXML ) {
+				var m = context.getElementById(match[1]);
+
+				return m ?
+					m.id === match[1] || typeof m.getAttributeNode !== "undefined" && m.getAttributeNode("id").nodeValue === match[1] ?
+						[m] :
+						undefined :
+					[];
+			}
+		};
+
+		Expr.filter.ID = function( elem, match ) {
+			var node = typeof elem.getAttributeNode !== "undefined" && elem.getAttributeNode("id");
+
+			return elem.nodeType === 1 && node && node.nodeValue === match;
+		};
+	}
+
+	root.removeChild( form );
+
+	// release memory in IE
+	root = form = null;
+})();
+
+(function(){
+	// Check to see if the browser returns only elements
+	// when doing getElementsByTagName("*")
+
+	// Create a fake element
+	var div = document.createElement("div");
+	div.appendChild( document.createComment("") );
+
+	// Make sure no comments are found
+	if ( div.getElementsByTagName("*").length > 0 ) {
+		Expr.find.TAG = function( match, context ) {
+			var results = context.getElementsByTagName( match[1] );
+
+			// Filter out possible comments
+			if ( match[1] === "*" ) {
+				var tmp = [];
+
+				for ( var i = 0; results[i]; i++ ) {
+					if ( results[i].nodeType === 1 ) {
+						tmp.push( results[i] );
+					}
+				}
+
+				results = tmp;
+			}
+
+			return results;
+		};
+	}
+
+	// Check to see if an attribute returns normalized href attributes
+	div.innerHTML = "<a href='#'></a>";
+
+	if ( div.firstChild && typeof div.firstChild.getAttribute !== "undefined" &&
+			div.firstChild.getAttribute("href") !== "#" ) {
+
+		Expr.attrHandle.href = function( elem ) {
+			return elem.getAttribute( "href", 2 );
+		};
+	}
+
+	// release memory in IE
+	div = null;
+})();
+
+if ( document.querySelectorAll ) {
+	(function(){
+		var oldSizzle = Sizzle,
+			div = document.createElement("div"),
+			id = "__sizzle__";
+
+		div.innerHTML = "<p class='TEST'></p>";
+
+		// Safari can't handle uppercase or unicode characters when
+		// in quirks mode.
+		if ( div.querySelectorAll && div.querySelectorAll(".TEST").length === 0 ) {
+			return;
+		}
+	
+		Sizzle = function( query, context, extra, seed ) {
+			context = context || document;
+
+			// Only use querySelectorAll on non-XML documents
+			// (ID selectors don't work in non-HTML documents)
+			if ( !seed && !Sizzle.isXML(context) ) {
+				// See if we find a selector to speed up
+				var match = /^(\w+$)|^\.([\w\-]+$)|^#([\w\-]+$)/.exec( query );
+				
+				if ( match && (context.nodeType === 1 || context.nodeType === 9) ) {
+					// Speed-up: Sizzle("TAG")
+					if ( match[1] ) {
+						return makeArray( context.getElementsByTagName( query ), extra );
+					
+					// Speed-up: Sizzle(".CLASS")
+					} else if ( match[2] && Expr.find.CLASS && context.getElementsByClassName ) {
+						return makeArray( context.getElementsByClassName( match[2] ), extra );
+					}
+				}
+				
+				if ( context.nodeType === 9 ) {
+					// Speed-up: Sizzle("body")
+					// The body element only exists once, optimize finding it
+					if ( query === "body" && context.body ) {
+						return makeArray( [ context.body ], extra );
+						
+					// Speed-up: Sizzle("#ID")
+					} else if ( match && match[3] ) {
+						var elem = context.getElementById( match[3] );
+
+						// Check parentNode to catch when Blackberry 4.6 returns
+						// nodes that are no longer in the document #6963
+						if ( elem && elem.parentNode ) {
+							// Handle the case where IE and Opera return items
+							// by name instead of ID
+							if ( elem.id === match[3] ) {
+								return makeArray( [ elem ], extra );
+							}
+							
+						} else {
+							return makeArray( [], extra );
+						}
+					}
+					
+					try {
+						return makeArray( context.querySelectorAll(query), extra );
+					} catch(qsaError) {}
+
+				// qSA works strangely on Element-rooted queries
+				// We can work around this by specifying an extra ID on the root
+				// and working up from there (Thanks to Andrew Dupont for the technique)
+				// IE 8 doesn't work on object elements
+				} else if ( context.nodeType === 1 && context.nodeName.toLowerCase() !== "object" ) {
+					var oldContext = context,
+						old = context.getAttribute( "id" ),
+						nid = old || id,
+						hasParent = context.parentNode,
+						relativeHierarchySelector = /^\s*[+~]/.test( query );
+
+					if ( !old ) {
+						context.setAttribute( "id", nid );
+					} else {
+						nid = nid.replace( /'/g, "\\$&" );
+					}
+					if ( relativeHierarchySelector && hasParent ) {
+						context = context.parentNode;
+					}
+
+					try {
+						if ( !relativeHierarchySelector || hasParent ) {
+							return makeArray( context.querySelectorAll( "[id='" + nid + "'] " + query ), extra );
+						}
+
+					} catch(pseudoError) {
+					} finally {
+						if ( !old ) {
+							oldContext.removeAttribute( "id" );
+						}
+					}
+				}
+			}
+		
+			return oldSizzle(query, context, extra, seed);
+		};
+
+		for ( var prop in oldSizzle ) {
+			Sizzle[ prop ] = oldSizzle[ prop ];
+		}
+
+		// release memory in IE
+		div = null;
+	})();
+}
+
+(function(){
+	var html = document.documentElement,
+		matches = html.matchesSelector || html.mozMatchesSelector || html.webkitMatchesSelector || html.msMatchesSelector;
+
+	if ( matches ) {
+		// Check to see if it's possible to do matchesSelector
+		// on a disconnected node (IE 9 fails this)
+		var disconnectedMatch = !matches.call( document.createElement( "div" ), "div" ),
+			pseudoWorks = false;
+
+		try {
+			// This should fail with an exception
+			// Gecko does not error, returns false instead
+			matches.call( document.documentElement, "[test!='']:sizzle" );
+	
+		} catch( pseudoError ) {
+			pseudoWorks = true;
+		}
+
+		Sizzle.matchesSelector = function( node, expr ) {
+			// Make sure that attribute selectors are quoted
+			expr = expr.replace(/\=\s*([^'"\]]*)\s*\]/g, "='$1']");
+
+			if ( !Sizzle.isXML( node ) ) {
+				try { 
+					if ( pseudoWorks || !Expr.match.PSEUDO.test( expr ) && !/!=/.test( expr ) ) {
+						var ret = matches.call( node, expr );
+
+						// IE 9's matchesSelector returns false on disconnected nodes
+						if ( ret || !disconnectedMatch ||
+								// As well, disconnected nodes are said to be in a document
+								// fragment in IE 9, so check for that
+								node.document && node.document.nodeType !== 11 ) {
+							return ret;
+						}
+					}
+				} catch(e) {}
+			}
+
+			return Sizzle(expr, null, null, [node]).length > 0;
+		};
+	}
+})();
+
+(function(){
+	var div = document.createElement("div");
+
+	div.innerHTML = "<div class='test e'></div><div class='test'></div>";
+
+	// Opera can't find a second classname (in 9.6)
+	// Also, make sure that getElementsByClassName actually exists
+	if ( !div.getElementsByClassName || div.getElementsByClassName("e").length === 0 ) {
+		return;
+	}
+
+	// Safari caches class attributes, doesn't catch changes (in 3.2)
+	div.lastChild.className = "e";
+
+	if ( div.getElementsByClassName("e").length === 1 ) {
+		return;
+	}
+	
+	Expr.order.splice(1, 0, "CLASS");
+	Expr.find.CLASS = function( match, context, isXML ) {
+		if ( typeof context.getElementsByClassName !== "undefined" && !isXML ) {
+			return context.getElementsByClassName(match[1]);
+		}
+	};
+
+	// release memory in IE
+	div = null;
+})();
+
+function dirNodeCheck( dir, cur, doneName, checkSet, nodeCheck, isXML ) {
+	for ( var i = 0, l = checkSet.length; i < l; i++ ) {
+		var elem = checkSet[i];
+
+		if ( elem ) {
+			var match = false;
+
+			elem = elem[dir];
+
+			while ( elem ) {
+				if ( elem[ expando ] === doneName ) {
+					match = checkSet[elem.sizset];
+					break;
+				}
+
+				if ( elem.nodeType === 1 && !isXML ){
+					elem[ expando ] = doneName;
+					elem.sizset = i;
+				}
+
+				if ( elem.nodeName.toLowerCase() === cur ) {
+					match = elem;
+					break;
+				}
+
+				elem = elem[dir];
+			}
+
+			checkSet[i] = match;
+		}
+	}
+}
+
+function dirCheck( dir, cur, doneName, checkSet, nodeCheck, isXML ) {
+	for ( var i = 0, l = checkSet.length; i < l; i++ ) {
+		var elem = checkSet[i];
+
+		if ( elem ) {
+			var match = false;
+			
+			elem = elem[dir];
+
+			while ( elem ) {
+				if ( elem[ expando ] === doneName ) {
+					match = checkSet[elem.sizset];
+					break;
+				}
+
+				if ( elem.nodeType === 1 ) {
+					if ( !isXML ) {
+						elem[ expando ] = doneName;
+						elem.sizset = i;
+					}
+
+					if ( typeof cur !== "string" ) {
+						if ( elem === cur ) {
+							match = true;
+							break;
+						}
+
+					} else if ( Sizzle.filter( cur, [elem] ).length > 0 ) {
+						match = elem;
+						break;
+					}
+				}
+
+				elem = elem[dir];
+			}
+
+			checkSet[i] = match;
+		}
+	}
+}
+
+if ( document.documentElement.contains ) {
+	Sizzle.contains = function( a, b ) {
+		return a !== b && (a.contains ? a.contains(b) : true);
+	};
+
+} else if ( document.documentElement.compareDocumentPosition ) {
+	Sizzle.contains = function( a, b ) {
+		return !!(a.compareDocumentPosition(b) & 16);
+	};
+
+} else {
+	Sizzle.contains = function() {
+		return false;
+	};
+}
+
+Sizzle.isXML = function( elem ) {
+	// documentElement is verified for cases where it doesn't yet exist
+	// (such as loading iframes in IE - #4833) 
+	var documentElement = (elem ? elem.ownerDocument || elem : 0).documentElement;
+
+	return documentElement ? documentElement.nodeName !== "HTML" : false;
+};
+
+var posProcess = function( selector, context, seed ) {
+	var match,
+		tmpSet = [],
+		later = "",
+		root = context.nodeType ? [context] : context;
+
+	// Position selectors must be done after the filter
+	// And so must :not(positional) so we move all PSEUDOs to the end
+	while ( (match = Expr.match.PSEUDO.exec( selector )) ) {
+		later += match[0];
+		selector = selector.replace( Expr.match.PSEUDO, "" );
+	}
+
+	selector = Expr.relative[selector] ? selector + "*" : selector;
+
+	for ( var i = 0, l = root.length; i < l; i++ ) {
+		Sizzle( selector, root[i], tmpSet, seed );
+	}
+
+	return Sizzle.filter( later, tmpSet );
+};
+
+// EXPOSE
+
+baidu.dom.query = Sizzle;
+
 })();
 /*
  * Tangram
@@ -5773,24 +6533,25 @@ baidu.dom.query = (/**function*/function (){
             }
             readyBound = true;
 
-            if (document.addEventListener) {
+            if (document.readyState === 'complete') {
+                ready.isReady = true;
+            } else {
+                if (document.addEventListener) {
+                    document.addEventListener('DOMContentLoaded', DOMContentLoaded, false);
+                    window.addEventListener('load', ready, false);
+                } else if (document.attachEvent) {
+                    document.attachEvent('onreadystatechange', DOMContentLoaded);
+                    window.attachEvent('onload', ready);
 
-                document.addEventListener('DOMContentLoaded', DOMContentLoaded, false);
-                window.addEventListener('load', ready, false);
+                    var toplevel = false;
 
-            } else if (document.attachEvent) {
+                    try {
+                        toplevel = window.frameElement == null;
+                    } catch (e) {}
 
-                document.attachEvent('onreadystatechange', DOMContentLoaded);
-                window.attachEvent('onload', ready);
-
-                var toplevel = false;
-
-                try {
-                    toplevel = window.frameElement == null;
-                } catch (e) {}
-
-                if (document.documentElement.doScroll && toplevel) {
-                    doScrollCheck();
+                    if (document.documentElement.doScroll && toplevel) {
+                        doScrollCheck();
+                    }
                 }
             }
         }
@@ -10935,50 +11696,6 @@ baidu.swf.Proxy.prototype.call = function(methodName, var_args) {
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
  * 
- * path: baidu/url.js
- * author: erik
- * version: 1.1.0
- * date: 2009/11/16
- */
-
-
-/**
- * 操作url的方法
- * @namespace baidu.url
- */
-baidu.url = baidu.url || {};
-/*
- * Tangram
- * Copyright 2009 Baidu Inc. All rights reserved.
- */
-
-
-
-/**
- * 对字符串进行%#&+=以及和\s匹配的所有字符进行url转义
- * @name baidu.url.escapeSymbol
- * @function
- * @grammar baidu.url.escapeSymbol(source)
- * @param {string} source 需要转义的字符串.
- * @return {string} 转义之后的字符串.
- * @remark
- * 用于get请求转义。在服务器只接受gbk，并且页面是gbk编码时，可以经过本转义后直接发get请求。
- *
- * @return {string} 转义后的字符串
- */
-baidu.url.escapeSymbol = function(source) {
-    
-    //TODO: 之前使用\s来匹配任意空白符
-    //发现在ie下无法匹配中文全角空格和纵向指标符\v，所以改\s为\f\r\n\t\v以及中文全角空格和英文空格
-    //但是由于ie本身不支持纵向指标符\v,故去掉对其的匹配，保证各浏览器下效果一致
-    return String(source).replace(/[#%&+=\/\\\ \　\f\r\n\t]/g, function(all) {
-        return '%' + (0x100 + all.charCodeAt()).toString(16).substring(1).toUpperCase();
-    });
-};
-/*
- * Tangram
- * Copyright 2009 Baidu Inc. All rights reserved.
- * 
  * path: baidu/url/getQueryValue.js
  * author: erik
  * version: 1.1.0
@@ -11126,6 +11843,564 @@ baidu.data = baidu.data || {};
 /**
  * Tangram
  * Copyright 2010 Baidu Inc. All rights reserved.
+ */
+
+
+
+
+
+/**
+ * Field构造函数
+ * @class
+ * @public
+ * @param {Object} options 参数
+ * @config {Object} options.define 定义参数，包含{fieldType,defaultValue}
+ * @config {Object} options.validation 条件限制，是否有长度，最大值，最小值等限制，类型见baidu.validator
+ */
+baidu.data.Field = baidu.data.Field || (function(){
+    
+    /**
+     * Field构造函数
+     * @public
+     * @param {Object} options 参数
+     * @config {Object} options.define 定义参数，包含{fieldType,defaultValue},
+     * @config {String} options.name
+     * @config {Object} options.validation 条件限制，是否有长度，最大值，最小值等限制，类型见baidu.validator
+     */
+    var Field = function(options, dataModel){
+        var me = this,
+            define = options.define || {};
+       
+        me._defaultValue = typeof define.defaultValue != 'undefined' ? define.defaultValue : me._defaultValue;
+        me._type = define.type || ''; 
+        
+        me._validation = options.validation || [];
+        me._validation.push({
+        	'rule': me._type
+        });
+        
+        me._dataModel = dataModel;
+        me._name = options.name;
+        me._validator = me._dataModel._validator;
+    };
+
+    Field.prototype = {
+
+        /**
+         * @lends baidu.data.Field.prototype
+         */
+
+        _defaultValue: '',
+        _name: '',
+        
+
+        /**
+         * 根据index值设置数据,当index相同的值存在时，会直接进行覆盖
+         * @public
+         * @param {Object} data, 可选
+         * @return {Boolean}
+         */
+        set: function(index, data){
+            var me = this,
+                result = {
+                    'result': true
+                };
+            
+            if(typeof data == 'undefined'){
+                
+                me._set(index, me._defaultValue);
+            
+            }else if(me._validator){
+               
+                result = me._validator.test(data, me._validation);
+                result.result && me._set(index, data);   
+            
+            }else{   
+                me._set(index, data); 
+            }
+            
+            return result;
+        },
+
+        _set: function(index, data){
+            var me = this;
+
+            data = baidu.object.clone(data);
+            me._dataModel._data[index] = me._dataModel._data[index] || {};
+            me._dataModel._data[index][me._name] = data;
+        }
+    };
+
+    return Field;
+
+})();
+/**
+ * Tangram
+ * Copyright 2010 Baidu Inc. All rights reserved.
+ */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/**
+ * DataModel实体类
+ * @class
+ * @public
+ * @param {Object} options 设置项
+ * @config {Object} options.fields 通过ModalManager.defineDM定义的数据结构
+ * @config {Array} options.data 传入的数据，可选
+ */
+baidu.data.DataModel = baidu.data.DataModel || (function(){
+
+    var CLONE = baidu.object.clone,
+        ARRAYEACH = baidu.array.each,
+        OBJECTEACH = baidu.object.each;
+
+    var dataAction = {
+        'ADD':'ADD',
+        'REMOVE': 'REMOVE',
+        'UPDATE': 'UPDATE',
+        'NULL': 'NULL'
+    };
+
+    /**
+     * 创建Field实例
+     * @private
+     * @param {Object} fields config
+     * @param {baidu.data.DataModel} dataModel
+     */
+    function _createField(fields, dataModel){
+        var fields = fields || {};
+
+        OBJECTEACH(fields, function(config, fieldName){
+            baidu.extend(config,{
+                name: fieldName
+            });
+            dataModel._fields[fieldName] = new baidu.data.Field(config, dataModel);
+        });
+    };
+
+    /**
+     * DataModel实体类
+     * @public
+     * @param {Object} options 设置项
+     * @config {Object} options.fields 通过ModalManager.defineDM定义的数据结构
+     * @config {Number} options.recodeLength cancel操作的记录数
+     * @config {baidu.data.Validator} validator
+     */
+    var dataModel = function(options){
+       
+        var me = this,
+            options = options || {};
+            
+        /**
+         * 存储Field实例的名值对
+         * @private
+         * @attribute
+         */
+        me._fields = {};
+        
+        /**
+         * 数据值
+         * @private
+         * @attribute
+         */
+        me._data = {};
+
+        me._actionQueue = [];
+        me._recodeLength = options.recodeLength || me.recodeLength;
+        
+        me._validator = options.validator;
+        _createField(options.fields || {}, me);
+    };
+        
+    /**
+     *  @lends baidu.data.DataModel.prototype
+     */
+    dataModel.prototype = {
+      
+        /**
+         * 数据存储索引
+         * @private
+         * @attribute
+         */
+        _index: 0,
+
+        /**
+         * 记录长度，默认值为5
+         * @public
+         * @attribute
+         */
+        _recodeLength: 5,
+
+        /**
+         * lastAction 压如队列
+         * @private
+         * @param {String} action
+         * @return {Null}
+         */
+        _setLastAction:function(action, lastData, lastChange){
+            var me = this;
+
+            me._actionQueue.push({
+                'action': action,
+                'lastData': lastData,
+                'lastChange': lastChange
+            });
+
+            me._actionQueue.length > me._recodeLength && me._actionQueue.shift();
+        },
+
+        /**
+         * 获取新的id
+         * @private
+         * @attribute
+         * @return {Number}
+         */
+        _getNewId: function(){
+            return this._index++;           
+        },
+        
+        /**
+         * 回滚id
+         * @private
+         * @attribute
+         */
+        _revertId: function(){
+        	this._index--;
+        },
+
+        /**
+         * 根据传入的index数组返回数据
+         * @private
+         * @param {String|String[]} where
+         * @param {Number|Number[]} indexArr
+         * @return {Object}
+         */
+        _getDataByIndex: function(where, indexArr){
+            var result = {},
+                me = this;
+
+            ARRAYEACH(indexArr, function(index){
+                result[index] = me._getDataByName(where, me._data[index]);
+            });
+
+            return result;
+        },
+        
+        /**
+         * 根据传入的function返回数据
+         * @private
+         * @param {String|String[]} where
+         * @param {Function} fun
+         * @return {Object}
+         */
+        _getDataByFunction: function(where, fun){
+            var me = this,
+                result = {};
+            
+            OBJECTEACH(me._data, function(eachData, dataIndex){
+                if(fun(eachData)){
+                    result[dataIndex] = me._getDataByName(where, eachData);
+                }
+            });
+
+            return result;
+
+        },
+
+        /**
+         * 根据where从单行数据中取出所致定的数据
+         * @private
+         * @param {Array|String} where
+         * @param {Object} data
+         * @return {Object}
+         */
+        _getDataByName: function(where, data){
+            var me = this,
+                result = {};
+
+            if(where == '*'){
+                return CLONE(data); 
+            }
+
+            baidu.lang.isString(where) && (where = where.split(','));
+            ARRAYEACH(where, function(name){
+                result[name] = data[name];
+            });
+            return CLONE(result);
+        },
+
+        /**
+         * 根据条件判断函数获取数据中符合要求的id
+         * @private
+         * @param {Function|Number[]|Number} condition
+         * @return {Number[]}
+         */
+        _getConditionId: function(condition){
+            var me = this,
+                result = [];
+
+            if(condition == '*')
+                return baidu.object.keys(me._data);
+
+            if(baidu.lang.isNumber(condition)){
+                return [condition];
+            }
+
+            if(baidu.lang.isArray(condition)){
+                return condition;
+            }
+
+            if(baidu.lang.isFunction(condition)){
+                OBJECTEACH(me._data, function(eachData, dataIndex){
+                    condition(eachData) && result.push(dataIndex);
+                });    
+                return result;
+            }
+
+            return result;
+        },
+        
+        /**
+         * 添加新数据
+         * @public
+         * @param {Object} 数据值，可以名值对
+         * @return {fail:[], success[]} fail数据为添加失败的数据的index,success数组为成功插入的数据的索引值 
+         */
+        add: function(data){
+            var me = this,
+                data = data || {},
+                result = {
+                    fail: [],
+                    success: []
+                }, 
+                tmpResult, tmpNames,
+                dataIndex,length,
+                lastData = {}, lastChange = {};
+
+            if(baidu.object.isEmpty(data)) return result; 
+
+            if(!baidu.lang.isArray(data)) data = [data];
+            
+            baidu.each(data, function(eachData, index){
+
+                tmpResult = true;
+                tmpNames = [];
+                dataIndex = me._getNewId();
+            
+                OBJECTEACH(me._fields, function(field, name){
+                    tmpResult = field.set(dataIndex, eachData[name]);
+                    tmpResult.result ? tmpNames.push(name) : result.fail.push(index); 
+                    return tmpResult.result;
+                });
+
+                if(!tmpResult.result){
+                    delete(me._data[dataIndex]);
+                    me._revertId();
+                }else{
+
+                    lastData[dataIndex] = 'undefined';
+                    lastChange[dataIndex] = CLONE(me._data[dataIndex]);
+
+                    result.success.push(dataIndex);
+                }
+            });
+
+            result.success.length > 0 && me._setLastAction(dataAction.ADD, lastData, lastChange);
+
+            return result;
+        },
+      
+        
+        /**
+         * 按条件查找并返回数据
+         * @public
+         * @param {String} where 查找那些field的数值,以','分割，支持'*'
+         * @param {Function|Number|Number[]} condition 查找条件方法,或者包含index的数组或者index
+         * @return {Object}
+         */
+        select: function(where, condition){
+            var me = this,
+                result = [],
+                index;
+
+            if(me._data.length == 0){
+                return result;
+            }
+
+            index = me._getConditionId(condition);
+            result = me._getDataByIndex(where, index);
+
+            return result;
+        },
+        
+        
+
+        /**
+         * 根据条件设置field的值
+         * @public
+         * @param {Object} data
+         * @param {Function|Number[]|Number} condition 查找条件方法,或者包含index的数组或者index
+         * @return {Number} 跟新的行数
+        */
+        update: function(data, condition){
+            var me = this,
+                resultId = [],
+                tmpResult,
+                tmpNames = [],
+                result = 0,
+                dataIndex,
+                lastData = {}, lastChange = {};
+           
+            if(baidu.object.isEmpty(data)){
+                return result;
+            } 
+
+            data = CLONE(data);
+            resultId = me._getConditionId(condition);
+            //第一次更新时做数据验证
+            if(resultId.length > 0){
+               dataIndex = resultId.shift();
+               lastData[dataIndex] = CLONE(me._data[dataIndex]);
+               
+               OBJECTEACH(data, function(item, name){
+                   tmpResult = me._fields[name].set(dataIndex, item);
+                   tmpResult && tmpNames.push(name);
+                   return tmpResult;
+               });
+               if(!tmpResult){
+                   me._data[dataIndex] = lastData;
+                   return result;
+               }
+
+               lastChange[dataIndex] = me._data[dataIndex];
+
+               result++;
+            }
+            
+            ARRAYEACH(resultId, function(dataIndex){
+                
+                lastData[dataIndex] = CLONE(me._data[dataIndex]);
+                
+                OBJECTEACH(data, function(item, name){
+                    me._data[dataIndex][name] = item;
+                });
+                
+                lastChange[dataIndex] = me._data[dataIndex];
+                result++;
+            });
+
+            result > 0 && me._setLastAction(dataAction.UPDATE, lastData, lastChange);
+            return result;
+         },
+
+        /**
+         * 删除数据
+         * @public
+         * @param {Function|Number[]|Number} condition 查找条件方法,或者包含index的数组或者index
+         * @return {Number} 被删除行数
+         */
+        remove: function(condition){
+            var me = this,
+                resultId = me._getConditionId(condition),
+                result = 0,data,
+                lastData = {}, lastChange = {};
+
+            if(resultId.length == 0){
+                return result;
+            }
+            
+            baidu.each(resultId, function(dataIndex){
+               
+                lastChange[dataIndex] = lastData[dataIndex] = CLONE(me._data[dataIndex]);
+                
+                result++;
+                delete(me._data[dataIndex]);
+            });
+           
+            result > 0 && me._setLastAction(dataAction.REMOVE, lastData, lastChange);
+            return result;
+        },
+
+        /**
+         * 回复上次操作之前的结果
+         * @public
+         */
+        cancel: function(){
+            var me = this,
+                lastAction,
+                result = {
+                    row: 0,
+                    cancelAction: dataAction.NULL,
+                    lastChange: {}
+                };
+            
+            if(me._actionQueue.length == 0)
+               return result;
+
+            lastAction = me._actionQueue.pop();
+            result.lastChange = lastAction.lastChange;
+            switch (lastAction.action){
+                case dataAction.ADD:
+                    OBJECTEACH(lastAction.lastData, function(data, dataIndex){
+                        delete(me._data[dataIndex]);
+                        result.row ++;
+                    });
+                    result.cancelAction = dataAction.ADD;
+                    break;
+                case dataAction.REMOVE:
+                    OBJECTEACH(lastAction.lastData, function(data, dataIndex){
+                        me._data[dataIndex] = data;
+                        result.row ++;
+                    });
+                    result.cancelAction = dataAction.REMOVE;
+                    break;
+                case dataAction.UPDATE:
+                    OBJECTEACH(lastAction.lastData, function(data, dataIndex){
+                        me._data[dataIndex] = data;
+                        result.row ++;
+                    });
+                    result.cancelAction = dataAction.UPDATE;
+                    break;
+                default:
+                    return result;
+            };
+
+            return result;
+        },
+
+        /**
+         * 返回最后一次修改时所涉及的数据
+         * @public
+         * @return {Object}
+         */
+        getLastChange: function(){
+            var me = this;
+                data = me._actionQueue.length > 0 ? CLONE(me._actionQueue[me._actionQueue.length - 1].lastChange) : [];
+            
+            return data; 
+        }
+    };
+
+    return dataModel;
+})();
+/**
+ * Tangram
+ * Copyright 2010 Baidu Inc. All rights reserved.
  * @path:data/dataSource.js
  * @author:walter
  * @version:1.0.0
@@ -11138,6 +12413,50 @@ baidu.data = baidu.data || {};
  * @namespace 定义命名空间
  */
 baidu.data.dataSource = baidu.dataSource = baidu.data.dataSource || {};
+/*
+ * Tangram
+ * Copyright 2009 Baidu Inc. All rights reserved.
+ */
+
+
+
+baidu.parser = baidu.parser || {};
+/*
+ * Tangram
+ * Copyright 2009 Baidu Inc. All rights reserved.
+ */
+
+
+
+baidu.parser.type = {
+    'XML': 'Xml',
+    'JSON': 'Json',
+    'HTML': 'Html'
+};
+/*
+ * Tangram
+ * Copyright 2009 Baidu Inc. All rights reserved.
+ */
+
+
+
+
+/**
+ * 工厂方法，创建对应type的parser实例
+ * @public
+ * @param {baidu.parser.type} type
+ * @param {Object} options
+ */
+baidu.parser.create = function(type, options){
+    var type = type || '',
+        options = options || {};
+
+    if(baidu.parser[type]){
+        return new baidu.parser[type](options);
+    }
+
+    return null;
+};
 /**
  * Tangram
  * Copyright 2010 Baidu Inc. All rights reserved.
@@ -11152,6 +12471,8 @@ baidu.data.dataSource = baidu.dataSource = baidu.data.dataSource || {};
 
 
 
+
+
 /**
  * 数据源类
  * @class
@@ -11159,6 +12480,7 @@ baidu.data.dataSource = baidu.dataSource = baidu.data.dataSource || {};
  * @param {Object}      [options]              config参数
  * @config {Number}     [maxCache = 10]       缓存数据的最大个数
  * @config {Boolean}    [cache = true]        是否使用缓存
+ * @config {baidu.parser.type} [dataType = '']    传入的数据为何种类型，当该值传入时会试图创建对应的parser
  * @config {Function}   [transition]          转换数据算法
  * @return {baidu.data.dataSource.DataSource} 数据源类
  * @private
@@ -11187,7 +12509,9 @@ baidu.data.dataSource.DataSource = baidu.lang.createClass(function(options){
 	maxCache: 100,
     
 	cache: true,
-	
+
+    dataType: '',
+
     /**
      * 更新配置
      * @param {Object} options
@@ -11206,6 +12530,11 @@ baidu.data.dataSource.DataSource = baidu.lang.createClass(function(options){
     get: function(options){
     
     },
+
+    /**
+     * 存储数据接口,由具体的dataSource实现
+     */
+    set: function(){},
     
     /**
      * 转换数据格式并调用回调函数
@@ -11216,7 +12545,23 @@ baidu.data.dataSource.DataSource = baidu.lang.createClass(function(options){
     _get: function(options){
         var me = this, 
 			data;
-        data = me.transition.call(me, me.source);
+       
+        //创建parser
+        function createParser(type, data){
+            var parser = null;
+
+            if(type){
+                parser = baidu.parser.create(type);
+                parser && parser.load(data);
+                return parser ? parser : data;
+            }
+
+            return  data;
+        };
+
+        data = createParser(me.dataType, me.source);
+        data = me.transition.call(me, data);
+        
         me.cache && options.key && data && me._addCacheData(options.key, data);
         options.onsuccess && options.onsuccess.call(me, data);
         return data;
@@ -11295,7 +12640,7 @@ baidu.data.dataSource.ajax = function(url, options){
         options = options || {};
         options.key = options.key || (me.url + (options.param ? "?" + baidu.json.stringify(options.param) : ""));
         if (!me.dispatchEvent("onbeforeget", options)) {
-            baidu.ajax.request(me.url, me.ajaxOption ||
+            baidu.ajax.request(options.key, me.ajaxOption ||
             {
                 method: options.method || 'get',
                 data: options.param,
@@ -11417,6 +12762,496 @@ baidu.data.dataSource.sio = function(url, options){
     };
     return dataSource;
 };
+/**
+ * Tangram
+ * Copyright 2010 Baidu Inc. All rights reserved.
+ */
+
+
+
+
+
+
+
+
+
+/**
+ * 数据仓库类
+ * @class
+ * @public
+ * @param {String|baidu.data.DataModel} dataModel DataModel实例
+ * @param {String|baidu.data.dataSource.DataSource} dataSource DataSource实例
+ * @param {String|Function} action {'append','replace','merge',Function} 当完成load时，向DataModel中填写数据时使用的策略,默认为append
+ * @param {Array[String]} mergeFields 当action 为merge时，合并数据时使用的依据变量
+ * @param {Boolean} usingLocal 当merge时出现数据冲突，以local为主还是remote数据为主,默认为本地.action为Function时，该选项不无效
+ */
+baidu.data.DataStore = (function(){
+   
+    var actionType = {
+        'APPEND': 'APPEND',
+        'REPLACE': 'REPLACE',
+        'MERGE': 'MERGE'
+    };
+
+    var dataAction = {
+        'ADD': 'ADD',
+        'REMOVE': 'REMOVE',
+        'UPDATE': 'UPDATE'
+    };
+    
+    /**
+     * 数据仓库类
+     * @class
+     * @public
+     * @param {baidu.data.DataModel} dataModel DataModel实例
+     * @param {baidu.data.dataSource.DataSource} dataSource DataSource实例
+     * @param {String|Function} action {'APPEND','REPLACE','MERGE',Function} 当完成load时，向DataModel中填写数据时使用的策略,默认为append
+     * @param {Array[String]} mergeFields 当action 为merge时，合并数据时使用的依据变量
+     * @param {Boolean} usingLocal 当merge时出现数据冲突，以local为主还是remote数据为主,默认为本地.action为Function时，该选项不无效
+     */
+    return baidu.lang.createClass(function(options){
+        var me = this;
+            dataModel = options.dataModel,
+            dataSource = options.dataSource,
+            action = options.action,
+            sync = options.sync;
+
+        dataModel && (me._dataModel = dataModel);
+        dataSource && (me._dataSource = dataSource);
+        typeof sync != 'undefined' && (me._sync = sync);
+       
+        if(!action){
+            me._action = 'APPEND';
+        }else{
+            
+            if(baidu.lang.isFunction(action))
+                me._action = action;
+            else{
+                me._action = actionType[action] ? actionType[action] : 'APPEND';
+            }
+        }
+
+        me._mergeFields = options.mergeFields || [];
+        me._usingLocal = typeof options.usingLocal != 'undefined' ? options.usingLocal : me._usingLocal;
+        
+    
+    }).extend({
+        
+        /**
+         *  @lends baidu.data.dataStore.DataStore.prototype
+         */ 
+
+        /**
+         * DataModel实例
+         * @private
+         * @property
+         */
+        _dataModel: null,
+        
+        /**
+         * DataSource 实例
+         * @private
+         * @property
+         */
+        _dataSource: null,
+
+       /**
+        * @private
+        * @property
+        */
+        _action: 'APPEND',
+       
+        /**
+         * @private
+         * @property
+         */
+        _usingLocal: true,
+       
+        /**
+         * 是否在操作DataSource时同步更新DataModel
+         * @private
+         * @property
+         */
+        _sync: false,
+
+        /**
+         * 设DataModel实例
+         * @public
+         * @param {DataModel} dataModel
+         * @return {Boolean}
+         */
+        setDataModel:function(dataModel){
+            
+            if(dataModel instanceof baidu.data.DataModel){
+                this._dataModel = dataModel;
+                return true;
+            }
+            return false;
+        },
+
+        /**
+         * 获取DataModel
+         * @public
+         * @return {DataModel|Null}
+         */
+        getDataModel: function(){
+            return this._dataModel;      
+        },
+
+        /**
+         * 获取当前使用的DataSource
+         * @public
+         * @return {Null|DataSource} dataSource
+         */
+        getDataSource: function(){
+            return this._dataSource;
+        },
+
+        /**
+         * 设置DataSource
+         * @public
+         * @param {DataSource} dataSource
+         * @return {Boolean}
+         */
+        setDataSource: function(dataSource){
+            if(dataSource instanceof baidu.data.dataSource.DataSource){
+                this._dataSource = dataSource;
+                return true;
+            }
+            return false;              
+        },
+
+        /**
+         * 设置是DataSource数据保持同步
+         * @pubic
+         * @param {Boolean} sync 是否同步
+         */
+        setSnyc: function(sync){
+            this._sync = sync;  
+        },
+
+        //TODO: 如何处理数据冲突
+        /**
+         * DataSource从其数据源拉取数据
+         * @param {Object} options
+         * @See baidu.data.dataSource
+         * @param {Boolean} sync
+         * @param {baidu.parser.type} 请求的数据类型，如不提供此参数，则不会向自定义函数传入经过parser包装对象，传入原始数据
+         */
+        load: function(options, sync, type){
+
+            var me = this,
+                dataSource = me._dataSource,
+                dataModel = me._dataModel,
+                sync = typeof sync != 'undefined' ? sync : me._sync,
+                success = options.onsuccess || baidu.fn.blank,
+                failture = options.onfailture || baidu.fn.blank,
+                tmpData = [];
+        
+            if(!dataSource) return;
+
+            if(sync){
+                options.onsuccess = function(data){
+                    switch (me._action){
+                        case 'APPEND':
+                            success.call(me, dataModel.add(data));
+                            break;
+                        case 'REPLACE':
+                            dataModel.remove('*');
+                            success.call(me, dataModel.add(data));
+                            break;
+                        case 'MERGE':
+                       
+                            //TODO: 看日后需求，如果需要将无冲突项进行append到dm中，在此处添加部分逻辑
+                            (me._mergeFields.length != 0) && baidu.each(data, function(item){
+                                dataModel.update(item, function(dataLine){
+                                    var result = true;
+                                    baidu.each(me._mergeFields, function(name){
+                                        result = (dataLine[name] == item[name]);
+                                        return result;
+                                    });
+
+                                    return result;
+                                });
+                            });
+                            success.call(me, data);
+                            break;
+                        default: 
+                            success.call(me, me._action.call(me, data));
+                    }     
+                };
+
+                options.onfailture = function(){
+                    failture.apply(me, arguments);    
+                };
+            }
+
+            dataSource.get(options);
+        },
+
+        //TODO: save数据如何给出？？？？
+        /**
+         * DataSource commit数据
+         * @public
+         * @param {Object} options
+         * @param {String} dataType 'ALL|LC' 默认值为'LC'
+         * @see baidu.data.dataSource.DataSource.commit
+         */
+        save: function(options, dataType){
+            var me = this,
+                dataModel = me._dataModel,
+                dataSource = me._dataSource,
+                dataType= dataType || 'LC';
+
+            dataSource.set(
+                options, 
+                dataType == 'ALL' ? dataModel.select('*') : dataModel.getLastChange()
+            );
+        },
+
+        /**
+         * 向DataModel中写入新的数据
+         * @public
+         * @param {Object} data
+         * @see baidu.data.DataModel.add
+         * @return {fail:Number[], success:Number[]} fail数据为添加失败的数据的index,success数组为成功插入的数据的索引值 
+         */
+        add: function(data){
+            var me = this,
+                result = me._dataModel.add(data);
+           
+            me.dispatchEvent('onadd', {
+                row: result.success.length,
+                data: (result.success.length > 0 ? me._dataModel.getLastChange() : {})
+            })
+
+            return result;
+        },
+
+        /**
+         * 从DataModel中取出数据
+         * @public
+         * @param {String} where
+         * @param {Function|Number[]|Number} condition 查找条件方法或者包含index的数组或者index
+         * @see baidu.data.DataModel.select
+         * @return {Object}
+         */
+        select: function(where, condition){
+            var where = where || '*',
+                condition = (typeof condition != 'undefined' ? condition : '*'); 
+            
+            return this._dataModel.select(where, condition);
+        },
+
+        /**
+         * 更新数据
+         * @public
+         * @param {Object} data
+         * @param {Function|Number[]|Number} condition 查找条件方法或者包含index的数组或者index
+         * @see baidu.data.DataModel.select
+         * @return {Number} 受到影响的数据行数
+         */
+        update: function(data, condition){
+            var me = this,
+                data = data || {},
+                condition = (typeof condition != 'undefined' ? condition : '*'),
+                row = me._dataModel.update(data, condition);
+
+            me.dispatchEvent('onupdate',{
+                row: row,
+                data: (row ? me._dataModel.getLastChange() : {})
+                
+            });
+
+            return row;
+        },
+
+        
+        /**
+         * 删除DataModel中的数据
+         * @public
+         * @param {Function|Number[]|Number} condition 查找条件方法或者包含index的数组或者index
+         * @See baidu.data.dataModel.remove
+         * @return {Number} 被删除的数据
+         */
+        remove: function(condition){
+            var me = this,
+                condition = (typeof condition != 'undefined' ? condition : '*'),
+                row = me._dataModel.remove(condition);
+
+            me.dispatchEvent('ondelete', {
+                row: row,
+                data: (row ? me._dataModel.getLastChange() : {})
+            });
+
+            return row;
+        },
+
+        /**
+         * 撤销上一次所做的修改
+         * @public
+         * @return {Number} 受影响的行数
+         */
+        cancel: function(){
+            var me = this,
+                result = me._dataModel.cancel();
+
+            me.dispatchEvent('oncancel',{
+                cancelAction: result.cancelAction,
+                row: result.row,
+                lastChange: result.lastChange
+            });
+
+            return result.row;
+        }
+    }); 
+})();
+/**
+ * Tangram
+ * Copyright 2010 Baidu Inc. All rights reserved.
+ */
+
+
+
+
+
+/**
+ * DataModel管理类
+ * @class
+ * @public
+ * 事件派发
+ */
+baidu.data.ModelManager = baidu.data.ModelManager || (function(){
+ 
+    var _DMDefine = {},
+        _DMInstanceByType = {},
+        _DMInstanceByIndex = {},
+        _index = 0,
+        _default = {
+            'string': '',
+            'number': 0,
+            'boolean': true
+        };
+    	_validator = null;
+
+    /**
+     * 返回该类型的default值
+     * @private
+     * @param {String} type
+     * @return {Object}
+     */
+    function _getDefualtValue(type){
+        return (_default[type] || '');
+    };
+
+    /**
+     * DataModel管理类
+     */
+    var modelManager = function(options){};
+    
+    modelManager.prototype = 
+    
+        /**
+         *  @lends baidu.data.ModelManager.prototype
+         */
+
+    {
+    	
+    	
+    	/**
+    	 * 设置validator
+    	 * @param {baidu.data.Validator} validator
+    	 * */	
+    	setValidator: function(validator){
+    		_validator = validator;
+    	},	
+    	
+        /**
+         * 对DataModel数据结构进行定义
+         * @public
+         * @param {String} type DataModel类型的唯一标识符
+         * @param {Object} options 设置项
+         * @config {Array} options.fields 数据字段设置，{name[String],type[String],defaultValue{Object}}
+         * @config {Array} options.validations 验证方式,{type{String},field{String},config}
+         */
+        defineDM: function(type, options){
+            var options = options || [],
+                fields = options.fields = options.fields || [],
+                validations = options.validations = options.validations || [],
+                result = {},
+                fieldName = '',
+                fieldType = '',
+                defaultValue = null;
+           
+            baidu.each(fields, function(field){
+                fieldName = field['name'];
+                fieldType = field['type'] || 'string';
+                defaultValue = typeof field.defaultValue != 'undefined' ? field.defaultValue : _getDefualtValue(fieldType);
+                
+                result[fieldName] = {
+                    'define': {
+                        'type': fieldType,
+                        'defaultValue': defaultValue
+                    },
+                    'validation': []
+                };
+            });
+
+            baidu.each(validations, function(validation){
+                fieldName = validation['field'];
+                delete(validation['field']);
+                result[fieldName]['validation'] = validation.val || [];
+            });
+
+            _DMDefine[type] = result;
+        },
+
+        /**
+         * 创建DataModel实例
+         * @public
+         * @param {String} type DataModel类型唯一标识
+         * @param {Object} options 创建DataModel使用的参数
+         * @see baidu.data.DataModel
+         * @return {Array} [index,DataModel]
+         */
+        createDM: function(type, options){
+            options = baidu.extend({
+                fields: _DMDefine[type] || {},
+                validator: _validator
+            }, options);
+
+            var DM = new baidu.data.DataModel(options);
+            
+            _DMInstanceByType[type] || (_DMInstanceByType[type] = {});
+            _DMInstanceByType[type][_index] = DM;
+            _DMInstanceByIndex[_index] = DM;
+
+            return [_index++, DM];
+        },
+
+        /**
+         * 通过标识获取DataModel
+         * @public
+         * @param {Number} index DataModel的index
+         * @return {baidu.data.DataModel}
+         */
+        getDMByIndex: function(index){
+           return _DMInstanceByIndex[index] || null; 
+        },
+
+        /**
+         * 通过DataModel类型唯一标识符获取DataModel实例
+         * @public
+         * @param {String} type 类型唯一标识
+         * @return {Object}
+         */
+        getDMByType: function(type){
+            return _DMInstanceByType[type] || [];
+        }
+    };
+
+    return new modelManager();
+})();
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
@@ -11678,6 +13513,518 @@ baidu.data.storage = (function(){
             me._storage.del.apply(me._storage, arguments);
         }
     };
+})();
+/*
+ * Tangram
+ * Copyright 2011 Baidu Inc. All rights reserved.
+ */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/**
+ * 数据验证组件
+ * @name baidu.data.Validator
+ * @class
+ * @grammar new baidu.data.Validator(validations)
+ * @param {Object} validations 每个验证规则的具体配置
+ *  {
+ *     val1: [
+ *               {rule: "length", conf: {len:20}},
+ *               {rule:"email" }
+ *           ],
+ *     val2: [
+ *               {rule: "remote", conf: {url:'#', onsuccess: function(){}, onfailure: function(){}}}
+ *           ]
+ *  }
+ */
+baidu.data.Validator = baidu.lang.createClass(function(validations){
+
+    var me = this;
+    me._validations = validations || {};
+    
+    //用来保存用户自定义的验证函数
+    me._rules = {}; 
+
+}).extend(
+
+    /**
+     * @lends baidu.data.Validator
+     */
+
+{
+    /**
+     * 对多个数据进行验证
+     * @public
+     * @param {Array} values 需要验证的数据项，例如：
+     *  [
+     *      [28, "isAge"], 
+     *      ["chengyang", "isNick"], 
+     *      ["chengyang", "isName"]
+     *  ]
+     * @return {Object} 验证反馈（包括该组数据的验证结果和验证失败的具体情况），例如：
+     *  {
+     *     result: resultType;
+     *     detail: [{
+     *          index: 0;
+     *          type: "numberRange"
+     *      }, {
+     *          index: 2;
+     *          type: "length"
+     *      }]
+     *  }
+     */
+    validate: function(values){
+        var me = this, value, validation, 
+            feedback = {
+                'result': [],
+                'detail': []
+            },
+            itemResult,
+            resultType = baidu.data.Validator.validatorResultTypes;
+        
+        if(values.length <= 0){
+            return;
+        }
+       
+       //逐个验证
+        baidu.array.each(values, function(item, index){
+            value = item[0];
+            validation = item[1];
+            itemResult = me._validations[validation] ? me._singleValidate(value, me._validations[validation]) : {'result': false};
+            if(itemResult['result'] != true){
+                feedback['detail'].push({
+                    'index': index,
+                    'rule': itemResult.rule || validation
+                });
+            }
+            feedback['result'].push(itemResult['result']);
+        });
+        
+        feedback['result'] = me._wrapResult(feedback['result']);
+        
+        return feedback;
+    },
+    
+    /**
+     * 将数组形式的验证结果包装成validatorResultTypes中的枚举类型
+     * @private
+     * @param {Object} result 验证结果
+     */
+    _wrapResult: function(result){
+        var me = this,
+            resultTypes = baidu.data.Validator.validatorResultTypes;
+        if(baidu.array.contains(result, false)){
+            result = resultTypes['FAILURE'];
+        }else if(!baidu.array.contains(result, false) && baidu.array.contains(result, 'loading')){
+            result = resultTypes['SUCCESSWITHOUTREMOTE'];
+        }else{
+            result = resultTypes['SUCCESS'];
+        }
+        return result;
+    },
+    
+    /**
+     * 对单个数据项进行验证（内部使用）
+     * @private
+     * @param {String | Number} value 待验证项的值
+     * @param {Array} validation 验证规则名称
+     * @return {Boolean} 验证结果
+     */
+    _singleValidate: function(value, validation){
+        var me = this, ruleType, rule, itemResult = {'result': true}, remoteConf;//TODO 如果一个值同时使用多个remote方式验证，会出错
+        
+        baidu.each(validation, function(val){
+            ruleType = val.rule;
+            if(ruleType == 'remote'){
+                remoteConf = val.conf;
+            }else{
+                rule = me._getRule(ruleType);
+                if(!rule(value, val.conf)){
+                    itemResult['result'] = false;
+                    itemResult['rule'] = ruleType;
+                }
+            }
+        });
+        
+        //如果除remote以外的验证都返回true，则调用remote验证；如果有一项为false，则无须进行remote验证
+        if(!itemResult['result']){
+            return itemResult;
+        }
+        
+        if(remoteConf){
+            me._remote(value, remoteConf);
+            itemResult['result'] = 'loading';
+            itemResult['rule'] = 'remote';
+        }
+        return itemResult;
+    },
+
+    /**
+     * 对单个数据项进行验证
+     * @public
+     * @param {String | Number} value 待验证项的值
+     * @param {String} rule 验证规则
+     * @param {Object} conf 配置项
+     * @return {Object} 验证结果
+     */
+    test: function(value, rule, conf){
+        var me = this, validation,tmpVal = [];
+        
+        if(me._validations[rule]){
+            validation = me._validations[rule];
+        }else if(me._getRule(rule)){
+            validation = [{
+                'rule': rule, 
+                'conf': conf
+            }];
+        }else if(baidu.lang.isArray(rule)){
+        	
+        	baidu.each(rule, function(name){
+        		if(me._validations[name.rule]){
+        			tmpVal = tmpVal.concat(me._validations[name.rule]);
+        		}else{
+        			tmpVal.push(name);
+        		}
+        		
+        	});
+        	return me._singleValidate(value, tmpVal);
+        }else{
+            return false;
+        }
+        
+        return me._singleValidate(value, validation);
+    },
+    
+    /**
+     * 添加一条规则
+     * @public
+     * @param {String} name 规则名称
+     * @param {Array} validation 验证规则
+     */
+    addValidation: function(name, validation){
+        var me = this;
+        me._validations[name] = validation || [];
+    },
+    
+    /**
+     * 调用远程接口对数据项进行验证
+     * @private
+     * @param {String | Number} value 待验证项的值
+     * @param {Object} option 参数
+     */
+    _remote: function(value, option){
+        var url = option.url,
+            key = option.key,//需要在配置项中指定待验证项对应的key
+            option = baidu.object.clone(option),
+            me = this;
+            
+        if(option.method.toUpperCase() == 'GET'){//如果是get方式，直接在URL后面加上参数
+            var junctor = url.indexOf('?') < 0 ? '?' : '&';
+            url = url + junctor + key + '=' + encodeURIComponent(value);
+        }else{
+            option.data = key + '=' + encodeURIComponent(value);
+        }
+        
+        if(option.callback){//如果只提供了callback方法，则将其作为onsuccess和onfailure的回调方法
+            option['onsuccess'] = option['onfailure'] = function(xhr, responseText){
+                option.callback(value, xhr, responseText);//callback方法中需要返回验证的结果（true或者false）
+            };
+        }else{
+            if(option.onsuccess){
+                var successCache = option.onsuccess;
+                option['onsuccess'] = function(xhr, responseText){
+                    successCache(value, xhr, responseText);//onsuccess方法中需要返回验证的结果（true或者false）
+                };
+            }
+            if(option.onfailure){
+                var failureCache = option.onfailure;
+                option['onfailure'] = function(xhr){
+                    failureCache(value, xhr);//onfailure方法中需要返回验证的结果（true或者false）
+                };
+            }
+        }
+        baidu.ajax.request(url, option);
+    },
+    
+    /**
+     * 添加一条规则
+     * @public
+     * @param {String} name 规则名
+     * @param {Function} handler 执行规则的函数
+     */
+    addRule: function(name, handler){
+        var me = this;
+        
+        me._rules[name] = handler || baidu.fn.blank;
+        me.dispatchEvent('onAddRule', {
+            'name': name, 
+            'handler': handler
+        });
+    },
+    
+    /**
+     * 根据规则名取得对应的规则函数
+     * @private
+     * @param {String} name 规则名
+     * @return {Function} 验证函数
+     */
+    _getRule: function(name){
+        var me = this,
+            rules = baidu.data.Validator.validatorRules || {};
+        
+        //先从用户自定义的rules中查找，再从内置的rules中查找
+        return me._rules[name] || rules[name] || null;
+    }
+});
+
+/**
+ * 用于存储返回值的枚举类
+ */
+baidu.data.Validator.validatorResultTypes = {
+    'SUCCESS': 'success',   //表示所有值都验证通过
+    'FAILURE': 'failure',   //表示存在验证不通过的值
+    'SUCCESSWITHOUTREMOTE': 'successwithoutremote' //表示除了使用remote方式验证的值，其他的都验证通过
+};
+/*
+ * Tangram
+ * Copyright 2011 Baidu Inc. All rights reserved.
+ * Code from EXT
+ */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/**
+ * 默认提供以下常用验证 
+ */
+baidu.data.Validator.validatorRules = (function(){
+    var rules = {
+        
+        /**
+         * Returns true if the given value is empty.
+         * @param {String} value The value to validate
+         * @return {Boolean} True if the validation passed
+         */
+        require: function(value){
+            return baidu.string.trim(value) !== '';
+        },
+        
+        /**
+         * Returns true if the given value`s length is equal to the given length.
+         * @param {String} value The value to validate
+         * @param {Object} conf Config object 
+         * @return {Boolean} True if the validation passed
+         */
+        length: function(value, conf){
+            return value.length == conf.len;
+        },
+        
+        /**
+         * Returns true if the given value is equal to the reference value.
+         * @param {String || Number} value The value to validate
+         * @param {Object} conf Config object 
+         * @return {Boolean} True if the validation passed
+         */
+        equalTo: function(value, conf){
+            return value === conf.refer;
+        },
+        
+        /**
+         * Returns true if the given value`s length is between the configured min and max length.
+         * @param {String || Number} value The value to validate
+         * @param {Object} conf Config object 
+         * @return {Boolean} True if the validation passed
+         */
+        lengthRange: function(value, conf){
+            var len = value.length,
+                min = conf.min,
+                max = conf.max;
+            if((min && len<min) || (max && len>max)){
+                return false;
+            }else{
+                return true;
+            }
+        },
+        
+        /**
+         * Returns true if the given value is between the configured min and max values.
+         * @param {String || Number} value The value to validate
+         * @param {Object} conf Config object 
+         * @return {Boolean} True if the validation passed
+         */
+        numberRange: function(value, conf){
+            var min = conf.min,
+                max = conf.max;
+            if((min && value<min) || (max && value>max)){
+                return false;
+            }else{
+                return true;
+            }
+        },
+        
+        /**
+         * Returns true if the given value is in the correct email format.
+         * @param {String || Number} value The value to validate
+         * @return {Boolean} True if the validation passed
+         */
+        email: function(value){
+            return /^[\w!#\$%'\*\+\-\/=\?\^`{}\|~]+([.][\w!#\$%'\*\+\-\/=\?\^`{}\|~]+)*@[-a-z0-9]{1,20}[.][a-z0-9]{1,10}([.][a-z]{2})?$/i.test(value);
+        },
+        
+        /**
+         * Returns true if the given value is in the correct url format.
+         * @param {String || Number} value The value to validate
+         * @return {Boolean} True if the validation passed
+         */
+        url: function(value){
+            return /^(https?|ftp|rmtp|mms):\/\/(([A-Z0-9][A-Z0-9_-]*)(\.[A-Z0-9][A-Z0-9_-]*)+)(:(\d+))?\/?/i.test(value);
+        }
+    },
+    
+    //将baidu.lang中的is***部分添加到_rules中
+    ruleNames = ['array', 'boolean', 'date', 'function', 'number', 'object', 'string'];
+    baidu.each(ruleNames, function(item){
+        rules[item] = baidu.lang['is' + item.substr(0,1).toUpperCase() + item.substr(1)];
+    });
+
+    return rules;
+})();
+/*
+ * Tangram
+ * Copyright 2011 Baidu Inc. All rights reserved.
+ * Code from EXT
+ */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/**
+ * 默认提供以下常用验证 
+ */
+baidu.data.Validator.validatorRules = (function(){
+    var rules = {
+        
+        /**
+         * Returns true if the given value is empty.
+         * @param {String} value The value to validate
+         * @return {Boolean} True if the validation passed
+         */
+        require: function(value){
+            return baidu.string.trim(value) !== '';
+        },
+        
+        /**
+         * Returns true if the given value`s length is equal to the given length.
+         * @param {String} value The value to validate
+         * @param {Object} conf Config object 
+         * @return {Boolean} True if the validation passed
+         */
+        length: function(value, conf){
+            return value.length == conf.len;
+        },
+        
+        /**
+         * Returns true if the given value is equal to the reference value.
+         * @param {String || Number} value The value to validate
+         * @param {Object} conf Config object 
+         * @return {Boolean} True if the validation passed
+         */
+        equalTo: function(value, conf){
+            return value === conf.refer;
+        },
+        
+        /**
+         * Returns true if the given value`s length is between the configured min and max length.
+         * @param {String || Number} value The value to validate
+         * @param {Object} conf Config object 
+         * @return {Boolean} True if the validation passed
+         */
+        lengthRange: function(value, conf){
+            var len = value.length,
+                min = conf.min,
+                max = conf.max;
+            if((min && len<min) || (max && len>max)){
+                return false;
+            }else{
+                return true;
+            }
+        },
+        
+        /**
+         * Returns true if the given value is between the configured min and max values.
+         * @param {String || Number} value The value to validate
+         * @param {Object} conf Config object 
+         * @return {Boolean} True if the validation passed
+         */
+        numberRange: function(value, conf){
+            var min = conf.min,
+                max = conf.max;
+            if((min && value<min) || (max && value>max)){
+                return false;
+            }else{
+                return true;
+            }
+        },
+        
+        /**
+         * Returns true if the given value is in the correct email format.
+         * @param {String || Number} value The value to validate
+         * @return {Boolean} True if the validation passed
+         */
+        email: function(value){
+            return /^[\w!#\$%'\*\+\-\/=\?\^`{}\|~]+([.][\w!#\$%'\*\+\-\/=\?\^`{}\|~]+)*@[-a-z0-9]{1,20}[.][a-z0-9]{1,10}([.][a-z]{2})?$/i.test(value);
+        },
+        
+        /**
+         * Returns true if the given value is in the correct url format.
+         * @param {String || Number} value The value to validate
+         * @return {Boolean} True if the validation passed
+         */
+        url: function(value){
+            return /^(https?|ftp|rmtp|mms):\/\/(([A-Z0-9][A-Z0-9_-]*)(\.[A-Z0-9][A-Z0-9_-]*)+)(:(\d+))?\/?/i.test(value);
+        }
+    },
+    
+    //将baidu.lang中的is***部分添加到_rules中
+    ruleNames = ['array', 'boolean', 'date', 'function', 'number', 'object', 'string'];
+    baidu.each(ruleNames, function(item){
+        rules[item] = baidu.lang['is' + item.substr(0,1).toUpperCase() + item.substr(1)];
+    });
+
+    return rules;
 })();
 ﻿/*
  * Tangram
@@ -12490,6 +14837,25 @@ baidu.form.ValidRule = baidu.form.ValidRule || baidu.lang.createClass(function()
 
 
 
+
+
+
+
+
+
+
+
+
+/**
+ *
+ *
+ * 拆分方法，将baidu.data.form中方法拆分到baidu.validator.Validator中
+ * 当前文件保留，但使用上述类中验证方法进行验证
+ * 当前文件中方法只进行对form表单的事件绑定，message显示等操作
+ *
+ *
+ *
+ * */
 
 
 
@@ -14938,6 +17304,701 @@ baidu.i18n.string = baidu.i18n.string || /**@lends baidu.i18n.string.prototype*/
     }
 
 };
+/*
+ * Tangram
+ * Copyright 2009 Baidu Inc. All rights reserved.
+ */
+
+
+
+baidu.parser.type = {
+    'XML': 'Xml',
+    'JSON': 'Json',
+    'HTML': 'Html'
+};
+/*
+ * Tangram
+ * Copyright 2009 Baidu Inc. All rights reserved.
+ */
+
+
+
+
+
+
+
+
+
+
+baidu.parser.Parser = baidu.parser.Parser || (function(){
+
+    /**
+     * 提供数据处理的基类方法
+     * @class
+     * @public
+     * @param {Object} options
+     * @config {String} method ‘GET’，'POST' 默认为GET
+     * @config {Function} onload
+     */
+    return baidu.lang.createClass(function(options){
+   
+        var me = this,
+            options = options || {};
+
+        me._method = options.method || me._method;
+        me.onload = options.onload || baidu.fn.blank;
+
+    },{
+        className: 'baidu.parser.Parser'
+    }).extend({
+        /**
+         *  @lends baidu.parser.Parser.prototype
+         */
+
+        _dom: null,
+
+        _isLoad: false,
+
+        _method: 'GET',
+
+        /**
+         * 将通过xpath query的数据缓存起来
+         * @private
+        */
+        _queryData: {},
+
+        _type: '',
+   
+        /**
+         * 加载数据，支持xml，json，html
+         * @public
+         * @param {String} dataString
+        */
+        load: function(dataString){
+            var me = this;
+           
+            if(typeof dataString == 'undefined'){
+                return;
+            }
+
+            me._isLoad = false;
+            if(me._parser(dataString)){
+                me._queryData = {};
+                me._isLoad = true;
+                me.dispatchEvent('onload');
+            }
+        },
+   
+        /**
+         * 加载数据片段
+         * @public
+         * @param {String} fileSrc
+         * @param {String} method 'GET','POST'
+         * @param {String} data
+         */
+        loadUrl: function(fileSrc, method, data){
+            var me = this,
+                fileSrc = fileSrc || '',
+                method = method || me._method,
+                data = data || '',
+                onsuccess = function(xhr, responseText){
+                    if(me._parser(responseText)){
+                        me._isLoad = true;
+                        me._queryData = {};
+                        me.dispatchEvent('onload');
+                    }
+                };
+            
+            me._isLoad = false;
+            method == 'GET' ? baidu.ajax.get(fileSrc, onsuccess) : baidu.ajax.post(fileSrc, data, onsuccess);
+        },
+
+        /**
+         * 通过xpath获取所需要的数据，支持html,json,xml
+         * @public
+         * @param {String} path
+         * @param {Boolean} 是否使用之前的缓存
+         * @return {Object}
+        */
+        query: function(path, cache){
+            var me = this,
+                path = path || '/',
+                cache = !(cache === false),
+                result = [];
+    
+            if(!me._isLoad)
+                return result;
+
+            if(cache && me._queryData[path]) return me._queryData[path];
+
+            result = me._query(path);
+            me._queryData[path] = result;
+
+            return result;
+        },
+  
+        /**
+         * @private
+         * @param {String} path
+         * @return {Array}
+         */
+        _query: function(path){
+            return [];
+        },
+        
+        /**
+         * 转换数据
+         * @private
+         * @param {String|Object} str
+         * @return {Boolean}
+         */
+        _parser: function(){
+            return false;         
+        },
+
+        /**
+         * 获取数据跟节点
+         * @public
+         * @return {HTMLElement}
+        */
+        getRoot: function(){
+            return this._dom;        
+        }, 
+
+        /**
+         * 获取parser的类型
+         * @return {baidu.parser.type}
+         */
+        getType: function(){
+            return this._type;         
+        }
+    });
+})();
+/*
+   JPath 1.0.5 - json equivalent to xpath
+   Copyright (C) 2009-2011  Bryan English <bryan at bluelinecity dot com>
+
+	Permission is hereby granted, free of charge, to any person obtaining a copy
+	of this software and associated documentation files (the "Software"), to deal
+	in the Software without restriction, including without limitation the rights
+	to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+	copies of the Software, and to permit persons to whom the Software is
+	furnished to do so, subject to the following conditions:
+
+	The above copyright notice and this permission notice shall be included in
+	all copies or substantial portions of the Software.
+
+	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+	IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+	FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+	AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+	LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+	THE SOFTWARE.
+
+   Usage:      
+      var jpath = new JPath( myjsonobj );
+
+      var somevalue = jpath.$('book/title').json;  //results in title
+         //or
+      var somevalue = jpath.query('book/title');   //results in title
+
+   Supported XPath-like Syntax:
+      /tagname
+      //tagname
+      tagname
+      * wildcard
+      [] predicates
+      operators ( >=, ==, <= )
+      array selection
+      .. 	         
+      *
+      and, or
+      nodename[0]
+      nodename[last()]
+      nodename[position()]
+      nodename[last()-1]
+      nodename[somenode > 3]/node
+      nodename[count() > 3]/node
+
+   Tested With:
+      Firefox 2-3, IE 6-7
+   
+   Update Log:
+      1.0.1 - Bugfix for zero-based element selection
+      1.0.2 - Bugfix for IE not handling eval() and returning a function
+      1.0.3 - Bugfix added support for underscore and dash in query() function
+                  Bugfix improper use of Array.concat which was flattening arrays
+                  Added support for single equal sign in query() function
+                  Added support for count() xpath function
+                  Added support for and, or boolean expression in predicate blocks
+                  Added support for global selector $$ and //
+                  Added support for wildcard (*) selector support 
+	  1.0.4 - Changed to MIT license
+	  1.0.5 - Bugfix for greedy regexp
+*/
+
+function JPath( json, parent )
+{ 
+    this.json = json; 
+    this._parent = parent; 
+}
+
+JPath.prototype = {
+
+   /*
+      Property: json
+      Copy of current json segment to operate on
+   */
+   json: null,
+   
+   /*
+      Property: parent
+      Parent json object, null if root.
+   */
+   parent: null,
+
+   /*
+      Method: $
+      Performs a find query on the current jpath object.
+
+      Parameters:
+        str - mixed, find query to perform. Can consist of a nodename or nodename path or function object or integer.
+
+      Return:
+        jpath - Returns the resulting jpath object after performing find query.
+
+   */
+   '$': function ( str )
+   {
+      var result = null;
+      var working = this;
+      
+      if ( this.json && str !== null )
+      {
+         switch ( typeof(str) )
+         {
+            case 'function':
+               result = this.f(str).json;
+            break;
+
+            case 'number':
+               result = this.json[str] || null;
+            break;
+
+            case 'string':
+               var names = str.split('/');     
+
+               //foreach slash delimited node name//
+               for ( var i=0; i<names.length ; i++ )
+               {
+                  var name = new RegExp('^' + names[i].replace(/\*/g,'.*') + '$');                  
+                  var isArray = (working.json instanceof Array);
+                  var a = new Array();
+                  
+                  //foreach working node property//
+                  for ( var p in working.json )
+                  {
+                     if ( typeof( working.json[p] ) != 'function' )
+                     {
+                        if ( isArray && (arguments.callee.caller != this.$$) )
+                        {
+                           a = a.concat( this.findAllByRegExp( name, working.json[p] ) );
+                        }
+                        else if ( name.test(p) )
+                        {                        
+                           a.push( working.json[p] );
+                        }
+                     }                  
+                  }
+
+                  working = new JPath( ( a.length==0 ? null : ( ( a.length == 1) ? a[0] : a ) ), working );
+               }
+
+               return working;
+            break;
+         }   
+      }
+      
+      return new JPath( result, this );
+   },
+
+   /*
+      Method: $$
+      Performs a global, recursive find query on the current jpath object.
+
+      Parameters:
+        str - mixed, find query to perform. Can consist of a nodename or nodename path or function object or integer.
+
+      Return:
+        jpath - Returns the resulting jpath object after performing find query.
+
+   */   
+   '$$': function( str )
+   {   
+      var r = this.$(str,true).json;
+      var arr = new Array();
+      
+      if ( r instanceof Array ) 
+         arr = arr.concat(r); 
+      else if ( r !== null )
+         arr.push(r);
+         
+      for ( var p in this.json )
+      {
+         if ( typeof( this.json[p] ) == 'object' )
+         {
+            arr = arr.concat( new JPath( this.json[p], this ).$$(str).json );
+         }
+      }
+      
+      return new JPath( arr, this );
+   },
+   
+   /*
+      Method: findAllByRegExp
+      Looks through a list of an object properties using a regular expression
+
+      Parameters:
+         re - regular expression, to use to search with
+         obj - object, the object to search through
+
+      Returns:
+         array - resulting properties
+   */
+   findAllByRegExp: function( re, obj )
+   {
+      var a = new Array();
+   
+      for ( var p in obj )
+      {
+         if ( obj instanceof Array )
+         {
+            a = a.concat( this.findAllByRegExp( re, obj[p] ) );
+         }
+         else if ( typeof( obj[p] ) != 'function' && re.test(p) )
+         {
+            a.push( obj[p] );
+         }
+      }
+
+      return a;
+   },
+
+   /*
+      Method: query (beta)
+      Performs a find query on the current jpath object using a single string similar to xpath. This method
+      is currently expirimental.
+
+      Parameters:
+        str - string, full xpath-like query to perform on the current object.
+
+      Return:
+        mixed - Returns the resulting json value after performing find query.
+
+   */
+   query: function( str )
+   {
+      var re = {
+         " and ":" && ",
+         " or ":" || ",
+         "([\\#\\*\\@a-z\\_][\\*a-z0-9_\\-]*)(?=(?:\\s|$|\\[|\\]|\\/))" : "\$('$1').",
+         "\\[([0-9])+\\]" : "\$($1).",
+         "\\.\\." : "parent().",
+         "\/\/" : "$",
+         "(^|\\[|\\s)\\/" : "$1root().",
+         "\\/" : '',
+         "([^\\=\\>\\<\\!])\\=([^\\=])" : '$1==$2',
+         "\\[" : "$(function(j){ with(j){return(",
+         "\\]" : ");}}).",
+         "\\(\\.":'(',
+         "(\\.|\\])(?!\\$|\\p)":"$1json",
+         "count\\(([^\\)]+)\\)":"count('$1')"
+      };
+
+      //save quoted strings//
+      var quotes = /(\'|\")([^\1]*?)\1/;
+      var saves = new Array();
+      while ( quotes.test(str) )
+      {
+         saves.push( str.match(quotes)[2] ); 
+         str = str.replace(quotes,'%'+ (saves.length-1) +'%');
+      }
+
+      for ( var e in re )
+      {
+         str = str.replace( new RegExp(e,'ig'), re[e] );
+      }
+      //alert('this.' + str.replace(/\%(\d+)\%/g,'saves[$1]') + ";");
+      return eval('this.' + str.replace(/\%(\d+)\%/g,'saves[$1]') + ";");
+   },
+
+   /*
+      Method: f
+      Performs the equivilant to an xpath predicate eval on the current nodeset.
+
+      Parameters:
+        f - function, an iterator function that is executed for every json node and is expected to return a boolean
+        value which determines if that particular node is selected. Alternativly you can submit a string which will be
+        inserted into a prepared function.
+
+      Return:
+        jpath - Returns the resulting jpath object after performing find query.
+
+   */
+   f: function ( iterator )
+   {
+      var a = new Array();
+
+      if ( typeof(iterator) == 'string' )
+      {
+         eval('iterator = function(j){with(j){return('+ iterator +');}}');
+      }
+
+      for ( var p in this.json )
+      {
+         var j = new JPath(this.json[p], this);
+         j.index = p;
+         if ( iterator( j ) )
+         {
+            a.push( this.json[p] );
+         }
+      }
+
+      return new JPath( a, this );
+   },
+
+   /*
+      Method: parent
+      Returns the parent jpath object or itself if its the root node
+
+      Return:
+        jpath - Returns the parent jpath object or itself if its the root node
+
+   */
+   parent: function()
+   {
+      return ( (this._parent) ? this._parent : this );
+   },
+
+   /*
+      Method: position
+      Returns the index position of the current node. Only valid within a function or predicate
+
+      Return:
+        int - array index position of this json object.
+   */
+   position: function()
+   {
+      return this.index;
+   },
+
+   /*
+      Method: last
+      Returns true if this is the last node in the nodeset. Only valid within a function or predicate
+
+      Return:
+        booean - Returns true if this is the last node in the nodeset
+   */
+   last: function()
+   {
+      return (this.index == (this._parent.json.length-1));
+   },
+
+   /*
+      Method: count
+      Returns the count of child nodes in the current node
+
+      Parameters:
+         string - optional node name to count, defaults to all
+      
+      Return:
+        booean - Returns number of child nodes found
+   */
+   count: function(n)
+   {
+      var found = this.$( n || '*').json;         
+      return ( found ? ( found instanceof Array ? found.length : 1 ) : 0 );
+   },
+
+   /*
+      Method: root
+      Returns the root jpath object.
+
+      Return:
+        jpath - The top level, root jpath object.
+   */
+   root: function ()
+   {
+      return ( this._parent ? this._parent.root() : this );
+   }
+
+};
+/*
+ * Tangram
+ * Copyright 2009 Baidu Inc. All rights reserved.
+ */
+
+
+
+
+
+
+
+
+
+baidu.parser.Json = baidu.parser.Json || (function(){
+
+    /**
+     * JSON操作解析器
+     * @public
+     * @class
+     */
+    return function(options){
+        
+        var parser = new baidu.parser.Parser(options);
+        parser._type = baidu.parser.JSON;
+
+        baidu.extend(parser, {
+       
+            _jPath: null,
+
+           /**
+            * 转换数据
+            * @private
+            * @param {String|Object} JSON
+            * @return {Boolean}
+            */
+            _parser: function(JSON){
+                var me = this;
+
+                if(baidu.lang.isString(JSON)){
+
+                    try{
+                        JSON = baidu.json.parse(JSON);
+                    }catch(e){
+                        return false;
+                    }   
+                }
+
+                me._jPath = new JPath(JSON);
+                me._dom = me._jPath.root();
+                return true;
+            },
+
+            /**
+             * 使用JPath获取数据并返回
+             * @public
+             * @param {String} Path
+             * @return {Array}
+             */
+            _query: function(JPath){
+                var me = this;
+                return me._jPath ? me._jPath.query(JPath) : [];
+            }
+
+        });
+        return parser;
+    };
+})();
+/*
+ * Tangram
+ * Copyright 2009 Baidu Inc. All rights reserved.
+ */
+
+
+
+
+
+
+
+    var IMP = document.implementation && document.implementation.createDocument;
+
+    function _createXMLDOM(){
+       return new ActiveXObject('Microsoft.XMLDOM');
+    };
+
+    /**
+     * 加载xmlString
+     * @private
+     * @param {XMLHttpRequest|DOMParser} DOMParser
+     * @param {String} xmlString xml字符串数据
+     * @return {XMLRoot}
+     */
+    function _loadXMLString(DOMParser, xmlString){
+        if(AXO){
+            DOMParser.async = false;
+            DOMParser.loadXML(xmlString);
+            DOMParser.setProperty("SelectionNamespaces", "xmlns:xsl='http://www.w3.org/1999/XSL/Transform'");
+            DOMParser.setProperty("SelectionLanguage", "XPath");
+            return DOMParser.documentElement;
+        }else if(IMP){
+            return DOMParser.parseFromString(xmlString, 'text/xml');
+        }
+    };
+
+    /**
+     * xml操作解析器
+     * @public
+     * @class
+     */
+    return function(options){
+        
+        var parser = new baidu.parser.Parser(options);
+        parser._type = baidu.parser.XML;
+
+        baidu.extend(parser, {
+    
+            _DOMParser: null,
+         
+            /**
+             * 将字符串转换为XMLDOM
+             * @private
+             * @param {String} XMLString
+             * @return {Boolean}
+             */
+            _parser: function(XMLString){
+                var me = this;
+
+                if(!me._DOMParser){
+                    IMP && (me._DOMParser = new DOMParser());
+                    AXO && (me._DOMParser = _createXMLDOM());
+                }
+
+                me._dom = _loadXMLString(me._DOMParser, XMLString);
+                
+                return me._dom ? true : false; 
+            },
+
+            /**
+            * 使用xpath获取数据
+            * @public
+            * @param {String} XPath
+            * @return {Array}
+            */
+            _query: function(XPath){
+                var me = this,
+                    result = [],
+                    nod = null,
+                    tmpResult;
+
+                if(AXO){
+                    result = me.getRoot().selectNodes(XPath);
+                }else if(IMP){
+                    tmpResult = me.getRoot().evaluate(XPath, me.getRoot(), null, XPathResult.ORDERED_NODE_ITERATOR_TYPE, null);
+                    while((nod = tmpResult.iterateNext()) != null) {   
+                        result.push(nod);
+                    }
+                }
+    
+                return result;
+            }
+        });
+
+        return parser;
+    };
+
+})();
 
 /**
  * 各种页面的UI组件
