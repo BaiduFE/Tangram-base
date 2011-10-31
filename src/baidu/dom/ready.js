@@ -72,24 +72,25 @@
             }
             readyBound = true;
 
-            if (document.addEventListener) {
+            if (document.readyState === 'complete') {
+                ready.isReady = true;
+            } else {
+                if (document.addEventListener) {
+                    document.addEventListener('DOMContentLoaded', DOMContentLoaded, false);
+                    window.addEventListener('load', ready, false);
+                } else if (document.attachEvent) {
+                    document.attachEvent('onreadystatechange', DOMContentLoaded);
+                    window.attachEvent('onload', ready);
 
-                document.addEventListener('DOMContentLoaded', DOMContentLoaded, false);
-                window.addEventListener('load', ready, false);
+                    var toplevel = false;
 
-            } else if (document.attachEvent) {
+                    try {
+                        toplevel = window.frameElement == null;
+                    } catch (e) {}
 
-                document.attachEvent('onreadystatechange', DOMContentLoaded);
-                window.attachEvent('onload', ready);
-
-                var toplevel = false;
-
-                try {
-                    toplevel = window.frameElement == null;
-                } catch (e) {}
-
-                if (document.documentElement.doScroll && toplevel) {
-                    doScrollCheck();
+                    if (document.documentElement.doScroll && toplevel) {
+                        doScrollCheck();
+                    }
                 }
             }
         }

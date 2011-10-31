@@ -10,6 +10,7 @@
 
 ///import baidu.ajax;
 ///import baidu.ajax.request;
+///import baidu.url.escapeSymbol;
 
 /**
  * 将一个表单用ajax方式提交
@@ -68,7 +69,7 @@ baidu.ajax.form = function (form, options) {
         // 处理：可用并包含表单name的表单项
         if (!item.disabled && itemName) {
             itemType = item.type;
-            itemValue = item.value;
+            itemValue = baidu.url.escapeSymbol(item.value);
         
             switch (itemType) {
             // radio和checkbox被选中时，拼装queryString数据
