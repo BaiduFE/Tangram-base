@@ -20,7 +20,7 @@
  /**
  * @namespace T Tangram七巧板
  * @name T
- * @version 1.3.9
+ * @version 1.5.0
 */
 
 /**
