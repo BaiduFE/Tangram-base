@@ -40,14 +40,16 @@ test('ready after onload', function() {
 		var script = document.createElement('script');
 		script.src = '../../tools/br/import.php?f=baidu.dom.ready';
 		var fun = function(){
-			ok(true, "onload");
-			baidu.dom.ready(function() {
-				ok(true, "dom ready");
-				start();
-			});
+			if(ua.browser.ie && this.readyState == 'loaded'){
+				ok(true, "onload");
+				baidu.dom.ready(function() {
+						ok(true, "dom ready");
+						start();	
+				});
+			}
 		};
 		if(ua.browser.ie){
-			script.onreadystatechange = fun; //IE中不能用onload
+			script.onreadystatechange = fun; 
 		}
 		else{
 			script.onload = fun;	
