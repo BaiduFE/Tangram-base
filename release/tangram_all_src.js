@@ -11853,6 +11853,7 @@ baidu.data = baidu.data || {};
  * Field构造函数
  * @class
  * @public
+ * @grammar new baidu.data.Field(options)
  * @param {Object} options 参数
  * @config {Object} options.define 定义参数，包含{fieldType,defaultValue}
  * @config {Object} options.validation 条件限制，是否有长度，最大值，最小值等限制，类型见baidu.validator
@@ -11958,6 +11959,7 @@ baidu.data.Field = baidu.data.Field || (function(){
 /**
  * DataModel实体类
  * @class
+ * @grammar new baidu.data.DataModel(options);
  * @public
  * @param {Object} options 设置项
  * @config {Object} options.fields 通过ModalManager.defineDM定义的数据结构
@@ -12779,6 +12781,7 @@ baidu.data.dataSource.sio = function(url, options){
  * 数据仓库类
  * @class
  * @public
+ * @grammar new baidu.data.DataStore(options)
  * @param {String|baidu.data.DataModel} dataModel DataModel实例
  * @param {String|baidu.data.dataSource.DataSource} dataSource DataSource实例
  * @param {String|Function} action {'append','replace','merge',Function} 当完成load时，向DataModel中填写数据时使用的策略,默认为append
@@ -13119,6 +13122,7 @@ baidu.data.DataStore = (function(){
  * DataModel管理类
  * @class
  * @public
+ * @grammar new baidu.data.ModelManager([options])
  * 事件派发
  */
 baidu.data.ModelManager = baidu.data.ModelManager || (function(){
@@ -13798,120 +13802,6 @@ baidu.data.Validator.validatorResultTypes = {
     'FAILURE': 'failure',   //表示存在验证不通过的值
     'SUCCESSWITHOUTREMOTE': 'successwithoutremote' //表示除了使用remote方式验证的值，其他的都验证通过
 };
-/*
- * Tangram
- * Copyright 2011 Baidu Inc. All rights reserved.
- * Code from EXT
- */
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/**
- * 默认提供以下常用验证 
- */
-baidu.data.Validator.validatorRules = (function(){
-    var rules = {
-        
-        /**
-         * Returns true if the given value is empty.
-         * @param {String} value The value to validate
-         * @return {Boolean} True if the validation passed
-         */
-        require: function(value){
-            return baidu.string.trim(value) !== '';
-        },
-        
-        /**
-         * Returns true if the given value`s length is equal to the given length.
-         * @param {String} value The value to validate
-         * @param {Object} conf Config object 
-         * @return {Boolean} True if the validation passed
-         */
-        length: function(value, conf){
-            return value.length == conf.len;
-        },
-        
-        /**
-         * Returns true if the given value is equal to the reference value.
-         * @param {String || Number} value The value to validate
-         * @param {Object} conf Config object 
-         * @return {Boolean} True if the validation passed
-         */
-        equalTo: function(value, conf){
-            return value === conf.refer;
-        },
-        
-        /**
-         * Returns true if the given value`s length is between the configured min and max length.
-         * @param {String || Number} value The value to validate
-         * @param {Object} conf Config object 
-         * @return {Boolean} True if the validation passed
-         */
-        lengthRange: function(value, conf){
-            var len = value.length,
-                min = conf.min,
-                max = conf.max;
-            if((min && len<min) || (max && len>max)){
-                return false;
-            }else{
-                return true;
-            }
-        },
-        
-        /**
-         * Returns true if the given value is between the configured min and max values.
-         * @param {String || Number} value The value to validate
-         * @param {Object} conf Config object 
-         * @return {Boolean} True if the validation passed
-         */
-        numberRange: function(value, conf){
-            var min = conf.min,
-                max = conf.max;
-            if((min && value<min) || (max && value>max)){
-                return false;
-            }else{
-                return true;
-            }
-        },
-        
-        /**
-         * Returns true if the given value is in the correct email format.
-         * @param {String || Number} value The value to validate
-         * @return {Boolean} True if the validation passed
-         */
-        email: function(value){
-            return /^[\w!#\$%'\*\+\-\/=\?\^`{}\|~]+([.][\w!#\$%'\*\+\-\/=\?\^`{}\|~]+)*@[-a-z0-9]{1,20}[.][a-z0-9]{1,10}([.][a-z]{2})?$/i.test(value);
-        },
-        
-        /**
-         * Returns true if the given value is in the correct url format.
-         * @param {String || Number} value The value to validate
-         * @return {Boolean} True if the validation passed
-         */
-        url: function(value){
-            return /^(https?|ftp|rmtp|mms):\/\/(([A-Z0-9][A-Z0-9_-]*)(\.[A-Z0-9][A-Z0-9_-]*)+)(:(\d+))?\/?/i.test(value);
-        }
-    },
-    
-    //将baidu.lang中的is***部分添加到_rules中
-    ruleNames = ['array', 'boolean', 'date', 'function', 'number', 'object', 'string'];
-    baidu.each(ruleNames, function(item){
-        rules[item] = baidu.lang['is' + item.substr(0,1).toUpperCase() + item.substr(1)];
-    });
-
-    return rules;
-})();
 /*
  * Tangram
  * Copyright 2011 Baidu Inc. All rights reserved.
@@ -17311,18 +17201,6 @@ baidu.i18n.string = baidu.i18n.string || /**@lends baidu.i18n.string.prototype*/
 
 
 
-baidu.parser.type = {
-    'XML': 'Xml',
-    'JSON': 'Json',
-    'HTML': 'Html'
-};
-/*
- * Tangram
- * Copyright 2009 Baidu Inc. All rights reserved.
- */
-
-
-
 
 
 
@@ -17911,7 +17789,9 @@ baidu.parser.Json = baidu.parser.Json || (function(){
 
 
 
+baidu.parser.Xml = baidu.parser.Xml || (function(){
 
+    var AXO = window.ActiveXObject;
     var IMP = document.implementation && document.implementation.createDocument;
 
     function _createXMLDOM(){
