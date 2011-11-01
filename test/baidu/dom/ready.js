@@ -40,7 +40,7 @@ test('ready after onload', function() {
 		var script = document.createElement('script');
 		script.src = '../../tools/br/import.php?f=baidu.dom.ready';
 		var fun = function(){
-			if(ua.browser.ie && this.readyState == 'loaded'){
+			if(ua.browser.ie && this.readyState == 'loaded' || !ua.browser.ie){
 				ok(true, "onload");
 				baidu.dom.ready(function() {
 						ok(true, "dom ready");
