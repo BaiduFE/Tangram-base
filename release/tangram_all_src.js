@@ -11857,12 +11857,13 @@ baidu.data = baidu.data || {};
  * @param {Object} options 参数
  * @config {Object} options.define 定义参数，包含{fieldType,defaultValue}
  * @config {Object} options.validation 条件限制，是否有长度，最大值，最小值等限制，类型见baidu.validator
+ * @return {baidu.data.Field} Field 实例
  */
 baidu.data.Field = baidu.data.Field || (function(){
     
     /**
      * Field构造函数
-     * @public
+     * @private
      * @param {Object} options 参数
      * @config {Object} options.define 定义参数，包含{fieldType,defaultValue},
      * @config {String} options.name
@@ -11963,7 +11964,9 @@ baidu.data.Field = baidu.data.Field || (function(){
  * @public
  * @param {Object} options 设置项
  * @config {Object} options.fields 通过ModalManager.defineDM定义的数据结构
- * @config {Array} options.data 传入的数据，可选
+ * @config {Number} options.recodeLength cancel操作的记录数
+ * @config {baidu.data.Validator} validator
+ * @return {baidu.data.DataModel} DataModel 实例
  */
 baidu.data.DataModel = baidu.data.DataModel || (function(){
 
@@ -11997,7 +12000,7 @@ baidu.data.DataModel = baidu.data.DataModel || (function(){
 
     /**
      * DataModel实体类
-     * @public
+     * @private
      * @param {Object} options 设置项
      * @config {Object} options.fields 通过ModalManager.defineDM定义的数据结构
      * @config {Number} options.recodeLength cancel操作的记录数
@@ -12029,10 +12032,12 @@ baidu.data.DataModel = baidu.data.DataModel || (function(){
         _createField(options.fields || {}, me);
     };
         
+    
+    dataModel.prototype = 
     /**
      *  @lends baidu.data.DataModel.prototype
      */
-    dataModel.prototype = {
+    {
       
         /**
          * 数据存储索引
@@ -12421,7 +12426,10 @@ baidu.data.dataSource = baidu.dataSource = baidu.data.dataSource || {};
  */
 
 
-
+/**
+ * 提供json,xml,html的基本处理方法
+ * @namespace baidu.parser
+ */
 baidu.parser = baidu.parser || {};
 /*
  * Tangram
@@ -12787,7 +12795,8 @@ baidu.data.dataSource.sio = function(url, options){
  * @param {String|Function} action {'append','replace','merge',Function} 当完成load时，向DataModel中填写数据时使用的策略,默认为append
  * @param {Array[String]} mergeFields 当action 为merge时，合并数据时使用的依据变量
  * @param {Boolean} usingLocal 当merge时出现数据冲突，以local为主还是remote数据为主,默认为本地.action为Function时，该选项不无效
- */
+ * @return {baidu.data.DataStore} DataStore 实例
+ *  */
 baidu.data.DataStore = (function(){
    
     var actionType = {
@@ -12805,7 +12814,7 @@ baidu.data.DataStore = (function(){
     /**
      * 数据仓库类
      * @class
-     * @public
+     * @private
      * @param {baidu.data.DataModel} dataModel DataModel实例
      * @param {baidu.data.dataSource.DataSource} dataSource DataSource实例
      * @param {String|Function} action {'APPEND','REPLACE','MERGE',Function} 当完成load时，向DataModel中填写数据时使用的策略,默认为append
@@ -12841,7 +12850,7 @@ baidu.data.DataStore = (function(){
     }).extend({
         
         /**
-         *  @lends baidu.data.dataStore.DataStore.prototype
+         *  @lends baidu.data.DataStore.prototype
          */ 
 
         /**
@@ -13123,7 +13132,7 @@ baidu.data.DataStore = (function(){
  * @class
  * @public
  * @grammar new baidu.data.ModelManager([options])
- * 事件派发
+ * @return {baidu.data.ModelManager} ModelManager 实例
  */
 baidu.data.ModelManager = baidu.data.ModelManager || (function(){
  
@@ -13540,9 +13549,8 @@ baidu.data.storage = (function(){
 
 /**
  * 数据验证组件
- * @name baidu.data.Validator
  * @class
- * @grammar new baidu.data.Validator(validations)
+ * @grammar new baidu.data.Validator(options)
  * @param {Object} validations 每个验证规则的具体配置
  *  {
  *     val1: [
@@ -13553,11 +13561,12 @@ baidu.data.storage = (function(){
  *               {rule: "remote", conf: {url:'#', onsuccess: function(){}, onfailure: function(){}}}
  *           ]
  *  }
+ * @return {baidu.data.Validator} Validator实例
  */
-baidu.data.Validator = baidu.lang.createClass(function(validations){
+baidu.data.Validator = baidu.lang.createClass(function(options){
 
     var me = this;
-    me._validations = validations || {};
+    me._validations = options || {};
     
     //用来保存用户自定义的验证函数
     me._rules = {}; 
@@ -13565,7 +13574,7 @@ baidu.data.Validator = baidu.lang.createClass(function(validations){
 }).extend(
 
     /**
-     * @lends baidu.data.Validator
+     * @lends baidu.data.Validator.prototype
      */
 
 {
@@ -13588,7 +13597,7 @@ baidu.data.Validator = baidu.lang.createClass(function(validations){
      *          index: 2;
      *          type: "length"
      *      }]
-     *  }
+     *  }，验证结果resultType是一个枚举，他的值分别是success: 表示所有值都验证通过, failure: 表示存在验证不通过的值, successwithoutremote: 表示除了使用remote方式验证的值，其他的都验证通过
      */
     validate: function(values){
         var me = this, value, validation, 
@@ -13796,6 +13805,7 @@ baidu.data.Validator = baidu.lang.createClass(function(validations){
 
 /**
  * 用于存储返回值的枚举类
+ * @private
  */
 baidu.data.Validator.validatorResultTypes = {
     'SUCCESS': 'success',   //表示所有值都验证通过
@@ -13822,7 +13832,11 @@ baidu.data.Validator.validatorResultTypes = {
 
 
 /**
- * 默认提供以下常用验证 
+ * 默认提供以下常用验证：require, length, equalTo, lengthRange, numberRange, email, url
+ * @Object
+ * @name baidu.data.Validator.validatorRules
+ * @grammar baidu.data.Validator.validatorRules
+ * @return {baidu.data.Validator.validatorRules} validatorRules 实例
  */
 baidu.data.Validator.validatorRules = (function(){
     var rules = {
