@@ -70,6 +70,48 @@ module("baidu.lang.Event");
 			ok(true,"listner is removed");
 
 		});
+	
+	test("removeEventListener - 2 handlers, no key", function() {
+		function myClass() {
+			this.name = "myclass";
+		}
+
+		_inherits(myClass, baidu.lang.Class);// 通过继承baidu.lang.Class来获取它的dispatchEvent方法
+		   expect(3);
+			var obj = new myClass();
+			function listner(){ok(true, "listner is added");}
+			
+			var myEventWithoutOn = new (baidu.lang.Event)("onMyEvent", obj);
+			debugger;
+			obj.addEventListener("onMyEvent",listner);
+			obj.addEventListener("onMyEvent",listner);
+			obj.dispatchEvent(myEventWithoutOn);
+			obj.removeEventListener("onMyEvent",listner);
+			obj.removeEventListener("onMyEvent",listner);
+			obj.dispatchEvent(myEventWithoutOn);
+			ok(true,"listner is removed");
+		});
+	
+	test("removeEventListener - 2 handlers, key", function() {
+		function myClass() {
+			this.name = "myclass";
+		}
+
+		_inherits(myClass, baidu.lang.Class);// 通过继承baidu.lang.Class来获取它的dispatchEvent方法
+		   expect(3);
+			var obj = new myClass();
+			function listner(){ok(true, "listner is added");}
+			
+			var myEventWithoutOn = new (baidu.lang.Event)("onMyEvent", obj);
+			debugger;
+			obj.addEventListener("onMyEvent",listner,'pointMyEvent');
+			obj.addEventListener("onMyEvent",listner,'pointMyEvent1');
+			obj.dispatchEvent(myEventWithoutOn);
+			obj.removeEventListener("onMyEvent",'pointMyEvent');
+			obj.removeEventListener("onMyEvent",'pointMyEvent1');
+			obj.dispatchEvent(myEventWithoutOn);
+			ok(true,"listner is removed");
+		});
 
     test("removeEventListener - no handler", function () {  // 2011-2-26, 无handler参数时移除所有事件
 		function myClass() {
