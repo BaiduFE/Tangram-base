@@ -40,4 +40,10 @@ test('异常用例',function(){
 	equal(baidu.g(null),null,"get null para");
 })
 
+test('baidu.dom.g(baidu.dom.g("***"))',function(){
+	expect(3);
+	equal(baidu.g(null),null,"get null para");
+	equal(baidu.g("***"),null,"get not exist para");
+	equal(baidu.g(baidu.g("***")),null,"get null para");
+})
 
