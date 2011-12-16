@@ -126,3 +126,146 @@ test("drag e", function() {
 		}, 30);
 	}, 30);
 });
+
+test("mouseup on body", function() {
+	expect(3);
+	var div = document.body.appendChild(document.createElement("div"));
+	$(div).css("width", 40).css("height", 40).css("position", "absolute").css(
+			"left", 0).css("top", 0).css("backgroundColor", "red");
+	baidu.dom.resizable(div, {
+		onresizeend : function(){
+			ok(true, "stop");
+			equals(parseInt($(div).css("width")), 50, "se拖动后，宽度变化");
+			equals(parseInt($(div).css("height")), 50, "se拖动后，宽度变化");
+			$(div).remove();
+			start();	
+		}
+	});
+	stop();
+
+	ua.mousemove(document.body, {
+		clientX : 40,
+		clientY : 40
+	});
+
+	var ehandle = div.lastChild;
+	setTimeout(function() {
+		ua.mousedown(ehandle, {
+			clientX : 40,
+			clientY : 40
+		});
+		setTimeout(function() {
+			ua.mousemove(ehandle, {
+				clientX : 50,
+				clientY : 50
+			});
+			setTimeout(function() {				
+				ua.mouseup(document.body);
+			}, 30);
+		}, 30);
+	}, 30);
+});
+
+test("start again before stop", function() {
+	expect(4);
+	var div = document.body.appendChild(document.createElement("div"));
+	$(div).css("width", 40).css("height", 40).css("position", "absolute").css(
+			"left", 0).css("top", 0).css("backgroundColor", "red");
+	var count = 0;
+	baidu.dom.resizable(div, {
+		onresizestart : function(){
+			ok(true, "start");
+		},
+		onresizeend : function(){
+			ok(true, "stop");
+			count ++;
+			if(count == 2){
+				$(div).remove();
+				start();
+			}
+		}
+	});
+	stop();
+
+	ua.mousemove(document.body, {
+		clientX : 40,
+		clientY : 40
+	});
+
+	var ehandle = div.lastChild;
+	setTimeout(function() {
+		ua.mousedown(ehandle, {
+			clientX : 40,
+			clientY : 40
+		});
+		setTimeout(function() {
+			ua.mousemove(ehandle, {
+				clientX : 50,
+				clientY : 50
+			});
+			setTimeout(function() {				
+				ua.mousedown(ehandle, {
+					clientX : 50,
+					clientY : 50
+				});
+				setTimeout(function() {				
+					ua.mouseup(ehandle);
+				}, 30);
+			}, 30);
+		}, 30);
+	}, 30);
+});
+
+test("start again after stop", function() {
+	expect(4);
+	var div = document.body.appendChild(document.createElement("div"));
+	$(div).css("width", 40).css("height", 40).css("position", "absolute").css(
+			"left", 0).css("top", 0).css("backgroundColor", "red");
+	var count = 0;
+	baidu.dom.resizable(div, {
+		onresizestart : function(){
+			ok(true, "start");
+			
+		},
+		onresizeend : function(){
+			ok(true, "stop");	
+			count ++;
+			if(count == 2){
+				$(div).remove();
+				start();
+			}
+		}
+	});
+	stop();
+
+	ua.mousemove(document.body, {
+		clientX : 40,
+		clientY : 40
+	});
+
+	var ehandle = div.lastChild;
+	setTimeout(function() {
+		ua.mousedown(ehandle, {
+			clientX : 40,
+			clientY : 40
+		});
+		setTimeout(function() {
+			ua.mousemove(ehandle, {
+				clientX : 50,
+				clientY : 50
+			});
+			setTimeout(function() {				
+				ua.mouseup(ehandle);
+				setTimeout(function() {				
+					ua.mousedown(ehandle, {
+						clientX : 50,
+						clientY : 50
+					});
+					setTimeout(function() {				
+						ua.mouseup(ehandle);
+					}, 30);
+				}, 30);
+			}, 30);
+		}, 30);
+	}, 30);
+});
