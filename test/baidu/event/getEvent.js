@@ -26,17 +26,27 @@ test('key event', function(){
 	ua.keydown($('div#div_test')[0]);
 });
 
+test('html event', function(){
+	expect(1);
+	$(document.body).append('<div id="div_test"></div>');
+	$("#div_test").resize(function(){
+		function test(){
+			equals(baidu.event.getEvent(), null, "should be null");
+		}
+		test();
+	});
+	$("#div_test").resize()
+});
+
 test('other event', function(){
 	expect(4);
 	$(document.body).append('<div id="div_test"></div>');
 	(function (){
 		(function(){
 			//这儿应该什么都不是
-			var e = baidu.event.getEvent();
 			equals(baidu.event.getEvent(), null, "should be null");
 		})();
 		function test(){ 
-			var e = baidu.event.getEvent();	
 			equals(baidu.event.getEvent(), null, "should be null");
 		}; test();
 		equals(baidu.event.getEvent(), null, "should be null");
