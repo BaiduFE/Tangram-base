@@ -21,6 +21,7 @@
 
 ///import baidu.lang.isFunction;
 ///import baidu.dom.getPosition;
+///import baidu.dom.setStyle;
 
 /**
  * 拖动指定的DOM元素
@@ -138,6 +139,7 @@
      */
     function stop() {
         clearInterval(timer);
+        setMargin = false;
 
         // 解除鼠标粘滞
         if (op.capture && op.handler.releaseCapture) {
