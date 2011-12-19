@@ -156,6 +156,90 @@ test('range and update range', function() {
 	}, 50).add(QUnit.start, 50).next();
 
 });
+
+test('margin', function() {
+	var div = document.createElement("div");
+	div.id = 'test_margin_div';
+	document.body.appendChild(div);
+	TT.e("test_margin_div").setStyle('position', 'absolute').setStyle(
+		'height', 10).setStyle('width', 10).setStyle(
+		'background-color', 'red').setStyle('left', 0).setStyle('top',
+		0);
+	TT.e("test_margin_div").setStyle('margin', '20px');
+	ua.mousemove(document.body, {
+		clientX : 0,
+		clientY : 0
+	});
+	var d = baidu.dom.drag(div);
+	ua.mousemove(document.body, {
+		clientX : 50,
+		clientY : 50
+	});
+	setTimeout(function(){
+		d.stop();
+		equals(baidu.dom.getPosition(div).left, "70", "left right");
+		equals(baidu.dom.getPosition(div).top, "70", "top right");
+		document.body.removeChild(div);
+		start();
+	}, 20);
+	stop();
+});
+
+test('margin autoStop', function() {
+	var div = document.createElement("div");
+	div.id = 'test_margin_div';
+	document.body.appendChild(div);
+	TT.e("test_margin_div").setStyle('position', 'absolute').setStyle(
+		'height', 10).setStyle('width', 10).setStyle(
+		'background-color', 'red').setStyle('left', 0).setStyle('top',
+		0);
+	TT.e("test_margin_div").setStyle('margin', '20px');
+	ua.mousemove(document.body, {
+		clientX : 0,
+		clientY : 0
+	});
+	var d = baidu.dom.drag(div);
+	ua.mousemove(document.body, {
+		clientX : 50,
+		clientY : 50
+	});
+	setTimeout(function(){
+		ua.mouseup(document.body);
+		equals(baidu.dom.getPosition(div).left, "70", "left right");
+		equals(baidu.dom.getPosition(div).top, "70", "top right");
+		document.body.removeChild(div);
+		start();
+	}, 20);
+	stop();
+});
+
+test('no margin', function() {
+	var div = document.createElement("div");
+	div.id = 'test_margin_div';
+	document.body.appendChild(div);
+	TT.e("test_margin_div").setStyle('position', 'absolute').setStyle(
+		'height', 10).setStyle('width', 10).setStyle(
+		'background-color', 'red').setStyle('left', 0).setStyle('top',
+		0);
+	TT.e("test_margin_div").setStyle('margin', '0');
+	ua.mousemove(document.body, {
+		clientX : 0,
+		clientY : 0
+	});
+	var d = baidu.dom.drag(div);
+	ua.mousemove(document.body, {
+		clientX : 50,
+		clientY : 50
+	});
+	setTimeout(function(){
+		equals(baidu.dom.getPosition(div).left, "50", "left right");
+		equals(baidu.dom.getPosition(div).top, "50", "top right");
+		d.stop();
+		document.body.removeChild(div);
+		start();
+	}, 20);
+	stop();
+});
 // test('drag with update', function() {
 // stop();
 // expect(2);
