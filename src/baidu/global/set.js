@@ -14,7 +14,7 @@
  *
  * @param   {string}    key         信息对应的 key 值
  * @param   {object}    value       被存储的信息
- * @param   {boolean}   protected_  保护原值不被覆盖
+ * @param   {boolean}   protected_  保护原值不被覆盖，默认值 false 可覆盖
  * @return  {object}                信息
  */
 (function(){

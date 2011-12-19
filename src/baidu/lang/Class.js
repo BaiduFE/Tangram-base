@@ -48,6 +48,7 @@ baidu.lang.Class.prototype.dispose = function(){
 
 /**
  * 重载了默认的toString方法，使得返回信息更加准确一些。
+ * 20111219 meizz 为支持老版本的className属性，以后统一改成 __type
  * @return {string} 对象的String表示形式
  */
 baidu.lang.Class.prototype.toString = function(){

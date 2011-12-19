@@ -42,6 +42,9 @@ baidu.lang.Class.prototype.removeEventListener = function (type, handler) {
     if (typeof handler == "undefined") {
         delete t[type];
     } else if (t[type]) {
+        // [TODO delete 2013] 支持按 key 删除注册的函数
+        typeof handler=="string" && (handler=t[type][handler]) && delete t[type][handler];
+
         for (i = t[type].length - 1; i >= 0; i--) {
             if (t[type][i] === handler) {
                 t[type].splice(i, 1);
@@ -49,3 +52,5 @@ baidu.lang.Class.prototype.removeEventListener = function (type, handler) {
         }
     }
 };
+
+// 2011.12.19 meizz 为兼容老版本的按 key 删除，添加了一行代码

@@ -78,7 +78,7 @@ baidu.lang.Class.prototype.dispatchEvent = function (event, options) {
  * @remark  事件类型区分大小写。如果自定义事件名称不是以小写"on"开头，该方法会给它加上"on"再进行判断，即"click"和"onclick"会被认为是同一种事件。 
  */
 baidu.lang.Class.prototype.on =
-baidu.lang.Class.prototype.addEventListener = function (type, handler) {
+baidu.lang.Class.prototype.addEventListener = function (type, handler, key) {
     if (typeof handler != "function") {
         return;
     }
@@ -98,38 +98,13 @@ baidu.lang.Class.prototype.addEventListener = function (type, handler) {
 
     t[type].push(handler);
 
+    // [TODO delete 2013] 2011.12.19 兼容老版本，2013删除此行
+    key && typeof key == "string" && (t[type][key] = handler);
+
     return handler;
 };
 
-baidu.lang.Class.prototype.un =
-baidu.lang.Class.prototype.removeEventListener = function (type, handler) {
-    var i,
-        t = this.__listeners;
-    if (!t) return;
-
-    // remove all event listener
-    if (typeof type == "undefined") {
-        for (i in t) {
-            delete t[i];
-        }
-        return;
-    }
-
-    type.indexOf("on") && (type = "on" + type);
-
-    // 移除某类事件监听
-    if (typeof handler == "undefined") {
-        delete t[type];
-    } else if (t[type]) {
-        for (i = t[type].length - 1; i >= 0; i--) {
-            if (t[type][i] === handler) {
-                t[type].splice(i, 1);
-            }
-        }
-    }
-};
-
-
+//  2011.12.19  meizz   很悲剧，第三个参数 key 还需要支持一段时间，以兼容老版本脚本
 //  2011.11.24  meizz   事件添加监听方法 addEventListener 移除第三个参数 key，添加返回值 handler
 //  2011.11.23  meizz   事件handler的存储对象由json改成array，以保证注册函数的执行顺序
 //  2011.11.22  meizz   将 removeEventListener 方法分拆到 baidu.lang.Class.$removeEventListener 中，以节约主程序代码
