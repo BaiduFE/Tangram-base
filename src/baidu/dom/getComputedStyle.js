@@ -5,7 +5,6 @@
 
 ///import baidu.dom._g;
 ///import baidu.dom.getDocument;
-///import baidu.browser.ie;
 
 /**
  * 获取目标元素的computed style值。如果元素的样式值不能被浏览器计算，则会返回空字符串（IE）
@@ -34,3 +33,5 @@ baidu.dom.getComputedStyle = function(element, key){
     }
     return ''; 
 };
+
+// 20111204 meizz   去掉一个无用的import baidu.browser.ie

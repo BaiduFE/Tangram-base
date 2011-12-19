@@ -28,7 +28,7 @@
  * @author: allstar, erik, meizz, berg
  */
 var T,
-    baidu = T = baidu || {version: "1.5.0"}; 
+    baidu = T = baidu || {version: "2.0"}; 
 
 //提出guid，防止在与老版本Tangram混用时
 //在下一行错误的修改window[undefined]
@@ -36,4 +36,4 @@ baidu.guid = "$BAIDU$";
 
 //Tangram可能被放在闭包中
 //一些页面级别唯一的属性，需要挂载在window[baidu.guid]上
-window[baidu.guid] = window[baidu.guid] || {};
+baidu.$$ = window[baidu.guid] = window[baidu.guid] || {};

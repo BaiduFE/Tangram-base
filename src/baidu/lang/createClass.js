@@ -4,12 +4,13 @@
  * 
  * @author: meizz
  * @namespace: baidu.lang.createClass
- * @version: 2010-05-13
+ * @version: 2.0
+ * @modify: 2011.11.24 meizz
  */
 
 ///import baidu.lang;
 ///import baidu.lang.Class;
-///import baidu.lang.Event;
+///import baidu.global.get;
 
 /**
  * 创建一个类，包括创造类的构造器、继承基类Class
@@ -19,7 +20,7 @@
  * @param {Function} constructor 类的构造器函数
  * @param {Object} [options] 
                 
- * @config {string} [className] 类名
+ * @config {string} [type] 类名
  * @config {Function} [superClass] 父类，默认为baidu.lang.Class
  * @version 1.2
  * @remark
@@ -37,14 +38,26 @@ baidu.lang.createClass = /**@function*/function(constructor, options) {
 
     // 创建新类的真构造器函数
     var fn = function(){
+        var me = this;
+
+        // 20101030 某类在添加该属性控制时，guid将不在全局instances里控制
+        options.decontrolled && (me.__decontrolled = true);
+
         // 继承父类的构造器
-        if(superClass != baidu.lang.Class){
-            superClass.apply(this, arguments);
-        }else{
-            superClass.call(this);
+        superClass.apply(me, arguments);
+
+        // 全局配置
+        for (i in fn.options) me[i] = fn.options[i];
+
+        constructor.apply(me, arguments);
+
+        var register = baidu.global.get(this.__type + baidu.version);
+        if (register) {
+            for (var i = 0; i < register.length; i++) {
+                register[i].apply(me, arguments);
+            };
         }
-        constructor.apply(this, arguments);
-    };
+      };
 
     fn.options = options.options || {};
 
@@ -58,7 +71,9 @@ baidu.lang.createClass = /**@function*/function(constructor, options) {
     // 继承传参进来的构造器的 prototype 不会丢
     for (var i in cp) fp[i] = cp[i];
 
-    typeof options.className == "string" && (fp._className = options.className);
+    // 20111122 原className参数改名为type
+    var type = options.className || options.type;
+    typeof type == "string" && (fp.__type = type);
 
     // 修正这种继承方式带来的 constructor 混乱的问题
     fp.constructor = cp.constructor;
