@@ -1,5 +1,5 @@
 module("baidu.lang.Event");
-module("baidu.lang.Class.$removeEventListener");
+module("baidu.lang.Class.removeEventListener");
 (function() {
 	/* 引入_inherits */
 	var _inherits = function(subClass, superClass, className) {

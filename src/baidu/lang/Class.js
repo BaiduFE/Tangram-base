@@ -52,7 +52,7 @@ baidu.lang.Class.prototype.dispose = function(){
  * @return {string} 对象的String表示形式
  */
 baidu.lang.Class.prototype.toString = function(){
-    return "[object " + (this.__type || this.className || "Object") + "]";
+    return "[object " + (this.__type || this._className || "Object") + "]";
 };
 
 /**

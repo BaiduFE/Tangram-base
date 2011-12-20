@@ -107,4 +107,4 @@ baidu.lang.Class.prototype.addEventListener = function (type, handler, key) {
 //  2011.12.19  meizz   很悲剧，第三个参数 key 还需要支持一段时间，以兼容老版本脚本
 //  2011.11.24  meizz   事件添加监听方法 addEventListener 移除第三个参数 key，添加返回值 handler
 //  2011.11.23  meizz   事件handler的存储对象由json改成array，以保证注册函数的执行顺序
-//  2011.11.22  meizz   将 removeEventListener 方法分拆到 baidu.lang.Class.$removeEventListener 中，以节约主程序代码
+//  2011.11.22  meizz   将 removeEventListener 方法分拆到 baidu.lang.Class.removeEventListener 中，以节约主程序代码
