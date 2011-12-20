@@ -20,7 +20,7 @@
  * @meta standard
  * @see baidu.dom.q
  *
- * @return {HTMLElement} 获取的元素，查找不到时返回null,如果参数不合法，直接返回参数.
+ * @return {HTMLElement|null} 获取的元素，查找不到时返回null,如果参数不合法，直接返回参数.
  */
 baidu.dom.g = function(id) {
     if (!id) return null; //修改IE下baidu.dom.g(baidu.dom.g('dose_not_exist_id'))报错的bug，by Meizz, dengping
