@@ -1,7 +1,7 @@
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
- * 
+ *
  * path: baidu/dom/g.js
  * author: allstar, erik
  * version: 1.1.0
@@ -15,17 +15,18 @@
  * @name baidu.dom.g
  * @function
  * @grammar baidu.dom.g(id)
- * @param {string|HTMLElement} id 元素的id或DOM元素
+ * @param {string|HTMLElement} id 元素的id或DOM元素.
  * @shortcut g,T.G
  * @meta standard
  * @see baidu.dom.q
- *             
- * @returns {HTMLElement|null} 获取的元素，查找不到时返回null,如果参数不合法，直接返回参数
+ *
+ * @return {?HTMLElement} 获取的元素，查找不到时返回null,如果参数不合法，直接返回参数.
  */
-baidu.dom.g = function (id) {
+baidu.dom.g = function(id) {
+    if (!id) return null; //修改IE下baidu.dom.g(baidu.dom.g('dose_not_exist_id'))报错的bug，by Meizz, dengping
     if ('string' == typeof id || id instanceof String) {
         return document.getElementById(id);
-    } else if (id && id.nodeName && (id.nodeType == 1 || id.nodeType == 9)) {
+    } else if (id.nodeName && (id.nodeType == 1 || id.nodeType == 9)) {
         return id;
     }
     return null;
