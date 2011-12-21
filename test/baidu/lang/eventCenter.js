@@ -1,6 +1,11 @@
 module("baidu.lang.eventCenter");
 
 (function() {
+	var s = document.createElement("script");
+	document.head.appendChild(s);
+	s.type = "text/javascript";
+	s.src = "../../../src/baidu/lang/Class/$removeEventListener";
+	
 	// 1
 	test("add dispatch remove", function() {
 		function listner1() {
