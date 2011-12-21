@@ -82,7 +82,6 @@ module("baidu.lang.Event");
 			function listner(){ok(true, "listner is added");}
 			
 			var myEventWithoutOn = new (baidu.lang.Event)("onMyEvent", obj);
-			debugger;
 			obj.addEventListener("onMyEvent",listner);
 			obj.addEventListener("onMyEvent",listner);
 			obj.dispatchEvent(myEventWithoutOn);

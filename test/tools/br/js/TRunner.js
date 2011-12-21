@@ -61,7 +61,8 @@
 		t.case_starttime = new Date().getTime();
 
 		t.RunningFrame.src = dom.href
-				+ (location.search.indexOf('cov=true') > 0 ? "&cov=true" : "");
+				+ (location.search.indexOf('cov=true') > 0 ? "&cov=true" : "")
+				+ (location.search.indexOf('release=true') > 0 ? "&release=true" : "");
 		if (batchrun) {
 			t.timeoutHandle = setTimeout(t.done, t.TIMEOUT);
 		}
