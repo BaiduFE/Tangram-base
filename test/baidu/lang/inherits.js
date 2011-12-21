@@ -94,7 +94,7 @@ test("extend", function(){
 		name: 'newName'
 	});
 	
-	equals(carA.name, "newName", 'carA.name = "newName"');
+	equals(carA.name, "Prime", 'carA.name = "Prime"');
 	equals(carA.newP, "newP", 'carA.newP = "newP"');
 	equals(carA.brand, "GE", 'carA.brand = "GE"');
 	equals(carA.wheels, 4, 'carA.wheels = 4');

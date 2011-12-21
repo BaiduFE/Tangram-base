@@ -1,6 +1,11 @@
 module("baidu.lang.Event");
-module("baidu.lang.Class.removeEventListener");
+
 (function() {
+	var s = document.createElement("script");
+	document.head.appendChild(s);
+	s.type = "text/javascript";
+	s.src = "../../../src/baidu/lang/Class/$removeEventListener";
+	
 	/* 引入_inherits */
 	var _inherits = function(subClass, superClass, className) {
 		var key, proto, selfProps = subClass.prototype, clazz = new Function();
@@ -36,9 +41,9 @@ module("baidu.lang.Class.removeEventListener");
 			obj.dispatchEvent(myEventWithOn);
 		
 		});
-	
-	
+
 	test("addEventListener", function() {
+		expect(2);
 		function myClass() {
 			this.name = "myclass";
 		}
@@ -49,11 +54,59 @@ module("baidu.lang.Class.removeEventListener");
 			
 			var myEventWithoutOn = new (baidu.lang.Event)("onMyEvent", obj);
 			obj.addEventListener("onMyEvent",listner,'onMyEvent');
+			var yourEventWithoutOn = new (baidu.lang.Event)("YourEvent", obj);
+			obj.addEventListener("YourEvent",listner,'YourEvent');
+			
 			obj.dispatchEvent("onMyEvent");
+			obj.dispatchEvent("YourEvent");
+		});
+	
+	test("addEventListener, more listeners", function() {
+		expect(2);
+		function myClass() {
+			this.name = "myclass";
+		}
 
+		_inherits(myClass, baidu.lang.Class);// 通过继承baidu.lang.Class来获取它的dispatchEvent方法
+			var obj = new myClass();
+			var step = 0;
+			function listner1(){
+				step ++;
+				equals(step, 1,  "listner1 is added");
+			}
+			function listner2(){
+				step ++;
+				equals(step, 2,  "listner2 is added");
+			}
+			
+			var myEventWithoutOn = new (baidu.lang.Event)("onMyEvent", obj);
+			obj.addEventListener("onMyEvent",listner1);
+			obj.addEventListener("onMyEvent",listner1);
+			obj.addEventListener("onMyEvent",listner2);
+			
+			obj.dispatchEvent(myEventWithoutOn);
 		});
 	
 	test("removeEventListener", function() {
+		
+		function myClass() {
+			this.name = "myclass";
+		}
+
+		_inherits(myClass, baidu.lang.Class);// 通过继承baidu.lang.Class来获取它的dispatchEvent方法
+		   expect(2);
+			var obj = new myClass();
+			function listner(){ok(true, "listner is added");}
+			
+			var myEventWithoutOn = new (baidu.lang.Event)("onMyEvent", obj);
+			obj.addEventListener("onMyEvent",listner,'pointMyEvent');
+			obj.dispatchEvent(myEventWithoutOn);
+			obj.removeEventListener("onMyEvent",'pointMyEvent');
+			obj.dispatchEvent(myEventWithoutOn);
+			ok(true,"listner is removed");
+	});
+
+	test("removeEventListener - no key", function() {
 		function myClass() {
 			this.name = "myclass";
 		}
@@ -69,11 +122,11 @@ module("baidu.lang.Class.removeEventListener");
 			obj.addEventListener("onMyEvent", listner);
 			obj.dispatchEvent(myEventWithoutOn);
 			obj.removeEventListener("onMyEvent", listner);
-			// obj.dispatchEvent(myEventWithoutOn);
+			obj.dispatchEvent(myEventWithoutOn);
 			ok(true, "listner is removed");
 
 		});
-
+	
     test("removeEventListener - no handler", function () {  // 2011-2-26, 无handler参数时移除所有事件
 		function myClass() {
 			this.name = "myclass";
