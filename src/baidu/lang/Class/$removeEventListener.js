@@ -2,7 +2,7 @@
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
  * 
- * path: baidu/lang/Class/$removeEventListener.js
+ * path: baidu/lang/Class/removeEventListener.js
  * author: meizz
  * version: 2.0
  * date: 2011/11/23

@@ -36,4 +36,4 @@ baidu.guid = "$BAIDU$";
 
 //Tangram可能被放在闭包中
 //一些页面级别唯一的属性，需要挂载在window[baidu.guid]上
-baidu.$$ = window[baidu.guid] = window[baidu.guid] || {};
+baidu.$$ = window[baidu.guid] = window[baidu.guid] || {global:{}};

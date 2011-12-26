@@ -8,11 +8,10 @@
  * date: 2011/11/29
  */
 
-///import baidu.global.get;
-///import baidu.global.set;
+///import baidu.lang;
 
 /**
- * 根据参数(guid)的指定，返回对应的实例对象引用
+ * 向某个类注册插件
  * @name baidu.lang.register
  * @function
  * @grammar baidu.lang.register(Class, pluginFn)
@@ -23,16 +22,13 @@
  *             
  */
 baidu.lang.register = function (Class, constructorHook, methods) {
-    var key = Class.prototype.__type + baidu.version;
-    var go = baidu.global.get(key);
-    if (baidu.toString.call(go) != "Array") {
-        go = baidu.global.set(key, []);
-    }
-    go[go.length] = constructorHook;
+    var reg = Class["\x06r"] || (Class["\x06r"] = []);
+    reg[reg.length] = constructorHook;
 
     for (var method in methods) {
     	Class.prototype[method] = methods[method];
     }
 };
 
+// 20111221 meizz   修改插件函数的存放地，重新放回类构造器静态属性上
 // 20111129	meizz	添加第三个参数，可以直接挂载方法到目标类原型链上

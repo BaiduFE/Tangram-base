@@ -10,7 +10,6 @@
 
 ///import baidu.lang;
 ///import baidu.lang.Class;
-///import baidu.global.get;
 
 /**
  * 创建一个类，包括创造类的构造器、继承基类Class
@@ -51,14 +50,12 @@ baidu.lang.createClass = /**@function*/function(constructor, options) {
 
         constructor.apply(me, arguments);
 
-        var register = baidu.global.get(this.__type + baidu.version);
-        if (register) {
-            for (var i = 0; i < register.length; i++) {
-                register[i].apply(me, arguments);
-            };
+        for (var i=0, reg=fn["\x06r"]; reg && i<reg.length; i++) {
+            reg[i].apply(me, arguments);
         }
-      };
+    };
 
+    // [TODO delete 2013] 放置全局配置，这个全局配置可以直接写到类里面
     fn.options = options.options || {};
 
     var C = function(){},
@@ -88,3 +85,5 @@ baidu.lang.createClass = /**@function*/function(constructor, options) {
 
     return fn;
 };
+
+// 20111221 meizz   修改插件函数的存放地，重新放回类构造器静态属性上
