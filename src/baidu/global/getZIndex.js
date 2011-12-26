@@ -18,7 +18,7 @@
  * @param   {Number}    step 	z-index 增长的步长
  * @return  {Number}            z-index
  */
-baidu.global.getZIndex = (key, step) {
+baidu.global.getZIndex = function(key, step){
     key && (key = baidu.global.get("zIndex")[key] += step || 1);
     return key;
 };
