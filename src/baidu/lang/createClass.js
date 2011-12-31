@@ -10,6 +10,7 @@
 
 ///import baidu.lang;
 ///import baidu.lang.Class;
+///import baidu.lang.Event;
 
 /**
  * 创建一个类，包括创造类的构造器、继承基类Class
