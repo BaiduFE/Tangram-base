@@ -1,11 +1,4 @@
 module("baidu.lang.eventCenter");
-	(function(){
-		var s = document.createElement("script");
-		document.getElementsByTagName('head')[0].appendChild(s);
-		s.type = "text/javascript";
-		s.src = "../../../src/baidu/lang/Class/$removeEventListener";
-	})();
-
 	// 1
 	test("add dispatch remove", function() {
 
