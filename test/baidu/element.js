@@ -185,7 +185,7 @@ test(
 									if (p && typeof p == 'function')
 										count++;
 									else {
-										if ('ready drag ddManager create resizable fixable getComputedStyle'
+										if ('ready drag ddManager create resizable fixable getComputedStyle getCurrentStyle opacity setPixel'
 												.indexOf(f) >= 0)
 											continue;
 										ok(false, '[' + f
