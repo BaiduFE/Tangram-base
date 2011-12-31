@@ -4,7 +4,7 @@
  * 
  * path: baidu/lang/Event.js
  * author: meizz, erik, berg
- * version: 2.0
+ * version: 1.6.0
  * date: 2009/11/24
  * modify: 2011/11/24 meizz
  */

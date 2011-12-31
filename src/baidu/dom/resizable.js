@@ -59,6 +59,7 @@ baidu.dom.resizable = /**@function*/function(element,options) {
         handlePosition,
         timer,
         isCancel = false,
+        isResizabled = false,
         defaultOptions = {
             direction: ['e', 's', 'se'],
             minWidth: 16,
@@ -139,7 +140,7 @@ baidu.dom.resizable = /**@function*/function(element,options) {
             target.appendChild(ele);
             resizeHandle[key] = ele;
 
-            baidu.on(ele, 'mousedown', start);
+            baidu.on(ele, 'mousedown',start);
         });
 
         isCancel = false;
@@ -179,10 +180,12 @@ baidu.dom.resizable = /**@function*/function(element,options) {
      * @return void
      */
     function start(e){
+		isResizabled && stop();
         var ele = baidu.event.getTarget(e),
             key = ele.key;
         currentEle = ele;
-
+		isResizabled = true;
+		
         if (ele.setCapture) {
             ele.setCapture();
         } else if (window.captureEvents) {
@@ -195,7 +198,7 @@ baidu.dom.resizable = /**@function*/function(element,options) {
          */
         orgCursor = baidu.getStyle(document.body, 'cursor');
         baidu.setStyle(document.body, 'cursor', key + '-resize');
-        baidu.on(ele, 'mouseup',stop);
+        baidu.on(document.body, 'mouseup',stop);
         baidu.on(document.body, 'selectstart', unselect);
         mozUserSelect = document.body.style.MozUserSelect;
         document.body.style.MozUserSelect = 'none';
@@ -220,7 +223,7 @@ baidu.dom.resizable = /**@function*/function(element,options) {
      * @return void
      */
     function stop() {
-        if (currentEle.releaseCapture) {
+        if (currentEle && currentEle.releaseCapture) {
             currentEle.releaseCapture();
         } else if (window.releaseEvents) {
             window.releaseEvents(Event.MOUSEMOVE | Event.MOUSEUP);
@@ -230,7 +233,7 @@ baidu.dom.resizable = /**@function*/function(element,options) {
          * 删除事件监听
          * 还原css属性设置
          */
-        baidu.un(currentEle, 'mouseup',stop);
+        baidu.un(document.body, 'mouseup',stop);
         baidu.un(document, 'selectstart', unselect);
         document.body.style.MozUserSelect = mozUserSelect;
         baidu.un(document.body, 'selectstart', unselect);
@@ -238,7 +241,7 @@ baidu.dom.resizable = /**@function*/function(element,options) {
         clearInterval(timer);
         baidu.setStyle(document.body, 'cursor',orgCursor);
         currentEle = null;
-
+		isResizabled = false;
         baidu.lang.isFunction(op.onresizeend) && op.onresizeend();
     }
 

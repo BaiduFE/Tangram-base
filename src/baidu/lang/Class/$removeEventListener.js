@@ -4,7 +4,7 @@
  * 
  * path: baidu/lang/Class/removeEventListener.js
  * author: meizz
- * version: 2.0
+ * version: 1.6.0
  * date: 2011/11/23
  * modify: 2011/11/23
  */

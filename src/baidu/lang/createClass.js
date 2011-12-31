@@ -4,7 +4,7 @@
  * 
  * @author: meizz
  * @namespace: baidu.lang.createClass
- * @version: 2.0
+ * @version: 1.6.0
  * @modify: 2011.11.24 meizz
  */
 

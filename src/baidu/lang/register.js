@@ -4,7 +4,7 @@
  * 
  * path: baidu/lang/register.js
  * author: meizz, dron
- * version: 2.0
+ * version: 1.6.0
  * date: 2011/11/29
  */
 
@@ -17,7 +17,7 @@
  * @grammar baidu.lang.register(Class, pluginFn)
  * @param   {Class}     Class   		接受注册的载体 类
  * @param   {Function}  constructorHook 运行在载体类构造器里钩子函数
- * @param	{JSON}		methods			挂载到载体类原型链上的方法集
+ * @param	{JSON}		methods			挂载到载体类原型链上的方法集，可选
  * @meta standard
  *             
  */

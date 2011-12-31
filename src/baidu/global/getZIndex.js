@@ -19,7 +19,9 @@
  * @return  {Number}            z-index
  */
 baidu.global.getZIndex = function(key, step){
-    key && (key = baidu.global.get("zIndex")[key] += step || 1);
+	if(key)
+		key = baidu.global.get("zIndex")[key] = baidu.global.get("zIndex")[key] + (step || 1);
     return key;
 };
+
 baidu.global.set("zIndex", {popup : 50000, dialog : 1000}, true);
