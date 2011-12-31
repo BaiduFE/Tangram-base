@@ -1,4 +1,4 @@
-module("baidu.lang.Class.addEventListeners");
+module("baidu.lang.Class.$addEventListeners");
 (function() {
 	var _inherits = function(subClass, superClass, className) {
 		var key, proto, selfProps = subClass.prototype, clazz = new Function();

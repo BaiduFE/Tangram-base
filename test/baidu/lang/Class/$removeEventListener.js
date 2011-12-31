@@ -1,4 +1,4 @@
-module("baidu.lang.removeEventListener");
+module("baidu.lang.Class.$removeEventListener");
 
 (function() {
 	
@@ -40,7 +40,7 @@ test("removeEventListener", function() {
 			obj.dispatchEvent(myEventWithoutOn);
 			ok(true,"listner is removed");
 			start();
-	}, "baidu.lang.Event", "baidu.lang.Class.removeEventListener");
+	}, "baidu.lang.Event", "baidu.lang.Class.$removeEventListener");
 });
 
 test("removeEventListener - no key", function() {

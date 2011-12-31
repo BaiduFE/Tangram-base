@@ -7,12 +7,7 @@ module('baidu.dom.droppable');
  * <li>cancel方法
  */
 
-(function() {
-	var s = document.createElement("script");
-	document.head.appendChild(s);
-	s.type = "text/javascript";
-	s.src = "../../../src/baidu/lang/Class/$removeEventListener";
-	
+(function() {	
 	var draghandle, drophandle, dragele, dropele, _ondropover, _ondrop, _ondropout;
 	/**
 	 * 初始化环境，包括droppable和创建元素等

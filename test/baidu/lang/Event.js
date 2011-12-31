@@ -1,10 +1,6 @@
 module("baidu.lang.Event");
 
 (function() {
-	var s = document.createElement("script");
-	document.head.appendChild(s);
-	s.type = "text/javascript";
-	s.src = "../../../src/baidu/lang/Class/$removeEventListener";
 	
 	/* 引入_inherits */
 	var _inherits = function(subClass, superClass, className) {
@@ -86,69 +82,6 @@ module("baidu.lang.Event");
 			
 			obj.dispatchEvent(myEventWithoutOn);
 		});
-	
-	test("removeEventListener", function() {
-		
-		function myClass() {
-			this.name = "myclass";
-		}
-
-		_inherits(myClass, baidu.lang.Class);// 通过继承baidu.lang.Class来获取它的dispatchEvent方法
-		   expect(2);
-			var obj = new myClass();
-			function listner(){ok(true, "listner is added");}
-			
-			var myEventWithoutOn = new (baidu.lang.Event)("onMyEvent", obj);
-			obj.addEventListener("onMyEvent",listner,'pointMyEvent');
-			obj.dispatchEvent(myEventWithoutOn);
-			obj.removeEventListener("onMyEvent",'pointMyEvent');
-			obj.dispatchEvent(myEventWithoutOn);
-			ok(true,"listner is removed");
-	});
-
-	test("removeEventListener - no key", function() {
-		function myClass() {
-			this.name = "myclass";
-		}
-
-		_inherits(myClass, baidu.lang.Class);// 通过继承baidu.lang.Class来获取它的dispatchEvent方法
-		   expect(2);
-			var obj = new myClass();
-			function listner(){
-				ok(true, "listner is added");
-			}
-			
-			var myEventWithoutOn = new (baidu.lang.Event)("onMyEvent", obj);
-			obj.addEventListener("onMyEvent", listner);
-			obj.dispatchEvent(myEventWithoutOn);
-			obj.removeEventListener("onMyEvent", listner);
-			obj.dispatchEvent(myEventWithoutOn);
-			ok(true, "listner is removed");
-
-		});
-	
-    test("removeEventListener - no handler", function () {  // 2011-2-26, 无handler参数时移除所有事件
-		function myClass() {
-			this.name = "myclass";
-		}
-
-		_inherits(myClass, baidu.lang.Class);// 通过继承baidu.lang.Class来获取它的dispatchEvent方法
-		   expect(5);
-			var obj = new myClass();
-			function listner1(){ok(true, "listner1 is added");}
-			function listner2(){ok(true, "listner2 is added");}
-
-			var myEventWithoutOn = new baidu.lang.Event("onMyEvent", obj);
-			obj.addEventListener("onMyEvent", listner1);
-			obj.addEventListener("onMyEvent", listner2);
-			obj.dispatchEvent(myEventWithoutOn);
-			obj.removeEventListener("onMyEvent", function(){});
-			obj.dispatchEvent(myEventWithoutOn);
-			obj.removeEventListener("onMyEvent");
-			obj.dispatchEvent(myEventWithoutOn);
-			ok(true, "listner is removed");
-           
-    });
 
 })();
 
