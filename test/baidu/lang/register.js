@@ -14,8 +14,8 @@ test("constructorHook", function(){
 			ok(true, "The getInfo() is apply");
 			return this.givenName;
 		}
-		baidu.lang.register(myClass, getInfo);
 		var NewClass = baidu.lang.createClass(myClass);
+		baidu.lang.register(NewClass, getInfo);
 		var sObject = new NewClass({
 			givenName: 'Jim',
 			getInfo: getInfo
@@ -34,12 +34,12 @@ test("methods", function(){
 		var getInfo = function(){
 			return this.givenName;
 		}
-		baidu.lang.register(myClass, getInfo, {
+		var NewClass = baidu.lang.createClass(myClass);
+		baidu.lang.register(NewClass, getInfo, {
 			testmethod : function(){
 				return this.givenName;
 			}
 		});
-		var NewClass = baidu.lang.createClass(myClass);
 		var sObject = new NewClass({
 			givenName: 'Jim',
 			getInfo: getInfo
