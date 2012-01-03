@@ -15,8 +15,7 @@ var jslist = "baidu.dom.draggable,baidu.dom.resizable,"
 		+ "baidu.dom.setStyle,baidu.dom.remove,baidu.dom.query,baidu.dom.setAttr,"
 		+ "baidu.dom.prev,baidu.dom.getAttr,baidu.dom.hasClass,baidu.dom.intersect,"
 		+ "baidu.dom.getText,baidu.dom.contains,baidu.dom.hasAttr,baidu.event.on,"
-		+ "baidu.dom.children," + "baidu.dom.q," 
-		+ "baidu.dom.getCurrentStyle,baidu.dom.opacity,baidu.dom.setPixel,"
+		+ "baidu.dom.children," + "baidu.dom.q,"
 		+ "baidu.event.un,baidu.event.stop";
 
 test('封装基础 - 输入字符串', function() {
@@ -185,7 +184,7 @@ test(
 									if (p && typeof p == 'function')
 										count++;
 									else {
-										if ('ready drag ddManager create resizable fixable getComputedStyle getCurrentStyle opacity setPixel'
+										if ('ready drag ddManager create resizable fixable getComputedStyle'
 												.indexOf(f) >= 0)
 											continue;
 										ok(false, '[' + f

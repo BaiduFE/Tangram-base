@@ -1,8 +1,8 @@
 module("baidu.lang.eventCenter");
+
+(function() {
 	// 1
 	test("add dispatch remove", function() {
-
-		
 		function listner1() {
 			ok(true, "listner1 is added");
 		}
@@ -94,3 +94,4 @@ module("baidu.lang.eventCenter");
 		baidu.lang.eventCenter.dispatchEvent(myEventWithoutOn);
 
 	});
+})();

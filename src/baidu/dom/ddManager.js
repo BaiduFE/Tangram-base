@@ -10,7 +10,6 @@
 
 ///import baidu.lang.createSingle;
 ///import baidu.lang.Event;
-///import baidu.lang.Class.$removeEventListener;
 /**
  * 拖曳管理器
  * @function

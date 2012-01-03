@@ -18,5 +18,3 @@
  */
 
 window[baidu.guid]._instances = window[baidu.guid]._instances || {};
-
-//	[TODO]	meizz	在2012年版本中将删除此模块

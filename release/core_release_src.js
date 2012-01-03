@@ -20,7 +20,7 @@
  /**
  * @namespace T Tangram七巧板
  * @name T
- * @version 1.5.0
+ * @version 1.5.1
 */
 
 /**
@@ -28,7 +28,7 @@
  * @author: allstar, erik, meizz, berg
  */
 var T,
-    baidu = T = baidu || {version: "1.5.0"}; 
+    baidu = T = baidu || {version: "1.5.1"}; 
 
 //提出guid，防止在与老版本Tangram混用时
 //在下一行错误的修改window[undefined]
@@ -1106,7 +1106,7 @@ baidu._g = baidu.dom._g;
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
- * 
+ *
  * path: baidu/dom/g.js
  * author: allstar, erik
  * version: 1.1.0
@@ -1120,17 +1120,18 @@ baidu._g = baidu.dom._g;
  * @name baidu.dom.g
  * @function
  * @grammar baidu.dom.g(id)
- * @param {string|HTMLElement} id 元素的id或DOM元素
+ * @param {string|HTMLElement} id 元素的id或DOM元素.
  * @shortcut g,T.G
  * @meta standard
  * @see baidu.dom.q
- *             
- * @returns {HTMLElement|null} 获取的元素，查找不到时返回null,如果参数不合法，直接返回参数
+ *
+ * @return {HTMLElement|null} 获取的元素，查找不到时返回null,如果参数不合法，直接返回参数.
  */
-baidu.dom.g = function (id) {
+baidu.dom.g = function(id) {
+    if (!id) return null; //修改IE下baidu.dom.g(baidu.dom.g('dose_not_exist_id'))报错的bug，by Meizz, dengping
     if ('string' == typeof id || id instanceof String) {
         return document.getElementById(id);
-    } else if (id && id.nodeName && (id.nodeType == 1 || id.nodeType == 9)) {
+    } else if (id.nodeName && (id.nodeType == 1 || id.nodeType == 9)) {
         return id;
     }
     return null;
@@ -3370,12 +3371,43 @@ baidu.lang.Class.prototype.toString = function(){
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
  * 
+ * path: baidu/lang/isObject.js
+ * author: erik
+ * version: 1.1.0
+ * date: 2009/12/30
+ */
+
+
+
+/**
+ * 判断目标参数是否为Object对象
+ * @name baidu.lang.isObject
+ * @function
+ * @grammar baidu.lang.isObject(source)
+ * @param {Any} source 目标参数
+ * @shortcut isObject
+ * @meta standard
+ * @see baidu.lang.isString,baidu.lang.isNumber,baidu.lang.isArray,baidu.lang.isElement,baidu.lang.isBoolean,baidu.lang.isDate
+ *             
+ * @returns {boolean} 类型判断结果
+ */
+baidu.lang.isObject = function (source) {
+    return 'function' == typeof source || !!(source && 'object' == typeof source);
+};
+
+// 声明快捷方法
+baidu.isObject = baidu.lang.isObject;
+/*
+ * Tangram
+ * Copyright 2009 Baidu Inc. All rights reserved.
+ * 
  * path: baidu/lang/Event.js
- * author: meizz, erik, berg
+ * author: meizz, erik, berg, linlingyu
  * version: 1.1.1
  * date: 2009/11/24
  * modify: 2010/04/19 berg
  */
+
 
 
 
@@ -3413,23 +3445,21 @@ baidu.lang.Class.prototype.addEventListener = function (type, handler, key) {
     if (!baidu.lang.isFunction(handler)) {
         return;
     }
-
     !this.__listeners && (this.__listeners = {});
-
     var t = this.__listeners, id;
     if (typeof key == "string" && key) {
         if (/[^\w\-]/.test(key)) {
             throw("nonstandard key:" + key);
         } else {
-            handler.hashCode = key; 
             id = key;
         }
     }
     type.indexOf("on") != 0 && (type = "on" + type);
-
     typeof t[type] != "object" && (t[type] = {});
     id = id || baidu.lang.guid();
-    handler.hashCode = id;
+    !handler.hashCode && (handler.hashCode = {});
+    !handler.hashCode[type] && (handler.hashCode[type] = {});
+    handler.hashCode[type][id] = 1;
     t[type][id] = handler;
 };
  
@@ -3441,33 +3471,35 @@ baidu.lang.Class.prototype.addEventListener = function (type, handler, key) {
  * @remark 	如果第二个参数handler没有被绑定到对应的自定义事件中，什么也不做。
  */
 baidu.lang.Class.prototype.removeEventListener = function (type, handler) {
-    if (typeof handler != "undefined") {
-        if ( (baidu.lang.isFunction(handler) && ! (handler = handler.hashCode))
-            || (! baidu.lang.isString(handler))
-        ){
+    type.indexOf('on') != 0 && (type = 'on' + type);
+    !this.__listeners && (this.__listeners = {});
+    var t = this.__listeners, key, hashMap;
+    if(handler){
+        if(baidu.lang.isString(handler) && t.hasOwnProperty(type)){
+            key = handler;
+            handler = t[type][handler];
+        }
+        if(!baidu.lang.isFunction(handler)){
             return;
         }
     }
-
-    !this.__listeners && (this.__listeners = {});
-
-    type.indexOf("on") != 0 && (type = "on" + type);
-
-    var t = this.__listeners;
-    if (!t[type]) {
-        return;
-    }
-    if (typeof handler != "undefined") {
-        t[type][handler] && delete t[type][handler];
-    } else {
-        for(var guid in t[type]){
-            delete t[type][guid];
+    if(!t[type] || (handler && !handler.hashCode)){return;}
+    if(key){
+        delete handler.hashCode[type][key];
+        delete t[type][key];
+    }else{
+        hashMap = handler ? handler.hashCode[type] : t[type];
+        for(guid in hashMap){
+            if(t[type][guid]){
+                delete t[type][guid].hashCode[type][guid];//delete handler hashCode
+                delete t[type][guid];//delete __listeners
+            }
         }
     }
 };
 
 /**
- * 派发自定义事件，使得绑定到自定义事件上面的函数都会被执行。引入baidu.lang.Event后，Class的子类实例才会获得该方法。
+ * 派发自定义事件，使得绑定到自定义事件上面的函数都会被执行。引入baiu.lang.Event后，Class的子类实例才会获得该方法。
  * @grammar obj.dispatchEvent(event, options)
  * @param {baidu.lang.Event|String} event 	Event对象，或事件名称(1.1.1起支持)
  * @param {Object} 					options 扩展参数,所含属性键值会扩展到Event对象上(1.2起支持)
@@ -3653,36 +3685,6 @@ baidu.lang.isElement = function (source) {
 baidu.lang.isNumber = function (source) {
     return '[object Number]' == Object.prototype.toString.call(source) && isFinite(source);
 };
-/*
- * Tangram
- * Copyright 2009 Baidu Inc. All rights reserved.
- * 
- * path: baidu/lang/isObject.js
- * author: erik
- * version: 1.1.0
- * date: 2009/12/30
- */
-
-
-
-/**
- * 判断目标参数是否为Object对象
- * @name baidu.lang.isObject
- * @function
- * @grammar baidu.lang.isObject(source)
- * @param {Any} source 目标参数
- * @shortcut isObject
- * @meta standard
- * @see baidu.lang.isString,baidu.lang.isNumber,baidu.lang.isArray,baidu.lang.isElement,baidu.lang.isBoolean,baidu.lang.isDate
- *             
- * @returns {boolean} 类型判断结果
- */
-baidu.lang.isObject = function (source) {
-    return 'function' == typeof source || !!(source && 'object' == typeof source);
-};
-
-// 声明快捷方法
-baidu.isObject = baidu.lang.isObject;
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
