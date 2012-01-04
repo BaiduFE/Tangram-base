@@ -7,7 +7,7 @@ module('baidu.dom.droppable');
  * <li>cancel方法
  */
 
-(function() {
+(function() {	
 	var draghandle, drophandle, dragele, dropele, _ondropover, _ondrop, _ondropout;
 	/**
 	 * 初始化环境，包括droppable和创建元素等

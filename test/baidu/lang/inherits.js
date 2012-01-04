@@ -87,6 +87,21 @@ test("complex normal inherit case, using inherits interface", function(){
 	equals(raceCarA.usage, "land", 'raceCarA.usage = "land"');
 });
 
+test("extend", function(){
+	carA = new car("Prime", "GE");
+	car.extend({
+		newP: 'newP',
+		name: 'newName'
+	});
+	
+	equals(carA.name, "Prime", 'carA.name = "Prime"');
+	equals(carA.newP, "newP", 'carA.newP = "newP"');
+	equals(carA.brand, "GE", 'carA.brand = "GE"');
+	equals(carA.wheels, 4, 'carA.wheels = 4');
+	equals(carA.engine, "fire", 'carA.engine = "fire"');
+	equals(carA.usage, "land", 'carA.usage = "land"');
+});
+
 /*
 *  The following codes check the results with JSSpec framework
 */
