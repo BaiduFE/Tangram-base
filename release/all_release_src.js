@@ -20,7 +20,7 @@
  /**
  * @namespace T Tangram七巧板
  * @name T
- * @version 1.5.1
+ * @version 1.5.0
 */
 
 /**
@@ -28,7 +28,7 @@
  * @author: allstar, erik, meizz, berg
  */
 var T,
-    baidu = T = baidu || {version: "1.5.1"}; 
+    baidu = T = baidu || {version: "1.5.0"}; 
 
 //提出guid，防止在与老版本Tangram混用时
 //在下一行错误的修改window[undefined]
@@ -2105,7 +2105,7 @@ baidu.dom = baidu.dom || {};
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
- *
+ * 
  * path: baidu/dom/g.js
  * author: allstar, erik
  * version: 1.1.0
@@ -2119,18 +2119,17 @@ baidu.dom = baidu.dom || {};
  * @name baidu.dom.g
  * @function
  * @grammar baidu.dom.g(id)
- * @param {string|HTMLElement} id 元素的id或DOM元素.
+ * @param {string|HTMLElement} id 元素的id或DOM元素
  * @shortcut g,T.G
  * @meta standard
  * @see baidu.dom.q
- *
- * @return {HTMLElement|null} 获取的元素，查找不到时返回null,如果参数不合法，直接返回参数.
+ *             
+ * @returns {HTMLElement|null} 获取的元素，查找不到时返回null,如果参数不合法，直接返回参数
  */
-baidu.dom.g = function(id) {
-    if (!id) return null; //修改IE下baidu.dom.g(baidu.dom.g('dose_not_exist_id'))报错的bug，by Meizz, dengping
+baidu.dom.g = function (id) {
     if ('string' == typeof id || id instanceof String) {
         return document.getElementById(id);
-    } else if (id.nodeName && (id.nodeType == 1 || id.nodeType == 9)) {
+    } else if (id && id.nodeName && (id.nodeType == 1 || id.nodeType == 9)) {
         return id;
     }
     return null;
@@ -2626,43 +2625,12 @@ baidu.lang.Class.prototype.toString = function(){
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
  * 
- * path: baidu/lang/isObject.js
- * author: erik
- * version: 1.1.0
- * date: 2009/12/30
- */
-
-
-
-/**
- * 判断目标参数是否为Object对象
- * @name baidu.lang.isObject
- * @function
- * @grammar baidu.lang.isObject(source)
- * @param {Any} source 目标参数
- * @shortcut isObject
- * @meta standard
- * @see baidu.lang.isString,baidu.lang.isNumber,baidu.lang.isArray,baidu.lang.isElement,baidu.lang.isBoolean,baidu.lang.isDate
- *             
- * @returns {boolean} 类型判断结果
- */
-baidu.lang.isObject = function (source) {
-    return 'function' == typeof source || !!(source && 'object' == typeof source);
-};
-
-// 声明快捷方法
-baidu.isObject = baidu.lang.isObject;
-/*
- * Tangram
- * Copyright 2009 Baidu Inc. All rights reserved.
- * 
  * path: baidu/lang/Event.js
- * author: meizz, erik, berg, linlingyu
+ * author: meizz, erik, berg
  * version: 1.1.1
  * date: 2009/11/24
  * modify: 2010/04/19 berg
  */
-
 
 
 
@@ -2700,21 +2668,23 @@ baidu.lang.Class.prototype.addEventListener = function (type, handler, key) {
     if (!baidu.lang.isFunction(handler)) {
         return;
     }
+
     !this.__listeners && (this.__listeners = {});
+
     var t = this.__listeners, id;
     if (typeof key == "string" && key) {
         if (/[^\w\-]/.test(key)) {
             throw("nonstandard key:" + key);
         } else {
+            handler.hashCode = key; 
             id = key;
         }
     }
     type.indexOf("on") != 0 && (type = "on" + type);
+
     typeof t[type] != "object" && (t[type] = {});
     id = id || baidu.lang.guid();
-    !handler.hashCode && (handler.hashCode = {});
-    !handler.hashCode[type] && (handler.hashCode[type] = {});
-    handler.hashCode[type][id] = 1;
+    handler.hashCode = id;
     t[type][id] = handler;
 };
  
@@ -2726,35 +2696,33 @@ baidu.lang.Class.prototype.addEventListener = function (type, handler, key) {
  * @remark 	如果第二个参数handler没有被绑定到对应的自定义事件中，什么也不做。
  */
 baidu.lang.Class.prototype.removeEventListener = function (type, handler) {
-    type.indexOf('on') != 0 && (type = 'on' + type);
-    !this.__listeners && (this.__listeners = {});
-    var t = this.__listeners, key, hashMap;
-    if(handler){
-        if(baidu.lang.isString(handler) && t.hasOwnProperty(type)){
-            key = handler;
-            handler = t[type][handler];
-        }
-        if(!baidu.lang.isFunction(handler)){
+    if (typeof handler != "undefined") {
+        if ( (baidu.lang.isFunction(handler) && ! (handler = handler.hashCode))
+            || (! baidu.lang.isString(handler))
+        ){
             return;
         }
     }
-    if(!t[type] || (handler && !handler.hashCode)){return;}
-    if(key){
-        delete handler.hashCode[type][key];
-        delete t[type][key];
-    }else{
-        hashMap = handler ? handler.hashCode[type] : t[type];
-        for(guid in hashMap){
-            if(t[type][guid]){
-                delete t[type][guid].hashCode[type][guid];//delete handler hashCode
-                delete t[type][guid];//delete __listeners
-            }
+
+    !this.__listeners && (this.__listeners = {});
+
+    type.indexOf("on") != 0 && (type = "on" + type);
+
+    var t = this.__listeners;
+    if (!t[type]) {
+        return;
+    }
+    if (typeof handler != "undefined") {
+        t[type][handler] && delete t[type][handler];
+    } else {
+        for(var guid in t[type]){
+            delete t[type][guid];
         }
     }
 };
 
 /**
- * 派发自定义事件，使得绑定到自定义事件上面的函数都会被执行。引入baiu.lang.Event后，Class的子类实例才会获得该方法。
+ * 派发自定义事件，使得绑定到自定义事件上面的函数都会被执行。引入baidu.lang.Event后，Class的子类实例才会获得该方法。
  * @grammar obj.dispatchEvent(event, options)
  * @param {baidu.lang.Event|String} event 	Event对象，或事件名称(1.1.1起支持)
  * @param {Object} 					options 扩展参数,所含属性键值会扩展到Event对象上(1.2起支持)
@@ -3511,6 +3479,194 @@ baidu.dom.getPosition = function (element) {
 };
 /*
  * Tangram
+ * Copyright 2010 Baidu Inc. All rights reserved.
+ * 
+ * path: baidu/dom/drag.js
+ * author: meizz, berg, lxp
+ * version: 1.1.0
+ * date: 2010/06/02
+ */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/**
+ * 拖动指定的DOM元素
+ * @name baidu.dom.drag
+ * @function
+ * @grammar baidu.dom.drag(element, options)
+ * @param {HTMLElement|string} element 元素或者元素的id
+ * @param {Object} options 拖曳配置项
+                
+ * @param {Array} options.range 限制drag的拖拽范围，数组中必须包含四个值，分别是上、右、下、左边缘相对上方或左方的像素距离。默认无限制
+ * @param {Number} options.interval 拖曳行为的触发频度（时间：毫秒）
+ * @param {Boolean} options.capture 鼠标拖曳粘滞
+ * @param {Object} options.mouseEvent 键名为clientX和clientY的object，若不设置此项，默认会获取当前鼠标位置
+ * @param {Function} options.ondragstart drag开始时触发
+ * @param {Function} options.ondrag drag进行中触发
+ * @param {Function} options.ondragend drag结束时触发
+ * @param {function} options.autoStop 是否在onmouseup时自动停止拖拽。默认为true
+ * @version 1.2
+ * @remark
+ * 
+            要拖拽的元素必须事先设定样式的postion值，如果postion为absloute，并且没有设定top和left，拖拽开始时，无法取得元素的top和left值，这时会从[0,0]点开始拖拽
+        
+ * @see baidu.dom.draggable
+ */
+/**
+ * 拖曳DOM元素
+ * @param   {HTMLElement|ID}    element 被拖曳的元素
+ * @param   {JSON}              options 拖曳配置项
+ *          {autoStop, interval, capture, range, ondragstart, ondragend, ondrag, mouseEvent}
+ */
+(function(){
+    var target, // 被拖曳的DOM元素
+        op, ox, oy, //timer, 
+        top, left, mozUserSelect,
+        lastLeft, lastTop,
+        isFunction = baidu.lang.isFunction,
+        timer,
+        offset_parent,offset_target;
+    
+    baidu.dom.drag = function(element, options) {
+        //每次开始拖拽的时候重置lastTop和lastLeft
+        lastTop = lastLeft = null;
+        
+        if (!(target = baidu.dom.g(element))) return false;
+        op = baidu.object.extend({
+            autoStop:true   // false 用户手动结束拖曳 ｜ true 在mouseup时自动停止拖曳
+            ,capture : true // 鼠标拖曳粘滞
+            ,interval : 16  // 拖曳行为的触发频度（时间：毫秒）
+            ,handler : target
+        }, options);
+
+        offset_parent = baidu.dom.getPosition(target.offsetParent);
+        offset_target = baidu.dom.getPosition(target);
+       
+        if(baidu.getStyle(target,'position') == "absolute"){
+            top =  offset_target.top - (target.offsetParent == document.body ? 0 : offset_parent.top);
+            left = offset_target.left - (target.offsetParent == document.body ? 0 :offset_parent.left);
+        }else{
+            top = parseFloat(baidu.getStyle(target,"top")) || -parseFloat(baidu.getStyle(target,"bottom")) || 0;
+            left = parseFloat(baidu.getStyle(target,"left")) || -parseFloat(baidu.getStyle(target,"right")) || 0; 
+        }
+
+        if(op.mouseEvent){
+            // [2010/11/16] 可以不依赖getMousePosition，直接通过一个可选参数获得鼠标位置
+            ox = baidu.page.getScrollLeft() + op.mouseEvent.clientX;
+            oy = baidu.page.getScrollTop() + op.mouseEvent.clientY;
+        }else{
+            var xy = baidu.page.getMousePosition();    // 得到当前鼠标坐标值
+            ox = xy.x;
+            oy = xy.y;
+        }
+
+        //timer = setInterval(render, op.interval);
+
+        // 这项为 true，缺省在 onmouseup 事件终止拖曳
+        op.autoStop && baidu.event.on(op.handler, "mouseup", stop);
+        op.autoStop && baidu.event.on(window, "mouseup", stop);
+        
+        // 在拖曳过程中页面里的文字会被选中高亮显示，在这里修正
+        baidu.event.on(document, "selectstart", unselect);
+
+        // 设置鼠标粘滞
+        if (op.capture && op.handler.setCapture) {
+            op.handler.setCapture();
+        } else if (op.capture && window.captureEvents) {
+            window.captureEvents(Event.MOUSEMOVE|Event.MOUSEUP);
+        }
+        //baidu.on(target,"mousemove",render);
+
+        // fixed for firefox
+        mozUserSelect = document.body.style.MozUserSelect;
+        document.body.style.MozUserSelect = "none";
+
+        // ondragstart 事件
+        if(isFunction(op.ondragstart)){
+            op.ondragstart(target, op);
+        }
+        
+        timer = setInterval(render, op.interval);
+        return {stop : stop, update : update};
+    };
+
+    /**
+     * 更新当前拖拽对象的属性
+     */
+    function update(options){
+        baidu.extend(op, options);
+    }
+
+    /**
+     * 手动停止拖拽
+     */
+    function stop() {
+        clearInterval(timer);
+
+        // 解除鼠标粘滞
+        if (op.capture && op.handler.releaseCapture) {
+            op.handler.releaseCapture();
+        } else if (op.capture && window.releaseEvents) {
+            window.releaseEvents(Event.MOUSEMOVE|Event.MOUSEUP);
+        }
+
+        // 拖曳时网页内容被框选
+        document.body.style.MozUserSelect = mozUserSelect;
+        baidu.event.un(document, "selectstart", unselect);
+        op.autoStop && baidu.event.un(op.handler, "mouseup", stop);
+        op.autoStop && baidu.event.un(window, "mouseup", stop);
+
+        // ondragend 事件
+        if(isFunction(op.ondragend)){
+            op.ondragend(target, op);
+        }
+    }
+
+    // 对DOM元素进行top/left赋新值以实现拖曳的效果
+    function render(e) {
+        var rg = op.range,
+            xy = baidu.page.getMousePosition(),
+            el = left + xy.x - ox,
+            et = top  + xy.y - oy;
+
+        // 如果用户限定了可拖动的范围
+        if (typeof rg == "object" && rg && rg.length == 4) {
+            el = Math.max(rg[3], el);
+            el = Math.min(rg[1] - target.offsetWidth,  el);
+            et = Math.max(rg[0], et);
+            et = Math.min(rg[2] - target.offsetHeight, et);
+        }
+        target.style.top = et + "px";
+        target.style.left = el + "px";
+
+        if((lastLeft !== el || lastTop !== et) && (lastLeft !== null || lastTop !== null) ){
+            if(isFunction(op.ondrag)){
+                op.ondrag(target, op);   
+            }
+        }
+        lastLeft = el;
+        lastTop = et;
+    }
+
+    // 对document.body.onselectstart事件进行监听，避免拖曳时文字被选中
+    function unselect(e) {
+        return baidu.event.preventDefault(e, false);
+    }
+})();
+/*
+ * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
  * 
  * path: baidu/dom/setStyle.js
@@ -3563,206 +3719,6 @@ baidu.dom.setStyle = function (element, key, value) {
 
 // 声明快捷方法
 baidu.setStyle = baidu.dom.setStyle;
-/*
- * Tangram
- * Copyright 2010 Baidu Inc. All rights reserved.
- *
- * path: baidu/dom/drag.js
- * author: meizz, berg, lxp
- * version: 1.1.0
- * date: 2010/06/02
- */
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/**
- * 拖动指定的DOM元素
- * @name baidu.dom.drag
- * @function
- * @grammar baidu.dom.drag(element, options)
- * @param {HTMLElement|string} element 元素或者元素的id.
- * @param {Object} options 拖曳配置项.
-
- * @param {Array} options.range 限制drag的拖拽范围，数组中必须包含四个值，分别是上、右、下、左边缘相对上方或左方的像素距离。默认无限制.
- * @param {Number} options.interval 拖曳行为的触发频度（时间：毫秒）.
- * @param {Boolean} options.capture 鼠标拖曳粘滞.
- * @param {Object} options.mouseEvent 键名为clientX和clientY的object，若不设置此项，默认会获取当前鼠标位置.
- * @param {Function} options.ondragstart drag开始时触发.
- * @param {Function} options.ondrag drag进行中触发.
- * @param {Function} options.ondragend drag结束时触发.
- * @param {function} options.autoStop 是否在onmouseup时自动停止拖拽。默认为true.
- * @version 1.2
- * @remark
- *
-            要拖拽的元素必须事先设定样式的postion值，如果postion为absloute，并且没有设定top和left，拖拽开始时，无法取得元素的top和left值，这时会从[0,0]点开始拖拽
-
- * @see baidu.dom.draggable
- */
-/**
- *
- 拖曳DOM元素
- * @param   {HTMLElement|ID}    element 被拖曳的元素.
- * @param   {JSON}              options 拖曳配置项
- *          {autoStop, interval, capture, range, ondragstart, ondragend, ondrag, mouseEvent}.
- */
-(function() {
-    var target, // 被拖曳的DOM元素
-        op, ox, oy, //timer,
-        top, left, mozUserSelect,
-        lastLeft, lastTop,
-        setMargin,
-        isFunction = baidu.lang.isFunction,
-        timer,
-        offset_parent, offset_target;
-
-    baidu.dom.drag = function(element, options) {
-        //每次开始拖拽的时候重置lastTop和lastLeft
-        lastTop = lastLeft = null;
-
-        if (!(target = baidu.dom.g(element))) return false;
-        op = baidu.object.extend({
-            autoStop: true   // false 用户手动结束拖曳 ｜ true 在mouseup时自动停止拖曳
-, capture: true // 鼠标拖曳粘滞
-, interval: 16  // 拖曳行为的触发频度（时间：毫秒）
-            , handler: target
-        }, options);
-
-        offset_parent = baidu.dom.getPosition(target.offsetParent);
-        offset_target = baidu.dom.getPosition(target);
-
-        if (baidu.getStyle(target, 'position') == 'absolute') {
-            top = offset_target.top - (target.offsetParent == document.body ? 0 : offset_parent.top);
-            left = offset_target.left - (target.offsetParent == document.body ? 0 : offset_parent.left);
-        }else {
-            top = parseFloat(baidu.getStyle(target, 'top')) || -parseFloat(baidu.getStyle(target, 'bottom')) || 0;
-            left = parseFloat(baidu.getStyle(target, 'left')) || -parseFloat(baidu.getStyle(target, 'right')) || 0;
-        }
-
-        if (op.mouseEvent) {
-            // [2010/11/16] 可以不依赖getMousePosition，直接通过一个可选参数获得鼠标位置
-            ox = baidu.page.getScrollLeft() + op.mouseEvent.clientX;
-            oy = baidu.page.getScrollTop() + op.mouseEvent.clientY;
-        }else {
-            var xy = baidu.page.getMousePosition();    // 得到当前鼠标坐标值
-            ox = xy.x;
-            oy = xy.y;
-        }
-
-        //timer = setInterval(render, op.interval);
-
-        // 这项为 true，缺省在 onmouseup 事件终止拖曳
-        op.autoStop && baidu.event.on(op.handler, 'mouseup', stop);
-        op.autoStop && baidu.event.on(window, 'mouseup', stop);
-
-        // 在拖曳过程中页面里的文字会被选中高亮显示，在这里修正
-        baidu.event.on(document, 'selectstart', unselect);
-
-        // 设置鼠标粘滞
-        if (op.capture && op.handler.setCapture) {
-            op.handler.setCapture();
-        } else if (op.capture && window.captureEvents) {
-            window.captureEvents(Event.MOUSEMOVE | Event.MOUSEUP);
-        }
-
-        //baidu.on(target,"mousemove",render);
-
-        // fixed for firefox
-        mozUserSelect = document.body.style.MozUserSelect;
-        document.body.style.MozUserSelect = 'none';
-
-        // ondragstart 事件
-        if (isFunction(op.ondragstart)) {
-            op.ondragstart(target, op);
-        }
-
-        timer = setInterval(render, op.interval);
-        return {stop: stop, update: update};
-    };
-
-    /**
-     * 更新当前拖拽对象的属性
-     */
-    function update(options) {
-        baidu.extend(op, options);
-    }
-
-    /**
-     * 手动停止拖拽
-     */
-    function stop() {
-        clearInterval(timer);
-        setMargin = false;
-
-        // 解除鼠标粘滞
-        if (op.capture && op.handler.releaseCapture) {
-            op.handler.releaseCapture();
-        } else if (op.capture && window.releaseEvents) {
-            window.releaseEvents(Event.MOUSEMOVE | Event.MOUSEUP);
-        }
-
-        // 拖曳时网页内容被框选
-        document.body.style.MozUserSelect = mozUserSelect;
-        baidu.event.un(document, 'selectstart', unselect);
-        op.autoStop && baidu.event.un(op.handler, 'mouseup', stop);
-        op.autoStop && baidu.event.un(window, 'mouseup', stop);
-
-        // ondragend 事件
-        if (isFunction(op.ondragend)) {
-            op.ondragend(target, op);
-        }
-    }
-
-    // 对DOM元素进行top/left赋新值以实现拖曳的效果
-    function render(e) {
-        var rg = op.range,
-            xy = baidu.page.getMousePosition(),
-            el = left + xy.x - ox,
-            et = top + xy.y - oy;
-
-        // 如果用户限定了可拖动的范围
-        if (typeof rg == 'object' && rg && rg.length == 4) {
-            el = Math.max(rg[3], el);
-            el = Math.min(rg[1] - target.offsetWidth, el);
-            et = Math.max(rg[0], et);
-            et = Math.min(rg[2] - target.offsetHeight, et);
-        }
-
-        if (!setMargin) {
-            baidu.setStyle(target, 'marginTop', 0);
-            baidu.setStyle(target, 'marginLeft', 0);
-            setMargin = true;
-        }
-
-        target.style.top = et + 'px';
-        target.style.left = el + 'px';
-
-        if ((lastLeft !== el || lastTop !== et) && (lastLeft !== null || lastTop !== null)) {
-            if (isFunction(op.ondrag)) {
-                op.ondrag(target, op);
-            }
-        }
-        lastLeft = el;
-        lastTop = et;
-    }
-
-    // 对document.body.onselectstart事件进行监听，避免拖曳时文字被选中
-    function unselect(e) {
-        return baidu.event.preventDefault(e, false);
-    }
-})();
 /*
  * Tangram
  * Copyright 2010 Baidu Inc. All rights reserved.
@@ -6994,7 +6950,6 @@ baidu.dom.resizable = /**@function*/function(element,options) {
         handlePosition,
         timer,
         isCancel = false,
-        isResizabled = false,
         defaultOptions = {
             direction: ['e', 's', 'se'],
             minWidth: 16,
@@ -7075,7 +7030,7 @@ baidu.dom.resizable = /**@function*/function(element,options) {
             target.appendChild(ele);
             resizeHandle[key] = ele;
 
-            baidu.on(ele, 'mousedown',start);
+            baidu.on(ele, 'mousedown', start);
         });
 
         isCancel = false;
@@ -7115,12 +7070,10 @@ baidu.dom.resizable = /**@function*/function(element,options) {
      * @return void
      */
     function start(e){
-		isResizabled && stop();
         var ele = baidu.event.getTarget(e),
             key = ele.key;
         currentEle = ele;
-		isResizabled = true;
-		
+
         if (ele.setCapture) {
             ele.setCapture();
         } else if (window.captureEvents) {
@@ -7133,7 +7086,7 @@ baidu.dom.resizable = /**@function*/function(element,options) {
          */
         orgCursor = baidu.getStyle(document.body, 'cursor');
         baidu.setStyle(document.body, 'cursor', key + '-resize');
-        baidu.on(document.body, 'mouseup',stop);
+        baidu.on(ele, 'mouseup',stop);
         baidu.on(document.body, 'selectstart', unselect);
         mozUserSelect = document.body.style.MozUserSelect;
         document.body.style.MozUserSelect = 'none';
@@ -7158,7 +7111,7 @@ baidu.dom.resizable = /**@function*/function(element,options) {
      * @return void
      */
     function stop() {
-        if (currentEle && currentEle.releaseCapture) {
+        if (currentEle.releaseCapture) {
             currentEle.releaseCapture();
         } else if (window.releaseEvents) {
             window.releaseEvents(Event.MOUSEMOVE | Event.MOUSEUP);
@@ -7168,7 +7121,7 @@ baidu.dom.resizable = /**@function*/function(element,options) {
          * 删除事件监听
          * 还原css属性设置
          */
-        baidu.un(document.body, 'mouseup',stop);
+        baidu.un(currentEle, 'mouseup',stop);
         baidu.un(document, 'selectstart', unselect);
         document.body.style.MozUserSelect = mozUserSelect;
         baidu.un(document.body, 'selectstart', unselect);
@@ -7176,7 +7129,7 @@ baidu.dom.resizable = /**@function*/function(element,options) {
         clearInterval(timer);
         baidu.setStyle(document.body, 'cursor',orgCursor);
         currentEle = null;
-		isResizabled = false;
+
         baidu.lang.isFunction(op.onresizeend) && op.onresizeend();
     }
 
@@ -8445,41 +8398,6 @@ baidu.event.get = function (event, win) {
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
- *
- * path: baidu/event/getEvent.js
- * author: xiadengping
- * version: 1.1.0
- * date: 2011/12/08
- */
-
-
-
-/**
- * 获取事件对象
- * @name baidu.event.getEvent
- * @function
- * @param {Event} event event对象，目前没有使用这个参数，只是保留接口。by dengping.
- * @grammar baidu.event.getEvent()
- * @meta standard
- * @return {Event} event对象.
- */
-
-baidu.event.getEvent = function(event) {
-    if (window.event) {
-        return window.event;
-    } else {
-        var f = arguments.callee;
-        do { //此处参考Qwrap框架 see http://www.qwrap.com/ by dengping
-            if (/Event/.test(f.arguments[0])) {
-                return f.arguments[0];
-            }
-        } while (f = f.caller);
-        return null;
-    }
-};
-/*
- * Tangram
- * Copyright 2009 Baidu Inc. All rights reserved.
  * 
  * path: baidu/event/getKeyCode.js
  * author: erik
@@ -9518,6 +9436,36 @@ baidu.lang.isElement = function (source) {
     return !!(source && source.nodeName && source.nodeType == 1);
 };
 
+/*
+ * Tangram
+ * Copyright 2009 Baidu Inc. All rights reserved.
+ * 
+ * path: baidu/lang/isObject.js
+ * author: erik
+ * version: 1.1.0
+ * date: 2009/12/30
+ */
+
+
+
+/**
+ * 判断目标参数是否为Object对象
+ * @name baidu.lang.isObject
+ * @function
+ * @grammar baidu.lang.isObject(source)
+ * @param {Any} source 目标参数
+ * @shortcut isObject
+ * @meta standard
+ * @see baidu.lang.isString,baidu.lang.isNumber,baidu.lang.isArray,baidu.lang.isElement,baidu.lang.isBoolean,baidu.lang.isDate
+ *             
+ * @returns {boolean} 类型判断结果
+ */
+baidu.lang.isObject = function (source) {
+    return 'function' == typeof source || !!(source && 'object' == typeof source);
+};
+
+// 声明快捷方法
+baidu.isObject = baidu.lang.isObject;
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
