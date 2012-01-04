@@ -111,8 +111,23 @@ test("class extend", function(){
 	equal(sObject.extend(),extendFunc(),"extend is success");
 });
 
-
-
+test("global config", function(){
+	expect(4);
+	var NewClass = baidu.lang.createClass(myClass, {
+		options : {subtitle : "test"}
+	});
+	var sObject = new NewClass({
+		givenName: 'Jim'
+	});
+	var nObject = new NewClass({
+		givenName: 'Tom'
+	});
+	
+	equals(sObject.givenName, "Jim", 'sObject.givenName');
+	equals(nObject.givenName, "Tom", 'nObject.givenName');
+	equals(sObject.subtitle, "test", 'sObject.subtitle');
+	equals(nObject.subtitle, "test", 'nObject.subtitle');
+});
 
 //describe('baidu.lang.createClass', {
 //	'default parent class' : function() {

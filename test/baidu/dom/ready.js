@@ -1,6 +1,6 @@
 module('baidu.dom.ready');
 
-test('dom ready after onload', function() {
+test('页面载入完毕后调用该方法？', function() {
 	stop();
 	expect(1);
 	baidu.dom.ready(function() {
