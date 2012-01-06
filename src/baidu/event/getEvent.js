@@ -4,7 +4,7 @@
  *
  * path: baidu/event/getEvent.js
  * author: xiadengping
- * version: 1.1.0
+ * version: 1.6.0
  * date: 2011/12/08
  */
 
