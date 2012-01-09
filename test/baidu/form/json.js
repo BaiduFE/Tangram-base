@@ -72,8 +72,11 @@ function createForm() {
 	sel.options[sel.options.length] = new Option('3', '3');
 	sel.options[2].selected = "selected";
 
-	selmul.name = "selmul";
-	selmul.multiple = "multiple";
+    selmul.name = "selmul";
+    selmul.multiple = "multiple";
+    if(selmul.type != 'select-multiple'){
+        selmul = document.createElement('<select name="selmul" multiple="true"></select>');
+    }
 	selmul.options[selmul.options.length] = new Option('1', '1');
 	selmul.options[selmul.options.length] = new Option('2', '2');
 	selmul.options[selmul.options.length] = new Option('3', '3');
