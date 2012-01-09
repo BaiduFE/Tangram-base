@@ -1,4 +1,4 @@
-module('baidu.form.serialize');
+module('baidu.form.json');
 function createForm() {
 	var div, form, text1, text2, hid, cb1, cb2, rb1, rb2, pass, textArea, sel, selmul, button;
 	div = document.createElement('div');
@@ -8,12 +8,16 @@ function createForm() {
 
 	text1 = document.createElement('input');
 	text2 = document.createElement('input');
+	text3 = document.createElement('input');
+	text4 = document.createElement('input');
 	hid = document.createElement('input');
 	rb1 = document.createElement('input');
 	rb2 = document.createElement('input');
 	cb1 = document.createElement('input');
 	cb2 = document.createElement('input');
+	cb3 = document.createElement('input');
 	pass = document.createElement('input');
+	bu = document.createElement('input');
 	textArea = document.createElement('textarea');
 	sel = document.createElement('select');
 	selmul = document.createElement('select');
@@ -23,46 +27,63 @@ function createForm() {
 	document.body.appendChild(div);
 
 	text1.type = "text";
-	text1.disabled = "disabled";
+	text1.name = "disable";
 	text1.value = "disable";
+	text1.disabled = "disabled";
 
 	text2.type = "text";
-	text2.value = "param&1";
 	text2.name = "param1";
+	text2.value = "param&1 测试中文";
+	text3.type = "text";
+	text3.name = "param2";
+	text3.value = "";
+	text4.type = "text";
+	text4.value = "param3";
 
 	hid.type = "hidden";
-	hid.name = "param2";
-	hid.value = "param2";
+	hid.name = "hidden3";
+	hid.value = "hidden3";
 
 	form.appendChild(text1);
 	form.appendChild(text2);
+	form.appendChild(text3);
+	form.appendChild(text4);
 	form.appendChild(hid);
 
 	rb1.type = "radio";
-	rb1.value = "rb1";
 	rb1.name = "rb";
+	rb1.value = "rb1";
 	rb2.type = "radio";
-	rb2.value = "rb2";
 	rb2.name = "rb";
-	cb1.name = "cb";
+	rb2.value = "rb2";
 	cb1.type = "checkbox";
+	cb1.name = "cb";
 	cb1.value = "cb1";
-	cb2.name = "cb";
 	cb2.type = "checkbox";
+	cb2.name = "cb";
 	cb2.value = "cb2";
+	cb3.type = "checkbox";
+	cb3.name = "cb";
+	cb3.value = "cb3";
 
 	form.appendChild(cb1);
 	form.appendChild(cb2);
+	form.appendChild(cb3);
 	form.appendChild(rb1);
 	form.appendChild(rb2);
 
 	rb2.checked = true;
 	cb1.checked = true;
+	cb3.checked = true;
 
 	pass.type = "password";
-	pass.value = "pwd";
 	pass.name = "pwd";
+	pass.value = "pwd";
 
+	bu.type = "button";
+	bu.name = "bu";
+	bu.value = "bu1";
+	
 	textArea.name = "ta";
 	textArea.value = "textarea";
 
@@ -72,8 +93,8 @@ function createForm() {
 	sel.options[sel.options.length] = new Option('3', '3');
 	sel.options[2].selected = "selected";
 
-	selmul.name = "selmul";
-	selmul.multiple = "multiple";
+    selmul.name = "selmul";
+    selmul.multiple = "multiple";
     if(selmul.type != 'select-multiple'){
         selmul = document.createElement('<select name="selmul" multiple="true"></select>');
     }
@@ -86,9 +107,11 @@ function createForm() {
 	selmul.options[2].selected = "selected";
 
 	button.id = "sub";
+	button.name = "sub";
 	button.value = "提交";
 
 	form.appendChild(pass);
+	form.appendChild(bu);
 	form.appendChild(textArea);
 	form.appendChild(sel);
 	form.appendChild(selmul);
@@ -97,6 +120,21 @@ function createForm() {
 }
 
 test("传入form，返回结果", function() {
+	expect(13);
     var f = createForm();
-	baidu.form.serialize(f);
+	var j = baidu.form.serialize(f);
+	equals(j.length, 12, "12 arears");
+	equals(j[0], "param1=param%261%20测试中文", "The text input(escapeUrl) is right");
+	equals(j[1], "param2=", "The text input(no value) is right");
+	equals(j[2], "hidden3=hidden3", "The text input(hidden) is right");
+	equals(j[3], "cb=cb1", "The combox is right");
+	equals(j[4], "cb=cb3", "The combox is right");
+	equals(j[5], "rb=rb2", "The radio is right");
+	equals(j[6], "pwd=pwd", "The password is right");
+	equals(j[7], "ta=textarea", "The textarea is right");
+	equals(j[8], "sel=3", "The select is right");
+	equals(j[9], "selmul=1", "The selmul is right");
+	equals(j[10], "selmul=2", "The selmul is right");
+	equals(j[11], "selmul=3", "The selmul is right");
+	$(f).remove();
 });
