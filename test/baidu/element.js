@@ -28,8 +28,8 @@ test('封装基础 - 输入字符串', function() {
 		equals(baidu.g('aaa').className, 'aaa', 'check class name');
 		equals(baidu.dom.query('.gaga').length, 0, 'check sub');
 		equals(baidu.dom.query('.berg').length, 1, 'check sub');
-		TT.e(div).next().remove();
-		TT.e(div).remove();
+		$(div).next().remove();
+		$(div).remove();
 		start();
 	}, 'baidu.event.on', 'baidu.element');
 });
@@ -134,11 +134,11 @@ test('event + on + un + stop', function() {
 		baidu.e(document).click(function() {
 			ok(false, 'event stopped');
 		});
-		TT.event.fire(p, 'click');
+		ua.click(p);
 		baidu.e(p).un('click');
 		baidu.e(document.body).un('click');
 		baidu.e(document).un('click');
-		TT.event.fire(p, 'click');
+		ua.click(p);
 
 		// multi dom binding
 		var count = 0;
@@ -153,7 +153,7 @@ test('event + on + un + stop', function() {
 		count = 0;
 		baidu.e(p).children().each(function(dom, i) {
 			equals(dom.innerHTML, count, 'check fired on different dom');
-			TT.event.fire(dom, 'click')
+			ua.click(dom);
 		});
 		equals(count, 2, "check fired on two div");
 
@@ -194,7 +194,7 @@ test(
 									}
 								}
 								equals(countlose, 0, '没有函数被遗漏');
-								TT.e(div).remove();
+								$(div).remove();
 								start();
 							});
 
@@ -209,14 +209,14 @@ test('返回值是第一个参数的包装 draggable droppable', function() {
 	e.attr('id', 'drag');// 无返回
 	e.draggable().addClass("berg");
 	ok(e.hasClass('berg'), "check draggable extend function");
-	TT.e(drag).remove();
+	$(drag).remove();
 });
 
 test('返回值是第一个参数的包装 resizable', function() {
 	var div1 = document.body.appendChild(document.createElement('div'));
 	baidu.e(div1).resizable().addClass("berg").attr('id', 'berg');
 	ok(baidu.e(div1).hasClass('berg'), 'has class');
-	TT.e(div1).remove();
+	$(div1).remove();
 });
 
 /**
@@ -324,5 +324,5 @@ test('element with select', function() {
 		// equals(this.type, typelist[count++], 'check this type');
 	});
 	equals(count, 2, 'check get select');
-	TT.e(div).remove();
+	$(div).remove();
 });
