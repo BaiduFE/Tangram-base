@@ -49,8 +49,7 @@ test("类型参数的有效性", function() {
 			ok(true, 'css loaded');
 		}
 	}, {
-		url : path + "a.js",// "a.php?file=a.js&type=js&opt=1",//opera支持的php下面js读取貌似有问题，改成js文件
-		type : 'js',
+		url : path + "a.js?file=a.css&type=css&opt=0",// "a.php?file=a.js&type=js&opt=1",//opera支持的php下面js读取貌似有问题，改成js文件
 		onload : function() {
 			step++;
 			ok(true, 'js loaded');
