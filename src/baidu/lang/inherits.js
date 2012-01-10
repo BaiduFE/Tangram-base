@@ -14,10 +14,10 @@
  * 为类型构造器建立继承关系
  * @name baidu.lang.inherits
  * @function
- * @grammar baidu.lang.inherits(subClass, superClass[, className])
+ * @grammar baidu.lang.inherits(subClass, superClass[, type])
  * @param {Function} subClass 子类构造器
  * @param {Function} superClass 父类构造器
- * @param {string} className 类名标识
+ * @param {string} type 类名标识
  * @remark
  * 
 使subClass继承superClass的prototype，因此subClass的实例能够使用superClass的prototype中定义的所有属性和方法。<br>
@@ -28,13 +28,14 @@
  * @meta standard
  * @see baidu.lang.Class
  */
-baidu.lang.inherits = function (subClass, superClass, className) {
+baidu.lang.inherits = function (subClass, superClass, type) {
     var key, proto, 
         selfProps = subClass.prototype, 
         clazz = new Function();
         
     clazz.prototype = superClass.prototype;
     proto = subClass.prototype = new clazz();
+
     for (key in selfProps) {
         proto[key] = selfProps[key];
     }
@@ -42,10 +43,17 @@ baidu.lang.inherits = function (subClass, superClass, className) {
     subClass.superClass = superClass.prototype;
 
     // 类名标识，兼容Class的toString，基本没用
-    if ("string" == typeof className) {
-        proto._className = className;
+    typeof type == "string" && (proto.__type = type);
+
+    subClass.extend = function(json) {
+        for (var i in json) proto[i] = json[i];
+        return subClass;
     }
+    
+    return subClass;
 };
 
 // 声明快捷方法
 baidu.inherits = baidu.lang.inherits;
+
+//  2011.11.22  meizz   为类添加了一个静态方法extend()，方便代码书写

@@ -1,0 +1,26 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>form</title>
+<!--qunit js -->
+<script type="text/javascript" src="../../../src/import.php?f=baidu.form,baidu.form.json,baidu.form.serialize"></script>
+<script type="text/javascript" >
+	function json(){
+		var j = baidu.form.json(document.getElementById('test'));
+		alert(j.file1);
+	};
+	function serialize(){
+		var j = baidu.form.serialize(document.getElementById('test'));
+		alert(j[0]);
+	}
+</script>
+</head>
+<body>
+	<form id="test">
+		<input type="file" name="file1">
+	</form>
+	<input type="button" name="json" value="查看json结果" onclick="json()">
+	<input type="button" name="json" value="查看serialize结果"onclick="serialize()">
+</body>
+</html>

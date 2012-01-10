@@ -174,7 +174,7 @@ baidu.page.load = /**@function*/function(resources, options, ignoreAllLoaded) {
                 }
             };
         //默认用后缀名, 并防止后缀名大写
-        res.type = res.type || url.replace(/^[^\?#]+\.(css|js|html)(\?|#| |$)[^\?#]*/i, '$1');
+        res.type = res.type || url.replace(/^[^\?#]+\.(css|js|html)(\?|#| |$)[^\?#]*/i, '$1'); //[bugfix]修改xxx.js?v这种情况下取不到js的问题。 
         //默认html格式用ajax请求,其他都使用dom标签方式请求.
         res.requestType = res.requestType || (res.type == 'html' ? 'ajax' : 'dom');
 

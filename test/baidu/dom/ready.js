@@ -1,6 +1,6 @@
 module('baidu.dom.ready');
 
-test('dom ready after onload', function() {
+test('页面载入完毕后调用该方法？', function() {
 	stop();
 	expect(1);
 	baidu.dom.ready(function() {
@@ -38,7 +38,7 @@ test('ready after onload', function() {
 	stop();
 	setTimeout(function() {
 		var script = document.createElement('script');
-		script.src = '../../tools/br/import.php?f=baidu.dom.ready';
+		script.src = upath + '../../../src/baidu/dom/ready.js';
 		var fun = function(){
 			if(ua.browser.ie && this.readyState == 'loaded' || !ua.browser.ie){
 				ok(true, "onload");
