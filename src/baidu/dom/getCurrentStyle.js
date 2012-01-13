@@ -12,7 +12,6 @@
 /**
  * 获取目标元素的 currentStyle 值，兼容非IE浏览器
  * 某些样式名称或者值需要hack的话，需要别外处理！
- *
  * @author meizz
  * @name baidu.dom.getCurrentStyle
  * @function

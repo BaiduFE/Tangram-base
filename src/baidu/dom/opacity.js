@@ -7,7 +7,7 @@
  * @author: meizz
  * @version: 2011-07-11
  * @namespace: baidu.dom.opacity
- *
+ * @grammar baidu.dom.opacity(element, opacity)
  * @param {String|HTMLElement}  element 定位插入的HTML的目标DOM元素
  * @param {Number}              opacity 不透明度
  */
