@@ -20,7 +20,7 @@
  /**
  * @namespace T Tangram七巧板
  * @name T
- * @version 1.5.0
+ * @version 1.6.0
 */
 
 /**
@@ -36,7 +36,7 @@ baidu.guid = "$BAIDU$";
 
 //Tangram可能被放在闭包中
 //一些页面级别唯一的属性，需要挂载在window[baidu.guid]上
-window[baidu.guid] = window[baidu.guid] || {};
+baidu.$$ = window[baidu.guid] = window[baidu.guid] || {global:{}};
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
@@ -1106,7 +1106,7 @@ baidu._g = baidu.dom._g;
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
- * 
+ *
  * path: baidu/dom/g.js
  * author: allstar, erik
  * version: 1.1.0
@@ -1120,17 +1120,18 @@ baidu._g = baidu.dom._g;
  * @name baidu.dom.g
  * @function
  * @grammar baidu.dom.g(id)
- * @param {string|HTMLElement} id 元素的id或DOM元素
+ * @param {string|HTMLElement} id 元素的id或DOM元素.
  * @shortcut g,T.G
  * @meta standard
  * @see baidu.dom.q
- *             
- * @returns {HTMLElement|null} 获取的元素，查找不到时返回null,如果参数不合法，直接返回参数
+ *
+ * @return {HTMLElement|null} 获取的元素，查找不到时返回null,如果参数不合法，直接返回参数.
  */
-baidu.dom.g = function (id) {
+baidu.dom.g = function(id) {
+    if (!id) return null; //修改IE下baidu.dom.g(baidu.dom.g('dose_not_exist_id'))报错的bug，by Meizz, dengping
     if ('string' == typeof id || id instanceof String) {
         return document.getElementById(id);
-    } else if (id && id.nodeName && (id.nodeType == 1 || id.nodeType == 9)) {
+    } else if (id.nodeName && (id.nodeType == 1 || id.nodeType == 9)) {
         return id;
     }
     return null;
@@ -1747,7 +1748,6 @@ baidu.dom.getDocument = function (element) {
 
 
 
-
 /**
  * 获取目标元素的computed style值。如果元素的样式值不能被浏览器计算，则会返回空字符串（IE）
  *
@@ -1775,6 +1775,8 @@ baidu.dom.getComputedStyle = function(element, key){
     }
     return ''; 
 };
+
+// 20111204 meizz   去掉一个无用的import baidu.browser.ie
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
@@ -2032,6 +2034,10 @@ baidu.dom.getPosition = function (element) {
  */
 baidu.dom.hasClass = function (element, className) {
     element = baidu.dom.g(element);
+
+    // 对于 textNode 节点来说没有 className
+    if(!element || !element.className) return false;
+
     var classArray = baidu.string.trim(className).split(/\s+/), 
         len = classArray.length;
 
@@ -3243,6 +3249,8 @@ baidu.json.stringify = (function () {
  * date: 2010/02/04
  */
 
+
+
 /**
  * 返回一个当前页面的唯一标识字符串。
  * @name baidu.lang.guid
@@ -3253,64 +3261,15 @@ baidu.json.stringify = (function () {
  *             
  * @returns {String} 当前页面的唯一标识字符串
  */
-
-(function(){
-    //不直接使用window，可以提高3倍左右性能
-    var guid = window[baidu.guid];
-
-    baidu.lang.guid = function() {
-        return "TANGRAM__" + (guid._counter ++).toString(36);
-    };
-
-    guid._counter = guid._counter || 1;
-})();
-/*
- * Tangram
- * Copyright 2009 Baidu Inc. All rights reserved.
- * 
- * path: baidu/lang/_instances.js
- * author: meizz, erik
- * version: 1.1.0
- * date: 2009/12/1
- */
-
-
-
-
-/**
- * 所有类的实例的容器
- * key为每个实例的guid
- * @meta standard
- */
-
-window[baidu.guid]._instances = window[baidu.guid]._instances || {};
-/*
- * Tangram
- * Copyright 2009 Baidu Inc. All rights reserved.
- * 
- * path: baidu/lang/isFunction.js
- * author: rocy
- * version: 1.1.2
- * date: 2010/06/12
- */
-
-
-
-/**
- * 判断目标参数是否为function或Function实例
- * @name baidu.lang.isFunction
- * @function
- * @grammar baidu.lang.isFunction(source)
- * @param {Any} source 目标参数
- * @version 1.2
- * @see baidu.lang.isString,baidu.lang.isObject,baidu.lang.isNumber,baidu.lang.isArray,baidu.lang.isElement,baidu.lang.isBoolean,baidu.lang.isDate
- * @meta standard
- * @returns {boolean} 类型判断结果
- */
-baidu.lang.isFunction = function (source) {
-    // chrome下,'function' == typeof /a/ 为true.
-    return '[object Function]' == Object.prototype.toString.call(source);
+baidu.lang.guid = function() {
+    return "TANGRAM$" + baidu.$$._counter ++;
 };
+
+//不直接使用window，可以提高3倍左右性能
+baidu.$$._counter = baidu.$$._counter || 1;
+
+
+// 20111129	meizz	去除 _counter.toString(36) 这步运算，节约计算量
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
@@ -3320,8 +3279,6 @@ baidu.lang.isFunction = function (source) {
  * version: 1.1.0
  * date: 2009/12/1
  */
-
-
 
 
 
@@ -3336,11 +3293,13 @@ baidu.lang.isFunction = function (source) {
  * @meta standard
  * @see baidu.lang.inherits,baidu.lang.Event
  */
-baidu.lang.Class = function(guid) {
-    this.guid = guid || baidu.lang.guid();
-    window[baidu.guid]._instances[this.guid] = this;
+baidu.lang.Class = function() {
+    this.guid = baidu.lang.guid();
+
+    !this.__decontrolled && (baidu.$$._instances[this.guid] = this);
 };
-window[baidu.guid]._instances = window[baidu.guid]._instances || {};
+
+baidu.$$._instances = baidu.$$._instances || {};
 
 /**
  * 释放对象所持有的资源，主要是自定义事件。
@@ -3349,34 +3308,48 @@ window[baidu.guid]._instances = window[baidu.guid]._instances || {};
  * TODO: 将_listeners中绑定的事件剔除掉
  */
 baidu.lang.Class.prototype.dispose = function(){
-    delete window[baidu.guid]._instances[this.guid];
+    delete baidu.$$._instances[this.guid];
+
+    // this.__listeners && (for (var i in this.__listeners) delete this.__listeners[i]);
 
     for(var property in this){
-        if (!baidu.lang.isFunction(this[property])) {
-            delete this[property];
-        }
+        typeof this[property] != "function" && delete this[property];
     }
     this.disposed = true;   // 20100716
 };
 
 /**
  * 重载了默认的toString方法，使得返回信息更加准确一些。
+ * 20111219 meizz 为支持老版本的className属性，以后统一改成 __type
  * @return {string} 对象的String表示形式
  */
 baidu.lang.Class.prototype.toString = function(){
-    return "[object " + (this._className || "Object" ) + "]";
+    return "[object " + (this.__type || this._className || "Object") + "]";
 };
+
+/**
+ * 按唯一标识guid字符串取得实例对象
+ *
+ * @param   {String}    guid
+ * @return  {object}            实例对象
+ */
+ window["baiduInstance"] = function(guid) {
+     return baidu.$$._instances[guid];
+ }
+
+//  2011.11.23  meizz   添加 baiduInstance 这个全局方法，可以快速地通过guid得到实例对象
+//  2011.11.22  meizz   废除创建类时指定guid的模式，guid只作为只读属性
+//  2011.11.22  meizz   废除 baidu.lang._instances 模块，由统一的global机制完成；
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
  * 
  * path: baidu/lang/Event.js
  * author: meizz, erik, berg
- * version: 1.1.1
+ * version: 1.6.0
  * date: 2009/11/24
- * modify: 2010/04/19 berg
+ * modify: 2011/11/24 meizz
  */
-
 
 
 
@@ -3400,72 +3373,7 @@ baidu.lang.Event = function (type, target) {
     this.target = target || null;
     this.currentTarget = null;
 };
-
-/**
- * 注册对象的事件监听器。引入baidu.lang.Event后，Class的子类实例才会获得该方法。
- * @grammar obj.addEventListener(type, handler[, key])
- * @param 	{string}   type         自定义事件的名称
- * @param 	{Function} handler      自定义事件被触发时应该调用的回调函数
- * @param 	{string}   [key]		为事件监听函数指定的名称，可在移除时使用。如果不提供，方法会默认为它生成一个全局唯一的key。
- * @remark 	事件类型区分大小写。如果自定义事件名称不是以小写"on"开头，该方法会给它加上"on"再进行判断，即"click"和"onclick"会被认为是同一种事件。 
- */
-baidu.lang.Class.prototype.addEventListener = function (type, handler, key) {
-    if (!baidu.lang.isFunction(handler)) {
-        return;
-    }
-
-    !this.__listeners && (this.__listeners = {});
-
-    var t = this.__listeners, id;
-    if (typeof key == "string" && key) {
-        if (/[^\w\-]/.test(key)) {
-            throw("nonstandard key:" + key);
-        } else {
-            handler.hashCode = key; 
-            id = key;
-        }
-    }
-    type.indexOf("on") != 0 && (type = "on" + type);
-
-    typeof t[type] != "object" && (t[type] = {});
-    id = id || baidu.lang.guid();
-    handler.hashCode = id;
-    t[type][id] = handler;
-};
  
-/**
- * 移除对象的事件监听器。引入baidu.lang.Event后，Class的子类实例才会获得该方法。
- * @grammar obj.removeEventListener(type, handler)
- * @param {string}   type     事件类型
- * @param {Function|string} handler  要移除的事件监听函数或者监听函数的key
- * @remark 	如果第二个参数handler没有被绑定到对应的自定义事件中，什么也不做。
- */
-baidu.lang.Class.prototype.removeEventListener = function (type, handler) {
-    if (typeof handler != "undefined") {
-        if ( (baidu.lang.isFunction(handler) && ! (handler = handler.hashCode))
-            || (! baidu.lang.isString(handler))
-        ){
-            return;
-        }
-    }
-
-    !this.__listeners && (this.__listeners = {});
-
-    type.indexOf("on") != 0 && (type = "on" + type);
-
-    var t = this.__listeners;
-    if (!t[type]) {
-        return;
-    }
-    if (typeof handler != "undefined") {
-        t[type][handler] && delete t[type][handler];
-    } else {
-        for(var guid in t[type]){
-            delete t[type][guid];
-        }
-    }
-};
-
 /**
  * 派发自定义事件，使得绑定到自定义事件上面的函数都会被执行。引入baidu.lang.Event后，Class的子类实例才会获得该方法。
  * @grammar obj.dispatchEvent(event, options)
@@ -3475,10 +3383,10 @@ baidu.lang.Class.prototype.removeEventListener = function (type, handler) {
 myobj.onMyEvent = function(){}<br>
 myobj.addEventListener("onMyEvent", function(){});
  */
+baidu.lang.Class.prototype.fire =
 baidu.lang.Class.prototype.dispatchEvent = function (event, options) {
-    if (baidu.lang.isString(event)) {
-        event = new baidu.lang.Event(event);
-    }
+    baidu.lang.isString(event) && (event = new baidu.lang.Event(event));
+
     !this.__listeners && (this.__listeners = {});
 
     // 20100603 添加本方法的第二个参数，将 options extend到event中去传递
@@ -3487,21 +3395,83 @@ baidu.lang.Class.prototype.dispatchEvent = function (event, options) {
         event[i] = options[i];
     }
 
-    var i, t = this.__listeners, p = event.type;
-    event.target = event.target || this;
-    event.currentTarget = this;
+    var i, n, me = this, t = me.__listeners, p = event.type;
+    event.target = event.target || (event.currentTarget = me);
 
-    p.indexOf("on") != 0 && (p = "on" + p);
+    // 支持非 on 开头的事件名
+    p.indexOf("on") && (p = "on" + p);
 
-    baidu.lang.isFunction(this[p]) && this[p].apply(this, arguments);
+    typeof me[p] == "function" && me[p].apply(me, arguments);
 
     if (typeof t[p] == "object") {
-        for (i in t[p]) {
-            t[p][i].apply(this, arguments);
+        for (i=0, n=t[p].length; i<n; i++) {
+            t[p][i] && t[p][i].apply(me, arguments);
         }
     }
     return event.returnValue;
 };
+
+/**
+ * 注册对象的事件监听器。引入baidu.lang.Event后，Class的子类实例才会获得该方法。
+ * @grammar obj.addEventListener(type, handler[, key])
+ * @param   {string}   type         自定义事件的名称
+ * @param   {Function} handler      自定义事件被触发时应该调用的回调函数
+ * @return  {Function}              将用户注入的监听函数返回，以便移除事件监听，特别适用于匿名函数。
+ * @remark  事件类型区分大小写。如果自定义事件名称不是以小写"on"开头，该方法会给它加上"on"再进行判断，即"click"和"onclick"会被认为是同一种事件。 
+ */
+baidu.lang.Class.prototype.on =
+baidu.lang.Class.prototype.addEventListener = function (type, handler, key) {
+    if (typeof handler != "function") {
+        return;
+    }
+
+    !this.__listeners && (this.__listeners = {});
+
+    var i, t = this.__listeners;
+
+    type.indexOf("on") && (type = "on" + type);
+
+    typeof t[type] != "object" && (t[type] = []);
+
+    // 避免函数重复注册
+    for (i = t[type].length - 1; i >= 0; i--) {
+        if (t[type][i] === handler) return handler;
+    };
+
+    t[type].push(handler);
+
+    // [TODO delete 2013] 2011.12.19 兼容老版本，2013删除此行
+    key && typeof key == "string" && (t[type][key] = handler);
+
+    return handler;
+};
+
+//  2011.12.19  meizz   很悲剧，第三个参数 key 还需要支持一段时间，以兼容老版本脚本
+//  2011.11.24  meizz   事件添加监听方法 addEventListener 移除第三个参数 key，添加返回值 handler
+//  2011.11.23  meizz   事件handler的存储对象由json改成array，以保证注册函数的执行顺序
+//  2011.11.22  meizz   将 removeEventListener 方法分拆到 baidu.lang.Class.removeEventListener 中，以节约主程序代码
+/*
+ * Tangram
+ * Copyright 2009 Baidu Inc. All rights reserved.
+ * 
+ * path: baidu/lang/_instances.js
+ * author: meizz, erik
+ * version: 1.1.0
+ * date: 2009/12/1
+ */
+
+
+
+
+/**
+ * 所有类的实例的容器
+ * key为每个实例的guid
+ * @meta standard
+ */
+
+window[baidu.guid]._instances = window[baidu.guid]._instances || {};
+
+//	[TODO]	meizz	在2012年版本中将删除此模块
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
@@ -3518,10 +3488,10 @@ baidu.lang.Class.prototype.dispatchEvent = function (event, options) {
  * 为类型构造器建立继承关系
  * @name baidu.lang.inherits
  * @function
- * @grammar baidu.lang.inherits(subClass, superClass[, className])
+ * @grammar baidu.lang.inherits(subClass, superClass[, type])
  * @param {Function} subClass 子类构造器
  * @param {Function} superClass 父类构造器
- * @param {string} className 类名标识
+ * @param {string} type 类名标识
  * @remark
  * 
 使subClass继承superClass的prototype，因此subClass的实例能够使用superClass的prototype中定义的所有属性和方法。<br>
@@ -3532,13 +3502,14 @@ baidu.lang.Class.prototype.dispatchEvent = function (event, options) {
  * @meta standard
  * @see baidu.lang.Class
  */
-baidu.lang.inherits = function (subClass, superClass, className) {
+baidu.lang.inherits = function (subClass, superClass, type) {
     var key, proto, 
         selfProps = subClass.prototype, 
         clazz = new Function();
         
     clazz.prototype = superClass.prototype;
     proto = subClass.prototype = new clazz();
+
     for (key in selfProps) {
         proto[key] = selfProps[key];
     }
@@ -3546,13 +3517,20 @@ baidu.lang.inherits = function (subClass, superClass, className) {
     subClass.superClass = superClass.prototype;
 
     // 类名标识，兼容Class的toString，基本没用
-    if ("string" == typeof className) {
-        proto._className = className;
+    typeof type == "string" && (proto.__type = type);
+
+    subClass.extend = function(json) {
+        for (var i in json) proto[i] = json[i];
+        return subClass;
     }
+    
+    return subClass;
 };
 
 // 声明快捷方法
 baidu.inherits = baidu.lang.inherits;
+
+//  2011.11.22  meizz   为类添加了一个静态方法extend()，方便代码书写
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
@@ -3631,6 +3609,33 @@ baidu.lang.isElement = function (source) {
     return !!(source && source.nodeName && source.nodeType == 1);
 };
 
+/*
+ * Tangram
+ * Copyright 2009 Baidu Inc. All rights reserved.
+ * 
+ * path: baidu/lang/isFunction.js
+ * author: rocy
+ * version: 1.1.2
+ * date: 2010/06/12
+ */
+
+
+
+/**
+ * 判断目标参数是否为function或Function实例
+ * @name baidu.lang.isFunction
+ * @function
+ * @grammar baidu.lang.isFunction(source)
+ * @param {Any} source 目标参数
+ * @version 1.2
+ * @see baidu.lang.isString,baidu.lang.isObject,baidu.lang.isNumber,baidu.lang.isArray,baidu.lang.isElement,baidu.lang.isBoolean,baidu.lang.isDate
+ * @meta standard
+ * @returns {boolean} 类型判断结果
+ */
+baidu.lang.isFunction = function (source) {
+    // chrome下,'function' == typeof /a/ 为true.
+    return '[object Function]' == Object.prototype.toString.call(source);
+};
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
@@ -4633,6 +4638,7 @@ baidu.swf.createHTML = function (options) {
 
 
 
+
 /**
  * 在页面中创建一个flash对象
  * @name baidu.swf.create
@@ -4677,12 +4683,7 @@ baidu.swf.create = function (options, target) {
     if (target && 'string' == typeof target) {
         target = document.getElementById(target);
     }
-    
-    if (target) {
-        target.innerHTML = html;
-    } else {
-        document.write(html);
-    }
+    baidu.dom.insertHTML( target || document.body ,'beforeEnd',html );
 };
 /*
  * Tangram
