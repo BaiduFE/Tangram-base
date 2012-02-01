@@ -4,7 +4,7 @@
 	<property name="serverip" value="10.32.34.115:8000" />
 	<property name="report.path" value="test/tools/br/report" />
 	<property name="coverage.path" value="test/coverage" />
-	<property name="build.end" value="test/tools/br/report/html/reports.xml" />
+	<property name="report.file" value="test/tools/br/report.xml" />
 	<property name="git.project" value="Tangram-base" />
 	<property name="git.user" value="" />
 	<path id="ext.classpath">
@@ -19,6 +19,7 @@
 	<taskdef name="gitext" classname="com.baidu.tangram.GitExt" classpathref="ext.classpath" />
 
 	<target name="init">
+		<delete file="${report.file}" />
 		<delete dir="${report.path}" />
 		<mkdir dir="${report.path}/html" />
 		<mkdir dir="${report.path}/coverage/html" />
@@ -44,7 +45,7 @@
 	</target>
 	<target name="getreport" depends="init,coverage,execute">
 		<waitfor maxwait="300" maxwaitunit="second">
-			<available file="${build.end}" />
+			<available file="${report.file}" />
 		</waitfor>
 
 		<!-- junit report and mail -->
