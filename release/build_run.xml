@@ -53,7 +53,8 @@
 		<!-- junit report and mail end -->
 	</target>
 	<target name="getreport_j" depends="init,coverage,execute_j">
-		<waitfor maxwait="300" maxwaitunit="second">
+		<waitfor maxwait="1800" maxwaitunit="second">
+			<!-- 5分钟跑不出来结果，实际观察发现执行耗时20分钟，此处调整为等待半小时 -->
 			<available file="${report.file}" />
 		</waitfor>
 	</target>
