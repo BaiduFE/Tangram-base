@@ -20,7 +20,7 @@
  /**
  * @namespace T Tangram七巧板
  * @name T
- * @version 1.5.0
+ * @version 1.6.0
 */
 
 /**
@@ -36,7 +36,7 @@ baidu.guid = "$BAIDU$";
 
 //Tangram可能被放在闭包中
 //一些页面级别唯一的属性，需要挂载在window[baidu.guid]上
-window[baidu.guid] = window[baidu.guid] || {};
+baidu.$$ = window[baidu.guid] = window[baidu.guid] || {global:{}};
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
@@ -2105,7 +2105,7 @@ baidu.dom = baidu.dom || {};
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
- * 
+ *
  * path: baidu/dom/g.js
  * author: allstar, erik
  * version: 1.1.0
@@ -2119,17 +2119,18 @@ baidu.dom = baidu.dom || {};
  * @name baidu.dom.g
  * @function
  * @grammar baidu.dom.g(id)
- * @param {string|HTMLElement} id 元素的id或DOM元素
+ * @param {string|HTMLElement} id 元素的id或DOM元素.
  * @shortcut g,T.G
  * @meta standard
  * @see baidu.dom.q
- *             
- * @returns {HTMLElement|null} 获取的元素，查找不到时返回null,如果参数不合法，直接返回参数
+ *
+ * @return {HTMLElement|null} 获取的元素，查找不到时返回null,如果参数不合法，直接返回参数.
  */
-baidu.dom.g = function (id) {
+baidu.dom.g = function(id) {
+    if (!id) return null; //修改IE下baidu.dom.g(baidu.dom.g('dose_not_exist_id'))报错的bug，by Meizz, dengping
     if ('string' == typeof id || id instanceof String) {
         return document.getElementById(id);
-    } else if (id && id.nodeName && (id.nodeType == 1 || id.nodeType == 9)) {
+    } else if (id.nodeName && (id.nodeType == 1 || id.nodeType == 9)) {
         return id;
     }
     return null;
@@ -2525,6 +2526,8 @@ baidu.dom.create = function(tagName, opt_attributes) {
  * date: 2010/02/04
  */
 
+
+
 /**
  * 返回一个当前页面的唯一标识字符串。
  * @name baidu.lang.guid
@@ -2535,37 +2538,15 @@ baidu.dom.create = function(tagName, opt_attributes) {
  *             
  * @returns {String} 当前页面的唯一标识字符串
  */
+baidu.lang.guid = function() {
+    return "TANGRAM$" + baidu.$$._counter ++;
+};
 
-(function(){
-    //不直接使用window，可以提高3倍左右性能
-    var guid = window[baidu.guid];
-
-    baidu.lang.guid = function() {
-        return "TANGRAM__" + (guid._counter ++).toString(36);
-    };
-
-    guid._counter = guid._counter || 1;
-})();
-/*
- * Tangram
- * Copyright 2009 Baidu Inc. All rights reserved.
- * 
- * path: baidu/lang/_instances.js
- * author: meizz, erik
- * version: 1.1.0
- * date: 2009/12/1
- */
+//不直接使用window，可以提高3倍左右性能
+baidu.$$._counter = baidu.$$._counter || 1;
 
 
-
-
-/**
- * 所有类的实例的容器
- * key为每个实例的guid
- * @meta standard
- */
-
-window[baidu.guid]._instances = window[baidu.guid]._instances || {};
+// 20111129	meizz	去除 _counter.toString(36) 这步运算，节约计算量
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
@@ -2575,8 +2556,6 @@ window[baidu.guid]._instances = window[baidu.guid]._instances || {};
  * version: 1.1.0
  * date: 2009/12/1
  */
-
-
 
 
 
@@ -2591,11 +2570,13 @@ window[baidu.guid]._instances = window[baidu.guid]._instances || {};
  * @meta standard
  * @see baidu.lang.inherits,baidu.lang.Event
  */
-baidu.lang.Class = function(guid) {
-    this.guid = guid || baidu.lang.guid();
-    window[baidu.guid]._instances[this.guid] = this;
+baidu.lang.Class = function() {
+    this.guid = baidu.lang.guid();
+
+    !this.__decontrolled && (baidu.$$._instances[this.guid] = this);
 };
-window[baidu.guid]._instances = window[baidu.guid]._instances || {};
+
+baidu.$$._instances = baidu.$$._instances || {};
 
 /**
  * 释放对象所持有的资源，主要是自定义事件。
@@ -2604,34 +2585,104 @@ window[baidu.guid]._instances = window[baidu.guid]._instances || {};
  * TODO: 将_listeners中绑定的事件剔除掉
  */
 baidu.lang.Class.prototype.dispose = function(){
-    delete window[baidu.guid]._instances[this.guid];
+    delete baidu.$$._instances[this.guid];
+
+    // this.__listeners && (for (var i in this.__listeners) delete this.__listeners[i]);
 
     for(var property in this){
-        if (!baidu.lang.isFunction(this[property])) {
-            delete this[property];
-        }
+        typeof this[property] != "function" && delete this[property];
     }
     this.disposed = true;   // 20100716
 };
 
 /**
  * 重载了默认的toString方法，使得返回信息更加准确一些。
+ * 20111219 meizz 为支持老版本的className属性，以后统一改成 __type
  * @return {string} 对象的String表示形式
  */
 baidu.lang.Class.prototype.toString = function(){
-    return "[object " + (this._className || "Object" ) + "]";
+    return "[object " + (this.__type || this._className || "Object") + "]";
 };
+
+/**
+ * 按唯一标识guid字符串取得实例对象
+ *
+ * @param   {String}    guid
+ * @return  {object}            实例对象
+ */
+ window["baiduInstance"] = function(guid) {
+     return baidu.$$._instances[guid];
+ }
+
+//  2011.11.23  meizz   添加 baiduInstance 这个全局方法，可以快速地通过guid得到实例对象
+//  2011.11.22  meizz   废除创建类时指定guid的模式，guid只作为只读属性
+//  2011.11.22  meizz   废除 baidu.lang._instances 模块，由统一的global机制完成；
+/*
+ * Tangram
+ * Copyright 2009 Baidu Inc. All rights reserved.
+ * 
+ * path: baidu/lang/Class/removeEventListener.js
+ * author: meizz
+ * version: 1.6.0
+ * date: 2011/11/23
+ * modify: 2011/11/23
+ */
+
+
+
+ 
+/**
+ * 移除对象的事件监听器。引入baidu.lang.Event后，Class的子类实例才会获得该方法。
+ * 事件移除操作是一个不常用的方法，如果你有需求再import调入，可以节约代码
+ * 可能通过参数走不同的分支：不传handler会移除某类事件监听；如果连type都不传那就移除当前实例的全部事件监听
+ *
+ * @grammar obj.removeEventListener(type, handler)
+ * @param {string}   type     事件类型
+ * @param {Function} handler  要移除的事件监听函数或者监听函数的key
+ * @remark 	如果第二个参数handler没有被绑定到对应的自定义事件中，什么也不做。
+ */
+baidu.lang.Class.prototype.un =
+baidu.lang.Class.prototype.removeEventListener = function (type, handler) {
+    var i,
+        t = this.__listeners;
+    if (!t) return;
+
+    // remove all event listener
+    if (typeof type == "undefined") {
+        for (i in t) {
+            delete t[i];
+        }
+        return;
+    }
+
+    type.indexOf("on") && (type = "on" + type);
+
+    // 移除某类事件监听
+    if (typeof handler == "undefined") {
+        delete t[type];
+    } else if (t[type]) {
+        // [TODO delete 2013] 支持按 key 删除注册的函数
+        typeof handler=="string" && (handler=t[type][handler]) && delete t[type][handler];
+
+        for (i = t[type].length - 1; i >= 0; i--) {
+            if (t[type][i] === handler) {
+                t[type].splice(i, 1);
+            }
+        }
+    }
+};
+
+// 2011.12.19 meizz 为兼容老版本的按 key 删除，添加了一行代码
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
  * 
  * path: baidu/lang/Event.js
  * author: meizz, erik, berg
- * version: 1.1.1
+ * version: 1.6.0
  * date: 2009/11/24
- * modify: 2010/04/19 berg
+ * modify: 2011/11/24 meizz
  */
-
 
 
 
@@ -2655,72 +2706,7 @@ baidu.lang.Event = function (type, target) {
     this.target = target || null;
     this.currentTarget = null;
 };
-
-/**
- * 注册对象的事件监听器。引入baidu.lang.Event后，Class的子类实例才会获得该方法。
- * @grammar obj.addEventListener(type, handler[, key])
- * @param 	{string}   type         自定义事件的名称
- * @param 	{Function} handler      自定义事件被触发时应该调用的回调函数
- * @param 	{string}   [key]		为事件监听函数指定的名称，可在移除时使用。如果不提供，方法会默认为它生成一个全局唯一的key。
- * @remark 	事件类型区分大小写。如果自定义事件名称不是以小写"on"开头，该方法会给它加上"on"再进行判断，即"click"和"onclick"会被认为是同一种事件。 
- */
-baidu.lang.Class.prototype.addEventListener = function (type, handler, key) {
-    if (!baidu.lang.isFunction(handler)) {
-        return;
-    }
-
-    !this.__listeners && (this.__listeners = {});
-
-    var t = this.__listeners, id;
-    if (typeof key == "string" && key) {
-        if (/[^\w\-]/.test(key)) {
-            throw("nonstandard key:" + key);
-        } else {
-            handler.hashCode = key; 
-            id = key;
-        }
-    }
-    type.indexOf("on") != 0 && (type = "on" + type);
-
-    typeof t[type] != "object" && (t[type] = {});
-    id = id || baidu.lang.guid();
-    handler.hashCode = id;
-    t[type][id] = handler;
-};
  
-/**
- * 移除对象的事件监听器。引入baidu.lang.Event后，Class的子类实例才会获得该方法。
- * @grammar obj.removeEventListener(type, handler)
- * @param {string}   type     事件类型
- * @param {Function|string} handler  要移除的事件监听函数或者监听函数的key
- * @remark 	如果第二个参数handler没有被绑定到对应的自定义事件中，什么也不做。
- */
-baidu.lang.Class.prototype.removeEventListener = function (type, handler) {
-    if (typeof handler != "undefined") {
-        if ( (baidu.lang.isFunction(handler) && ! (handler = handler.hashCode))
-            || (! baidu.lang.isString(handler))
-        ){
-            return;
-        }
-    }
-
-    !this.__listeners && (this.__listeners = {});
-
-    type.indexOf("on") != 0 && (type = "on" + type);
-
-    var t = this.__listeners;
-    if (!t[type]) {
-        return;
-    }
-    if (typeof handler != "undefined") {
-        t[type][handler] && delete t[type][handler];
-    } else {
-        for(var guid in t[type]){
-            delete t[type][guid];
-        }
-    }
-};
-
 /**
  * 派发自定义事件，使得绑定到自定义事件上面的函数都会被执行。引入baidu.lang.Event后，Class的子类实例才会获得该方法。
  * @grammar obj.dispatchEvent(event, options)
@@ -2730,10 +2716,10 @@ baidu.lang.Class.prototype.removeEventListener = function (type, handler) {
 myobj.onMyEvent = function(){}<br>
 myobj.addEventListener("onMyEvent", function(){});
  */
+baidu.lang.Class.prototype.fire =
 baidu.lang.Class.prototype.dispatchEvent = function (event, options) {
-    if (baidu.lang.isString(event)) {
-        event = new baidu.lang.Event(event);
-    }
+    baidu.lang.isString(event) && (event = new baidu.lang.Event(event));
+
     !this.__listeners && (this.__listeners = {});
 
     // 20100603 添加本方法的第二个参数，将 options extend到event中去传递
@@ -2742,21 +2728,61 @@ baidu.lang.Class.prototype.dispatchEvent = function (event, options) {
         event[i] = options[i];
     }
 
-    var i, t = this.__listeners, p = event.type;
-    event.target = event.target || this;
-    event.currentTarget = this;
+    var i, n, me = this, t = me.__listeners, p = event.type;
+    event.target = event.target || (event.currentTarget = me);
 
-    p.indexOf("on") != 0 && (p = "on" + p);
+    // 支持非 on 开头的事件名
+    p.indexOf("on") && (p = "on" + p);
 
-    baidu.lang.isFunction(this[p]) && this[p].apply(this, arguments);
+    typeof me[p] == "function" && me[p].apply(me, arguments);
 
     if (typeof t[p] == "object") {
-        for (i in t[p]) {
-            t[p][i].apply(this, arguments);
+        for (i=0, n=t[p].length; i<n; i++) {
+            t[p][i] && t[p][i].apply(me, arguments);
         }
     }
     return event.returnValue;
 };
+
+/**
+ * 注册对象的事件监听器。引入baidu.lang.Event后，Class的子类实例才会获得该方法。
+ * @grammar obj.addEventListener(type, handler[, key])
+ * @param   {string}   type         自定义事件的名称
+ * @param   {Function} handler      自定义事件被触发时应该调用的回调函数
+ * @return  {Function}              将用户注入的监听函数返回，以便移除事件监听，特别适用于匿名函数。
+ * @remark  事件类型区分大小写。如果自定义事件名称不是以小写"on"开头，该方法会给它加上"on"再进行判断，即"click"和"onclick"会被认为是同一种事件。 
+ */
+baidu.lang.Class.prototype.on =
+baidu.lang.Class.prototype.addEventListener = function (type, handler, key) {
+    if (typeof handler != "function") {
+        return;
+    }
+
+    !this.__listeners && (this.__listeners = {});
+
+    var i, t = this.__listeners;
+
+    type.indexOf("on") && (type = "on" + type);
+
+    typeof t[type] != "object" && (t[type] = []);
+
+    // 避免函数重复注册
+    for (i = t[type].length - 1; i >= 0; i--) {
+        if (t[type][i] === handler) return handler;
+    };
+
+    t[type].push(handler);
+
+    // [TODO delete 2013] 2011.12.19 兼容老版本，2013删除此行
+    key && typeof key == "string" && (t[type][key] = handler);
+
+    return handler;
+};
+
+//  2011.12.19  meizz   很悲剧，第三个参数 key 还需要支持一段时间，以兼容老版本脚本
+//  2011.11.24  meizz   事件添加监听方法 addEventListener 移除第三个参数 key，添加返回值 handler
+//  2011.11.23  meizz   事件handler的存储对象由json改成array，以保证注册函数的执行顺序
+//  2011.11.22  meizz   将 removeEventListener 方法分拆到 baidu.lang.Class.removeEventListener 中，以节约主程序代码
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
@@ -2766,6 +2792,7 @@ baidu.lang.Class.prototype.dispatchEvent = function (event, options) {
  * version: 1.1.2
  * date: 2010-05-13
  */
+
 
 
 
@@ -2800,6 +2827,7 @@ baidu.lang.createSingle = function (json) {
  * version: 1.4.0
  * date: 2010/10/14
  */
+
 
 
 
@@ -2849,7 +2877,6 @@ baidu.dom.getDocument = function (element) {
 
 
 
-
 /**
  * 获取目标元素的computed style值。如果元素的样式值不能被浏览器计算，则会返回空字符串（IE）
  *
@@ -2877,6 +2904,8 @@ baidu.dom.getComputedStyle = function(element, key){
     }
     return ''; 
 };
+
+// 20111204 meizz   去掉一个无用的import baidu.browser.ie
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
@@ -3479,194 +3508,6 @@ baidu.dom.getPosition = function (element) {
 };
 /*
  * Tangram
- * Copyright 2010 Baidu Inc. All rights reserved.
- * 
- * path: baidu/dom/drag.js
- * author: meizz, berg, lxp
- * version: 1.1.0
- * date: 2010/06/02
- */
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/**
- * 拖动指定的DOM元素
- * @name baidu.dom.drag
- * @function
- * @grammar baidu.dom.drag(element, options)
- * @param {HTMLElement|string} element 元素或者元素的id
- * @param {Object} options 拖曳配置项
-                
- * @param {Array} options.range 限制drag的拖拽范围，数组中必须包含四个值，分别是上、右、下、左边缘相对上方或左方的像素距离。默认无限制
- * @param {Number} options.interval 拖曳行为的触发频度（时间：毫秒）
- * @param {Boolean} options.capture 鼠标拖曳粘滞
- * @param {Object} options.mouseEvent 键名为clientX和clientY的object，若不设置此项，默认会获取当前鼠标位置
- * @param {Function} options.ondragstart drag开始时触发
- * @param {Function} options.ondrag drag进行中触发
- * @param {Function} options.ondragend drag结束时触发
- * @param {function} options.autoStop 是否在onmouseup时自动停止拖拽。默认为true
- * @version 1.2
- * @remark
- * 
-            要拖拽的元素必须事先设定样式的postion值，如果postion为absloute，并且没有设定top和left，拖拽开始时，无法取得元素的top和left值，这时会从[0,0]点开始拖拽
-        
- * @see baidu.dom.draggable
- */
-/**
- * 拖曳DOM元素
- * @param   {HTMLElement|ID}    element 被拖曳的元素
- * @param   {JSON}              options 拖曳配置项
- *          {autoStop, interval, capture, range, ondragstart, ondragend, ondrag, mouseEvent}
- */
-(function(){
-    var target, // 被拖曳的DOM元素
-        op, ox, oy, //timer, 
-        top, left, mozUserSelect,
-        lastLeft, lastTop,
-        isFunction = baidu.lang.isFunction,
-        timer,
-        offset_parent,offset_target;
-    
-    baidu.dom.drag = function(element, options) {
-        //每次开始拖拽的时候重置lastTop和lastLeft
-        lastTop = lastLeft = null;
-        
-        if (!(target = baidu.dom.g(element))) return false;
-        op = baidu.object.extend({
-            autoStop:true   // false 用户手动结束拖曳 ｜ true 在mouseup时自动停止拖曳
-            ,capture : true // 鼠标拖曳粘滞
-            ,interval : 16  // 拖曳行为的触发频度（时间：毫秒）
-            ,handler : target
-        }, options);
-
-        offset_parent = baidu.dom.getPosition(target.offsetParent);
-        offset_target = baidu.dom.getPosition(target);
-       
-        if(baidu.getStyle(target,'position') == "absolute"){
-            top =  offset_target.top - (target.offsetParent == document.body ? 0 : offset_parent.top);
-            left = offset_target.left - (target.offsetParent == document.body ? 0 :offset_parent.left);
-        }else{
-            top = parseFloat(baidu.getStyle(target,"top")) || -parseFloat(baidu.getStyle(target,"bottom")) || 0;
-            left = parseFloat(baidu.getStyle(target,"left")) || -parseFloat(baidu.getStyle(target,"right")) || 0; 
-        }
-
-        if(op.mouseEvent){
-            // [2010/11/16] 可以不依赖getMousePosition，直接通过一个可选参数获得鼠标位置
-            ox = baidu.page.getScrollLeft() + op.mouseEvent.clientX;
-            oy = baidu.page.getScrollTop() + op.mouseEvent.clientY;
-        }else{
-            var xy = baidu.page.getMousePosition();    // 得到当前鼠标坐标值
-            ox = xy.x;
-            oy = xy.y;
-        }
-
-        //timer = setInterval(render, op.interval);
-
-        // 这项为 true，缺省在 onmouseup 事件终止拖曳
-        op.autoStop && baidu.event.on(op.handler, "mouseup", stop);
-        op.autoStop && baidu.event.on(window, "mouseup", stop);
-        
-        // 在拖曳过程中页面里的文字会被选中高亮显示，在这里修正
-        baidu.event.on(document, "selectstart", unselect);
-
-        // 设置鼠标粘滞
-        if (op.capture && op.handler.setCapture) {
-            op.handler.setCapture();
-        } else if (op.capture && window.captureEvents) {
-            window.captureEvents(Event.MOUSEMOVE|Event.MOUSEUP);
-        }
-        //baidu.on(target,"mousemove",render);
-
-        // fixed for firefox
-        mozUserSelect = document.body.style.MozUserSelect;
-        document.body.style.MozUserSelect = "none";
-
-        // ondragstart 事件
-        if(isFunction(op.ondragstart)){
-            op.ondragstart(target, op);
-        }
-        
-        timer = setInterval(render, op.interval);
-        return {stop : stop, update : update};
-    };
-
-    /**
-     * 更新当前拖拽对象的属性
-     */
-    function update(options){
-        baidu.extend(op, options);
-    }
-
-    /**
-     * 手动停止拖拽
-     */
-    function stop() {
-        clearInterval(timer);
-
-        // 解除鼠标粘滞
-        if (op.capture && op.handler.releaseCapture) {
-            op.handler.releaseCapture();
-        } else if (op.capture && window.releaseEvents) {
-            window.releaseEvents(Event.MOUSEMOVE|Event.MOUSEUP);
-        }
-
-        // 拖曳时网页内容被框选
-        document.body.style.MozUserSelect = mozUserSelect;
-        baidu.event.un(document, "selectstart", unselect);
-        op.autoStop && baidu.event.un(op.handler, "mouseup", stop);
-        op.autoStop && baidu.event.un(window, "mouseup", stop);
-
-        // ondragend 事件
-        if(isFunction(op.ondragend)){
-            op.ondragend(target, op);
-        }
-    }
-
-    // 对DOM元素进行top/left赋新值以实现拖曳的效果
-    function render(e) {
-        var rg = op.range,
-            xy = baidu.page.getMousePosition(),
-            el = left + xy.x - ox,
-            et = top  + xy.y - oy;
-
-        // 如果用户限定了可拖动的范围
-        if (typeof rg == "object" && rg && rg.length == 4) {
-            el = Math.max(rg[3], el);
-            el = Math.min(rg[1] - target.offsetWidth,  el);
-            et = Math.max(rg[0], et);
-            et = Math.min(rg[2] - target.offsetHeight, et);
-        }
-        target.style.top = et + "px";
-        target.style.left = el + "px";
-
-        if((lastLeft !== el || lastTop !== et) && (lastLeft !== null || lastTop !== null) ){
-            if(isFunction(op.ondrag)){
-                op.ondrag(target, op);   
-            }
-        }
-        lastLeft = el;
-        lastTop = et;
-    }
-
-    // 对document.body.onselectstart事件进行监听，避免拖曳时文字被选中
-    function unselect(e) {
-        return baidu.event.preventDefault(e, false);
-    }
-})();
-/*
- * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
  * 
  * path: baidu/dom/setStyle.js
@@ -3719,6 +3560,206 @@ baidu.dom.setStyle = function (element, key, value) {
 
 // 声明快捷方法
 baidu.setStyle = baidu.dom.setStyle;
+/*
+ * Tangram
+ * Copyright 2010 Baidu Inc. All rights reserved.
+ *
+ * path: baidu/dom/drag.js
+ * author: meizz, berg, lxp
+ * version: 1.1.0
+ * date: 2010/06/02
+ */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/**
+ * 拖动指定的DOM元素
+ * @name baidu.dom.drag
+ * @function
+ * @grammar baidu.dom.drag(element, options)
+ * @param {HTMLElement|string} element 元素或者元素的id.
+ * @param {Object} options 拖曳配置项.
+
+ * @param {Array} options.range 限制drag的拖拽范围，数组中必须包含四个值，分别是上、右、下、左边缘相对上方或左方的像素距离。默认无限制.
+ * @param {Number} options.interval 拖曳行为的触发频度（时间：毫秒）.
+ * @param {Boolean} options.capture 鼠标拖曳粘滞.
+ * @param {Object} options.mouseEvent 键名为clientX和clientY的object，若不设置此项，默认会获取当前鼠标位置.
+ * @param {Function} options.ondragstart drag开始时触发.
+ * @param {Function} options.ondrag drag进行中触发.
+ * @param {Function} options.ondragend drag结束时触发.
+ * @param {function} options.autoStop 是否在onmouseup时自动停止拖拽。默认为true.
+ * @version 1.2
+ * @remark
+ *
+            要拖拽的元素必须事先设定样式的postion值，如果postion为absloute，并且没有设定top和left，拖拽开始时，无法取得元素的top和left值，这时会从[0,0]点开始拖拽
+
+ * @see baidu.dom.draggable
+ */
+/**
+ *
+ 拖曳DOM元素
+ * @param   {HTMLElement|ID}    element 被拖曳的元素.
+ * @param   {JSON}              options 拖曳配置项
+ *          {autoStop, interval, capture, range, ondragstart, ondragend, ondrag, mouseEvent}.
+ */
+(function() {
+    var target, // 被拖曳的DOM元素
+        op, ox, oy, //timer,
+        top, left, mozUserSelect,
+        lastLeft, lastTop,
+        setMargin,
+        isFunction = baidu.lang.isFunction,
+        timer,
+        offset_parent, offset_target;
+
+    baidu.dom.drag = function(element, options) {
+        //每次开始拖拽的时候重置lastTop和lastLeft
+        lastTop = lastLeft = null;
+
+        if (!(target = baidu.dom.g(element))) return false;
+        op = baidu.object.extend({
+            autoStop: true   // false 用户手动结束拖曳 ｜ true 在mouseup时自动停止拖曳
+, capture: true // 鼠标拖曳粘滞
+, interval: 16  // 拖曳行为的触发频度（时间：毫秒）
+            , handler: target
+        }, options);
+
+        offset_parent = baidu.dom.getPosition(target.offsetParent);
+        offset_target = baidu.dom.getPosition(target);
+
+        if (baidu.getStyle(target, 'position') == 'absolute') {
+            top = offset_target.top - (target.offsetParent == document.body ? 0 : offset_parent.top);
+            left = offset_target.left - (target.offsetParent == document.body ? 0 : offset_parent.left);
+        }else {
+            top = parseFloat(baidu.getStyle(target, 'top')) || -parseFloat(baidu.getStyle(target, 'bottom')) || 0;
+            left = parseFloat(baidu.getStyle(target, 'left')) || -parseFloat(baidu.getStyle(target, 'right')) || 0;
+        }
+
+        if (op.mouseEvent) {
+            // [2010/11/16] 可以不依赖getMousePosition，直接通过一个可选参数获得鼠标位置
+            ox = baidu.page.getScrollLeft() + op.mouseEvent.clientX;
+            oy = baidu.page.getScrollTop() + op.mouseEvent.clientY;
+        }else {
+            var xy = baidu.page.getMousePosition();    // 得到当前鼠标坐标值
+            ox = xy.x;
+            oy = xy.y;
+        }
+
+        //timer = setInterval(render, op.interval);
+
+        // 这项为 true，缺省在 onmouseup 事件终止拖曳
+        op.autoStop && baidu.event.on(op.handler, 'mouseup', stop);
+        op.autoStop && baidu.event.on(window, 'mouseup', stop);
+
+        // 在拖曳过程中页面里的文字会被选中高亮显示，在这里修正
+        baidu.event.on(document, 'selectstart', unselect);
+
+        // 设置鼠标粘滞
+        if (op.capture && op.handler.setCapture) {
+            op.handler.setCapture();
+        } else if (op.capture && window.captureEvents) {
+            window.captureEvents(Event.MOUSEMOVE | Event.MOUSEUP);
+        }
+
+        //baidu.on(target,"mousemove",render);
+
+        // fixed for firefox
+        mozUserSelect = document.body.style.MozUserSelect;
+        document.body.style.MozUserSelect = 'none';
+
+        // ondragstart 事件
+        if (isFunction(op.ondragstart)) {
+            op.ondragstart(target, op);
+        }
+
+        timer = setInterval(render, op.interval);
+        return {stop: stop, update: update};
+    };
+
+    /**
+     * 更新当前拖拽对象的属性
+     */
+    function update(options) {
+        baidu.extend(op, options);
+    }
+
+    /**
+     * 手动停止拖拽
+     */
+    function stop() {
+        clearInterval(timer);
+        setMargin = false;
+
+        // 解除鼠标粘滞
+        if (op.capture && op.handler.releaseCapture) {
+            op.handler.releaseCapture();
+        } else if (op.capture && window.releaseEvents) {
+            window.releaseEvents(Event.MOUSEMOVE | Event.MOUSEUP);
+        }
+
+        // 拖曳时网页内容被框选
+        document.body.style.MozUserSelect = mozUserSelect;
+        baidu.event.un(document, 'selectstart', unselect);
+        op.autoStop && baidu.event.un(op.handler, 'mouseup', stop);
+        op.autoStop && baidu.event.un(window, 'mouseup', stop);
+
+        // ondragend 事件
+        if (isFunction(op.ondragend)) {
+            op.ondragend(target, op);
+        }
+    }
+
+    // 对DOM元素进行top/left赋新值以实现拖曳的效果
+    function render(e) {
+        var rg = op.range,
+            xy = baidu.page.getMousePosition(),
+            el = left + xy.x - ox,
+            et = top + xy.y - oy;
+
+        // 如果用户限定了可拖动的范围
+        if (typeof rg == 'object' && rg && rg.length == 4) {
+            el = Math.max(rg[3], el);
+            el = Math.min(rg[1] - target.offsetWidth, el);
+            et = Math.max(rg[0], et);
+            et = Math.min(rg[2] - target.offsetHeight, et);
+        }
+
+        if (!setMargin) {
+            baidu.setStyle(target, 'marginTop', 0);
+            baidu.setStyle(target, 'marginLeft', 0);
+            setMargin = true;
+        }
+
+        target.style.top = et + 'px';
+        target.style.left = el + 'px';
+
+        if ((lastLeft !== el || lastTop !== et) && (lastLeft !== null || lastTop !== null)) {
+            if (isFunction(op.ondrag)) {
+                op.ondrag(target, op);
+            }
+        }
+        lastLeft = el;
+        lastTop = et;
+    }
+
+    // 对document.body.onselectstart事件进行监听，避免拖曳时文字被选中
+    function unselect(e) {
+        return baidu.event.preventDefault(e, false);
+    }
+})();
 /*
  * Tangram
  * Copyright 2010 Baidu Inc. All rights reserved.
@@ -4481,6 +4522,39 @@ baidu.dom.getAncestorByTag = function (element, tagName) {
 
     return null;
 };
+/*
+ * Tangram
+ * Copyright 2011 Baidu Inc. All rights reserved.
+ *
+ * author: meizz
+ * create: 20111204
+ */
+
+
+
+
+/**
+ * 获取目标元素的 currentStyle 值，兼容非IE浏览器
+ * 某些样式名称或者值需要hack的话，需要别外处理！
+ * @author meizz
+ * @name baidu.dom.getCurrentStyle
+ * @function
+ * @grammar baidu.dom.currentStyle(element, key)
+ * @param {HTMLElement|string} element 目标元素或目标元素的id
+ * @param {string} key 要获取的样式名
+ *
+ * @see baidu.dom.getStyle
+ *             
+ * @returns {string} 目标元素的computed style值
+ */
+
+baidu.dom.getCurrentStyle = function(element, key){
+    element = baidu.dom.g(element);
+
+    return element.style[key] ||
+        (element.currentStyle ? element.currentStyle[key] : "") || 
+        baidu.dom.getComputedStyle(element, key);
+};
 
 /*
  * Tangram
@@ -4637,6 +4711,10 @@ baidu.dom.hasAttr = function (element, name){
  */
 baidu.dom.hasClass = function (element, className) {
     element = baidu.dom.g(element);
+
+    // 对于 textNode 节点来说没有 className
+    if(!element || !element.className) return false;
+
     var classArray = baidu.string.trim(className).split(/\s+/), 
         len = classArray.length;
 
@@ -4860,6 +4938,30 @@ baidu.dom.last = function (element) {
  */
 baidu.dom.next = function (element) {
     return baidu.dom._matchNode(element, 'nextSibling', 'nextSibling');
+};
+
+
+
+/**
+ * 设置HTML元素的不透明性，跨浏览器种类兼容处理
+ * 
+ * @author: meizz
+ * @version: 2011-07-11
+ * @namespace: baidu.dom.opacity
+ * @grammar baidu.dom.opacity(element, opacity)
+ * @param {String|HTMLElement}  element 定位插入的HTML的目标DOM元素
+ * @param {Number}              opacity 不透明度
+ */
+baidu.dom.opacity = function(element, opacity){
+    element = baidu.dom.g(element);
+
+    if (!baidu.browser.ie) {
+        element.style.opacity = opacity;
+        element.style.KHTMLOpacity = opacity;
+    } else {
+        element.style.filter = "progid:DXImageTransform.Microsoft.Alpha(opacity:"+
+            Math.floor(opacity * 100) +")";
+    }
 };
 /*
  * Tangram
@@ -6950,6 +7052,7 @@ baidu.dom.resizable = /**@function*/function(element,options) {
         handlePosition,
         timer,
         isCancel = false,
+        isResizabled = false,
         defaultOptions = {
             direction: ['e', 's', 'se'],
             minWidth: 16,
@@ -7030,7 +7133,7 @@ baidu.dom.resizable = /**@function*/function(element,options) {
             target.appendChild(ele);
             resizeHandle[key] = ele;
 
-            baidu.on(ele, 'mousedown', start);
+            baidu.on(ele, 'mousedown',start);
         });
 
         isCancel = false;
@@ -7070,10 +7173,12 @@ baidu.dom.resizable = /**@function*/function(element,options) {
      * @return void
      */
     function start(e){
+		isResizabled && stop();
         var ele = baidu.event.getTarget(e),
             key = ele.key;
         currentEle = ele;
-
+		isResizabled = true;
+		
         if (ele.setCapture) {
             ele.setCapture();
         } else if (window.captureEvents) {
@@ -7086,7 +7191,7 @@ baidu.dom.resizable = /**@function*/function(element,options) {
          */
         orgCursor = baidu.getStyle(document.body, 'cursor');
         baidu.setStyle(document.body, 'cursor', key + '-resize');
-        baidu.on(ele, 'mouseup',stop);
+        baidu.on(document.body, 'mouseup',stop);
         baidu.on(document.body, 'selectstart', unselect);
         mozUserSelect = document.body.style.MozUserSelect;
         document.body.style.MozUserSelect = 'none';
@@ -7111,7 +7216,7 @@ baidu.dom.resizable = /**@function*/function(element,options) {
      * @return void
      */
     function stop() {
-        if (currentEle.releaseCapture) {
+        if (currentEle && currentEle.releaseCapture) {
             currentEle.releaseCapture();
         } else if (window.releaseEvents) {
             window.releaseEvents(Event.MOUSEMOVE | Event.MOUSEUP);
@@ -7121,7 +7226,7 @@ baidu.dom.resizable = /**@function*/function(element,options) {
          * 删除事件监听
          * 还原css属性设置
          */
-        baidu.un(currentEle, 'mouseup',stop);
+        baidu.un(document.body, 'mouseup',stop);
         baidu.un(document, 'selectstart', unselect);
         document.body.style.MozUserSelect = mozUserSelect;
         baidu.un(document.body, 'selectstart', unselect);
@@ -7129,7 +7234,7 @@ baidu.dom.resizable = /**@function*/function(element,options) {
         clearInterval(timer);
         baidu.setStyle(document.body, 'cursor',orgCursor);
         currentEle = null;
-
+		isResizabled = false;
         baidu.lang.isFunction(op.onresizeend) && op.onresizeend();
     }
 
@@ -7218,6 +7323,28 @@ baidu.dom.resizable = /**@function*/function(element,options) {
     }
     
     return {cancel:cancel,update:update,enable:render};
+};
+/*
+ * Tangram
+ * Copyright 2011 Baidu Inc. All rights reserved.
+ *
+ * author: meizz
+ * create: 2011-12-14
+ */
+
+
+
+
+/**
+ * 给元素样式（比如width）赋值时，如果是数字则添加单位(px)，如果是其它值直接赋
+ * @grammar baidu.dom.setPixel(el, style, n)
+ * @param	{HTMLElement}	el 		DOM元素
+ * @param 	{String}		style 	样式属性名
+ * @param	{Number|String} n 		被赋的值
+ */
+baidu.dom.setPixel = function (el, style, n) {
+	typeof n != "undefined" &&
+	(baidu.dom.g(el).style[style] = n +(!isNaN(n) ? "px" : ""));
 };
 
 /*
@@ -8398,6 +8525,41 @@ baidu.event.get = function (event, win) {
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
+ *
+ * path: baidu/event/getEvent.js
+ * author: xiadengping
+ * version: 1.6.0
+ * date: 2011/12/08
+ */
+
+
+
+/**
+ * 获取事件对象
+ * @name baidu.event.getEvent
+ * @function
+ * @param {Event} event event对象，目前没有使用这个参数，只是保留接口。by dengping.
+ * @grammar baidu.event.getEvent()
+ * @meta standard
+ * @return {Event} event对象.
+ */
+
+baidu.event.getEvent = function(event) {
+    if (window.event) {
+        return window.event;
+    } else {
+        var f = arguments.callee;
+        do { //此处参考Qwrap框架 see http://www.qwrap.com/ by dengping
+            if (/Event/.test(f.arguments[0])) {
+                return f.arguments[0];
+            }
+        } while (f = f.caller);
+        return null;
+    }
+};
+/*
+ * Tangram
+ * Copyright 2009 Baidu Inc. All rights reserved.
  * 
  * path: baidu/event/getKeyCode.js
  * author: erik
@@ -8787,6 +8949,294 @@ if (window.attachEvent) {
 baidu.fn.abstractMethod = function() {
     throw Error('unimplemented abstract method');
 };
+﻿/*
+ * Tangram
+ * Copyright 2009 Baidu Inc. All rights reserved.
+ *
+ * path: baidu/fn.js
+ * author: qiaoyue
+ * version: 1.0.0
+ * date: 2011/12/23
+ */
+
+
+/**
+ * 对form的操作，解决表单数据问题
+ * @namespace baidu.form
+ */
+baidu.form = baidu.form || {};
+/*
+ * Tangram
+ * Copyright 2009 Baidu Inc. All rights reserved.
+ * 
+ * path: baidu/form/json.js
+ * author: qiaoyue
+ * version: 1.1.0
+ * date: 2011/12/23
+ */
+
+
+
+
+/**
+ * josn化表单数据
+ * @name baidu.form.json
+ * @function
+ * @grammar baidu.form.json(form[, replacer])
+ * @param {HTMLFormElement} form        需要提交的表单元素
+ * @param {Function} replacer           对参数值特殊处理的函数,replacer(string value, string key)
+	           
+ * @returns {data} 表单数据js对象
+ */
+baidu.form.json = function (form, replacer) {
+    var elements = form.elements,
+        replacer = replacer || function (value, name) {
+            return value;
+        },
+        data = {},
+        item, itemType, itemName, itemValue, 
+        opts, oi, oLen, oItem;
+        
+    /**
+     * 向缓冲区添加参数数据
+     * @private
+     */
+    function addData(name, value) {
+        var val = data[name];
+        if(val){
+            val.push || ( data[name] = [val] );
+            data[name].push(value);
+        }else{
+            data[name] = value;
+        }
+    }
+    
+    for (var i = 0, len = elements.length; i < len; i++) {
+        item = elements[i];
+        itemName = item.name;
+        
+        // 处理：可用并包含表单name的表单项
+        if (!item.disabled && itemName) {
+            itemType = item.type;
+            itemValue = baidu.url.escapeSymbol(item.value);
+        
+            switch (itemType) {
+            // radio和checkbox被选中时，拼装queryString数据
+            case 'radio':
+            case 'checkbox':
+                if (!item.checked) {
+                    break;
+                }
+                
+            // 默认类型，拼装queryString数据
+            case 'textarea':
+            case 'text':
+            case 'password':
+            case 'hidden':
+            case 'file':
+            case 'select-one':
+                addData(itemName, replacer(itemValue, itemName));
+                break;
+                
+            // 多行选中select，拼装所有选中的数据
+            case 'select-multiple':
+                opts = item.options;
+                oLen = opts.length;
+                for (oi = 0; oi < oLen; oi++) {
+                    oItem = opts[oi];
+                    if (oItem.selected) {
+                        addData(itemName, replacer(oItem.value, itemName));
+                    }
+                }
+                break;
+            }
+        }
+    }
+
+    return data;
+};
+/*
+ * Tangram
+ * Copyright 2009 Baidu Inc. All rights reserved.
+ * 
+ * path: baidu/form/serialize.js
+ * author: qiaoyue
+ * version: 1.1.0
+ * date: 2011/12/23
+ */
+
+
+
+
+/**
+ * 序列化表单数据
+ * @name baidu.form.serialize
+ * @function
+ * @grammar baidu.form.serialize(form[, replacer])
+ * @param {HTMLFormElement} form        需要提交的表单元素
+ * @param {Function} replacer           对参数值特殊处理的函数,replacer(string value, string key)
+	           
+ * @returns {data} 表单数据数组
+ */
+baidu.form.serialize = function (form, replacer) {
+    var elements = form.elements,
+        replacer = replacer || function (value, name) {
+            return value;
+        },
+        data = [],
+        item, itemType, itemName, itemValue, 
+        opts, oi, oLen, oItem;
+        
+    /**
+     * 向缓冲区添加参数数据
+     * @private
+     */
+    function addData(name, value) {
+        data.push(name + '=' + value);
+    }
+    
+    for (var i = 0, len = elements.length; i < len; i++) {
+        item = elements[i];
+        itemName = item.name;
+        
+        // 处理：可用并包含表单name的表单项
+        if (!item.disabled && itemName) {
+            itemType = item.type;
+            itemValue = baidu.url.escapeSymbol(item.value);
+        
+            switch (itemType) {
+            // radio和checkbox被选中时，拼装queryString数据
+            case 'radio':
+            case 'checkbox':
+                if (!item.checked) {
+                    break;
+                }
+                
+            // 默认类型，拼装queryString数据
+            case 'textarea':
+            case 'text':
+            case 'password':
+            case 'hidden':
+            case 'file':
+            case 'select-one':
+                addData(itemName, replacer(itemValue, itemName));
+                break;
+                
+            // 多行选中select，拼装所有选中的数据
+            case 'select-multiple':
+                opts = item.options;
+                oLen = opts.length;
+                for (oi = 0; oi < oLen; oi++) {
+                    oItem = opts[oi];
+                    if (oItem.selected) {
+                        addData(itemName, replacer(oItem.value, itemName));
+                    }
+                }
+                break;
+            }
+        }
+    }
+
+    return data;
+};
+/*
+ * Tangram
+ * Copyright 2009 Baidu Inc. All rights reserved.
+ * 
+ * version: 1.4.0
+ * date: 2011/07/05
+ */
+
+
+
+/**
+ * @namespace baidu.global 操作global对象的方法。
+ * @author meizz
+ */
+baidu.global = baidu.global || {};
+
+// 将全局存放在的变量都集中到一个地方
+window[baidu.guid].global = window[baidu.guid].global || {};
+/*
+ * Tangram
+ * Copyright 2009 Baidu Inc. All rights reserved.
+ * 
+ * version: 1.4.0
+ * date: 2011/07/05
+ */
+
+
+
+/**
+ * @namespace baidu.global.get 取得global全局对象里存储的信息。
+ * @author meizz
+ *
+ * @param   {string}    key     信息对应的 key 值
+ * @return  {object}            信息
+ */
+(function(){
+    var global = window[baidu.guid].global;
+
+    baidu.global.get = function(key) {
+        return global[key];
+    };
+})();
+/*
+ * Tangram
+ * Copyright 2009 Baidu Inc. All rights reserved.
+ * 
+ * version: 1.4.0
+ * date: 2011/07/05
+ */
+
+
+
+/**
+ * @namespace baidu.global.set 向global全局对象里存储信息。
+ * @author meizz
+ *
+ * @param   {string}    key         信息对应的 key 值
+ * @param   {object}    value       被存储的信息
+ * @param   {boolean}   protected_  保护原值不被覆盖，默认值 false 可覆盖
+ * @return  {object}                信息
+ */
+(function(){
+    var global = window[baidu.guid].global;
+
+    baidu.global.set = function(key, value, protected_) {
+        var b = !protected_ || (protected_ && typeof global[key] == "undefined");
+
+        b && (global[key] = value);
+        return global[key];
+    };
+})();
+/*
+ * Tangram
+ * Copyright 2011 Baidu Inc. All rights reserved.
+ * 
+ * author: meizz
+ * version: 2.0
+ * date: 2011.12.22
+ */
+
+
+
+
+
+/**
+ * @namespace baidu.global.getZIndex 全局统一管理 z-index。
+ *
+ * @param   {String}    key 	信息对应的 key 值(popup | dialog)
+ * @param   {Number}    step 	z-index 增长的步长
+ * @return  {Number}            z-index
+ */
+baidu.global.getZIndex = function(key, step){
+	if(key)
+		key = baidu.global.get("zIndex")[key] = baidu.global.get("zIndex")[key] + (step || 1);
+    return key;
+};
+
+baidu.global.set("zIndex", {popup : 50000, dialog : 1000}, true);
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
@@ -9087,7 +9537,8 @@ baidu.lang.Class.prototype.addEventListeners = function (events, fn) {
  * 
  * @author: meizz
  * @namespace: baidu.lang.createClass
- * @version: 2010-05-13
+ * @version: 1.6.0
+ * @modify: 2011.11.24 meizz
  */
 
 
@@ -9102,7 +9553,7 @@ baidu.lang.Class.prototype.addEventListeners = function (events, fn) {
  * @param {Function} constructor 类的构造器函数
  * @param {Object} [options] 
                 
- * @config {string} [className] 类名
+ * @config {string} [type] 类名
  * @config {Function} [superClass] 父类，默认为baidu.lang.Class
  * @version 1.2
  * @remark
@@ -9120,15 +9571,25 @@ baidu.lang.createClass = /**@function*/function(constructor, options) {
 
     // 创建新类的真构造器函数
     var fn = function(){
+        var me = this;
+
+        // 20101030 某类在添加该属性控制时，guid将不在全局instances里控制
+        options.decontrolled && (me.__decontrolled = true);
+
         // 继承父类的构造器
-        if(superClass != baidu.lang.Class){
-            superClass.apply(this, arguments);
-        }else{
-            superClass.call(this);
+        superClass.apply(me, arguments);
+
+        // 全局配置
+        for (i in fn.options) me[i] = fn.options[i];
+
+        constructor.apply(me, arguments);
+
+        for (var i=0, reg=fn["\x06r"]; reg && i<reg.length; i++) {
+            reg[i].apply(me, arguments);
         }
-        constructor.apply(this, arguments);
     };
 
+    // [TODO delete 2013] 放置全局配置，这个全局配置可以直接写到类里面
     fn.options = options.options || {};
 
     var C = function(){},
@@ -9141,7 +9602,9 @@ baidu.lang.createClass = /**@function*/function(constructor, options) {
     // 继承传参进来的构造器的 prototype 不会丢
     for (var i in cp) fp[i] = cp[i];
 
-    typeof options.className == "string" && (fp._className = options.className);
+    // 20111122 原className参数改名为type
+    var type = options.className || options.type;
+    typeof type == "string" && (fp.__type = type);
 
     // 修正这种继承方式带来的 constructor 混乱的问题
     fp.constructor = cp.constructor;
@@ -9156,6 +9619,30 @@ baidu.lang.createClass = /**@function*/function(constructor, options) {
 
     return fn;
 };
+
+// 20111221 meizz   修改插件函数的存放地，重新放回类构造器静态属性上
+/*
+ * Tangram
+ * Copyright 2009 Baidu Inc. All rights reserved.
+ * 
+ * path: baidu/lang/_instances.js
+ * author: meizz, erik
+ * version: 1.1.0
+ * date: 2009/12/1
+ */
+
+
+
+
+/**
+ * 所有类的实例的容器
+ * key为每个实例的guid
+ * @meta standard
+ */
+
+window[baidu.guid]._instances = window[baidu.guid]._instances || {};
+
+//	[TODO]	meizz	在2012年版本中将删除此模块
 /*
  * Tangram
  * Copyright 2010 Baidu Inc. All rights reserved.
@@ -9296,10 +9783,10 @@ baidu.lang.getModule = function(name, opt_obj) {
  * 为类型构造器建立继承关系
  * @name baidu.lang.inherits
  * @function
- * @grammar baidu.lang.inherits(subClass, superClass[, className])
+ * @grammar baidu.lang.inherits(subClass, superClass[, type])
  * @param {Function} subClass 子类构造器
  * @param {Function} superClass 父类构造器
- * @param {string} className 类名标识
+ * @param {string} type 类名标识
  * @remark
  * 
 使subClass继承superClass的prototype，因此subClass的实例能够使用superClass的prototype中定义的所有属性和方法。<br>
@@ -9310,13 +9797,14 @@ baidu.lang.getModule = function(name, opt_obj) {
  * @meta standard
  * @see baidu.lang.Class
  */
-baidu.lang.inherits = function (subClass, superClass, className) {
+baidu.lang.inherits = function (subClass, superClass, type) {
     var key, proto, 
         selfProps = subClass.prototype, 
         clazz = new Function();
         
     clazz.prototype = superClass.prototype;
     proto = subClass.prototype = new clazz();
+
     for (key in selfProps) {
         proto[key] = selfProps[key];
     }
@@ -9324,13 +9812,20 @@ baidu.lang.inherits = function (subClass, superClass, className) {
     subClass.superClass = superClass.prototype;
 
     // 类名标识，兼容Class的toString，基本没用
-    if ("string" == typeof className) {
-        proto._className = className;
+    typeof type == "string" && (proto.__type = type);
+
+    subClass.extend = function(json) {
+        for (var i in json) proto[i] = json[i];
+        return subClass;
     }
+    
+    return subClass;
 };
 
 // 声明快捷方法
 baidu.inherits = baidu.lang.inherits;
+
+//  2011.11.22  meizz   为类添加了一个静态方法extend()，方便代码书写
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
@@ -9519,6 +10014,40 @@ baidu.lang.module = function(name, module, owner) {
         owner[packages[len]] = module;
     }
 };
+/*
+ * Tangram
+ * Copyright 2011 Baidu Inc. All rights reserved.
+ * 
+ * path: baidu/lang/register.js
+ * author: meizz, dron
+ * version: 1.6.0
+ * date: 2011/11/29
+ */
+
+
+
+/**
+ * 向某个类注册插件
+ * @name baidu.lang.register
+ * @function
+ * @grammar baidu.lang.register(Class, constructorHook, methods)
+ * @param   {Class}     Class   		接受注册的载体 类
+ * @param   {Function}  constructorHook 运行在载体类构造器里钩子函数
+ * @param	{JSON}		methods			挂载到载体类原型链上的方法集，可选
+ * @meta standard
+ *             
+ */
+baidu.lang.register = function (Class, constructorHook, methods) {
+    var reg = Class["\x06r"] || (Class["\x06r"] = []);
+    reg[reg.length] = constructorHook;
+
+    for (var method in methods) {
+    	Class.prototype[method] = methods[method];
+    }
+};
+
+// 20111221 meizz   修改插件函数的存放地，重新放回类构造器静态属性上
+// 20111129	meizz	添加第三个参数，可以直接挂载方法到目标类原型链上
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
@@ -10237,7 +10766,7 @@ baidu.page.load = /**@function*/function(resources, options, ignoreAllLoaded) {
                 }
             };
         //默认用后缀名, 并防止后缀名大写
-        res.type = res.type || url.substr(url.lastIndexOf('.') + 1);
+        res.type = res.type || url.replace(/^[^\?#]+\.(css|js|html)(\?|#| |$)[^\?#]*/i, '$1'); //[bugfix]修改xxx.js?v这种情况下取不到js的问题。 
         //默认html格式用ajax请求,其他都使用dom标签方式请求.
         res.requestType = res.requestType || (res.type == 'html' ? 'ajax' : 'dom');
 
@@ -11529,6 +12058,7 @@ baidu.swf.createHTML = function (options) {
 
 
 
+
 /**
  * 在页面中创建一个flash对象
  * @name baidu.swf.create
@@ -11573,12 +12103,7 @@ baidu.swf.create = function (options, target) {
     if (target && 'string' == typeof target) {
         target = document.getElementById(target);
     }
-    
-    if (target) {
-        target.innerHTML = html;
-    } else {
-        document.write(html);
-    }
+    baidu.dom.insertHTML( target || document.body ,'beforeEnd',html );
 };
 /*
  * Tangram
@@ -11940,6 +12465,7 @@ baidu.data.Field = baidu.data.Field || (function(){
  * Tangram
  * Copyright 2010 Baidu Inc. All rights reserved.
  */
+
 
 
 
@@ -12417,7 +12943,8 @@ baidu.data.DataModel = baidu.data.DataModel || (function(){
 
 
 /**
- * @namespace 定义命名空间
+ * 数据源类
+ * @namespace baidu.data.dataSource
  */
 baidu.data.dataSource = baidu.dataSource = baidu.data.dataSource || {};
 /*
@@ -12482,7 +13009,6 @@ baidu.parser.create = function(type, options){
 
 
 
-
 /**
  * 数据源类
  * @class
@@ -12509,7 +13035,7 @@ baidu.data.dataSource.DataSource = baidu.lang.createClass(function(options){
         evt.returnValue = !!data;
     });
 }, {
-    className: "baidu.data.dataSource.DataSource"
+    type: "baidu.data.dataSource.DataSource"
 }).extend(
     /**
      *  @lends baidu.data.dataSource.DataSource.prototype
@@ -13280,33 +13806,34 @@ baidu.data.ModelManager = baidu.data.ModelManager || (function(){
 
 
 
+
 /**
  * 一个本地存储对象，使用key-value的方式来存值，不具备夸浏览器通信功能，根据浏览器的不同自动选择userData或是localStorage或是cookie来存值.
  * @Object
  * @grammar baidu.data.storage
  * @return {baidu.data.storage}
  */
-baidu.data.storage = (function(){
+baidu.data.storage = (function() {
     var _guid = baidu.lang.guid(),
         _status = {//状态说明
             SUCCESS: 0,
             FAILURE: 1,
             OVERFLOW: 2
         };
-    function _getKey(key){
+    function _getKey(key) {
         //escape spaces in name，单下划线替换为双下划线，空格替换为_s
         return key.replace(/[_\s]/g, function(matcher) {
             return matcher == '_' ? '__' : '_s';
         });
     }
-    
-    function _getElement(){
+
+    function _getElement() {
         return baidu.dom.g(_guid + '-storage');
     }
-    
-    function _getInstance(){
+
+    function _getInstance() {
         var _storage;
-        if (window.ActiveXObject) {
+        if (window.ActiveXObject && baidu.browser.ie < 9) { //IE9不再支持userData，暂时采用版本判断的临时方法解决。by xiadengping
             _storage = _createUserData();
         }else if (window.localStorage) {
             _storage = _createLocalStorage();
@@ -13315,13 +13842,13 @@ baidu.data.storage = (function(){
         }
         return _storage;
     }
-    
+
     /**
      * 将userData进行包装并返回一个只包含三个方法的对象
      * @return {Object} 一个对象，包括set, get, del接口.
      * @private
      */
-    function _createUserData(){
+    function _createUserData() {
         baidu.dom.insertHTML(document.body,
             'beforeEnd',
             baidu.string.format('<div id="#{id}" style="display:none;"></div>',
@@ -13336,7 +13863,13 @@ baidu.data.storage = (function(){
                     newKey = _getKey(key),
                     time = options && options.expires ? options.expires
                         : new Date().getTime() + 365 * 24 * 60 * 60 * 1000;//默认保存一年时间
-                baidu.lang.isDate(time) && (time = time.getTime());
+                //bugfix 若expires是毫秒数，先要new Date().getTime()再加上毫秒数。 
+                //另外time有可能是字符串，需要变成数字。by xiadengping
+                if (baidu.lang.isDate(time)) {
+                    time = time.getTime();
+                } else {
+                    time = new Date().getTime() + (time - 0);
+                }
                 ele.expires = new Date(time).toUTCString();
                 try {
                     ele.setAttribute(newKey, value);
@@ -13384,13 +13917,13 @@ baidu.data.storage = (function(){
             }
         };
     }
-    
+
     /**
      * 将localstorage进行包装并返回一个只包含三个方法的对象
      * @return {Object} 一个对象，包括set, get, del接口.
      * @private
      */
-    function _createLocalStorage(){
+    function _createLocalStorage() {
         return {
 //            size: 10 * 1024 * 1024,
             set: function(key, value, callback, options) {
@@ -13398,7 +13931,14 @@ baidu.data.storage = (function(){
                     storage = window.localStorage,
                     newKey = _getKey(key),
                     time = options && options.expires ? options.expires : 0;
-                baidu.lang.isDate(time) && (time = time.getTime());
+                //bugfix 若expires是毫秒数，先要new Date().getTime()再加上毫秒数。
+                //另外time有可能是字符串，需要变成数字。by xiadengping
+                if (baidu.lang.isDate(time)) {
+                    time = time.getTime();
+                } else if (time > 0) {
+                    time = new Date().getTime() + (time - 0);
+                }
+                
                 try {
                     storage.setItem(newKey, time + '|' + value);
                 }catch (e) {
@@ -13424,7 +13964,7 @@ baidu.data.storage = (function(){
                     if (new Date(time).getTime() > new Date().getTime()
                         || time == 0) {
                         val = val.substring(index + 1, val.length);
-                    }else{
+                    }else {
                         val = null;
                         status = _status.FAILURE;
                         this.del(key);
@@ -13455,13 +13995,13 @@ baidu.data.storage = (function(){
             }
         };
     }
-    
+
     /**
      * 将baidu.cookie进行包装并返回一个只包含三个方法的对象
      * @return {Object} 一个对象，包括set, get, del接口.
      * @private
      */
-    function _createCookie(){
+    function _createCookie() {
         return {
 //            size: 4 * 1024,
             set: function(key, value, callback, options) {
@@ -13481,8 +14021,8 @@ baidu.data.storage = (function(){
             }
         };
     }
-    
-    
+
+
     return /**@lends baidu.data.storage.prototype*/{
         /**
          * 将一个键值对存入到本地存储中
@@ -13494,12 +14034,12 @@ baidu.data.storage = (function(){
          * @param {Object} options config参数.
          * @config {Date|Number} expires 设置一个过期时间，值的类型必须是一个Date对象或是一个毫秒数
          */
-        set: function(key, value, callback, options){
+        set: function(key, value, callback, options) {
             var me = this;
             !me._storage && (me._storage = _getInstance());
             me._storage.set.apply(me._storage, arguments);
         },
-        
+
         /**
          * 依据一个键名称来取得本地存储中的值
          * @function
@@ -13507,12 +14047,12 @@ baidu.data.storage = (function(){
          * @param {String} key 一个键名称.
          * @param {Function} callback 一个回调函数，函数的第一参数返回该次存储的状态码，各状码表示{0: 成功, 1: 失败, 2: 溢出}，第二参数返回当次的value.
          */
-        get: function(key, callback){
+        get: function(key, callback) {
             var me = this;
             !me._storage && (me._storage = _getInstance());
             me._storage.get.apply(me._storage, arguments);
         },
-        
+
         /**
          * 根据一个键名称来删除在本地存储中的值
          * @function
@@ -13520,7 +14060,7 @@ baidu.data.storage = (function(){
          * @param {String} key 一个键名称.
          * @param {Function} callback 一个回调函数，函数的第一参数返回该次存储的状态码，各状码表示{0: 成功, 1: 失败, 2: 溢出}，第二参数返回当次的value.
          */
-        remove: function(key, callback){
+        remove: function(key, callback) {
             var me = this;
             !me._storage && (me._storage = _getInstance());
             me._storage.del.apply(me._storage, arguments);
@@ -14630,17 +15170,6 @@ baidu.flash.imageUploader = baidu.flash.imageUploader || function(options){
  */
 
 
-/**
- * 和表单相关的数据验证
- * @namespace baidu.form
- */
-baidu.form = baidu.form || {};
-/*
- * Tangram
- * Copyright 2011 Baidu Inc. All rights reserved.
- */
-
-
 
 
 
@@ -15051,6 +15580,7 @@ baidu.fx = baidu.fx || {} ;
 
 
 
+
 /**
  * 提供一个按时间进程的时间线类
  *
@@ -15081,19 +15611,19 @@ baidu.fx = baidu.fx || {} ;
  * @config {Number} duration 时间线总时长（毫秒）
  * @config {Number} percent  时间线进度的百分比
  */
-baidu.fx.Timeline = baidu.lang.createClass(function(options) {
-    baidu.object.extend(this, baidu.fx.Timeline.options);
+baidu.fx.Timeline = function(options){
+    baidu.lang.Class.call(this);
+
+    this.interval = 16;
+    this.duration = 500;
+    this.dynamic  = true;
+
     baidu.object.extend(this, options);
-},
-{
-    className: "baidu.fx.Timeline"
-    ,options:{interval:16, duration:500, dynamic:true}
-}).extend(
+};
+baidu.lang.inherits(baidu.fx.Timeline, baidu.lang.Class, "baidu.fx.Timeline").extend({
 /**
  *  @lends baidu.fx.Timeline.prototype
  */
-{
-
     /**
      * 启动时间线
      * @return {instance} 类实例
@@ -15211,7 +15741,7 @@ baidu.fx.create = function(element, options, fxName) {
     var timeline = new baidu.fx.Timeline(options);
 
     timeline.element = element;
-    timeline._className = fxName || timeline._className;
+    timeline.__type = fxName || timeline.__type;
     timeline["\x06original"] = {};   // 20100708
     var catt = "baidu_current_effect";
 
@@ -15220,7 +15750,7 @@ baidu.fx.create = function(element, options, fxName) {
      */
     timeline.addEventListener("onbeforestart", function(){
         var me = this, guid;
-        me.attribName = "att_"+ me._className.replace(/\W/g, "_");
+        me.attribName = "att_"+ me.__type.replace(/\W/g, "_");
         guid = me.element.getAttribute(catt);
         me.element.setAttribute(catt, (guid||"") +"|"+ me.guid +"|", 0);
 
@@ -15647,7 +16177,7 @@ baidu.fx.fadeIn = function(element, options) {
     var fx = baidu.fx.opacity(element,
         baidu.object.extend({from:0, to:1, restoreAfterFinish:true}, options||{})
     );
-    fx._className = "baidu.fx.fadeIn";
+    fx.__type = "baidu.fx.fadeIn";
 
     return fx;
 };
@@ -15690,7 +16220,7 @@ baidu.fx.fadeOut = function(element, options) {
         baidu.object.extend({from:1, to:0, restoreAfterFinish:true}, options||{})
     );
     fx.addEventListener("onafterfinish", function(){baidu.dom.hide(this.element);});
-    fx._className = "baidu.fx.fadeOut";
+    fx.__type = "baidu.fx.fadeOut";
 
     return fx;
 };
@@ -17222,6 +17752,7 @@ baidu.i18n.string = baidu.i18n.string || /**@lends baidu.i18n.string.prototype*/
 
 
 
+
 baidu.parser.Parser = baidu.parser.Parser || (function(){
 
     /**
@@ -17241,7 +17772,7 @@ baidu.parser.Parser = baidu.parser.Parser || (function(){
         me.onload = options.onload || baidu.fn.blank;
 
     },{
-        className: 'baidu.parser.Parser'
+        type: 'baidu.parser.Parser'
     }).extend({
         /**
          *  @lends baidu.parser.Parser.prototype
@@ -17749,7 +18280,7 @@ baidu.parser.Json = baidu.parser.Json || (function(){
     return function(options){
         
         var parser = new baidu.parser.Parser(options);
-        parser._type = baidu.parser.JSON;
+        parser._type = baidu.parser.type.JSON;
 
         baidu.extend(parser, {
        
@@ -17839,7 +18370,7 @@ baidu.parser.Xml = baidu.parser.Xml || (function(){
     return function(options){
         
         var parser = new baidu.parser.Parser(options);
-        parser._type = baidu.parser.XML;
+        parser._type = baidu.parser.type.XML;
 
         baidu.extend(parser, {
     
@@ -17907,10 +18438,10 @@ baidu.ui = baidu.ui || { version: '1.3.9' };
 
 
 /**
- * 通过uiType找到UI类，查找规则：suggestion -> baidu.ui.Suggestion，toolbar-spacer -> baidu.ui.Toolbar.Spacer.
+ * 通过uiType找到UI类
  * @function
  * @grammar baidu.ui.getUI(uiType)
- * @param {String} uiType
+ * @param  {String} uiType  查找规则：suggestion -> baidu.ui.Suggestion，toolbar-spacer -> baidu.ui.Toolbar.Spacer.
  * @return {object} UI类
  * @author berg
  */
@@ -17941,7 +18472,7 @@ baidu.ui.getUI = function(uiType){
  * @param {object|String} UI控件类或者uiType
  * @param {object} options optional 控件的初始化属性
  * @config {Boolean} autoRender 是否自动render，默认true
- * @config {String|HTMLElement} render到的元素
+ * @config {String|HTMLElement} render render到的元素
  * @config {Object} parent 父控件
  * @return {Object} 创建好的控件实例
  * @author berg
@@ -18120,6 +18651,7 @@ baidu.ui.Base =
 
 
 
+
 /**
  * 创建一个UI控件类
  * @function
@@ -18275,13 +18807,15 @@ baidu.ui.createUI = function(constructor, options) {
  * @config    {Function}      ondragstart           draggable模块支持，当拖拽开始时触发
  * @config    {Function}      ondrag                draggable模块支持，拖拽过程中触发
  * @config    {Function}      ondragend             draggable模块支持，拖拽结束时触发
- * @plugin    modal           可以让dialog后面加一个半透明层，并且锁定窗口。
- * @plugin    draggable       可以让dialog支持被拖拽。
- * @plugin    keyboard        可以让dialog支持一些常用的键盘操作。
- * @plugin    button          可以让dialog底部添加按钮。
- * @plugin    closeButton     可以让dialog右上角添加一个关闭按钮。
- * @plugin    smartCover      可以让dialog支持遮罩下方的select和flash。
- * @plugin    resizable       可以为Dialog添加缩放功能。
+ * @plugin    autoDispose		支持关闭后自动销毁组建
+ * @plugin    button			Dialog底部按钮
+ * @plugin    closeButton		支持关闭按钮
+ * @plugin    coverable			支持遮盖页面的任意元素
+ * @plugin    draggable       	支持被拖拽
+ * @plugin    iframe	      	支持创建的content是一个iframe
+ * @plugin    keyboard	      	键盘支持插件
+ * @plugin    modal		      	背景遮罩插件
+ * @plugin    resizable		    缩放功能插件
  */
 
 baidu.ui.Dialog = baidu.ui.createUI(function (options){
@@ -18823,11 +19357,12 @@ baidu.ui.behavior = baidu.ui.behavior || {};
 
 /**
  * 为Dialog添加缩放功能
- * 可选参数
- * @param {Number} minWidth 最小宽度.
- * @param {Number} minHeight 最小高度.
- * @param {Boolean} resizable 是否启用resizable.
- * @direction {Array} direction 可已经resize的方向，默认为["s","e","se"]3方向
+ * @name baidu.ui.Dialog.Dialog$resizable
+ * @addon baidu.ui.Dialog
+ * @param {Number} minWidth 可选，最小宽度.
+ * @param {Number} minHeight 可选，最小高度.
+ * @param {Boolean} resizable 可选，是否启用resizable.
+ * @param {Array} direction 可选，允许resize的方向，默认为["s","e","se"]3方向
  */
 baidu.extend(baidu.ui.Dialog.prototype, {
     resizable: true,
@@ -18997,7 +19532,9 @@ baidu.ui.Dialog.register(function(me) {
 
 /**
  * 为Dialog添加拖拽功能
- * @param {Boolean} draggable 是否启用draggable
+ * @name baidu.ui.Dialog.Dialog$draggable
+ * @addon baidu.ui.Dialog
+ * @param {Boolean} draggable 是否启用draggable，默认为true
  * */
 baidu.ui.Dialog.prototype.draggable = true;
 
@@ -19152,7 +19689,7 @@ baidu.ui.Dialog.register(function(me){
         },options));
     };
 })();
-/*
+﻿/*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
  */
@@ -19160,6 +19697,11 @@ baidu.ui.Dialog.register(function(me){
 
 
 
+/**
+ * 支持遮盖页面的任意元素
+ * @name baidu.ui.Dialog.Dialog$coverable
+ * @addon baidu.ui.Dialog
+ */
 
 baidu.extend(baidu.ui.Dialog.prototype,{
     coverable: true,
@@ -19480,7 +20022,8 @@ baidu.ui.Base.getParent = function(){
  * @config {Function}           ondisable   当调用button的实例方法disable，使得按钮失效时触发。
  * @config {Function}           onenable    当调用button的实例方法enable，使得按钮有效时触发。
  * @returns {Button}                        Button类
- * @plugin statable             状态行为，为button组件添加事件和样式。
+ * @plugin  capture            使按钮支持capture
+ * @plugin  poll               使按钮支持poll轮询
  * @remark  创建按钮控件时，会自动为控件加上四种状态的style class，分别为正常情况(tangram-button)、鼠标悬停在按钮上(tangram-button-hover)、鼠标按下按钮时(tangram-button-press)、按钮失效时(tangram-button-disable)，用户可自定义样式。
  */
 baidu.ui.Button = baidu.ui.createUI(new Function).extend(
@@ -19519,7 +20062,12 @@ baidu.ui.Button = baidu.ui.createUI(new Function).extend(
     render: function(target) {
         var me = this,
             body;
-        me.addState('click', 'click');
+        me.addState('click', 'click', function(id, group) {
+            var me = this;
+            if (!me.getState(id, group)['disabled']) {
+                return true;
+            }
+        });
         baidu.dom.insertHTML(me.renderMain(target), 'beforeEnd', me._getString());
 
         body = baidu.g(target).lastChild;
@@ -19626,8 +20174,9 @@ baidu.ui.Button = baidu.ui.createUI(new Function).extend(
 
 
 /**
- * addon
- * 关闭按钮
+  * 支持关闭按钮插件
+ * @name baidu.ui.Dialog.Dialog$closeButton
+ * @addon baidu.ui.Dialog
  */
 
 baidu.extend(baidu.ui.Dialog.prototype,{
@@ -19948,6 +20497,7 @@ baidu.ui.ItemSet = baidu.ui.createUI(function(options){
  * @grammar new baidu.ui.Tab(options)
  * @param      {Object} [options] 选项
  * @config {Array} items 数据项，格式如：[{head: 'text-0', body: 'content-0'}, {head: 'text-1', body: 'content-1'}...]
+ * @see <a href="#baidu.ui.ItemSet">baidu.ui.ItemSet</a>
  */
  
 baidu.ui.Tab = baidu.ui.createUI( function (options) {
@@ -20522,6 +21072,7 @@ baidu.tools.log.Dialog.prototype = {
  * @grammar new baidu.ui.Accordion(options)
  * @param {Object} options 选项
  * @config {Array} items 数据项，格式如：[{head: 'text-0', body: 'content-0'}, {head: 'text-1', body: 'content-1'}...]
+ * @plugin fx  手风琴的动画效果
  * @return {baidu.ui.Accordion} Accordion实例
  */
 baidu.ui.Accordion = baidu.ui.createUI(function (options){
@@ -20613,7 +21164,9 @@ baidu.ui.Accordion = baidu.ui.createUI(function (options){
 
 
 /**
- * 手风琴的动画效果
+ * 为手风琴组件添加动画效果
+ * @name  baidu.ui.Accordion.Accordion$fx
+ * @addon baidu.ui.Accordion
  */
 baidu.ui.Accordion.register(function(me) {
 //  me._fxElement = null;//用于存放当前正在进行动画的对象
@@ -21402,6 +21955,7 @@ baidu.extend(baidu.ui.behavior.statable, {
      * @param {Object} group 状态类型，同一类型的相同状态会被加上相同的css
      * @param {Object} key 索引，在同一类中的索引
      * @memberOf {TypeName}
+	 * @private
      * @return {Object} 格式：{evntName0 : handler0, evntName1 : handler1}
      */
     setStateHandler : function(element, group, key){
@@ -21430,6 +21984,8 @@ baidu.extend(baidu.ui.behavior.statable, {
 
 /**
  * 使按钮支持capture，实现在按钮上点击并保持鼠标按着状态拖离鼠标，请在构造函数的options中定义capture参数为true来激活该状态
+ * @name baidu.ui.Button.Button$capture
+ * @addon baidu.ui.Button
  * @class
  * @param {Object} options options参数.
  * @config {Boolean} capture 当为true时表示需要使按钮是一个capture的按钮.
@@ -21467,6 +22023,7 @@ baidu.ui.Button.register(function(me) {
 
 /**
  * 使按钮支持poll轮询，实现在按钮上点击并保持鼠标按着状态时连续激活事件侦听器
+ * @name baidu.ui.Button.Button$poll
  * @addon baidu.ui.Button
  * @param   {Object}    options config参数.
  * @config  {Object}    poll 当为true时表示需要使按钮是一个poll的按钮，如果是一个json的描述，可以有两个可选参数：{interval: 100, time: 4}，interval表示轮询的时间间隔，time表示第一次执行和第二执行之间的时间间隔是time*interval毫秒 
@@ -21983,6 +22540,7 @@ baidu.ui.Calendar = baidu.ui.createUI(function(options){
 
 
 
+
 /**
  * 创建一个简单的滚动组件
  * @name baidu.ui.Carousel
@@ -22000,6 +22558,12 @@ baidu.ui.Calendar = baidu.ui.createUI(function(options){
  * @config {function} onnext 当翻到下一项或下一页时触发该事件
  * @config {function} onitemclick 当点击某个项时触发该事件
  * @config {function} onfocus 当某一项获得焦点时触发该事件
+ * @plugin autoScroll 为滚动组件增加自动滚动功能
+ * @plugin btn 为滚动组件添加控制按钮插件
+ * @plugin cycle 为滚动组件增加无限循环滚动功能
+ * @plugin fx 为滚动组件增加动画滚动功能
+ * @plugin splice 为滚动组件提供动态增加或是删减滚动项功能
+ * @plugin table 支持在一个滚动项中放多个图片或是其它文字内容
  * @author linlingyu
  */
 
@@ -22447,6 +23011,8 @@ baidu.ui.Carousel = baidu.ui.createUI(function(options) {
 
 /**
  * 为滚动组件增加无限循环滚动功能
+ * @name baidu.ui.Carousel.Carousel$cycle
+ * @addon baidu.ui.Carousel
  * @param {Object} options config参数.
  * @config {Boolean} isCycle 是否支持循环滚动，默认支持
  * @author linlingyu
@@ -22512,6 +23078,8 @@ baidu.ui.Carousel.prototype.isCycle = true;
 
 /**
  * 为滚动组件增加自动滚动功能
+ * @name baidu.ui.Carousel.Carousel$autoScroll
+ * @addon baidu.ui.Carousel.Carousel
  * @param {Object} options config参数.
  * @config {Boolean} isAutoScroll 是否支持自动滚动，默认支持
  * @config {Number} scrollInterval 以毫秒描述每次滚动的时间间隔
@@ -22563,6 +23131,9 @@ baidu.ui.Carousel.extend(
     },
     /**
      * 从停止状态开始自动滚动
+	 * @name baidu.ui.Carousel.Carousel$autoScroll.startAutoScroll
+	 * @addon baidu.ui.Carousel.Carousel$autoScroll
+	 * @function 
      */
     startAutoScroll: function(){
         var me = this,
@@ -22573,6 +23144,9 @@ baidu.ui.Carousel.extend(
     },
     /**
      * 停止当前自动滚动状态
+	 * @name baidu.ui.Carousel.Carousel$autoScroll.stopAutoScroll
+	 * @addon baidu.ui.Carousel.Carousel$autoScroll
+	 * @function 
      */
     stopAutoScroll: function(){
         var me = this;
@@ -22589,8 +23163,8 @@ baidu.ui.Carousel.extend(
 
 /**
  * 为滚动组件添加控制按钮插件
- * @name baidu.ui.Carousel
- * @class
+ * @name baidu.ui.Carousel.Carousel$btn
+ * @addon baidu.ui.Carousel
  * @param {Object} options config参数.
  * @config {Boolean} showButton 是否显示按钮，默认显示
  * @config {Object} btnLabel 设置按钮的文字描述，参考值：{prev: 'left', next: 'right'}
@@ -22629,6 +23203,8 @@ baidu.object.extend(baidu.ui.Carousel.prototype, {
 
 /**
  * 为滚动组件增加动画滚动功能
+ * @name baidu.ui.Carousel.Carousel$fx
+ * @addon baidu.ui.Carousel
  * @param {Object} options config参数.
  * @config {Boolean} enableFx 是否支持动画插件
  * @config {Function} scrollFx 描述组件的动画执行过程，默认是baidu.fx.scrollTo
@@ -22705,6 +23281,8 @@ baidu.ui.Carousel.extend({
 
 /**
  * 为滚动组件提供动态增加或是删减滚动项功能
+ * @name baidu.ui.Carousel.Carousel$splice
+ * @addon baidu.ui.Carousel
  */
 baidu.ui.Carousel.extend(
 /**
@@ -22771,6 +23349,9 @@ baidu.ui.Carousel.extend(
     },
     /**
      * 将一个字符串的内容插入到索引指定的位置
+	 * @name baidu.ui.Carousel.Carousel$splice.addText
+	 * @addon baidu.ui.Carousel.Carousel$splice
+	 * @function 
      * @param {String} content 需要插入项的字符内容
      * @param {Number} index 插入位置
      */
@@ -22780,8 +23361,11 @@ baidu.ui.Carousel.extend(
         me.dispatchEvent('onaddtext', {index: index});
     },
     /**
-     * 
-     * @param {HTMLElement} element 将一个element项的内容插入到索引指定的位置
+     * 将一个element项的内容插入到索引指定的位置
+	 * @name baidu.ui.Carousel.Carousel$splice.addItem
+	 * @addon baidu.ui.Carousel.Carousel$splice
+	 * @function 
+     * @param {HTMLElement} element 需要插入项的元素
      * @param {Number} index 插入位置
      */
     addItem: function(element, index){
@@ -22791,6 +23375,9 @@ baidu.ui.Carousel.extend(
     },
     /**
      * 移除索引指定的某一项
+	 * @name baidu.ui.Carousel.Carousel$splice.removeItem
+	 * @addon baidu.ui.Carousel.Carousel$splice
+	 * @function 
      * @param {Number} index 要移除项的索引
      * @return {HTMLElement} 当移除项存在于页面时返回该节点
      */
@@ -22833,6 +23420,11 @@ baidu.ui.Carousel.extend(
  * @param       {Object} options config参数
  * @config      {Object} data 生成表格的数据，格式[{id: "rsid0", content : ["column0", "column1"]}, {id : "rsid0", content : ["column0", "column1"]}], id不是必要，当有选择列时用来定义用户的checkbox的value
  * @config      {Object} columns 各个列的高级定义，格式[{index : 1, width : 100, type : "select"}, {index : 2, width : "100%", enableEdit : true}, {index : 3, width : "200px"}]
+ * @plugin      btn		为翻页功能增加相关按钮
+ * @plugin 		edit	支持单元格编辑
+ * @plugin 		page	支持翻页
+ * @plugin 		select	增加选择列
+ * @plugin 		title	支持列标题
  */
 baidu.ui.Table = baidu.ui.createUI(function(options){
     var me = this;
@@ -22989,8 +23581,8 @@ baidu.ui.Table.extend(
     
     /**
      * 添加行控件
-     * @param {Object} optoins  创建Row所需要的options
-     * @param {Number} index
+     * @param {Object} options  创建Row所需要的options
+     * @param {Number} index	在索引位置后创建Row
      */
     addRow : function(options, index){
         var me = this;
@@ -23298,7 +23890,9 @@ baidu.ui.Table.Cell = baidu.ui.createUI(function(options){}).extend(
 
 
 /**
- * 
+ * 支持在一个滚动项中放多个图片或是其它文字内容
+ * @name baidu.ui.Carousel.Carousel$table
+ * @addon baidu.ui.Carousel.Carousel
  * @param {Object} options config参数.
  * @config {Boolean} supportTable 是否支持表格项，默认支持
  * @config {Object} gridLayout 描述一个滚动项的内容是以多行多列的数据形式，例如：{row:3, col:2}
@@ -23345,6 +23939,8 @@ baidu.ui.Carousel.extend(
     },
     /**
      * 在指定索引处插入一个新的多行多列表格
+	 * @name baidu.ui.Carousel.Carousel$table.addTableItem
+	 * @addon baidu.ui.Carousel.Carousel$table
      * @param {Object} data 需要插入的数据（一维数组），格式：[{content: 'col-0'}, {content: 'col-1'}, {content: 'col-2'}....]
      * @param {Number} index 在指定的索引处插入，默认在末端插入
      */
@@ -23357,6 +23953,8 @@ baidu.ui.Carousel.extend(
     },
     /**
      * 移除由索引指定的项
+	 * @name baidu.ui.Carousel.Carousel$table.removeTableItem
+	 * @addon baidu.ui.Carousel.Carousel$table
      * @param {Number} index 需要移除的索引项
      * @return {HTMLElement} 被移除的表格对象，不存在该对象或不存在于当前页面的返回null
      */
@@ -23369,6 +23967,8 @@ baidu.ui.Carousel.extend(
     },
     /**
      * 根据索引取得表格
+	 * @name baidu.ui.Carousel.Carousel$table.getTable
+	 * @addon baidu.ui.Carousel.Carousel$table
      * @param {Number} index 索引
      * @return {baidu.ui.Table} 该索引对应的表格对象，不存在该表格对象的返回null
      */
@@ -23410,7 +24010,7 @@ baidu.ui.Carousel.extend(
  * @config     {Array}                  range        可拖动的范围，取值min到max之间，例如[30, 80]
  * @config     {Boolean}                disabled     是否禁用
  * @config     {String}                 skin         自定义样式名称前缀
- * @plugin     progressBar              进度条跟随滑块的滑动
+ * @plugin     progressBar              支持进度条跟随滑动
  */
 baidu.ui.Slider = baidu.ui.createUI(function(options){
     var me = this;
@@ -24268,7 +24868,7 @@ baidu.ui.ColorPalette = baidu.ui.createUI(function(options) {
  * @param {Object} options 配置.
  * @config {Number} gridSize 一行显示的颜色块个数，默认8.
  * @config {Function} onchosen 颜色选择事件.
- * @plugin click 创建一个鼠标点击触发colorPicker的插件
+ * @plugin click 支持触发模式为鼠标点击
  * @plugin more 弹出调色板插件
  * @author walter
  */
@@ -24495,20 +25095,21 @@ baidu.ui.get = function(element/*, type*/){
 
 
 /**
- * 创建一个鼠标点击触发的colorPicker
- * @name baidu.ui.ColorPicker
+ * 支持触发模式为鼠标点击
+ * @name baidu.ui.ColorPicker.ColorPicker$click
+ * @addon baidu.ui.ColorPicker
  * @author walter
  */
 baidu.ui.ColorPicker.extend({
     /**
-     * 插件触发方式，默认为点击
-     * @param {String} [options.type = 'click'].
+     * @param {String} type 默认为click，点击插件触发方式
+	 * @private
      */
     type: 'click',
 
     /**
-     * body点击事件，点击body关闭菜单
-     * @param {Object} e 事件.
+     * @param {Object} e 事件. body点击事件，点击body关闭菜单
+	 * @private
      */
     bodyClick: function(e) {
         var me = this,
@@ -24562,6 +25163,12 @@ baidu.ui.ColorPicker.register(function(me) {
 
 
 
+/**
+ * 关闭后自动销毁插件
+ * @name baidu.ui.Dialog.Dialog$autoDispose
+ * @addon baidu.ui.Dialog
+ */
+
 baidu.extend(baidu.ui.Dialog.prototype,{
     autoDispose: true
 });
@@ -24595,17 +25202,18 @@ baidu.ui.Dialog.register(function(me){
 
 
 /**
- * 根据this.buttons创建dialog下部的buttons
- * butions格式
- * {
- *  name,{baidu.ui.button.Button相同的参数}
- * }
+ * 允许创建底部按钮
+ * @name baidu.ui.Dialog.Dialog$button
+ * @addon baidu.ui.Dialog
  */
 baidu.extend(baidu.ui.Dialog.prototype,{
     
     /**
      * 创建底部按钮
-     * @param {Object} option 创建按钮的options
+	 * @name baidu.ui.Dialog.Dialog$button.createButton
+	 * @addon  baidu.ui.Dialog.Dialog$button
+	 * @function 
+     * @param {Object} option 创建按钮的options，格式与baidu.ui.Button的参数相同
      * @param {String} name 按钮的唯一标识符
      * @return void
      */
@@ -24624,6 +25232,9 @@ baidu.extend(baidu.ui.Dialog.prototype,{
    
     /**
      * 删除底部按钮
+	 * @name baidu.ui.Dialog.Dialog$button.removeButton
+	 * @addon  baidu.ui.Dialog.Dialog$button
+	 * @function 
      * @param {String} name 按钮的唯一标识符
      * @return void
      */
@@ -24717,8 +25328,9 @@ baidu.ui.Dialog.register(function(me){
 
 
 /**
- * ColorPalette 插件
- * @name baidu.ui.ColorPicker
+ * 调色板插件
+ * @name baidu.ui.ColorPicker.ColorPicker$more
+ * @addon baidu.ui.ColorPicker
  * @param {Number} [options.sliderLength = 150] 滑动条长度.
  * @param {String} options.coverImgSrc 调色板背景渐变图片路径.
  * @param {String} options.sliderImgSrc 滑动条背景图片路径.
@@ -24839,6 +25451,11 @@ baidu.ui.ColorPicker.register(function(me) {
  * @param {Object} data 数据项
  * @param {Number} hideDelay 鼠标移出子菜单多长时间，菜单消失，默认300
  * @param {Function} toggle 开关函数,返回false时不显示
+ * @param {Function} toggle 开关函数,返回false时不显示
+ * @plugin click	支持点击触发
+ * @plugin fx		动画效果
+ * @plugin hover	鼠标hover触发
+ * @plugin icon		菜单支持图标
  */
 baidu.ui.Menubar = baidu.ui.createUI(function(options){
     var me = this;
@@ -25177,16 +25794,20 @@ baidu.ui.Menubar = baidu.ui.createUI(function(options){
 
 /**
  * 创建一个鼠标点击触发的menubar
+ * @name baidu.ui.Menubar.Menubar$click
+ * @addon baidu.ui.Menubar
  */
 baidu.ui.Menubar.extend({
     /**
      * 插件触发方式，默认为点击
+	 * @private
      * @param {String} [options.type = 'click']
      */
     type: 'click',
     
     /**
      * body点击事件，点击body关闭菜单
+	 * @private
      * @param {Object} e 事件
      */
     bodyClick: function(e){
@@ -25271,7 +25892,7 @@ baidu.ui.Menubar.register(function(me){
  * @config {Function}             onmouseout       离开时触发
  * @config {Function}             onmousedown      鼠标按下时触发
  * @config {Function}             onmouseup        鼠标抬起时触发
- * @plugin statable 状态插件
+ * @plugin statable 状态插件，提供enable、disable行为
  * @plugin select   通过select控件的数据创建combox     
  */
 baidu.ui.Combox = baidu.ui.createUI(function (options){
@@ -25469,7 +26090,9 @@ baidu.ui.Combox = baidu.ui.createUI(function (options){
 
 
 /**
- * select 插件
+ * select插件，支持通过select控件的数据创建combox   
+ * @name baidu.ui.Combox.Combox$select
+ * @addon baidu.ui.Combox
  * @param   {Object}            [options]   参数对象
  * @config  {Element|String}    select      select对象的id或者element本身
  * @config  {String}            type        启动插件参数，设置为'select'
@@ -25503,7 +26126,9 @@ baidu.ui.Combox.register(function(me){
 
 
 /**
- * 提供enable、disable行为
+ * 状态插件，提供enable、disable行为
+ * @name baidu.ui.Combox.Combox$statable
+ * @addon baidu.ui.Combox
  */
 baidu.ui.Combox.register(function(me){
  
@@ -25748,7 +26373,7 @@ baidu.ui.createPopup = function(options) {
  * @config    {Function}           ondragstart           draggable模块支持，当拖拽开始时触发
  * @config    {Function}           ondrag                draggable模块支持，拖拽过程中触发
  * @config    {Function}           ondragend             draggable模块支持，拖拽结束时触发
- * @plugin    smartCover                                 智能遮罩
+ * @plugin 	  coverable 		   支持背景遮罩
  * @remark
  * @return {baidu.ui.Popup}                                    Popup类
  */
@@ -25976,7 +26601,7 @@ baidu.ui.Popup = baidu.ui.createUI(function (options){
 
 baidu.ui.Popup.instances = baidu.ui.Popup.instances || [];
 
-/*
+﻿/*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
  */
@@ -25984,7 +26609,11 @@ baidu.ui.Popup.instances = baidu.ui.Popup.instances || [];
 
 
 
-
+/**
+ * 支持背景遮罩掩盖select、flash、iframe元素
+ * @name baidu.ui.Popup.Popup$coverable
+ * @addon baidu.ui.Popup
+ */
 baidu.extend(baidu.ui.Popup.prototype,{
     coverable: true,
     coverableOptions: {}
@@ -26188,6 +26817,12 @@ baidu.ui.DatePicker = baidu.ui.createUI(function(options){
 
 
 
+
+/**
+ * 创建一个content是iframe的dialog
+ * @name baidu.ui.Dialog.Dialog$iframe
+ * @addon baidu.ui.Dialog
+ */
 baidu.ui.Dialog.register(function(me){
     if(me.type == "iframe"){
         baidu.extend(me,{
@@ -26196,7 +26831,9 @@ baidu.ui.Dialog.register(function(me){
 
             /**
              * 获取iframe
-             * @public
+			 * @name baidu.ui.Dialog.Dialog$iframe.getIframe
+			 * @addon baidu.ui.Dialog.Dialog$iframe
+			 * @function 
              * @return {HTMLElement} iframe
              */
             getIframe: function(){
@@ -26205,8 +26842,10 @@ baidu.ui.Dialog.register(function(me){
 
             /**
              * 更新iframe的Style，更新dialog
-             * @public
-             * @param {Object} styles {width:width,height:height}
+			 * @name baidu.ui.Dialog.Dialog$iframe.updateIframe
+			 * @addon baidu.ui.Dialog.Dialog$iframe
+			 * @function 
+             * @param {Object} styles 样式名称和值组成的对象，例如{width:"500px",height:"300px"}
              * @return {Null}
              */
             updateIframe:function(styles){
@@ -26253,10 +26892,9 @@ baidu.ui.Dialog.register(function(me){
 
 
 /**
- *
- * 键盘支持模块
- * 1. esc 关闭最上层的dialog
- * 2. enter 确认alert和confirm
+ * 键盘支持模块，支持esc关闭最上层的dialog，enter确认alert和confirm
+ * @name baidu.ui.Dialog.Dialog$keyboard
+ * @addon baidu.ui.Dialog
  */
 baidu.extend(baidu.ui.Dialog.prototype,{
     enableKeyboard : true,
@@ -26358,6 +26996,7 @@ baidu.ui.Dialog.register(function(me){
  * 为控件增加遮罩.
  * @class Modal类
  * @grammar new baidu.ui.Modal()
+ * @plugin coverable 支持背景遮罩
  */
 baidu.ui.Modal = baidu.ui.createUI(function(options) {
     var me = this,
@@ -26732,7 +27371,7 @@ baidu.ui.Modal = baidu.ui.createUI(function(options) {
 
 //存储所有的modal参数
 baidu.ui.Modal.collection = {};
-/*
+﻿/*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
  */
@@ -26743,7 +27382,11 @@ baidu.ui.Modal.collection = {};
 
 
 
-
+/**
+ * 支持背景遮罩掩盖select、flash、iframe元素
+ * @name baidu.ui.Modal.Modal$coverable
+ * @addon baidu.ui.Modal
+ */
 baidu.extend(baidu.ui.Modal.prototype,{
     coverable: true,
     coverableOptions: {}
@@ -26776,7 +27419,11 @@ baidu.ui.Modal.register(function(me){
 
 
 
-
+/**
+ *支持遮罩
+ * @name baidu.ui.Dialog.Dialog$modal
+ * @addon baidu.ui.Dialog
+ */
 baidu.extend(baidu.ui.Dialog.prototype, {
     modal : true,
     modalColor : "#000000",
@@ -26825,6 +27472,9 @@ baidu.ui.Dialog.register(function(me){
 
 /**
  *  从指定的dom元素中获取ui控件的属性值
+ *  @grammar baidu.ui.getAttribute(element)
+ *  @param {element} element dom元素
+ *  @return {Object} params 属性值集合对象
  */
 
 baidu.ui.getAttribute = function(element){
@@ -27090,6 +27740,7 @@ baidu.ui.Input = baidu.ui.createUI(new Function).extend(
  * @config {Function}           onLoginFailure        登录失败回调 TODO 默认处理函数, json.error
  * @config {Function}           onRegisterSuccess     注册成功回调函数
  * @config {Function}           onRegisterFailure     注册失败回调函数
+ * @plugin register				应用实现tab:login
  *
  */
 
@@ -27225,13 +27876,14 @@ baidu.ui.Login.instances = baidu.ui.Login.instances || {};
 
 
 /**
- * 应用实现 tab:login&&register 备注：涉及passport的API接口参数可以参见http://fe.baidu.com/doc/zhengxin/passport/openapi_help.text
- * @function
+ * 应用实现tab:login&&register备注：涉及passport的API接口参数可以参见http://fe.baidu.com/doc/zhengxin/passport/openapi_help.text
+ * @name baidu.ui.Login.Login$register
+ * @addon baidu.ui.Login
  * @config {String}             regURL                注册地址,无须改动
- * @config {String}             regJumpURL            注册跳转地址,必须，为提交表单跨域使用，可前往 http://fe.baidu.com/~zhengxin/passport/jump.html  下载，或者线上
+ * @config {String}             regJumpURL            注册跳转地址,必须，为提交表单跨域使用，可前往 http://fe.baidu.com/~zhengxin/passport/jump.html下载，或者线上
  * @config {Function}           onRegisterSuccess     注册成功回调函数
  * @config {Function}           onRegisterFailure     注册失败回调函数
- * @config {String}             defaultStatus         弹出时初始状态(登录或注册),取值 ['login','reg'],默认为 login
+ * @config {String}             defaultStatus         弹出时初始状态(登录或注册),取值['login','reg'],默认为login
  */ 
 baidu.extend(baidu.ui.Login.prototype,{
 
@@ -27353,7 +28005,7 @@ renderReg: function() {
 });
 
 
-/*
+﻿/*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
  */
@@ -27363,7 +28015,11 @@ renderReg: function() {
 
 
 
-
+/**
+ * 为Menubar增加动画效果
+ * @name baidu.ui.Menubar.Menubar$fx
+ * @addon baidu.ui.Menubar
+ */
 baidu.ui.Menubar.extend({
     enableFx:true,
     showFx : baidu.fx.expand,
@@ -27415,30 +28071,36 @@ baidu.ui.Menubar.register(function(me){
 
 
 /**
- *  鼠标hover触发menubar插件
+ * 鼠标hover触发menubar插件
+ * @name baidu.ui.Menubar.Menubar$hover
+ * @addon baidu.ui.Menubar
  */
 baidu.ui.Menubar.extend({
    
     /**
      * 插件触发方式，默认为点击
+	 * @private
      * @param {String} [options.type = 'hover']
      */
     type: 'hover',
 
     /**
      * 菜单显示延迟时间
+	 * @private
      * @param {Number} [options.showDelay = 100]
      */
     showDelay: 100,
     
     /**
      * 菜单关闭延迟时间
+	 * @private
      * @param {Number} [options.hideDelay = 500]
      */
     hideDelay: 500,
     
     /**
      * 鼠标浮动到target上显示菜单
+	 * @private
      */
     targetHover: function(){
         var me = this;
@@ -27450,6 +28112,7 @@ baidu.ui.Menubar.extend({
     
     /**
      * 鼠标移出target关闭菜单
+	 * @private
      */
     targetMouseOut: function(){
         var me = this;
@@ -27462,6 +28125,7 @@ baidu.ui.Menubar.extend({
 	
    /**
      * 清除hideHandler
+	 * @private
      */
     clearHideHandler:function(){
         clearTimeout(this.hideHandler);
@@ -27520,13 +28184,18 @@ baidu.ui.Menubar.register(function(me){
 
 
 /**
- * 菜单图标
+ * 支持菜单图标
+ * @name baidu.ui.Menubar.Menubar$icon
+ * @addon baidu.ui.Menubar
  */
 baidu.ui.Menubar.extend({
     tplIcon : '<span class="#{icon}" style="#{iconStyle};"></span>',
     
     /**
      * 更新item图标
+	 * @name baidu.ui.Menubar.Menubar$icon.updateIcons
+	 * @addon baidu.ui.Menubar.Menubar$icon
+	 * @function
      */
     updateIcons : function(){
         var me = this;
@@ -27562,13 +28231,14 @@ baidu.ui.Menubar.register(function(me){
 
 
 
+
  /**
  * 生成分页功能，默认会有一个横向的页面跳转链接列表，其两端有首页，尾页，上一页，下一页。若要自定义样式（如隐藏某些部件），请使用css（注：控件中各部件的css类名都有控件的tangram类名前缀）首页：first，尾页：last，上一页：previous，下一页：next，当前页：current。若要自定义控件生成的HTML，请参考源代码中以tpl开头的模板属性，类中的属性和方法都可以通过options动态覆盖。
  * @class
  * @grammar new baidu.ui.Pager(option)
  * @param     {Object}            [options]         更新选项，若选项值不符合规则，则此次更新不予更新任何选项
  * @config    {Number}            beginPage         页码范围：起始页码，默认值1。
- * @config    {Number}            endPage           页码范围：最后页码+1，必须大于起始页码，默认值100。
+ * @config    {Number}            endPage           页码范围：最后页码，大于或者等于起始页码，默认值100。
  * @config    {Number}            currentPage       必须在页码范围内，若未指定currentPage且当前页码已超出页码范围，则会自动将currentPage更新到beginPage。
  * @config    {Number}            itemCount         默认显示多少个页面的链接（不包括“首页”等特殊链接），默认值10。
  * @config    {Number}            leftItemCount     当前页面链接在页面链接列表中的默认位置，必须小于itemCount，默认值4。
@@ -27703,31 +28373,30 @@ baidu.ui.Pager = baidu.ui.createUI(function (options){
      * @private
      */
     _genBody: function (){
-        var me = this;
-        var begin = me.beginPage;
-        var end = me.endPage;
-        var current = me.currentPage;
-        // 处理范围小于显示数量的情况
-        var numlist = Math.min(end - begin, me.itemCount);
-        // 处理当前页面在范围的两端的情况
-        var leftcnt = Math.min(current - begin, me.leftItemCount);
-        leftcnt = Math.max(numlist - (end - current), leftcnt);
-        var startPage = current - leftcnt;
-        // 生成特殊链接
-        var pageMap = {
-            first: begin,
-            last: end - 1,
-            previous: current - 1,
-            next: current + 1
-        };
-        var spec = {};
+        var me = this,
+            begin = me.beginPage,
+            end = me.endPage,
+            current = me.currentPage,
+            numlist = Math.min( Math.max(end - begin + 1, 1), me.itemCount),  // 处理范围小于显示数量的情况
+            leftcnt = Math.min(current - begin, me.leftItemCount), // 处理当前页面在范围的两端的情况
+            leftcnt = Math.max(numlist - (end + 1 - current), leftcnt),
+            startPage = current - leftcnt,
+            pageMap = {
+                first: begin,
+                last: end,
+                previous: current - 1,
+                next: current + 1
+            }, // 生成特殊链接
+            spec = {};
+
         baidu.object.each(pageMap, function (s, k){
             spec[k] = me._genItem(s, k);
         });
+
         spec.previous = pageMap.previous < begin ? '' : spec.previous;
-        spec.next = pageMap.next >= end ? '' : spec.next;
+        spec.next = pageMap.next > end ? '' : spec.next;
         spec.first = startPage == begin ? '' : spec.first;
-        spec.last = startPage + numlist >= end - 1 ? '' : spec.last;
+        spec.last = startPage + numlist > end ? '' : spec.last;
         // 生成常规链接
         var buff = [];
         for (var i=0; i<numlist; i++) {
@@ -28016,6 +28685,7 @@ baidu.ui.ProgressBar = baidu.ui.createUI(function(options) {
  * @config  {Number}    dimension   滚动条滑块占全部内容的百分比，定义域(0, 100)
  * @config  {Number}    step        用户自定义当点击滚动按钮时每次滚动百分比距离，定义域(0, 100)
  * @config  {Function}  onscroll    当滚动时触发该事件，function(evt){}，evt.value可以取得滚动的百分比
+ * @plugin  container	支持绑定一个容器
  * @author linlingyu
  */
 baidu.ui.ScrollBar = baidu.ui.createUI(function(options) {
@@ -28223,15 +28893,23 @@ baidu.ui.ScrollBar = baidu.ui.createUI(function(options) {
                         || [];
                 return matcher[1] == 'mozilla' ? 'DOMMouseScroll' : 'mousewheel';
             },
-            entry = {
+            entry = me._mouseWheelEvent = {
                 target: target,
                 evtName: getEvtName(),
                 handler: baidu.fn.bind('_onMouseWheelHandler', me)
             };
         baidu.event.on(entry.target, entry.evtName, entry.handler);
-        me.addEventListener('dispose', function() {
-            baidu.event.un(entry.target, entry.evtName, entry.handler);
-        });
+    },
+    
+    /**
+     * 对已经注册了滚轮事件的容器进行解除.
+     * @private
+     */
+    _cancelMouseWheelEvt: function(){
+        var entry = this._mouseWheelEvent;
+        if(!entry){return;}
+        baidu.event.un(entry.target, entry.evtName, entry.handler);
+        this._mouseWheelEvent = null;
     },
 
     /**
@@ -28276,6 +28954,7 @@ baidu.ui.ScrollBar = baidu.ui.createUI(function(options) {
     dispose: function() {
         var me = this;
         me.dispatchEvent('dispose');
+        me._cancelMouseWheelEvt();
         me._prev.dispose();
         me._thumbButton.dispose();
         me._slider.dispose();
@@ -28293,9 +28972,11 @@ baidu.ui.ScrollBar = baidu.ui.createUI(function(options) {
 
 
 /**
- * 让滚动条邦定一个容器
- * @param   {Object}                options config参数.
- * @config  {String|HTMLElement}    container 一个容器的dom或是id的字符串
+ * 让滚动条绑定一个容器
+ * @name baidu.ui.ScrollBar.ScrollBar$container
+ * @addon baidu.ui.ScrollBar
+ * @param   {Object}                options    config参数.
+ * @config  {String|HTMLElement}    container  一个容器的dom或是id的字符串
  * @author linlingyu
  */
 baidu.ui.ScrollBar.register(function(me) {
@@ -28331,6 +29012,9 @@ baidu.ui.ScrollBar.register(function(me) {
 baidu.object.extend(baidu.ui.ScrollBar.prototype, {
     /**
      * 取得用户传入的需要被滚动条管理的对象
+	 * @name baidu.ui.ScrollBar.ScrollBar$container.getContainer
+	 * @addon baidu.ui.ScrollBar.ScrollBar$container
+	 * @function
      * @return {HTMLElement}
      */
     getContainer: function() {
@@ -28377,14 +29061,16 @@ baidu.ui.ScrollPanel = baidu.ui.createUI(function(options) {
             unSize: 'width',
             unScrollSize: 'scrollWidth',
             unClientSize: 'clientWidth',
-            offsetSize: 'offsetHeight'
+            offsetSize: 'offsetHeight',
+            unOffsetSize: 'offsetWidth'
         },
         x: {
             size: 'width',
             unSize: 'height',
             unScrollSize: 'scrollHeight',
             unClientSize: 'clientHeight',
-            offsetSize: 'offsetWidth'
+            offsetSize: 'offsetWidth',
+            unOffsetSize: 'offsetHeight'
         }
     },
 
@@ -28421,6 +29107,7 @@ baidu.ui.ScrollPanel = baidu.ui.createUI(function(options) {
         baidu.dom.insertHTML(me.getTarget(), 'afterEnd', me.getString());
         me.renderMain(me.getId('main'));
         me._renderUI();
+        me.dispatchEvent('onload');
     },
 
     /**
@@ -28576,7 +29263,7 @@ baidu.ui.ScrollPanel = baidu.ui.createUI(function(options) {
             instance = pos ? me['_' + pos + 'Scrollbar'] : null;
         if(!instance){
             instance = (me._yScrollbar && me._xScrollbar) ? [me._yScrollbar, me._xScrollbar]
-                : (me._yScrollbar || me._xScrollbar)
+                : (me._yScrollbar || me._xScrollbar);
         }
         return instance;
     },
@@ -28623,11 +29310,91 @@ baidu.ui.ScrollPanel = baidu.ui.createUI(function(options) {
             ybar = me._yScrollbar,
             xbar = me._xScrollbar;
         me.dispatchEvent('dispose');
-        me.getMain().parentNode.appendChild(me.getTarget());
+        me.setVisible(false);
+        me.getMain().parentNode.insertBefore(me.getTarget(), me.getMain());
         if (ybar) {ybar.dispose();}
         if (xbar) {xbar.dispose();}
         baidu.dom.remove(me.getMain());
         baidu.lang.Class.prototype.dispose.call(me);
+    }
+});
+/*
+ * Tangram
+ * Copyright 2011 Baidu Inc. All rights reserved.
+ */
+
+
+
+
+
+/**
+ * 为滚动面板增加自动适应功能
+ * @name baidu.ui.ScrollPanel.ScrollPanel$poll
+ * @addon baidu.ui.ScrollPanel
+ * @param {Object} options config参数.
+ * @config {Boolean} adaptive 是否支持当滚动容器大小发生变化时自适应滚动面板，默认支持
+ * @author linlingyu
+ */
+baidu.ui.ScrollPanel.register(function(me){
+    if(!me.adaptive){return;}
+    me.addEventListener('onload', function(){
+        var interval = 20,
+            container = me.getContainer(),
+            offset = {
+                w: container.clientWidth,
+                h: container.clientHeight
+            },
+            timer = setInterval(function(){
+                var container = me.getContainer(),
+                    prevVal = offset, newVal;
+                if(prevVal.w == container.clientWidth
+                    && prevVal.h == container.clientHeight){return;}
+                newVal = offset = {
+                    w: container.clientWidth,
+                    h: container.clientHeight
+                };
+                function isInnerChange(orie){//测试是否是scrollPanel内部对container进行了边界设置
+                    var bar = me['_' + orie + 'Scrollbar'],
+                        axis = me._axis[orie],
+                        visible = bar ? bar.isVisible() : false,
+                        val = me.getMain()[axis.unClientSize] - me.getContainer()[axis.unOffsetSize];
+                    return (visible && val == me._scrollBarSize) || (!visible && val == 0);
+                }
+                if(isInnerChange('y') && isInnerChange('x')){return;}
+                me.flushBounds();
+            }, interval);
+            me.addEventListener('dispose', function(){
+                clearInterval(timer);
+            });
+    });
+});
+baidu.ui.ScrollPanel.extend({
+    adaptive: true,
+    
+    /**
+     * 根据滚动容器的大小来重新刷新滚动条面板的外观
+     * @name baidu.ui.ScrollPanel.ScrollPanel$adaptive.flushBounds
+     * @addon baidu.ui.ScrollPanel.ScrollPanel$adaptive
+     * @function
+     * @param {Object} bounds 给予一个滚动容器的大小变化值，例如：{width: 320, height:240}，该参数是可选，如果给出该参数，滚动容器将以该参数来重新设置，如果不给出该参数，滚动条的外观将以当时滚动容器的大小来自适应。
+     */
+    flushBounds: function(bounds){
+        var me = this,
+            main = me.getMain(),
+            container = me.getContainer(),
+            defaultVisible = {y: me._yVisible, x: me._xVisible},
+            _bounds = {
+                w: bounds && baidu.lang.isNumber(bounds.width) ? bounds.width : container.clientWidth,
+                h: bounds && baidu.lang.isNumber(bounds.height) ? bounds.height : container.clientHeight
+            };
+        me.setVisible(false);
+        container.style.width = _bounds.w + 'px';
+        container.style.height = _bounds.h + 'px';
+        main.style.width = container.offsetWidth + 'px';
+        main.style.height = container.offsetHeight + 'px';
+        me._yVisible = defaultVisible.y;
+        me._xVisible = defaultVisible.x;
+        me._smartVisible();
     }
 });
 /*
@@ -28645,8 +29412,9 @@ baidu.ui.ScrollPanel = baidu.ui.createUI(function(options) {
 
 
 /**
- *
- * 和进度条结合  进度条跟随滑块的滑动
+  * 和进度条结合，进度条跟随滑块的滑动
+ * @name baidu.ui.Slider.Slider$progressBar
+ * @addon baidu.ui.Slider
  */
 baidu.ui.Slider.register(function(me){
     me.addEventListener("load", function(){
@@ -28892,6 +29660,10 @@ baidu.ui.StarRate = baidu.ui.createUI(function(options){
  * @config {String}   prependHTML      写在下拉框列表前面的html
  * @config {String}   appendHTML       写在下拉框列表后面的html
  * @config {Boolean}  holdHighLight    鼠标移出待选项区域后，是否保持高亮元素的状态
+ * @plugin coverable  支持背景遮罩
+ * @plugin data		  提供数据内存缓存
+ * @plugin fixWidth	  提供位置校准功能
+ * @plugin input	  支持快捷键操作
  */
 baidu.ui.Suggestion = baidu.ui.createUI(function(options) {
     var me = this;
@@ -29070,14 +29842,11 @@ baidu.ui.Suggestion = baidu.ui.createUI(function(options) {
         
         //如果当前有选中的条目，将其放到input中
         if(me.currentIndex >= 0 && me.holdHighLight){
-            console.log(me.currentIndex);
-            console.log(me.currentData);
             var currentData = me.currentData,
                 j = -1;
             for(var i=0, len=currentData.length; i<len; i++){
                 if(typeof currentData[i].disable == 'undefined' || currentData[i].disable == false){
                     j++;
-                    console.log(j +  "    " + i);
                     if(j == me.currentIndex)
                         me.pick(i);
                 }
@@ -29391,7 +30160,7 @@ baidu.ui.Suggestion = baidu.ui.createUI(function(options) {
         baidu.lang.Class.prototype.dispose.call(this);
     }
 });
-/*
+﻿/*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
  */
@@ -29400,7 +30169,11 @@ baidu.ui.Suggestion = baidu.ui.createUI(function(options) {
 
 
 
-
+/**
+ * 支持背景遮罩掩盖select、flash、iframe元素
+ * @name baidu.ui.Suggestion.Suggestion$coverable
+ * @addon baidu.ui.Suggestion
+ */
 baidu.extend(baidu.ui.Suggestion.prototype, {
     coverable: true,
     coverableOptions: {}
@@ -29427,16 +30200,21 @@ baidu.ui.Suggestion.register(function(me) {
 
 
 /**
- * 为Suggestion提供数据内存缓存
- * 扩展这里可做本地缓存
+ * 为Suggestion提供数据内存缓存，可对其扩展做本地缓存
+ * @name baidu.ui.Suggestion.Suggestion$data
+ * @addon baidu.ui.Suggestion
  * @author berg
  */
 
 baidu.ui.Suggestion.extend({
-    /*
-     * 设置一组数据给suggestion
-     * 调用者可以选择是否立即显示这组数据: noShow
-     * @public
+    /**
+     * 设置一组数据给suggestion，调用者可以选择是否立即显示这组数据: noShow
+	 * @name baidu.ui.Suggestion.Suggestion$data
+	 * @addon baidu.ui.Suggestion
+	 * @function
+	 * @param  {String}  word     关键字
+	 * @param  {Array}   data     数据数组，例如["aaa","bbb"]
+	 * @param  {Boolean} noShow  为true则不立即显示这组数据
      * @return {null}
      */
     setData: function(word, data, noShow) {
@@ -29486,6 +30264,8 @@ baidu.ui.Suggestion.register(function(me) {
 
 /**
  * 为Suggestion提供位置校准功能
+ * @name  baidu.ui.Suggestion.Suggestion$fixWidth
+ * @addon baidu.ui.Suggestion
  * @author berg
  */
 baidu.ui.Suggestion.extend({
@@ -29566,7 +30346,11 @@ baidu.ui.Suggestion.register(function(me) {
 
 
 
-
+/**
+ * 支持快捷键操作，如上下，回车等
+ * @name  baidu.ui.Suggestion.Suggestion$input
+ * @addon baidu.ui.Suggestion
+ */
 baidu.ui.Suggestion.register(function(me) {
     var target,
 
@@ -29580,12 +30364,19 @@ baidu.ui.Suggestion.register(function(me) {
         pickValue,
         mousedownView = false,
         stopCircleTemporary = false;
-
+    
+    function initKeyValue(){
+        setTimeout(function(){//防止opera和ie回退时自动打开sug
+            keyValue = me.getTarget().value;
+        }, 20);
+    }
 
     me.addEventListener('onload', function() {
         target = this.getTarget();
 
-        keyValue = target.value;
+        initKeyValue();
+        
+        me.on(window, 'onload', initKeyValue);
 
         //生成dom事件函数
         me.targetKeydownHandler = me.getTargetKeydownHandler();
@@ -29784,6 +30575,8 @@ baidu.ui.Suggestion.extend({
 
 /**
  * 表格翻页的插件
+ * @name  baidu.ui.Table.Table$page
+ * @addon baidu.ui.Table
  * @param   {Object} options config参数
  * @config  {Number} pageSize 一页显多少行的数字表示形式
  */
@@ -29806,8 +30599,10 @@ baidu.object.extend(baidu.ui.Table.prototype, {
 	},
 	/**
 	 * 直接翻到索引指定的页数
+	 * @name  baidu.ui.Table.Table$page.gotoPage
+	 * @addon baidu.ui.Table.Table$page
+	 * @function
 	 * @param {Object} index
-	 * @memberOf {TypeName} 
 	 */
 	gotoPage : function(index){
 		var me = this,
@@ -29837,7 +30632,9 @@ baidu.object.extend(baidu.ui.Table.prototype, {
 	
 	/**
 	 * 翻到上一页
-	 * @memberOf {TypeName} 
+	 * @name  baidu.ui.Table.Table$page.prevPage
+	 * @addon baidu.ui.Table.Table$page
+	 * @function
 	 */
 	prevPage : function(){
 		var me = this;
@@ -29846,7 +30643,9 @@ baidu.object.extend(baidu.ui.Table.prototype, {
 	
 	/**
 	 * 翻到下一页
-	 * @memberOf {TypeName} 
+	 * @name  baidu.ui.Table.Table$page.nextPage
+	 * @addon baidu.ui.Table.Table$page
+	 * @function
 	 */
 	nextPage : function(){
 		var me = this;
@@ -29855,7 +30654,9 @@ baidu.object.extend(baidu.ui.Table.prototype, {
 	
 	/**
 	 * 取得总记录数
-	 * @memberOf {TypeName} 
+	 * @name  baidu.ui.Table.Table$page.getTotalCount
+	 * @addon baidu.ui.Table.Table$page
+	 * @function
 	 * @return {number} 
 	 */
 	getTotalCount : function(){
@@ -29864,7 +30665,9 @@ baidu.object.extend(baidu.ui.Table.prototype, {
 	
 	/**
 	 * 取得总页数
-	 * @memberOf {TypeName} 
+	 * @name  baidu.ui.Table.Table$page.getTotalPage
+	 * @addon baidu.ui.Table.Table$page
+	 * @function
 	 * @return {number} 
 	 */
 	getTotalPage : function(){
@@ -29875,7 +30678,9 @@ baidu.object.extend(baidu.ui.Table.prototype, {
 	
 	/**
 	 * 取得当前页数
-	 * @memberOf {TypeName} 
+	 * @name  baidu.ui.Table.Table$page.getCurrentPage
+	 * @addon baidu.ui.Table.Table$page
+	 * @function
 	 * @return {number} 
 	 */
 	getCurrentPage : function(){
@@ -29886,7 +30691,9 @@ baidu.object.extend(baidu.ui.Table.prototype, {
 	 * 新增一个行，
 	 * @param {Object} options 格式同table的addRow
 	 * @param {Number} index 在索引的行之前插入，可选项，默认值是在最后插入
-	 * @memberOf {TypeName} 
+	 * @name  baidu.ui.Table.Table$page.addRow
+	 * @addon baidu.ui.Table.Table$page
+	 * @function
 	 */
 	addRow : function(options, index){
 		var me = this,
@@ -29917,7 +30724,8 @@ baidu.object.extend(baidu.ui.Table.prototype, {
 	/**
 	 * 移除一个行
 	 * @param {Object} index 需要移除的行的索引
-	 * @memberOf {TypeName} 
+	 * @name  baidu.ui.Table.Table$page.removeRow
+	 * @addon baidu.ui.Table.Table$page
 	 */
 	removeRow : function(index){
 		var me = this,
@@ -29959,7 +30767,9 @@ baidu.object.extend(baidu.ui.Table.prototype, {
 
 
 /**
- * 使单元格支持编辑
+ * 为翻页功能增加相关按钮
+ * @name  baidu.ui.Table.Table$btn
+ * @addon baidu.ui.Table
  * @param {Object} options config参数
  * @config {Object} widthPager 当该参数要在table的结尾处增加翻页按钮
  */
@@ -29984,7 +30794,8 @@ baidu.ui.Table.register(function(me){
 baidu.object.extend(baidu.ui.Table.prototype, {
     /**
      * 取得存放pager的容器
-     * @memberOf {TypeName} 
+	 * @name  baidu.ui.Table.Table$btn.getPagerContainer
+	 * @addon baidu.ui.Table.Table$btn
      * @return {html-element} 
      */
     getPagerContainer : function(){
@@ -29993,7 +30804,8 @@ baidu.object.extend(baidu.ui.Table.prototype, {
     
     /**
      * 重设pager容器的大小
-     * @memberOf {TypeName} 
+	 * @name  baidu.ui.Table.Table$btn.resize
+	 * @addon baidu.ui.Table.Table$btn
      */
     resize : function(){
         var me = this;
@@ -30022,8 +30834,10 @@ baidu.object.extend(baidu.ui.Table.prototype, {
 
 /**
  * 使单元格支持编辑
+ * @name  baidu.ui.Table.Table$edit
+ * @addon baidu.ui.Table
  * @param {Object} options config参数
- * @config {Object} columns，在columns的数据描述中加入enableEdit属性并设置为true表示该支持可双击紡辑，如：{index:0, enableEdit: true}
+ * @config {Object} columns 在columns的数据描述中加入enableEdit属性并设置为true表示该支持可双击紡辑，如：{index:0, enableEdit: true}
  */
 baidu.ui.Table.register(function(me){
     //me._editArray = [];    //存入用户设置的需要编辑的行对象
@@ -30052,9 +30866,10 @@ baidu.ui.Table.register(function(me){
 //
 baidu.object.extend(baidu.ui.Table.prototype, {
     /**
-     * 绑定一行中的某列拥有双击事件
+     * 绑定某行中的列拥有双击事件
      * @param {baidu.ui.table.Row} row 行对象
-     * @memberOf {TypeName} 
+	 * @name  baidu.ui.Table.Table$edit.attachEdit
+	 * @addon baidu.ui.Table.Table$edit
      */
     attachEdit : function(row){
         var me = this;
@@ -30123,8 +30938,10 @@ baidu.object.extend(baidu.ui.Table.prototype, {
 
 /**
  * 增加选择列的插件
+ * @name  baidu.ui.Table.Table$select
+ * @addon baidu.ui.Table
  * @param   {Object} options config 参数
- * @config  {Object} columns，在columns的数据描述中加入type属性并设置为'checkbox'表示该列支持checkbox，如：{index:0, type: 'checkbox'}
+ * @config  {Object} columns 在columns的数据描述中加入type属性并设置为'checkbox'表示该列支持checkbox，如：{index:0, type: 'checkbox'}
  */
 baidu.ui.Table.register(function(me){
 //	me._selectedItems = {};      //当前选中的id:checkbox-id, data:row-data
@@ -30223,8 +31040,10 @@ baidu.object.extend(baidu.ui.Table.prototype, {
 	
 	/**
 	 * 添加单个checkbox到行中
+	 * @name  baidu.ui.Table.Table$select.addCheckbox
+	 * @addon baidu.ui.Table.Table$select
+	 * @function
 	 * @param {String} rowId 该行的id
-	 * @memberOf {TypeName} 
 	 */
 	addCheckbox : function(rowId, index){
 		var me = this, row, cell, checkboxStr;
@@ -30244,7 +31063,9 @@ baidu.object.extend(baidu.ui.Table.prototype, {
 	/**
 	 * 移除一个checkbox
 	 * @param {Object} rowId 该行的id
-	 * @memberOf {TypeName} 
+	 * @name  baidu.ui.Table.Table$select.removeCheckbox
+	 * @addon baidu.ui.Table.Table$select
+	 * @function
 	 */
 	removeCheckbox : function(rowId){
 		var me = this;
@@ -30255,7 +31076,9 @@ baidu.object.extend(baidu.ui.Table.prototype, {
 	
 	/**
 	 * 取得表格标题的全选checkbox
-	 * @memberOf {TypeName} 
+	 * @name  baidu.ui.Table.Table$select.getTitleCheckbox
+	 * @addon baidu.ui.Table.Table$select
+	 * @function
 	 * @return {html-element} 
 	 */
 	getTitleCheckbox : function(){
@@ -30265,7 +31088,9 @@ baidu.object.extend(baidu.ui.Table.prototype, {
 	/**
 	 * 设置一个自定义的全选checkbox
 	 * @param {String} checkboxId 该checkbox的id
-	 * @memberOf {TypeName}
+	 * @name  baidu.ui.Table.Table$select.setTitleCheckbox
+	 * @addon baidu.ui.Table.Table$select
+	 * @function
 	 */
 	setTitleCheckbox : function(checkbox){
 		this.titleCheckboxId = checkbox.id || checkbox;
@@ -30323,7 +31148,9 @@ baidu.object.extend(baidu.ui.Table.prototype, {
 	/**
 	 * 根据给定的数组索引选中checkbox
 	 * @param {Object} indexArr 格式：[1, 3, 8]
-	 * @memberOf {TypeName} 
+	 * @name  baidu.ui.Table.Table$select.select
+	 * @addon baidu.ui.Table.Table$select
+	 * @function
 	 */
 	select : function(indexArr){
 		this._setCheckboxState(indexArr, true);
@@ -30331,8 +31158,10 @@ baidu.object.extend(baidu.ui.Table.prototype, {
 	
 	/**
 	 * 根据给定的数组索引反选checkbox
-	 * @param {Object} indexArr
-	 * @memberOf {TypeName} 
+	 * @param {Object} indexArr 索引数组
+	 * @name  baidu.ui.Table.Table$select.unselect
+	 * @addon baidu.ui.Table.Table$select
+	 * @function
 	 */
 	unselect : function(indexArr){
 		this._setCheckboxState(indexArr, false);
@@ -30340,8 +31169,10 @@ baidu.object.extend(baidu.ui.Table.prototype, {
 	
 	/**
 	 * 单项的切换选中或反选
-	 * @param {Object} rsid
-	 * @memberOf {TypeName} 
+	 * @param {Object} rsid 项ID
+	 * @name  baidu.ui.Table.Table$select.toggle
+	 * @addon baidu.ui.Table.Table$select
+	 * @function
 	 */
 	toggle : function(rsid){
 		var me = this,
@@ -30364,7 +31195,9 @@ baidu.object.extend(baidu.ui.Table.prototype, {
 	
 	/**
 	 * 全部选中checkbox
-	 * @memberOf {TypeName} 
+	 * @name  baidu.ui.Table.Table$select.selectAll
+	 * @addon baidu.ui.Table.Table$select
+	 * @function
 	 */
 	selectAll : function(){
 		this._setCheckboxState(null, true);
@@ -30372,7 +31205,9 @@ baidu.object.extend(baidu.ui.Table.prototype, {
 	
 	/**
 	 * 全部反选checkbox
-	 * @memberOf {TypeName} 
+	 * @name  baidu.ui.Table.Table$select.unselectAll
+	 * @addon baidu.ui.Table.Table$select
+	 * @function
 	 */
 	unselectAll : function(){
 		this._setCheckboxState(null, false);
@@ -30380,7 +31215,9 @@ baidu.object.extend(baidu.ui.Table.prototype, {
 	
 	/**
 	 * 当全选的checkbox存在时才可以切换全选和全反选
-	 * @memberOf {TypeName} 
+	 * @name  baidu.ui.Table.Table$select.toggleAll
+	 * @addon baidu.ui.Table.Table$select
+	 * @function
 	 */
 	toggleAll : function(){
 		var me = this, checkbox = me.getTitleCheckbox();
@@ -30391,7 +31228,9 @@ baidu.object.extend(baidu.ui.Table.prototype, {
 	
 	/**
 	 * 取得已经选中的数据，如果该行的row.data中设置id则返回所选中的id数组，否则返回该row的data
-	 * @memberOf {TypeName} 
+	 * @name  baidu.ui.Table.Table$select.getSelected
+	 * @addon baidu.ui.Table.Table$select
+	 * @function
 	 * @return {TypeName} 
 	 */
 	getSelected : function(){
@@ -30417,7 +31256,9 @@ baidu.object.extend(baidu.ui.Table.prototype, {
 
 /**
  * 增加列标题
- * @param   {Object} optoins config参数
+ * @name  baidu.ui.Table.Table$title
+ * @addon baidu.ui.Table
+ * @param   {Object} options config参数
  * @config  {Object} title 在表格头上增加一个行来说明各个表格列的标题，参数格式：['column-1', 'column-2', 'column-3'...]
  */
 baidu.ui.Table.register(function(me){
@@ -30472,7 +31313,9 @@ baidu.object.extend(baidu.ui.Table.prototype, {
 	
 	/**
 	 * 取得表格的table对象
-	 * @memberOf {TypeName} 
+	 * @name  baidu.ui.Table.Table$title.getTitleBody
+	 * @addon baidu.ui.Table.Table$title
+	 * @function
 	 * @return {html-element} 
 	 */
 	getTitleBody : function(){
@@ -30940,16 +31783,19 @@ baidu.ui.Toolbar.Separator = baidu.ui.createUI(function(options) {
 {
     /**
      * statable
+     * @private
      */
     statable: false,
 
     /**
      * uiType
+     * @private
      */
     uiType: 'toolbar-separator',
 
     /**
      * 模板
+	 * @private
      */
     tplMain: '<span id="#{id}" class="#{class}" style="display:block"></span>',
 
@@ -30969,6 +31815,7 @@ baidu.ui.Toolbar.Separator = baidu.ui.createUI(function(options) {
 
     /**
      * 绘制控件
+     * @private
      * @return void.
      */
     render: function(container) {
@@ -31004,21 +31851,25 @@ baidu.ui.Toolbar.Spacer = baidu.ui.createUI(function(options) {
 {
     /**
      * statable
+     * @private
      */
     statable: false,
 
     /**
      * uiType
+     * @private
      */
     uiType: 'toolbar-spacer',
 
     /**
      * 默认宽度
+     * @private
      */
     width: '10px',
 
     /**
      * html 模板
+     * @private
      */
     tplBody: '<div #{style} id="#{id}" class="#{class}"></div>',
 
@@ -31039,6 +31890,7 @@ baidu.ui.Toolbar.Spacer = baidu.ui.createUI(function(options) {
     /**
      * 绘制item
      * @param {String|HTMLDom} [container=this.container] Item容器.
+     * @private
      */
     render: function(container) {
         var me = this;
@@ -31088,7 +31940,10 @@ baidu.ui.Toolbar.Spacer = baidu.ui.createUI(function(options) {
  * @config      {Function}        onclose         （可选）关闭tooltip时触发。
  * @config      {Function}        onbeforeopen    （可选）打开tooltip前触发。
  * @config      {Function}        onbeforeclose   （可选）关闭tooltip前触发。
- * @plugin      fx                Tooltip的展现和消失效果支持。
+ * @plugin      click				支持单击隐藏显示
+ * @plugin      close				支持关闭按钮
+ * @plugin      fx					动画效果
+ * @plugin      hover				支持鼠标滑过隐藏显示
  * @return     {baidu.ui.Tooltip}        Tooltip实例
  */
 
@@ -31410,6 +32265,11 @@ baidu.ui.Tooltip.showing = {};
 
 
 
+/**
+ * 支持单击隐藏显示Tooltip
+ * @name  baidu.ui.Tooltip.Tooltip$click
+ * @addon baidu.ui.Tooltip
+ */
 baidu.ui.Tooltip.register(function(me) {
     
     if (me.type == 'click') {
@@ -31482,12 +32342,11 @@ baidu.ui.Tooltip.register(function(me) {
 
 /**
  * 创建关闭按钮
+ * @param {String} headContent  内容
+ * @name  baidu.ui.Tooltip.Tooltip$close
+ * @addon baidu.ui.Tooltip
  */
 baidu.ui.Tooltip.extend({
-    /**
-     * 标题内容
-     * @param {String} [options.headContent].
-     */
     headContent: '',
     tplhead: '<div class="#{headClass}" id="#{id}">#{headContent}</div>'
 });
@@ -31522,6 +32381,12 @@ baidu.ui.Tooltip.register(function(me) {
 
 
 
+/**
+ * 为Tooltip添加动画效果支持
+ * @name  baidu.ui.Tooltip.Tooltip$fx
+ * @addon baidu.ui.Tooltip
+ */
+
 baidu.ui.Tooltip.extend({
 	//是否使用效果,默认开启
 	enableFx: true,
@@ -31533,9 +32398,7 @@ baidu.ui.Tooltip.extend({
 	hideFxOptions: {duration: 500}
 });
 
-/**
- * 为Tooltip添加效果支持
- */
+
 baidu.ui.Tooltip.register(function(me) {
 	if (me.enableFx) {
 	
@@ -31578,7 +32441,11 @@ baidu.ui.Tooltip.register(function(me) {
 
 
 
-
+/**
+ * 支持鼠标滑过隐藏显示
+ * @name  baidu.ui.Tooltip.Tooltip$hover
+ * @addon baidu.ui.Tooltip
+ */
 baidu.ui.Tooltip.extend({
     hideDelay: 500
 });
@@ -31868,7 +32735,7 @@ baidu.ui.Tree.TreeNode.prototype =
     },
     /**
      * 将已有节点添加到目标节点中，成为这个目标节点的子节点。
-     * @param : parentNode
+     * @param {TreeNode} parentNode 节点对象
      */
     appendTo: function(parentNode) {
         var me = this;
@@ -31878,7 +32745,7 @@ baidu.ui.Tree.TreeNode.prototype =
     },
     /**
      * 将此节点移动至一个目标节点,成为这个目标节点的next节点
-     * @param {TreeNode} 移动至目标节点
+     * @param {TreeNode}  treeNode 移动至目标节点
      */
     moveTo: function(treeNode) {
         var me = this,
@@ -31928,14 +32795,9 @@ baidu.ui.Tree.TreeNode.prototype =
     },
 
     /**
-     * 新增一个子节点
-     * 1.先判断子节点是否被渲染过，如果渲染过，就将子节点append到自己subNodes容器里
-     *   否则就inertHTML的子节点的getString
-     * 2.对parentNode与childNodes进行变更。
-     * 3.更新treeNode与tree的update
-     * @param {TreeNode} 需要加入的节点(分为已经渲染的节点和为被渲染的节点)
-     *                  通过treeNode._getContainer()返回值来判断是否被渲染.
-     * @param {index}  此节点做为 节点集合的[index+1]的值
+     * 新增一个子节点，1.先判断子节点是否被渲染过，如果渲染过，就将子节点append到自己subNodes容器里，否则就inertHTML的子节点的getString，2.对parentNode与childNodes进行变更， 3.更新treeNode与tree的update。
+     * @param  {TreeNode}  treeNode 需要加入的节点(分为已经渲染的节点和为被渲染的节点)，通过treeNode._getContainer()返回值来判断是否被渲染.
+     * @param  {Number}  index 此节点做为 节点集合的[index+1]的值
      * @return {TreeNode} treeNode 返回被新增的child
     */
     appendChild: function(treeNode,index) {

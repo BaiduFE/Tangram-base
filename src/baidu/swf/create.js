@@ -8,6 +8,7 @@
  * date: 2009/11/17
  */
 
+///import baidu.dom.insertHTML;
 ///import baidu.swf.createHTML;
 
 /**
@@ -54,10 +55,5 @@ baidu.swf.create = function (options, target) {
     if (target && 'string' == typeof target) {
         target = document.getElementById(target);
     }
-    
-    if (target) {
-        target.innerHTML = html;
-    } else {
-        document.write(html);
-    }
+    baidu.dom.insertHTML( target || document.body ,'beforeEnd',html );
 };

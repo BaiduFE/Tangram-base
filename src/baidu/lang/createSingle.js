@@ -10,6 +10,7 @@
 
 ///import baidu.lang;
 ///import baidu.lang.Class;
+///import baidu.lang.Class.$removeEventListener;
 ///import baidu.lang.Event;
 
 /**

@@ -20,7 +20,7 @@
  /**
  * @namespace T Tangram七巧板
  * @name T
- * @version 1.5.0
+ * @version 1.6.0
 */
 
 /**
@@ -36,4 +36,4 @@ baidu.guid = "$BAIDU$";
 
 //Tangram可能被放在闭包中
 //一些页面级别唯一的属性，需要挂载在window[baidu.guid]上
-window[baidu.guid] = window[baidu.guid] || {};
+baidu.$$ = window[baidu.guid] = window[baidu.guid] || {global:{}};

@@ -18,9 +18,9 @@ test('ready before onload', function() {
 	window.frameload = function(w) {
 		w.baidu.dom.ready(function() {
 			equals(step++, 0, 'ready before onload');
-			TT.on(w, 'load', function(){
+			w.onload = function(){
 				equals(step++, 1, 'onload after ready');
-			});
+			};
 		});
 //		TT.on(w, 'load', function(){//IE6、8下，绑定事件的执行顺序并不固定，这个用例移除
 //			equals(step++, 1, 'onload after ready');
@@ -28,7 +28,7 @@ test('ready before onload', function() {
 	};
 	f.src = upath + 'readyFrame.php?f=baidu.dom.ready';// 空页面
 	setTimeout(function(){
-		TT.e(f).remove();
+		$(f).remove();
 		start();
 	}, 1000);
 });
@@ -38,7 +38,7 @@ test('ready after onload', function() {
 	stop();
 	setTimeout(function() {
 		var script = document.createElement('script');
-		script.src = '../../tools/br/import.php?f=baidu.dom.ready';
+		script.src = upath + '../../../src/baidu/dom/ready.js';
 		var fun = function(){
 			if(ua.browser.ie && this.readyState == 'loaded' || !ua.browser.ie){
 				ok(true, "onload");

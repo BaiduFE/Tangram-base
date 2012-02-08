@@ -11,8 +11,8 @@ module('baidu.dom.drag');
 		dom : []
 	};
 	QUnit.testDone = function() {
-		TT.array.each(te.dom, function(node) {
-			TT.e(node).remove();
+		$.each(te.dom, function(i, node) {
+			$(node).remove();
 		});
 		td.apply(this, arguments);
 	};
@@ -23,17 +23,17 @@ module('baidu.dom.drag');
 	 * <li>创建div并追加到自动清除列表
 	 */
 	window.drag_check = function(opt) {
-		TT.event.fire(document.body, 'mousemove', {
+		ua.mousemove(document.body, {
 			clientX : 0,
 			clientY : 0
 		});
-		TT.e(document.body)
-				.insertHTML('beforeend', '<div id="test_div"></div>');
-		TT.e(document.body).setStyle('margin', 0).setStyle('padding', 0);
-		var div = TT.e("test_div").setStyle('position', 'absolute').setStyle(
-				'height', 10).setStyle('width', 10).setStyle(
-				'background-color', 'red').setStyle('left', 0).setStyle('top',
-				0)._dom[0];
+		$(document.body)
+				.append('<div id="test_div"></div>');
+		$(document.body).css('margin', 0).css('padding', 0);
+		var div = $("#test_div").css('position', 'absolute').css(
+				'height', 10).css('width', 10).css(
+				'background-color', 'red').css('left', 0).css('top',
+				0)[0];
 		te.dom.push(div);
 		opt = opt || {};
 		var dc = {
@@ -41,15 +41,15 @@ module('baidu.dom.drag');
 			dom : div,
 			move : function(op, timeout, after) {
 				var callback = function() {
-					TT.event.fire(document.body, 'mousemove', op);
+					ua.mousemove(document.body, op);
 					after && after();
 				};
 				timeout ? setTimeout(callback, timeout) : callback();
 			},
 			check : function() {
-				equals(parseInt(TT.e(div).style('left')), dc.check.left,
+				equals(parseInt($(div).css('left')), dc.check.left,
 						"check left after drag");
-				equals(parseInt(TT.e(div).style('top')), dc.check.left,
+				equals(parseInt($(div).css('top')), dc.check.left,
 						"check top after drag");
 			}
 		};
@@ -100,7 +100,7 @@ test('update', function() {
 	});
 	var enstop = false;
 	// mouseup不应该出发drag的stop
-	TT.event.fire(document.body, 'mouseup');
+	ua.mouseup(document.body);
 
 	QUnit.stop();
 	ua.fnQueue().add(function() {
@@ -137,9 +137,9 @@ test('range and update range', function() {
 		});
 	}, 50).add(
 			function() {
-				ok(parseInt(TT.e(dc.dom).style('left')) < 100,
+				ok(parseInt($(dc.dom).css('left')) < 100,
 						"check left after drag");
-				ok(parseInt(TT.e(dc.dom).style('top')) < 100,
+				ok(parseInt($(dc.dom).css('top')) < 100,
 						"check top after drag");
 				dc.d.update({
 					range : [ 0, 200, 200, 0 ]
@@ -155,6 +155,90 @@ test('range and update range', function() {
 		dc.d.stop();
 	}, 50).add(QUnit.start, 50).next();
 
+});
+
+test('margin', function() {
+	var div = document.createElement("div");
+	div.id = 'test_margin_div';
+	document.body.appendChild(div);
+	$("#test_margin_div").css('position', 'absolute').css(
+		'height', 10).css('width', 10).css(
+		'background-color', 'red').css('left', 0).css('top',
+		0);
+	$("#test_margin_div").css('margin', '20px');
+	ua.mousemove(document.body, {
+		clientX : 0,
+		clientY : 0
+	});
+	var d = baidu.dom.drag(div);
+	ua.mousemove(document.body, {
+		clientX : 50,
+		clientY : 50
+	});
+	setTimeout(function(){
+		d.stop();
+		equals(baidu.dom.getPosition(div).left, "70", "left right");
+		equals(baidu.dom.getPosition(div).top, "70", "top right");
+		document.body.removeChild(div);
+		start();
+	}, 20);
+	stop();
+});
+
+test('margin autoStop', function() {
+	var div = document.createElement("div");
+	div.id = 'test_margin_div';
+	document.body.appendChild(div);
+	$("#test_margin_div").css('position', 'absolute').css(
+		'height', 10).css('width', 10).css(
+		'background-color', 'red').css('left', 0).css('top',
+		0);
+	$("#test_margin_div").css('margin', '20px');
+	ua.mousemove(document.body, {
+		clientX : 0,
+		clientY : 0
+	});
+	var d = baidu.dom.drag(div);
+	ua.mousemove(document.body, {
+		clientX : 50,
+		clientY : 50
+	});
+	setTimeout(function(){
+		ua.mouseup(document.body);
+		equals(baidu.dom.getPosition(div).left, "70", "left right");
+		equals(baidu.dom.getPosition(div).top, "70", "top right");
+		document.body.removeChild(div);
+		start();
+	}, 20);
+	stop();
+});
+
+test('no margin', function() {
+	var div = document.createElement("div");
+	div.id = 'test_margin_div';
+	document.body.appendChild(div);
+	$("#test_margin_div").css('position', 'absolute').css(
+		'height', 10).css('width', 10).css(
+		'background-color', 'red').css('left', 0).css('top',
+		0);
+	$("#test_margin_div").css('margin', '0');
+	ua.mousemove(document.body, {
+		clientX : 0,
+		clientY : 0
+	});
+	var d = baidu.dom.drag(div);
+	ua.mousemove(document.body, {
+		clientX : 50,
+		clientY : 50
+	});
+	setTimeout(function(){
+		equals(baidu.dom.getPosition(div).left, "50", "left right");
+		equals(baidu.dom.getPosition(div).top, "50", "top right");
+		d.stop();
+		document.body.removeChild(div);
+		start();
+	}, 20);
+	stop();
 });
 // test('drag with update', function() {
 // stop();
