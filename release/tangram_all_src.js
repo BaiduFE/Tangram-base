@@ -20,7 +20,7 @@
  /**
  * @namespace T Tangram七巧板
  * @name T
- * @version 1.6.0
+ * @version 1.5.2
 */
 
 /**
@@ -28,7 +28,7 @@
  * @author: allstar, erik, meizz, berg
  */
 var T,
-    baidu = T = baidu || {version: "1.5.0"}; 
+    baidu = T = baidu || {version: "1.5.2"}; 
 
 //提出guid，防止在与老版本Tangram混用时
 //在下一行错误的修改window[undefined]
@@ -9230,12 +9230,13 @@ window[baidu.guid].global = window[baidu.guid].global || {};
  * @param   {Number}    step 	z-index 增长的步长
  * @return  {Number}            z-index
  */
-baidu.global.getZIndex = function(key, step){
-	if(key)
-		key = baidu.global.get("zIndex")[key] = baidu.global.get("zIndex")[key] + (step || 1);
-    return key;
+baidu.global.getZIndex = function(key, step) {
+	var zi = baidu.global.get("zIndex");
+	if (key) {
+		zi[key] = zi[key] + (step || 1);
+	}
+	return zi[key];
 };
-
 baidu.global.set("zIndex", {popup : 50000, dialog : 1000}, true);
 /*
  * Tangram
