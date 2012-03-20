@@ -159,3 +159,17 @@ test("get style from css file", function() {
 
 	ua.loadcss(upath + 'style.css', handle, 'content', 'width', '200px');
 });
+
+test("null style ", function() {
+	stop();
+	ua.importsrc("baidu.dom._styleFixer.width,baidu.dom._styleFixer.height", function(){
+		var div = document.createElement('div');
+		document.body.appendChild(div);
+		var div1 = document.createElement('div');
+		$(div1).css("height", "10px").css("width", "10px");
+		div.appendChild(div1);
+		equals(baidu.dom.getStyle(div, "height"), div.offsetHeight + "px", "The height is right");//IE下不会返回auto
+		equals(baidu.dom.getStyle(div, "width"), document.body.offsetWidth + "px", "The width is right");//IE下不会返回auto
+		start();
+	}, "baidu.dom._styleFixer.width", "baidu.dom.getStyle")
+});
