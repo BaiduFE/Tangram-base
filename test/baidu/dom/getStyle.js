@@ -162,7 +162,7 @@ test("get style from css file", function() {
 
 test("null style ", function() {
 	stop();
-	ua.importsrc("baidu.dom._styleFixer.width,baidu.dom._styleFixer.height", function(){
+	ua.importsrc("baidu.dom._styleFixer.size", function(){
 		var div = document.createElement('div');
 		document.body.appendChild(div);
 		var div1 = document.createElement('div');
