@@ -34,13 +34,13 @@
  * @config {HTMLElement}          [handler] 	        用于拖拽的手柄，比如dialog的title.
  * @config {Function} 	          [toggle] 		        在每次ondrag的时候，会调用这个方法判断是否应该停止拖拽。如果此函数返回值为false，则停止拖拽.
  * @version 1.2
- * @remark    要拖拽的元素必须事先设定样式的postion值，如果postion为absloute，并且没有设定top和left，拖拽开始时，无法取得元素的top和left值，这时会从[0,0]点开始拖拽<br>如果要拖拽的元素是static定位，会被改成relative定位方式。
+ * @remark    要拖拽的元素必须事先设定样式的postion值，如果postion为absloute，并且没有设定top和left，拖拽开始时，无法取得元素的top和left值，这时会从[0,0]点开始拖拽.
  * @see baidu.dom.drag
  * @returns {Draggable Instance} 拖拽实例，包含cancel方法，可以停止拖拽.
  */
 
 baidu.dom.draggable = function(element, options) {
-    options = baidu.object.extend({toggle: function() {return true}}, options || {});
+    options = baidu.object.extend({toggle: function() {return true}}, options);
     options.autoStop = true;
     element = baidu.dom.g(element);
     options.handler = options.handler || element;
@@ -57,7 +57,6 @@ baidu.dom.draggable = function(element, options) {
             }
         },
         me = this;
-
     //如果存在ddManager, 将事件转发到ddManager中
     if (manager = baidu.dom.ddManager) {
         for (; i >= 0; i--) {
@@ -77,14 +76,15 @@ baidu.dom.draggable = function(element, options) {
     if (element) {
         function handlerMouseDown(e) {
             var event = options.mouseEvent = window.event || e;
+            options.mouseEvent = {clientX: event.clientX, clientY: event.clientY};
             if (event.button > 1 //只支持鼠标左键拖拽; 左键代码: IE为1,W3C为0
                 // 可以通过配置项里的这个开关函数暂停或启用拖曳功能
                 || (baidu.lang.isFunction(options.toggle) && !options.toggle())) {
                 return;
             }
-            if (baidu.dom.getStyle(element, 'position') == 'static') {
-                baidu.dom.setStyle(element, 'position', 'relative');
-            }
+//            if (baidu.dom.getStyle(element, 'position') == 'static') {
+//                baidu.dom.setStyle(element, 'position', 'relative');
+//            }
             if (baidu.lang.isFunction(options.onbeforedragstart)) {
                 options.onbeforedragstart(element);
             }
