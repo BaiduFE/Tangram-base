@@ -47,10 +47,10 @@ module('baidu.dom.drag');
 				timeout ? setTimeout(callback, timeout) : callback();
 			},
 			check : function() {
-				equals(parseInt($(div).css('left')), dc.check.left,
-						"check left after drag");
-				equals(parseInt($(div).css('top')), dc.check.left,
-						"check top after drag");
+				equals(baidu.dom.getPosition(div).left, dc.check.left,
+				"check left after drag");
+				equals(baidu.dom.getPosition(div).top, dc.check.left,
+				"check top after drag");
 			}
 		};
 		return dc;
@@ -62,33 +62,34 @@ module('baidu.dom.drag');
  */
 test('base and events', function() {
 	expect(5);
-	var noDragging = true;
-	var dc = window.drag_check({
-		ondragstart : function() {
-			ok(true, 'drag start');
-		},
-		ondrag : function() {
-			if (noDragging) {
-				ok(true, 'dragging');
-				noDragging = false;
-			}
-		},
-		ondragend : function() {
-			ok(true, 'drag end');
-		}
-	});
-	// 启动前，等待200
 	QUnit.stop();
-	ua.fnQueue().add(function() {
-		dc.move({
-			clientX : 50,
-			clientY : 50
+	ua.importsrc("baidu.dom.getPosition", function(){
+		var noDragging = true;
+		var dc = window.drag_check({
+			ondragstart : function() {
+				ok(true, 'drag start');
+			},
+			ondrag : function() {
+				if (noDragging) {
+					ok(true, 'dragging');
+					noDragging = false;
+				}
+			},
+			ondragend : function() {
+				ok(true, 'drag end');
+			}
 		});
-	}, 50).add(function() {
-		dc.check.left = 50;
-		dc.check();
-		dc.d.stop();
-	}, 50).add(QUnit.start, 50).next();
+		ua.fnQueue().add(function() {
+			dc.move({
+				clientX : 50,
+				clientY : 50
+			});
+		}, 50).add(function() {
+			dc.check.left = 50;
+			dc.check();
+			dc.d.stop();
+		}, 50).add(QUnit.start, 50).next();
+	}, "baidu.dom.getPosition", "baidu.dom.drag");
 });
 
 test('update', function() {
@@ -158,6 +159,7 @@ test('range and update range', function() {
 });
 
 test('margin', function() {
+	stop();
 	var div = document.createElement("div");
 	div.id = 'test_margin_div';
 	document.body.appendChild(div);
@@ -171,21 +173,24 @@ test('margin', function() {
 		clientY : 0
 	});
 	var d = baidu.dom.drag(div);
-	ua.mousemove(document.body, {
-		clientX : 50,
-		clientY : 50
-	});
 	setTimeout(function(){
-		d.stop();
-		equals(baidu.dom.getPosition(div).left, "70", "left right");
-		equals(baidu.dom.getPosition(div).top, "70", "top right");
-		document.body.removeChild(div);
-		start();
+		ua.mousemove(document.body, {
+			clientX : 50,
+			clientY : 50
+		});
+		setTimeout(function(){
+			d.stop();
+			equals(baidu.dom.getPosition(div).left, "70", "left right");
+			equals(baidu.dom.getPosition(div).top, "70", "top right");
+			equals(div.style["margin"], "20px", "The margin is not changed");
+			document.body.removeChild(div);
+			start();
+		}, 20);
 	}, 20);
-	stop();
 });
 
 test('margin autoStop', function() {
+	stop();
 	var div = document.createElement("div");
 	div.id = 'test_margin_div';
 	document.body.appendChild(div);
@@ -199,21 +204,24 @@ test('margin autoStop', function() {
 		clientY : 0
 	});
 	var d = baidu.dom.drag(div);
-	ua.mousemove(document.body, {
-		clientX : 50,
-		clientY : 50
-	});
 	setTimeout(function(){
-		ua.mouseup(document.body);
-		equals(baidu.dom.getPosition(div).left, "70", "left right");
-		equals(baidu.dom.getPosition(div).top, "70", "top right");
-		document.body.removeChild(div);
-		start();
+		ua.mousemove(document.body, {
+			clientX : 50,
+			clientY : 50
+		});
+		setTimeout(function(){
+			ua.mouseup(document.body);
+			equals(baidu.dom.getPosition(div).left, "70", "left right");
+			equals(baidu.dom.getPosition(div).top, "70", "top right");
+			equals(div.style["margin"], "20px", "The margin is not changed");
+			document.body.removeChild(div);
+			start();
+		}, 20);
 	}, 20);
-	stop();
 });
 
 test('no margin', function() {
+	stop();
 	var div = document.createElement("div");
 	div.id = 'test_margin_div';
 	document.body.appendChild(div);
@@ -221,25 +229,58 @@ test('no margin', function() {
 		'height', 10).css('width', 10).css(
 		'background-color', 'red').css('left', 0).css('top',
 		0);
-	$("#test_margin_div").css('margin', '0');
+	$("#test_margin_div").css('margin', '0px');
 	ua.mousemove(document.body, {
 		clientX : 0,
 		clientY : 0
 	});
 	var d = baidu.dom.drag(div);
-	ua.mousemove(document.body, {
-		clientX : 50,
-		clientY : 50
-	});
 	setTimeout(function(){
-		equals(baidu.dom.getPosition(div).left, "50", "left right");
-		equals(baidu.dom.getPosition(div).top, "50", "top right");
-		d.stop();
-		document.body.removeChild(div);
-		start();
+		ua.mousemove(document.body, {
+			clientX : 50,
+			clientY : 50
+		});
+		setTimeout(function(){
+			equals(baidu.dom.getPosition(div).left, "50", "left right");
+			equals(baidu.dom.getPosition(div).top, "50", "top right");
+			equals(div.style["margin"], "0px", "The margin is not changed");
+			d.stop();
+			document.body.removeChild(div);
+			start();
+		}, 20);
 	}, 20);
-	stop();
 });
+
+test('border', function() {
+	stop();
+	ua.importsrc("baidu.dom.getPosition", function(){
+		var div = document.createElement("div");
+		div.id = 'test_margin_div';
+		document.body.appendChild(div);
+		$("#test_margin_div").css('position', 'absolute').css(
+				'height', 10).css('width', 10).css("top", 0).css("left", 0).
+				css('background-color', 'green').css('border', '5px');
+		ua.mousemove(document.body, {
+			clientX : 0,
+			clientY : 0
+		});
+		var d = baidu.dom.drag(div);
+		setTimeout(function(){
+			ua.mousemove(document.body, {
+				clientX : 50,
+				clientY : 50
+			});
+			setTimeout(function(){
+				d.stop();
+				equals(baidu.dom.getPosition(div).left, "50", "left right");
+				equals(baidu.dom.getPosition(div).top, "50", "top right");
+				document.body.removeChild(div);
+				start();
+			}, 20);
+		}, 20);
+	}, "baidu.dom.getPosition", "baidu.dom.drag");
+});
+
 // test('drag with update', function() {
 // stop();
 // expect(2);

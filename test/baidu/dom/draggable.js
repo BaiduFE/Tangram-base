@@ -11,12 +11,16 @@ var clear = function(element, dd, needstart) {
 
 /* need move mouse before testing */
 test('check return value', function() {
+	stop();
 	expect(1);
-	var div = document.createElement('div');
-	document.body.appendChild(div);
-	var div1 = baidu.dom.draggable(div);
-	ok(baidu.lang.isFunction(div1.cancel), "check return function");
-	clear(div, div1);
+	ua.importsrc("baidu.dom.getPosition", function(){
+		var div = document.createElement('div');
+		document.body.appendChild(div);
+		var div1 = baidu.dom.draggable(div);
+		ok(baidu.lang.isFunction(div1.cancel), "check return function");
+		clear(div, div1);
+		start();
+	}, "baidu.dom.getPosition", "baidu.dom.drag");
 });
 
 test('drag,no options', function() {
@@ -40,8 +44,48 @@ test('drag,no options', function() {
 	var move = function(ele, x, y) {
 		if (x >= 100) {
 			ua.mouseup(ele);
-			equal(parseInt($(ele).css('left')), 100);
-			equal(parseInt($(ele).css('top')), 50);
+			equal(baidu.dom.getPosition(div).left, 100, "stop left");
+			equal(baidu.dom.getPosition(div).top, 50, "stop top");
+			clear(div, div1, true);
+		} else {
+			ua.mousemove(document, {
+				clientX : x + 10,
+				clientY : y + 5
+			});
+			setTimeout(function() {
+				move(ele, x + 10, y + 5);
+			}, 20);
+		}
+	};
+	move(div, 0, 0);
+});
+
+test('drag, static', function() {
+	stop();
+	expect(3);
+	var div = document.createElement('div');
+	document.body.appendChild(div);
+	$(div).css('position', 'static').css('left', '0').css('top', '0').css(
+			'backgroundColor', 'red').css('width', '100px').css('height',
+			'100px');
+	var oleft = baidu.dom.getPosition(div).left;
+	var otop = baidu.dom.getPosition(div).top;
+	var div1 = baidu.dom.draggable(div);// 注册onmousedown事件
+	ua.mousemove(div, {
+		clientX : 0,
+		clientY : 0
+	});
+	ua.mousedown(div, {
+		clientX : 0,
+		clientY : 0
+	});
+
+	var move = function(ele, x, y) {
+		if (x >= 100) {
+			ua.mouseup(ele);
+			equal(baidu.dom.getPosition(div).left, oleft, "stop left, the ele is not dragged");
+			equal(baidu.dom.getPosition(div).top, otop, "stop top, the ele is not dragged");
+			equal($(div).css('position'), 'static', "The ele is still static");
 			clear(div, div1, true);
 		} else {
 			ua.mousemove(document, {
@@ -67,8 +111,8 @@ test('options', function() {
 			'red');
 	var div1 = baidu.dom.draggable('div_test', {
 		ondragstart : function(ele, op) {
-			equal(parseInt($(ele).css('left')), 0, 'start left');
-			equal(parseInt($(ele).css('top')), 0, 'start top');
+			equal(baidu.dom.getPosition(div).left, 0, 'start left');
+			equal(baidu.dom.getPosition(div).top, 0, 'start top');
 		},
 		ondrag : function(ele, op) {
 			ok(true, 'drag');
@@ -127,8 +171,8 @@ test('undraggble', function() {
 				endX : 12,
 				endY : 12,
 				callback : function() {
-					equals(parseInt($(div).css('left')), 0);
-					equals(parseInt($(div).css('top')), 0);
+					equals(baidu.dom.getPosition(div).left, 0);
+					equals(baidu.dom.getPosition(div).top, 0);
 					clear(div, div1, true);
 				}
 			});
@@ -181,6 +225,7 @@ test('ddManager', function() {
 		clear(div, div1, true);
 	}, 60);
 });
+
 //
 //// 测试非static元素是否可以正确移动，为便于定位，元素追加至某有特殊定位的父元素中
 //test('element none static', function() {
