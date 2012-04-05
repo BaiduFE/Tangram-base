@@ -41,10 +41,10 @@ baidu.dom.getStyle = function (element, key) {
                 dom.getComputedStyle(element, key);
 
     // 在取不到值的时候，用fixer进行修正
-    if (!value) {
+    if (!value || value == 'auto') {
         var fixer = dom._styleFixer[key];
         if(fixer){
-            value = fixer.get ? fixer.get(element) : baidu.dom.getStyle(element, fixer);
+            value = fixer.get ? fixer.get(element, key, value) : baidu.dom.getStyle(element, fixer);
         }
     }
     

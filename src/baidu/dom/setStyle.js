@@ -45,7 +45,7 @@ baidu.dom.setStyle = function (element, key, value) {
     }
 
     fixer = dom._styleFixer[key];
-    (fixer && fixer.set) ? fixer.set(element, value) : (element.style[fixer || key] = value);
+    (fixer && fixer.set) ? fixer.set(element, value, key) : (element.style[fixer || key] = value);
 
     return element;
 };
