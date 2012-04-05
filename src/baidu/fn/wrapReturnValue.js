@@ -13,7 +13,7 @@
  * @grammar baidu.fn.wrapReturnValue(func, wrapper, mode)
  * @param {function} func    需要包装的函数
  * @param {function} wrapper 包装器
- * @param {number} 包装第几个参数
+ * @param {number} mode 包装第几个参数
  * @version 1.3.5
  * @return {function} 包装后的函数
  */
@@ -21,12 +21,11 @@ baidu.fn.wrapReturnValue = function (func, wrapper, mode) {
     mode = mode | 0;
     return function(){
         var ret = func.apply(this, arguments); 
-
-        if(mode > 0){
-            return new wrapper(arguments[mode - 1]);
-        }
         if(!mode){
             return new wrapper(ret);
+        }
+        if(mode > 0){
+            return new wrapper(arguments[mode - 1]);
         }
         return ret;
     }
