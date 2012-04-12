@@ -2,7 +2,6 @@
 <project name="project" default="releaserun" basedir="../">
 	<import file="build_run.xml" />
 
-	<property name="git.project.release" value="Tangram-base-release" />
 	<property name="release_file.mailcc" value="tianlili@baidu.com" />
 	<property name="release_file.mailto" value="tianlili@baidu.com" />
 	<property name="release_file.mailfrom" value="tianlili@baidu.com" />
@@ -106,6 +105,6 @@
 	</target>
 	<target name="releaserun_j" depends="init,release">
 		<gitext />
-		<get src="http://${serverip}/addTask?proj=${git.user}.${git.project}" dest="/tmp/${git.uesr}_${git.project}.php"/>
+		<get src="http://${serverip}/addTask?proj=${git.user}.${git.project}-release" dest="/tmp/${git.uesr}_${git.project}_release.php"/>
 	</target>
 </project>
