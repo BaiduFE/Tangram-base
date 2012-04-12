@@ -20,7 +20,7 @@
  /**
  * @namespace T Tangram七巧板
  * @name T
- * @version 1.5.2
+ * @version 1.5.2.1
 */
 
 /**
@@ -28,7 +28,7 @@
  * @author: allstar, erik, meizz, berg
  */
 var T,
-    baidu = T = baidu || {version: "1.5.2"}; 
+    baidu = T = baidu || {version: "1.5.2.1"}; 
 
 //提出guid，防止在与老版本Tangram混用时
 //在下一行错误的修改window[undefined]
