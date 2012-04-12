@@ -20,9 +20,9 @@
 	<property name="report.coverage.xsl" value="test/tools/br/reportstyle/TangramTest-coverage.xsl" />
 	<property name="report.coverage.xml" value="${report.path}/coverage/" />
 	<property name="report.coverage.html" value="${report.path}/coverage/html/" />
-	<property name="report.mailto" value="yangbo@baidu.com" />
-	<property name="report.mailcc" value="yangbo@baidu.com" />
-	<property name="report.mailfrom" value="yangbo@baidu.com" />
+	<property name="report.mailto" value="tianlili@baidu.com" />
+	<property name="report.mailcc" value="tianlili@baidu.com" />
+	<property name="report.mailfrom" value="tianlili@baidu.com" />
 
 	<!-- ================================= 
           target: report
