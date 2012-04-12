@@ -2,7 +2,6 @@
 <project name="project" default="releaserun" basedir="../">
 	<import file="build_run.xml" />
 
-	<property name="git.project.release" value="Tangram-base-release" />
 	<property name="release_file.mailcc" value="tianlili@baidu.com" />
 	<property name="release_file.mailto" value="tianlili@baidu.com" />
 	<property name="release_file.mailfrom" value="tianlili@baidu.com" />
@@ -99,13 +98,13 @@
 
 	<target name="releaserun" depends="init,release,release_file_mail">
 		<gitext />
-		<get src="http://${serverip}/${git.user}/${git.project.release}/test/tools/br/runall.php?ci=true&amp;release=true" dest="/tmp/${git.user}_${git.project}.php" />
+		<get src="http://${serverip}/${git.user}/${git.project}-release/test/tools/br/runall.php?ci=true&amp;release=true" dest="/tmp/${git.user}_${git.project}.php" />
 		<waitfor maxwait="300" maxwaitunit="second">
 			<available file="${report.file}" />
 		</waitfor>
 	</target>
 	<target name="releaserun_j" depends="init,release">
 		<gitext />
-		<get src="http://${serverip}/addTask?proj=${git.user}.${git.project}" dest="/tmp/${git.uesr}_${git.project}.php"/>
+		<get src="http://${serverip}/addTask?proj=${git.user}.${git.project}-release" dest="/tmp/${git.uesr}_${git.project}.php"/>
 	</target>
 </project>
