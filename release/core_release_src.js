@@ -20,7 +20,7 @@
  /**
  * @namespace T Tangram七巧板
  * @name T
- * @version 1.5.2
+ * @version 1.5.2.1
 */
 
 /**
@@ -28,7 +28,7 @@
  * @author: allstar, erik, meizz, berg
  */
 var T,
-    baidu = T = baidu || {version: "1.5.2"}; 
+    baidu = T = baidu || {version: "1.5.2.1"}; 
 
 //提出guid，防止在与老版本Tangram混用时
 //在下一行错误的修改window[undefined]
@@ -1855,10 +1855,10 @@ baidu.dom.getStyle = function (element, key) {
                 dom.getComputedStyle(element, key);
 
     // 在取不到值的时候，用fixer进行修正
-    if (!value) {
+    if (!value || value == 'auto') {
         var fixer = dom._styleFixer[key];
         if(fixer){
-            value = fixer.get ? fixer.get(element) : baidu.dom.getStyle(element, fixer);
+            value = fixer.get ? fixer.get(element, key, value) : baidu.dom.getStyle(element, fixer);
         }
     }
     
@@ -2581,7 +2581,7 @@ baidu.dom.setStyle = function (element, key, value) {
     }
 
     fixer = dom._styleFixer[key];
-    (fixer && fixer.set) ? fixer.set(element, value) : (element.style[fixer || key] = value);
+    (fixer && fixer.set) ? fixer.set(element, value, key) : (element.style[fixer || key] = value);
 
     return element;
 };
