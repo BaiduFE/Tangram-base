@@ -105,7 +105,7 @@
 	</target>
 	<target name="releaserun_j" depends="init,release">
 		<gitext />
-		<get src="http://${serverip}/addTask?proj=${git.user}.${git.project}&amp;release=true" dest="/tmp/${git.uesr}_${git.project}.php"/>
+		<get src="http://${serverip}/addTask?proj=${git.user}.${git.project}-release&amp;release=true" dest="/tmp/${git.uesr}_${git.project}.php"/>
 		<waitfor maxwait="300" maxwaitunit="second">
 			<available file="${report.file}" />
 		</waitfor>
