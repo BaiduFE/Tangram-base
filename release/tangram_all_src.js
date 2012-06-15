@@ -20,7 +20,7 @@
  /**
  * @namespace T Tangram七巧板
  * @name T
- * @version 1.5.2.1
+ * @version 1.5.2.2
 */
 
 /**
@@ -28,7 +28,7 @@
  * @author: allstar, erik, meizz, berg
  */
 var T,
-    baidu = T = baidu || {version: "1.5.2.1"}; 
+    baidu = T = baidu || {version: "1.5.2.2"}; 
 
 //提出guid，防止在与老版本Tangram混用时
 //在下一行错误的修改window[undefined]
@@ -13310,7 +13310,7 @@ baidu.data.DataStore = (function(){
      * @param {Boolean} usingLocal 当merge时出现数据冲突，以local为主还是remote数据为主,默认为本地.action为Function时，该选项不无效
      */
     return baidu.lang.createClass(function(options){
-        var me = this;
+        var me = this,
             dataModel = options.dataModel,
             dataSource = options.dataSource,
             action = options.action,
@@ -15032,7 +15032,7 @@ baidu.flash.fileUploader = baidu.flash.fileUploader || function(options){
      * @public
      */
     me.getFileAll = function(callBack){
-        _flash.call('getFileAll', [], callBack);
+        _flash.call('getFilesAll', [], callBack);
     };
 
     /**
@@ -16077,7 +16077,7 @@ baidu.fx.opacity = function(element, options) {
         initialize : function() {
             baidu.dom.show(element);
 
-            if (baidu.browser.ie) {
+            if (baidu.browser.ie < 9) {
                 this.protect("filter");
             } else {
                 this.protect("opacity");
@@ -16091,7 +16091,7 @@ baidu.fx.opacity = function(element, options) {
         ,render : function(schedule) {
             var n = this.distance * schedule + this.from;
 
-            if(!baidu.browser.ie) {
+            if(!(baidu.browser.ie < 9)) {
                 e.style.opacity = n;
                 e.style.KHTMLOpacity = n;
             } else {
@@ -17370,6 +17370,7 @@ baidu.i18n.cultures['en-US'] = baidu.object.extend(baidu.i18n.cultures['en-US'] 
         dateFormat: 'yyyy-MM-dd',
         titleNames: '#{MM}&nbsp;#{yyyy}',
         monthNames: ['January','February','March','April','May','June', 'July','August','September','October','November','December'],
+        monthNamesShort: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
         dayNames: {mon: 'Mon', tue: 'Tue', wed: 'Wed', thu: 'Thu', fri: 'Fri', sat: 'Sat', sun: 'Sun'}
     },
     
@@ -17405,7 +17406,7 @@ baidu.i18n.cultures['en-US'] = baidu.object.extend(baidu.i18n.cultures['en-US'] 
     }
 });
 
-baidu.i18n.currentLocale = baidu.i18n.currentLocale || 'en-US';
+baidu.i18n.currentLocale = 'en-US';
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
@@ -17418,6 +17419,7 @@ baidu.i18n.cultures['zh-CN'] = baidu.object.extend(baidu.i18n.cultures['zh-CN'] 
         dateFormat: 'yyyy-MM-dd',
         titleNames: '#{yyyy}年&nbsp;#{MM}月',
         monthNames: ['一', '二', '三', '四', '五', '六', '七', '八', '九', '十', '十一', '十二'],
+        monthNamesShort: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
         dayNames: {mon: '一', tue: '二', wed: '三', thu: '四', fri: '五', sat: '六', sun: '日'}
     },
     
@@ -17453,8 +17455,8 @@ baidu.i18n.cultures['zh-CN'] = baidu.object.extend(baidu.i18n.cultures['zh-CN'] 
     }
 });
 
-baidu.i18n.currentLocale = baidu.i18n.currentLocale || 'zh-CN';
-/*
+baidu.i18n.currentLocale = 'zh-CN';
+﻿/*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
  */
@@ -17512,7 +17514,7 @@ baidu.i18n.number = baidu.i18n.number || /**@lends baidu.i18n.number.prototype*/
     /**
      * 格式化数字
      * @private
-     * @param {Number} number 需要个数化的数字
+     * @param {Number} number 需要格式化的数字
      * @param {Object} options 格式化数字使用的参数
      * @return {String}
      */
@@ -17629,7 +17631,7 @@ baidu.i18n.date = baidu.i18n.date || /**@lends baidu.i18n.date.prototype*/{
      * 将传入的date对象转换成指定地区的date对象
      * @grammar baidu.i18n.date.toLocaleDate(dateObject, sLocale, tLocale)
      * @param {Date} dateObject
-     * @param {String} sLocale dateObject 的地区标识，可选参数，传则以dateObject中获取的为准
+     * @param {String} sLocale dateObject 的地区标识，可选参数，不传则以dateObject中获取的为准
      * @param {String} tLocale 地区名称简写字符.
      * @return {Date}
      */
@@ -17642,7 +17644,7 @@ baidu.i18n.date = baidu.i18n.date || /**@lends baidu.i18n.date.prototype*/{
      * @private
      * @param {Date} dateObject 需要转换的日期函数.
      * @param {String} sLocale dateObject 的地区标识，可选参数，否则以dateObject中获取的为准
-     * @param {string} tlocale 传入date的地区名称简写字符，不传入则从date中计算得出.
+     * @param {String} tlocale 传入date的地区名称简写字符，不传入则从date中计算得出.
      */
     _basicDate: function(dateObject, sLocale, tLocale) {
         var tTimeZone = baidu.i18n.cultures[tLocale || baidu.i18n.currentLocale].timeZone,
@@ -17655,10 +17657,24 @@ baidu.i18n.date = baidu.i18n.date || /**@lends baidu.i18n.date.prototype*/{
             sTimeOffset = sTimeZone * 60;
         }else{
             sTimeOffset = -1 * dateObject.getTimezoneOffset();
-            sTimeZone = sTimeZone / 60;
+            sTimeZone = sTimeOffset / 60;
         }
 
         return new Date(sTimeZone != tTimeZone ? (millisecond  + (tTimeOffset - sTimeOffset) * 60000) : millisecond);
+    },
+
+    /*
+     * @格式化日期显示
+     * @param {Date} dateObject  日期对象(必须)
+     * @param {String} tLocale 给定目标locale(可选)
+     * @return {String}  格式化后的日期字符串
+     */
+    format: function(dateObject, tLocale) {
+        // 拿到对应locale的format类型配置
+        var c = baidu.i18n.cultrues[tLocale || baidu.i18n.currentLocale];
+        return baidu.date.format(
+            baidu.i18n.date.toLocaleDate(dateObject, "", tLocale),
+            c.calendar.dateFormat);
     }
 };
 /*
@@ -19775,9 +19791,9 @@ baidu.ui.Base.getParent = function(){
         var me = this;
 
         me.addEventListeners('ondisable,onenable', function(event,options) {
-            var element, group;
-            options = options || {};
-            elementId = (options.element || me.getMain()).id;
+            var element, group,
+            options = options || {},
+            elementId = (options.element || me.getMain()).id,
             group = options.group;
 
             if (event.type == 'ondisable' && !me.getState(elementId, group)['disabled']) {
@@ -20901,8 +20917,8 @@ baidu.tools.log.Dialog.prototype = {
     push:function(data){
         var me =  this,
             data = data || [],
-            dataString = []
-            tmpChild = [],
+            dataString = [],
+            tmpChild = [];
 
         baidu.each(data,function(d,i){
             dataString.push(me._getString(d));
@@ -21076,7 +21092,7 @@ baidu.ui.Accordion = baidu.ui.createUI(function (options){
      * @param {number} index    索引，默认插入在最后一项
      */
     insertItemHTML:function(item, index){
-        var me = this;
+        var me = this,
             ids = me._headIds,
             index = ids[index] ? index : ids.length,
             container = baidu.dom.g(ids[index]) || me.getBody(),
@@ -24171,7 +24187,7 @@ baidu.ui.Slider = baidu.ui.createUI(function(options){
      */
     _parseValue: function(val, type){
         var me = this,
-            axis = me._axis[me.layout];
+            axis = me._axis[me.layout],
             len = me.getBody()[axis.clientSize] - me.getThumb()[axis.offsetSize];
         if(type == 'value'){
             val = (me.max - me.min) / len * val + me.min;
@@ -26664,24 +26680,20 @@ baidu.ui.DatePicker = baidu.ui.createUI(function(options){
      */
     _getInputDate: function(){
         var me = this,
+            dateValue = me.input.value,
             patrn = [/yyyy|yy/, /M{1,2}/, /d{1,2}/],//只支持到年月日的格式化，需要时分秒的请扩展此数组
-            key = [],
-            val = {},
-            count = patrn.length,
-            i = 0,
-            regExp;
-        for(; i < count; i++){
-            regExp = patrn[i].exec(me.format);
-            key[i] = regExp ? regExp.index : null;
+            len = patrn.length,
+            date = [],
+            regExp,
+            index;
+        if(!dateValue){return;}
+        for(var i = 0; i < len; i++){
+            if(regExp = patrn[i].exec(me.format)){
+                index = regExp.index;
+                date[i] = dateValue.substring(index, index + regExp[0].length);
+            }
         }
-        me.input.value.replace(/\d{1,4}/g, function(mc, index){
-            val[index] = mc;
-        });
-        for(i = 0; i < key.length; i++){
-            key[i] = val[key[i]];
-            if(!key[i]){return;}
-        }
-        return new Date(key[0], key[1] - 1, key[2]);//需要时分秒的则扩展参数
+        return new Date(date[0], date[1] - 1, date[2]);//需要时分秒的则扩展参数
     },
     
     /**
@@ -28951,7 +28963,7 @@ baidu.ui.ScrollBar.register(function(me) {
             }
         },
         beforeupdate: function() {
-            var me = this;
+            var me = this,
                 axis = me._axis[me.orientation],
                 container = me.getContainer();
             if (!container) {return;}
@@ -29562,7 +29574,7 @@ baidu.ui.StarRate = baidu.ui.createUI(function(options){
      * 销毁控件
      */
     dispose:function(){
-        var me = this;
+        var me = this, i;
        
         for(i=0; i < me.total; ++i){
             baidu.dom.remove(me.getId(i));
@@ -29763,6 +29775,9 @@ baidu.ui.Suggestion = baidu.ui.createUI(function(options) {
             len = data.length,
             me = this;
 
+        //如果返回的data对应的word不是当前的关键字，直接返回
+        if(word != me.getTargetValue())
+            return;
         me.enableIndex = [];
         me.currentIndex = -1;
 
@@ -31500,6 +31515,7 @@ baidu.ui.Toolbar = baidu.ui.createUI(function(options) {
             td,
             cells = [],
             container,
+            containerTR,
             i;
         type == 'str' || (type = 'html');
 
@@ -32064,7 +32080,8 @@ baidu.ui.Tooltip = baidu.ui.createUI(function(options) {
 	
     _updateBodyByTitle:function(){
         var me = this,
-            body = me.getBody();
+            body = me.getBody(),
+            title;
         
         if(!me.contentElement && !me.content && me.currentTarget){
             if((title = baidu.getAttr(me.currentTarget, 'tangram-tooltip-title')) && title != ''){
@@ -33136,7 +33153,8 @@ baidu.ui.Tree.TreeNode.prototype =
     _getIdentString: function(isInit) {
         var me = this,
             string = '',
-            prifix;
+            prifix,
+            className;
         while (me.getParentNode() && me.getParentNode().type != 'root') {
             me = me.getParentNode();
             prifix =( me.isLastNode(isInit) ? 'blank' : 'I');
