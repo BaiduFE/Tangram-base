@@ -8940,7 +8940,7 @@ if (window.attachEvent) {
 baidu.fn.abstractMethod = function() {
     throw Error('unimplemented abstract method');
 };
-﻿/*
+/*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
  *
@@ -14432,7 +14432,7 @@ baidu.data.Validator.validatorRules = (function(){
 
     return rules;
 })();
-﻿/*
+/*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
  */
@@ -17456,7 +17456,7 @@ baidu.i18n.cultures['zh-CN'] = baidu.object.extend(baidu.i18n.cultures['zh-CN'] 
 });
 
 baidu.i18n.currentLocale = 'zh-CN';
-﻿/*
+/*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
  */
@@ -19667,7 +19667,7 @@ baidu.ui.Dialog.register(function(me){
         },options));
     };
 })();
-﻿/*
+/*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
  */
@@ -26579,7 +26579,7 @@ baidu.ui.Popup = baidu.ui.createUI(function (options){
 
 baidu.ui.Popup.instances = baidu.ui.Popup.instances || [];
 
-﻿/*
+/*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
  */
@@ -27345,7 +27345,7 @@ baidu.ui.Modal = baidu.ui.createUI(function(options) {
 
 //存储所有的modal参数
 baidu.ui.Modal.collection = {};
-﻿/*
+/*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
  */
@@ -27979,7 +27979,7 @@ renderReg: function() {
 });
 
 
-﻿/*
+/*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
  */
@@ -30137,7 +30137,7 @@ baidu.ui.Suggestion = baidu.ui.createUI(function(options) {
         baidu.lang.Class.prototype.dispose.call(this);
     }
 });
-﻿/*
+/*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
  */
