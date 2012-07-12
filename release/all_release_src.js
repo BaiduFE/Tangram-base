@@ -8940,7 +8940,7 @@ if (window.attachEvent) {
 baidu.fn.abstractMethod = function() {
     throw Error('unimplemented abstract method');
 };
-﻿/*
+/*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
  *

@@ -43,7 +43,7 @@ test("iframe",function(){
 				a = baidu.global.get('id');
 				equals(a, 'value4', 'iframe');
 				me.finish();
-			}, 50);
+			}, 200);
 		}, "baidu.global.get", "", w);
 	});
 });
