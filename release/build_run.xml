@@ -57,6 +57,8 @@
 			<!-- 5分钟跑不出来结果，实际观察发现执行耗时20分钟，此处调整为等待半小时 -->
 			<available file="${report.file}" />
 		</waitfor>
+		<waitfor maxwait="20" maxwaitunit="second">
+		</waitfor>
 	</target>
 
 	<taskdef name='taskImport' classname="com.baidu.tangram.TaskImport" classpathref="ext.classpath">
