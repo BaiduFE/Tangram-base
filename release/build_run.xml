@@ -58,6 +58,7 @@
 			<available file="${report.file}" />
 		</waitfor>
 		<waitfor maxwait="20" maxwaitunit="second">
+			<istrue value="false"/>
 		</waitfor>
 	</target>
 
