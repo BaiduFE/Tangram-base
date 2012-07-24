@@ -26,7 +26,7 @@ test("getModule", function(){
   equals(baidu.lang.getModule('baidu.lang.getModule'), baidu.lang.getModule);
   equals(baidu.lang.getModule('baidu.lang'), baidu.lang);
   equals(baidu.lang.getModule('baidu'), baidu);
-  equals(baidu.lang.getModule('baidu.object.isEmpty'), null);
+  equals(baidu.lang.getModule('baidu.object.a'), null);
 });
 
 //test("performance", function(){
