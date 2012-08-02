@@ -1,0 +1,3440 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><testsuites>
+    <testsuite browser="ff ie6 chrome" casename="baidu/object/clone.js" covLine="15" coverage="100.0%" totalLine="15">
+           <line covNumber="40" lineNumber="45"/>
+           <line covNumber="15" lineNumber="35"/>
+           <line covNumber="2" lineNumber="24"/>
+           <line covNumber="7" lineNumber="33"/>
+           <line covNumber="44" lineNumber="25"/>
+           <line covNumber="7" lineNumber="34"/>
+           <line covNumber="44" lineNumber="26"/>
+           <line covNumber="8" lineNumber="39"/>
+           <line covNumber="33" lineNumber="37"/>
+           <line covNumber="8" lineNumber="38"/>
+           <line covNumber="4" lineNumber="30"/>
+           <line covNumber="13" lineNumber="41"/>
+           <line covNumber="7" lineNumber="32"/>
+           <line covNumber="13" lineNumber="40"/>
+           <line covNumber="40" lineNumber="31"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/object/keys.js" covLine="6" coverage="100.0%" totalLine="6">
+           <line covNumber="3" lineNumber="30"/>
+           <line covNumber="1" lineNumber="23"/>
+           <line covNumber="3" lineNumber="24"/>
+           <line covNumber="3" lineNumber="25"/>
+           <line covNumber="11" lineNumber="26"/>
+           <line covNumber="11" lineNumber="27"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/fn/blank.js" covLine="1" coverage="100.0%" totalLine="1">
+           <line covNumber="7" lineNumber="18"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/ajax/get.js" covLine="2" coverage="100.0%" totalLine="2">
+           <line covNumber="1" lineNumber="26"/>
+           <line covNumber="3" lineNumber="27"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/json/encode.js" covLine="1" coverage="100.0%" totalLine="1">
+           <line covNumber="1" lineNumber="24"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/event.js" covLine="1" coverage="100.0%" totalLine="1">
+           <line covNumber="38" lineNumber="21"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/dom/insertAfter.js" covLine="9" coverage="100.0%" totalLine="9">
+           <line covNumber="9" lineNumber="30"/>
+           <line covNumber="9" lineNumber="32"/>
+           <line covNumber="9" lineNumber="35"/>
+           <line covNumber="7" lineNumber="33"/>
+           <line covNumber="1" lineNumber="25"/>
+           <line covNumber="9" lineNumber="26"/>
+           <line covNumber="9" lineNumber="27"/>
+           <line covNumber="9" lineNumber="28"/>
+           <line covNumber="9" lineNumber="29"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/global/get.js" covLine="4" coverage="100.0%" totalLine="4">
+           <line covNumber="3" lineNumber="21"/>
+           <line covNumber="3" lineNumber="19"/>
+           <line covNumber="13" lineNumber="22"/>
+           <line covNumber="3" lineNumber="18"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/page/getViewWidth.js" covLine="3" coverage="100.0%" totalLine="3">
+           <line covNumber="12" lineNumber="22"/>
+           <line covNumber="3" lineNumber="23"/>
+           <line covNumber="3" lineNumber="26"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/dom/addClass.js" covLine="9" coverage="100.0%" totalLine="9">
+           <line covNumber="3" lineNumber="49"/>
+           <line covNumber="3" lineNumber="30"/>
+           <line covNumber="13" lineNumber="45"/>
+           <line covNumber="13" lineNumber="44"/>
+           <line covNumber="13" lineNumber="32"/>
+           <line covNumber="13" lineNumber="31"/>
+           <line covNumber="18" lineNumber="40"/>
+           <line covNumber="24" lineNumber="39"/>
+           <line covNumber="13" lineNumber="38"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/lang/Class/$removeEventListener.js" covLine="15" coverage="100.0%" totalLine="15">
+           <line covNumber="16" lineNumber="49"/>
+           <line covNumber="14" lineNumber="48"/>
+           <line covNumber="14" lineNumber="44"/>
+           <line covNumber="14" lineNumber="46"/>
+           <line covNumber="1" lineNumber="36"/>
+           <line covNumber="1" lineNumber="33"/>
+           <line covNumber="4" lineNumber="25"/>
+           <line covNumber="1" lineNumber="34"/>
+           <line covNumber="19" lineNumber="39"/>
+           <line covNumber="20" lineNumber="27"/>
+           <line covNumber="20" lineNumber="29"/>
+           <line covNumber="5" lineNumber="43"/>
+           <line covNumber="19" lineNumber="42"/>
+           <line covNumber="20" lineNumber="32"/>
+           <line covNumber="10" lineNumber="50"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/array.js" covLine="1" coverage="100.0%" totalLine="1">
+           <line covNumber="18" lineNumber="18"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/string/trim.js" covLine="5" coverage="100.0%" totalLine="5">
+           <line covNumber="10" lineNumber="30"/>
+           <line covNumber="56" lineNumber="31"/>
+           <line covNumber="10" lineNumber="27"/>
+           <line covNumber="10" lineNumber="28"/>
+           <line covNumber="10" lineNumber="37"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/dom/setAttrs.js" covLine="6" coverage="100.0%" totalLine="6">
+           <line covNumber="63" lineNumber="30"/>
+           <line covNumber="29" lineNumber="31"/>
+           <line covNumber="63" lineNumber="34"/>
+           <line covNumber="3" lineNumber="27"/>
+           <line covNumber="63" lineNumber="28"/>
+           <line covNumber="3" lineNumber="38"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/page/getScrollLeft.js" covLine="3" coverage="100.0%" totalLine="3">
+           <line covNumber="9" lineNumber="27"/>
+           <line covNumber="143" lineNumber="28"/>
+           <line covNumber="143" lineNumber="29"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/array/some.js" covLine="6" coverage="100.0%" totalLine="6">
+           <line covNumber="2" lineNumber="20"/>
+           <line covNumber="1" lineNumber="19"/>
+           <line covNumber="2" lineNumber="22"/>
+           <line covNumber="7" lineNumber="23"/>
+           <line covNumber="1" lineNumber="24"/>
+           <line covNumber="1" lineNumber="27"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/browser/isGecko.js" covLine="1" coverage="100.0%" totalLine="1">
+           <line covNumber="21" lineNumber="21"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/array/each.js" covLine="9" coverage="100.0%" totalLine="9">
+           <line covNumber="4" lineNumber="30"/>
+           <line covNumber="9" lineNumber="42"/>
+           <line covNumber="244" lineNumber="41"/>
+           <line covNumber="48" lineNumber="31"/>
+           <line covNumber="48" lineNumber="46"/>
+           <line covNumber="244" lineNumber="35"/>
+           <line covNumber="48" lineNumber="33"/>
+           <line covNumber="48" lineNumber="34"/>
+           <line covNumber="244" lineNumber="39"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/swf.js" covLine="1" coverage="100.0%" totalLine="1">
+           <line covNumber="5" lineNumber="16"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/browser/maxthon.js" covLine="2" coverage="66.66667%" totalLine="3">
+           <line covNumber="0" lineNumber="22"/>
+           <line covNumber="1" lineNumber="13"/>
+           <line covNumber="1" lineNumber="14"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/page/getWidth.js" covLine="3" coverage="100.0%" totalLine="3">
+           <line covNumber="2" lineNumber="22"/>
+           <line covNumber="1" lineNumber="23"/>
+           <line covNumber="1" lineNumber="28"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/async/post.js" covLine="6" coverage="100.0%" totalLine="6">
+           <line covNumber="2" lineNumber="19"/>
+           <line covNumber="1" lineNumber="17"/>
+           <line covNumber="2" lineNumber="18"/>
+           <line covNumber="1" lineNumber="23"/>
+           <line covNumber="1" lineNumber="26"/>
+           <line covNumber="2" lineNumber="29"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/lang/isFunction.js" covLine="2" coverage="100.0%" totalLine="2">
+           <line covNumber="17" lineNumber="24"/>
+           <line covNumber="213" lineNumber="26"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/fn.js" covLine="1" coverage="100.0%" totalLine="1">
+           <line covNumber="15" lineNumber="16"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/dom/setAttr.js" covLine="8" coverage="100.0%" totalLine="8">
+           <line covNumber="119" lineNumber="42"/>
+           <line covNumber="13" lineNumber="32"/>
+           <line covNumber="13" lineNumber="46"/>
+           <line covNumber="119" lineNumber="35"/>
+           <line covNumber="2" lineNumber="36"/>
+           <line covNumber="119" lineNumber="33"/>
+           <line covNumber="117" lineNumber="39"/>
+           <line covNumber="117" lineNumber="38"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/lang/isString.js" covLine="3" coverage="100.0%" totalLine="3">
+           <line covNumber="56" lineNumber="30"/>
+           <line covNumber="56" lineNumber="25"/>
+           <line covNumber="921" lineNumber="26"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/lang/eventCenter.js" covLine="1" coverage="100.0%" totalLine="1">
+           <line covNumber="1" lineNumber="14"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/page/getMousePosition.js" covLine="8" coverage="100.0%" totalLine="8">
+           <line covNumber="5" lineNumber="30"/>
+           <line covNumber="83" lineNumber="42"/>
+           <line covNumber="83" lineNumber="41"/>
+           <line covNumber="130" lineNumber="31"/>
+           <line covNumber="83" lineNumber="40"/>
+           <line covNumber="5" lineNumber="39"/>
+           <line covNumber="5" lineNumber="28"/>
+           <line covNumber="5" lineNumber="37"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/dom/q.js" covLine="19" coverage="73.07692%" totalLine="26">
+           <line covNumber="16" lineNumber="78"/>
+           <line covNumber="6" lineNumber="59"/>
+           <line covNumber="23" lineNumber="58"/>
+           <line covNumber="23" lineNumber="57"/>
+           <line covNumber="16" lineNumber="56"/>
+           <line covNumber="16" lineNumber="55"/>
+           <line covNumber="17" lineNumber="35"/>
+           <line covNumber="1" lineNumber="36"/>
+           <line covNumber="6" lineNumber="43"/>
+           <line covNumber="10" lineNumber="41"/>
+           <line covNumber="16" lineNumber="40"/>
+           <line covNumber="0" lineNumber="64"/>
+           <line covNumber="1" lineNumber="82"/>
+           <line covNumber="17" lineNumber="61"/>
+           <line covNumber="0" lineNumber="68"/>
+           <line covNumber="0" lineNumber="45"/>
+           <line covNumber="6" lineNumber="44"/>
+           <line covNumber="1" lineNumber="30"/>
+           <line covNumber="17" lineNumber="31"/>
+           <line covNumber="16" lineNumber="53"/>
+           <line covNumber="0" lineNumber="71"/>
+           <line covNumber="16" lineNumber="54"/>
+           <line covNumber="0" lineNumber="72"/>
+           <line covNumber="0" lineNumber="73"/>
+           <line covNumber="0" lineNumber="74"/>
+           <line covNumber="16" lineNumber="50"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/event/_eventFilter/mouseenter.js" covLine="2" coverage="100.0%" totalLine="2">
+           <line covNumber="6" lineNumber="21"/>
+           <line covNumber="1" lineNumber="20"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/event/on.js" covLine="12" coverage="70.588234%" totalLine="17">
+           <line covNumber="0" lineNumber="49"/>
+           <line covNumber="18" lineNumber="66"/>
+           <line covNumber="0" lineNumber="48"/>
+           <line covNumber="104" lineNumber="45"/>
+           <line covNumber="0" lineNumber="57"/>
+           <line covNumber="104" lineNumber="47"/>
+           <line covNumber="0" lineNumber="56"/>
+           <line covNumber="104" lineNumber="55"/>
+           <line covNumber="104" lineNumber="36"/>
+           <line covNumber="104" lineNumber="33"/>
+           <line covNumber="104" lineNumber="34"/>
+           <line covNumber="129" lineNumber="39"/>
+           <line covNumber="18" lineNumber="32"/>
+           <line covNumber="104" lineNumber="62"/>
+           <line covNumber="104" lineNumber="54"/>
+           <line covNumber="104" lineNumber="61"/>
+           <line covNumber="0" lineNumber="50"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/date.js" covLine="1" coverage="100.0%" totalLine="1">
+           <line covNumber="2" lineNumber="16"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/event/EventArg.js" covLine="24" coverage="92.30769%" totalLine="26">
+           <line covNumber="1" lineNumber="77"/>
+           <line covNumber="1" lineNumber="58"/>
+           <line covNumber="1" lineNumber="57"/>
+           <line covNumber="3" lineNumber="56"/>
+           <line covNumber="64" lineNumber="35"/>
+           <line covNumber="77" lineNumber="34"/>
+           <line covNumber="2" lineNumber="39"/>
+           <line covNumber="1" lineNumber="43"/>
+           <line covNumber="1" lineNumber="40"/>
+           <line covNumber="1" lineNumber="62"/>
+           <line covNumber="3" lineNumber="86"/>
+           <line covNumber="0" lineNumber="60"/>
+           <line covNumber="1" lineNumber="87"/>
+           <line covNumber="2" lineNumber="47"/>
+           <line covNumber="3" lineNumber="24"/>
+           <line covNumber="2" lineNumber="25"/>
+           <line covNumber="2" lineNumber="26"/>
+           <line covNumber="2" lineNumber="27"/>
+           <line covNumber="2" lineNumber="29"/>
+           <line covNumber="2" lineNumber="30"/>
+           <line covNumber="77" lineNumber="32"/>
+           <line covNumber="2" lineNumber="31"/>
+           <line covNumber="3" lineNumber="71"/>
+           <line covNumber="1" lineNumber="72"/>
+           <line covNumber="1" lineNumber="73"/>
+           <line covNumber="0" lineNumber="75"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/dom/setPosition.js" covLine="2" coverage="100.0%" totalLine="2">
+           <line covNumber="1" lineNumber="32"/>
+           <line covNumber="2" lineNumber="33"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/dom/draggable.js" covLine="30" coverage="93.75%" totalLine="32">
+           <line covNumber="4" lineNumber="79"/>
+           <line covNumber="4" lineNumber="78"/>
+           <line covNumber="6" lineNumber="77"/>
+           <line covNumber="1" lineNumber="56"/>
+           <line covNumber="1" lineNumber="55"/>
+           <line covNumber="10" lineNumber="43"/>
+           <line covNumber="1" lineNumber="42"/>
+           <line covNumber="6" lineNumber="64"/>
+           <line covNumber="0" lineNumber="83"/>
+           <line covNumber="6" lineNumber="65"/>
+           <line covNumber="4" lineNumber="80"/>
+           <line covNumber="2" lineNumber="62"/>
+           <line covNumber="1" lineNumber="103"/>
+           <line covNumber="6" lineNumber="63"/>
+           <line covNumber="6" lineNumber="99"/>
+           <line covNumber="6" lineNumber="101"/>
+           <line covNumber="6" lineNumber="61"/>
+           <line covNumber="5" lineNumber="67"/>
+           <line covNumber="6" lineNumber="66"/>
+           <line covNumber="4" lineNumber="95"/>
+           <line covNumber="5" lineNumber="68"/>
+           <line covNumber="6" lineNumber="45"/>
+           <line covNumber="4" lineNumber="93"/>
+           <line covNumber="6" lineNumber="44"/>
+           <line covNumber="6" lineNumber="47"/>
+           <line covNumber="4" lineNumber="92"/>
+           <line covNumber="6" lineNumber="46"/>
+           <line covNumber="4" lineNumber="91"/>
+           <line covNumber="1" lineNumber="54"/>
+           <line covNumber="4" lineNumber="88"/>
+           <line covNumber="0" lineNumber="89"/>
+           <line covNumber="6" lineNumber="76"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/dom/hasAttr.js" covLine="4" coverage="100.0%" totalLine="4">
+           <line covNumber="1" lineNumber="25"/>
+           <line covNumber="53" lineNumber="26"/>
+           <line covNumber="53" lineNumber="27"/>
+           <line covNumber="53" lineNumber="28"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/global/set.js" covLine="6" coverage="100.0%" totalLine="6">
+           <line covNumber="3" lineNumber="21"/>
+           <line covNumber="3" lineNumber="20"/>
+           <line covNumber="3" lineNumber="23"/>
+           <line covNumber="7" lineNumber="24"/>
+           <line covNumber="7" lineNumber="26"/>
+           <line covNumber="7" lineNumber="27"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/dom/g.js" covLine="8" coverage="100.0%" totalLine="8">
+           <line covNumber="2341" lineNumber="30"/>
+           <line covNumber="2" lineNumber="32"/>
+           <line covNumber="69" lineNumber="36"/>
+           <line covNumber="69" lineNumber="25"/>
+           <line covNumber="2388" lineNumber="26"/>
+           <line covNumber="2378" lineNumber="27"/>
+           <line covNumber="35" lineNumber="28"/>
+           <line covNumber="2343" lineNumber="29"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/lang/Class.js" covLine="12" coverage="92.30769%" totalLine="13">
+           <line covNumber="7" lineNumber="44"/>
+           <line covNumber="2" lineNumber="46"/>
+           <line covNumber="1" lineNumber="55"/>
+           <line covNumber="10" lineNumber="24"/>
+           <line covNumber="12" lineNumber="25"/>
+           <line covNumber="2" lineNumber="39"/>
+           <line covNumber="12" lineNumber="27"/>
+           <line covNumber="10" lineNumber="38"/>
+           <line covNumber="10" lineNumber="30"/>
+           <line covNumber="2" lineNumber="43"/>
+           <line covNumber="10" lineNumber="64"/>
+           <line covNumber="0" lineNumber="65"/>
+           <line covNumber="10" lineNumber="54"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/dom/getStyle.js" covLine="12" coverage="92.30769%" totalLine="13">
+           <line covNumber="23" lineNumber="45"/>
+           <line covNumber="643" lineNumber="44"/>
+           <line covNumber="0" lineNumber="47"/>
+           <line covNumber="643" lineNumber="56"/>
+           <line covNumber="23" lineNumber="46"/>
+           <line covNumber="643" lineNumber="36"/>
+           <line covNumber="27" lineNumber="33"/>
+           <line covNumber="643" lineNumber="34"/>
+           <line covNumber="643" lineNumber="39"/>
+           <line covNumber="643" lineNumber="37"/>
+           <line covNumber="643" lineNumber="52"/>
+           <line covNumber="643" lineNumber="53"/>
+           <line covNumber="27" lineNumber="60"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/swf/version.js" covLine="6" coverage="46.153847%" totalLine="13">
+           <line covNumber="3" lineNumber="22"/>
+           <line covNumber="0" lineNumber="35"/>
+           <line covNumber="3" lineNumber="23"/>
+           <line covNumber="3" lineNumber="24"/>
+           <line covNumber="0" lineNumber="33"/>
+           <line covNumber="3" lineNumber="25"/>
+           <line covNumber="0" lineNumber="34"/>
+           <line covNumber="0" lineNumber="29"/>
+           <line covNumber="3" lineNumber="21"/>
+           <line covNumber="3" lineNumber="20"/>
+           <line covNumber="0" lineNumber="30"/>
+           <line covNumber="0" lineNumber="32"/>
+           <line covNumber="0" lineNumber="31"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/page/getHeight.js" covLine="3" coverage="100.0%" totalLine="3">
+           <line covNumber="2" lineNumber="22"/>
+           <line covNumber="1" lineNumber="23"/>
+           <line covNumber="1" lineNumber="28"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/date/format.js" covLine="21" coverage="100.0%" totalLine="21">
+           <line covNumber="392" lineNumber="49"/>
+           <line covNumber="28" lineNumber="67"/>
+           <line covNumber="28" lineNumber="48"/>
+           <line covNumber="28" lineNumber="69"/>
+           <line covNumber="28" lineNumber="68"/>
+           <line covNumber="1" lineNumber="45"/>
+           <line covNumber="29" lineNumber="44"/>
+           <line covNumber="1" lineNumber="43"/>
+           <line covNumber="28" lineNumber="64"/>
+           <line covNumber="28" lineNumber="70"/>
+           <line covNumber="28" lineNumber="52"/>
+           <line covNumber="28" lineNumber="65"/>
+           <line covNumber="28" lineNumber="62"/>
+           <line covNumber="28" lineNumber="71"/>
+           <line covNumber="28" lineNumber="63"/>
+           <line covNumber="28" lineNumber="72"/>
+           <line covNumber="28" lineNumber="60"/>
+           <line covNumber="28" lineNumber="73"/>
+           <line covNumber="28" lineNumber="61"/>
+           <line covNumber="28" lineNumber="74"/>
+           <line covNumber="28" lineNumber="76"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/form/json.js" covLine="28" coverage="100.0%" totalLine="28">
+           <line covNumber="4" lineNumber="79"/>
+           <line covNumber="1" lineNumber="78"/>
+           <line covNumber="1" lineNumber="77"/>
+           <line covNumber="14" lineNumber="56"/>
+           <line covNumber="12" lineNumber="39"/>
+           <line covNumber="1" lineNumber="37"/>
+           <line covNumber="12" lineNumber="38"/>
+           <line covNumber="9" lineNumber="43"/>
+           <line covNumber="3" lineNumber="41"/>
+           <line covNumber="3" lineNumber="40"/>
+           <line covNumber="4" lineNumber="80"/>
+           <line covNumber="3" lineNumber="81"/>
+           <line covNumber="5" lineNumber="60"/>
+           <line covNumber="2" lineNumber="61"/>
+           <line covNumber="1" lineNumber="84"/>
+           <line covNumber="16" lineNumber="49"/>
+           <line covNumber="16" lineNumber="48"/>
+           <line covNumber="1" lineNumber="47"/>
+           <line covNumber="1" lineNumber="24"/>
+           <line covNumber="1" lineNumber="25"/>
+           <line covNumber="12" lineNumber="27"/>
+           <line covNumber="16" lineNumber="52"/>
+           <line covNumber="14" lineNumber="53"/>
+           <line covNumber="9" lineNumber="71"/>
+           <line covNumber="9" lineNumber="72"/>
+           <line covNumber="14" lineNumber="54"/>
+           <line covNumber="1" lineNumber="76"/>
+           <line covNumber="1" lineNumber="89"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/global.js" covLine="2" coverage="100.0%" totalLine="2">
+           <line covNumber="5" lineNumber="18"/>
+           <line covNumber="5" lineNumber="15"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/async/Deferred.js" covLine="41" coverage="93.181816%" totalLine="44">
+           <line covNumber="55" lineNumber="116"/>
+           <line covNumber="2" lineNumber="117"/>
+           <line covNumber="49" lineNumber="78"/>
+           <line covNumber="55" lineNumber="114"/>
+           <line covNumber="49" lineNumber="77"/>
+           <line covNumber="55" lineNumber="115"/>
+           <line covNumber="36" lineNumber="58"/>
+           <line covNumber="36" lineNumber="57"/>
+           <line covNumber="38" lineNumber="113"/>
+           <line covNumber="38" lineNumber="136"/>
+           <line covNumber="0" lineNumber="55"/>
+           <line covNumber="3" lineNumber="137"/>
+           <line covNumber="4" lineNumber="36"/>
+           <line covNumber="38" lineNumber="37"/>
+           <line covNumber="55" lineNumber="119"/>
+           <line covNumber="38" lineNumber="38"/>
+           <line covNumber="49" lineNumber="64"/>
+           <line covNumber="49" lineNumber="65"/>
+           <line covNumber="12" lineNumber="104"/>
+           <line covNumber="12" lineNumber="103"/>
+           <line covNumber="12" lineNumber="102"/>
+           <line covNumber="12" lineNumber="101"/>
+           <line covNumber="36" lineNumber="61"/>
+           <line covNumber="38" lineNumber="100"/>
+           <line covNumber="49" lineNumber="67"/>
+           <line covNumber="40" lineNumber="49"/>
+           <line covNumber="38" lineNumber="143"/>
+           <line covNumber="38" lineNumber="48"/>
+           <line covNumber="5" lineNumber="144"/>
+           <line covNumber="4" lineNumber="69"/>
+           <line covNumber="38" lineNumber="127"/>
+           <line covNumber="4" lineNumber="68"/>
+           <line covNumber="2" lineNumber="128"/>
+           <line covNumber="26" lineNumber="92"/>
+           <line covNumber="26" lineNumber="91"/>
+           <line covNumber="26" lineNumber="90"/>
+           <line covNumber="4" lineNumber="70"/>
+           <line covNumber="4" lineNumber="71"/>
+           <line covNumber="36" lineNumber="53"/>
+           <line covNumber="4" lineNumber="72"/>
+           <line covNumber="0" lineNumber="54"/>
+           <line covNumber="0" lineNumber="75"/>
+           <line covNumber="38" lineNumber="89"/>
+           <line covNumber="4" lineNumber="50"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/url/jsonToQuery.js" covLine="10" coverage="100.0%" totalLine="10">
+           <line covNumber="41" lineNumber="30"/>
+           <line covNumber="35" lineNumber="43"/>
+           <line covNumber="20" lineNumber="47"/>
+           <line covNumber="9" lineNumber="40"/>
+           <line covNumber="38" lineNumber="35"/>
+           <line covNumber="3" lineNumber="36"/>
+           <line covNumber="20" lineNumber="33"/>
+           <line covNumber="1" lineNumber="26"/>
+           <line covNumber="3" lineNumber="39"/>
+           <line covNumber="20" lineNumber="27"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/swf/create.js" covLine="5" coverage="83.33333%" totalLine="6">
+           <line covNumber="1" lineNumber="49"/>
+           <line covNumber="2" lineNumber="58"/>
+           <line covNumber="0" lineNumber="56"/>
+           <line covNumber="2" lineNumber="55"/>
+           <line covNumber="2" lineNumber="51"/>
+           <line covNumber="2" lineNumber="50"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/dom/resizable.js" covLine="88" coverage="80.73394%" totalLine="109">
+           <line covNumber="15" lineNumber="281"/>
+           <line covNumber="7" lineNumber="332"/>
+           <line covNumber="0" lineNumber="158"/>
+           <line covNumber="0" lineNumber="157"/>
+           <line covNumber="15" lineNumber="284"/>
+           <line covNumber="0" lineNumber="156"/>
+           <line covNumber="15" lineNumber="283"/>
+           <line covNumber="0" lineNumber="155"/>
+           <line covNumber="15" lineNumber="282"/>
+           <line covNumber="7" lineNumber="154"/>
+           <line covNumber="15" lineNumber="288"/>
+           <line covNumber="15" lineNumber="289"/>
+           <line covNumber="15" lineNumber="286"/>
+           <line covNumber="15" lineNumber="287"/>
+           <line covNumber="8" lineNumber="202"/>
+           <line covNumber="8" lineNumber="203"/>
+           <line covNumber="8" lineNumber="204"/>
+           <line covNumber="8" lineNumber="200"/>
+           <line covNumber="8" lineNumber="201"/>
+           <line covNumber="7" lineNumber="169"/>
+           <line covNumber="15" lineNumber="272"/>
+           <line covNumber="13" lineNumber="274"/>
+           <line covNumber="13" lineNumber="273"/>
+           <line covNumber="2" lineNumber="275"/>
+           <line covNumber="0" lineNumber="276"/>
+           <line covNumber="0" lineNumber="277"/>
+           <line covNumber="0" lineNumber="278"/>
+           <line covNumber="0" lineNumber="160"/>
+           <line covNumber="8" lineNumber="211"/>
+           <line covNumber="8" lineNumber="212"/>
+           <line covNumber="8" lineNumber="210"/>
+           <line covNumber="8" lineNumber="216"/>
+           <line covNumber="0" lineNumber="319"/>
+           <line covNumber="15" lineNumber="213"/>
+           <line covNumber="8" lineNumber="316"/>
+           <line covNumber="8" lineNumber="317"/>
+           <line covNumber="8" lineNumber="315"/>
+           <line covNumber="8" lineNumber="217"/>
+           <line covNumber="8" lineNumber="310"/>
+           <line covNumber="0" lineNumber="170"/>
+           <line covNumber="0" lineNumber="171"/>
+           <line covNumber="7" lineNumber="109"/>
+           <line covNumber="0" lineNumber="172"/>
+           <line covNumber="0" lineNumber="173"/>
+           <line covNumber="7" lineNumber="104"/>
+           <line covNumber="7" lineNumber="97"/>
+           <line covNumber="7" lineNumber="225"/>
+           <line covNumber="8" lineNumber="226"/>
+           <line covNumber="0" lineNumber="227"/>
+           <line covNumber="28" lineNumber="90"/>
+           <line covNumber="8" lineNumber="228"/>
+           <line covNumber="8" lineNumber="324"/>
+           <line covNumber="8" lineNumber="187"/>
+           <line covNumber="8" lineNumber="229"/>
+           <line covNumber="8" lineNumber="189"/>
+           <line covNumber="0" lineNumber="320"/>
+           <line covNumber="8" lineNumber="322"/>
+           <line covNumber="15" lineNumber="291"/>
+           <line covNumber="7" lineNumber="182"/>
+           <line covNumber="8" lineNumber="183"/>
+           <line covNumber="8" lineNumber="184"/>
+           <line covNumber="8" lineNumber="186"/>
+           <line covNumber="7" lineNumber="89"/>
+           <line covNumber="7" lineNumber="112"/>
+           <line covNumber="8" lineNumber="241"/>
+           <line covNumber="8" lineNumber="191"/>
+           <line covNumber="0" lineNumber="190"/>
+           <line covNumber="8" lineNumber="192"/>
+           <line covNumber="8" lineNumber="199"/>
+           <line covNumber="8" lineNumber="245"/>
+           <line covNumber="8" lineNumber="244"/>
+           <line covNumber="8" lineNumber="243"/>
+           <line covNumber="8" lineNumber="242"/>
+           <line covNumber="7" lineNumber="84"/>
+           <line covNumber="21" lineNumber="125"/>
+           <line covNumber="21" lineNumber="126"/>
+           <line covNumber="7" lineNumber="300"/>
+           <line covNumber="21" lineNumber="128"/>
+           <line covNumber="0" lineNumber="301"/>
+           <line covNumber="7" lineNumber="124"/>
+           <line covNumber="7" lineNumber="309"/>
+           <line covNumber="8" lineNumber="239"/>
+           <line covNumber="7" lineNumber="72"/>
+           <line covNumber="0" lineNumber="73"/>
+           <line covNumber="8" lineNumber="236"/>
+           <line covNumber="7" lineNumber="75"/>
+           <line covNumber="8" lineNumber="238"/>
+           <line covNumber="7" lineNumber="76"/>
+           <line covNumber="8" lineNumber="237"/>
+           <line covNumber="21" lineNumber="134"/>
+           <line covNumber="21" lineNumber="135"/>
+           <line covNumber="15" lineNumber="263"/>
+           <line covNumber="21" lineNumber="133"/>
+           <line covNumber="21" lineNumber="138"/>
+           <line covNumber="21" lineNumber="137"/>
+           <line covNumber="0" lineNumber="269"/>
+           <line covNumber="0" lineNumber="268"/>
+           <line covNumber="0" lineNumber="267"/>
+           <line covNumber="2" lineNumber="266"/>
+           <line covNumber="13" lineNumber="265"/>
+           <line covNumber="13" lineNumber="264"/>
+           <line covNumber="21" lineNumber="143"/>
+           <line covNumber="1" lineNumber="49"/>
+           <line covNumber="7" lineNumber="146"/>
+           <line covNumber="21" lineNumber="140"/>
+           <line covNumber="15" lineNumber="256"/>
+           <line covNumber="7" lineNumber="255"/>
+           <line covNumber="21" lineNumber="141"/>
+           <line covNumber="7" lineNumber="50"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/dom/intersect.js" covLine="6" coverage="100.0%" totalLine="6">
+           <line covNumber="24" lineNumber="32"/>
+           <line covNumber="24" lineNumber="31"/>
+           <line covNumber="2" lineNumber="25"/>
+           <line covNumber="24" lineNumber="34"/>
+           <line covNumber="24" lineNumber="26"/>
+           <line covNumber="24" lineNumber="37"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/dom/show.js" covLine="5" coverage="100.0%" totalLine="5">
+           <line covNumber="1" lineNumber="30"/>
+           <line covNumber="6" lineNumber="32"/>
+           <line covNumber="6" lineNumber="31"/>
+           <line covNumber="6" lineNumber="34"/>
+           <line covNumber="1" lineNumber="38"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/url/getQueryValue.js" covLine="6" coverage="100.0%" totalLine="6">
+           <line covNumber="34" lineNumber="32"/>
+           <line covNumber="34" lineNumber="33"/>
+           <line covNumber="21" lineNumber="34"/>
+           <line covNumber="1" lineNumber="26"/>
+           <line covNumber="34" lineNumber="27"/>
+           <line covNumber="13" lineNumber="37"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/page/getScrollTop.js" covLine="3" coverage="100.0%" totalLine="3">
+           <line covNumber="10" lineNumber="22"/>
+           <line covNumber="143" lineNumber="23"/>
+           <line covNumber="143" lineNumber="24"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/dom/last.js" covLine="2" coverage="100.0%" totalLine="2">
+           <line covNumber="1" lineNumber="23"/>
+           <line covNumber="5" lineNumber="24"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/event/_eventFilter/mouseleave.js" covLine="2" coverage="100.0%" totalLine="2">
+           <line covNumber="3" lineNumber="20"/>
+           <line covNumber="1" lineNumber="19"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/dom/_styleFilter/px.js" covLine="4" coverage="100.0%" totalLine="4">
+           <line covNumber="146" lineNumber="21"/>
+           <line covNumber="377" lineNumber="19"/>
+           <line covNumber="14" lineNumber="17"/>
+           <line covNumber="377" lineNumber="24"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/lang/isObject.js" covLine="3" coverage="100.0%" totalLine="3">
+           <line covNumber="7" lineNumber="30"/>
+           <line covNumber="7" lineNumber="25"/>
+           <line covNumber="96" lineNumber="26"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/json/parse.js" covLine="2" coverage="100.0%" totalLine="2">
+           <line covNumber="2" lineNumber="26"/>
+           <line covNumber="15" lineNumber="28"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/string/escapeReg.js" covLine="2" coverage="100.0%" totalLine="2">
+           <line covNumber="3" lineNumber="25"/>
+           <line covNumber="49" lineNumber="26"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/fn/abstractMethod.js" covLine="2" coverage="100.0%" totalLine="2">
+           <line covNumber="1" lineNumber="21"/>
+           <line covNumber="1" lineNumber="20"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/form.js" covLine="1" coverage="100.0%" totalLine="1">
+           <line covNumber="2" lineNumber="16"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/dom/getPosition.js" covLine="13" coverage="39.39394%" totalLine="33">
+           <line covNumber="0" lineNumber="79"/>
+           <line covNumber="0" lineNumber="78"/>
+           <line covNumber="0" lineNumber="114"/>
+           <line covNumber="127" lineNumber="77"/>
+           <line covNumber="0" lineNumber="113"/>
+           <line covNumber="127" lineNumber="56"/>
+           <line covNumber="127" lineNumber="35"/>
+           <line covNumber="20" lineNumber="33"/>
+           <line covNumber="127" lineNumber="34"/>
+           <line covNumber="0" lineNumber="118"/>
+           <line covNumber="0" lineNumber="119"/>
+           <line covNumber="0" lineNumber="109"/>
+           <line covNumber="0" lineNumber="106"/>
+           <line covNumber="0" lineNumber="105"/>
+           <line covNumber="127" lineNumber="62"/>
+           <line covNumber="0" lineNumber="104"/>
+           <line covNumber="127" lineNumber="63"/>
+           <line covNumber="0" lineNumber="103"/>
+           <line covNumber="127" lineNumber="60"/>
+           <line covNumber="0" lineNumber="99"/>
+           <line covNumber="127" lineNumber="130"/>
+           <line covNumber="0" lineNumber="100"/>
+           <line covNumber="0" lineNumber="98"/>
+           <line covNumber="0" lineNumber="126"/>
+           <line covNumber="0" lineNumber="96"/>
+           <line covNumber="0" lineNumber="123"/>
+           <line covNumber="0" lineNumber="124"/>
+           <line covNumber="127" lineNumber="51"/>
+           <line covNumber="0" lineNumber="52"/>
+           <line covNumber="127" lineNumber="70"/>
+           <line covNumber="127" lineNumber="71"/>
+           <line covNumber="0" lineNumber="120"/>
+           <line covNumber="127" lineNumber="73"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/lang/isNumber.js" covLine="2" coverage="100.0%" totalLine="2">
+           <line covNumber="10" lineNumber="21"/>
+           <line covNumber="3" lineNumber="20"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/sio/callByBrowser.js" covLine="18" coverage="94.73685%" totalLine="19">
+           <line covNumber="5" lineNumber="67"/>
+           <line covNumber="3" lineNumber="49"/>
+           <line covNumber="3" lineNumber="48"/>
+           <line covNumber="5" lineNumber="59"/>
+           <line covNumber="3" lineNumber="45"/>
+           <line covNumber="3" lineNumber="44"/>
+           <line covNumber="1" lineNumber="27"/>
+           <line covNumber="5" lineNumber="28"/>
+           <line covNumber="5" lineNumber="38"/>
+           <line covNumber="0" lineNumber="41"/>
+           <line covNumber="3" lineNumber="40"/>
+           <line covNumber="3" lineNumber="51"/>
+           <line covNumber="3" lineNumber="53"/>
+           <line covNumber="1" lineNumber="62"/>
+           <line covNumber="3" lineNumber="54"/>
+           <line covNumber="1" lineNumber="63"/>
+           <line covNumber="1" lineNumber="60"/>
+           <line covNumber="1" lineNumber="61"/>
+           <line covNumber="3" lineNumber="50"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/dom/first.js" covLine="2" coverage="100.0%" totalLine="2">
+           <line covNumber="1" lineNumber="23"/>
+           <line covNumber="7" lineNumber="24"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/dom/getDocument.js" covLine="3" coverage="100.0%" totalLine="3">
+           <line covNumber="35" lineNumber="24"/>
+           <line covNumber="519" lineNumber="25"/>
+           <line covNumber="519" lineNumber="26"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/browser/firefox.js" covLine="1" coverage="100.0%" totalLine="1">
+           <line covNumber="2" lineNumber="16"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/url/escapeSymbol.js" covLine="3" coverage="100.0%" totalLine="3">
+           <line covNumber="4" lineNumber="20"/>
+           <line covNumber="82" lineNumber="25"/>
+           <line covNumber="91" lineNumber="26"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/lang/isDate.js" covLine="2" coverage="100.0%" totalLine="2">
+           <line covNumber="1" lineNumber="24"/>
+           <line covNumber="9" lineNumber="26"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/dom/setStyle.js" covLine="10" coverage="100.0%" totalLine="10">
+           <line covNumber="391" lineNumber="48"/>
+           <line covNumber="391" lineNumber="43"/>
+           <line covNumber="391" lineNumber="44"/>
+           <line covNumber="391" lineNumber="41"/>
+           <line covNumber="391" lineNumber="47"/>
+           <line covNumber="391" lineNumber="40"/>
+           <line covNumber="17" lineNumber="36"/>
+           <line covNumber="17" lineNumber="54"/>
+           <line covNumber="391" lineNumber="37"/>
+           <line covNumber="391" lineNumber="50"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/array/reduce.js" covLine="13" coverage="100.0%" totalLine="13">
+           <line covNumber="1" lineNumber="33"/>
+           <line covNumber="13" lineNumber="25"/>
+           <line covNumber="29" lineNumber="39"/>
+           <line covNumber="7" lineNumber="27"/>
+           <line covNumber="6" lineNumber="28"/>
+           <line covNumber="12" lineNumber="37"/>
+           <line covNumber="6" lineNumber="29"/>
+           <line covNumber="29" lineNumber="38"/>
+           <line covNumber="13" lineNumber="21"/>
+           <line covNumber="1" lineNumber="20"/>
+           <line covNumber="6" lineNumber="30"/>
+           <line covNumber="12" lineNumber="42"/>
+           <line covNumber="7" lineNumber="32"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/sio/callByServer.js" covLine="23" coverage="92.0%" totalLine="25">
+           <line covNumber="3" lineNumber="78"/>
+           <line covNumber="4" lineNumber="77"/>
+           <line covNumber="1" lineNumber="56"/>
+           <line covNumber="7" lineNumber="55"/>
+           <line covNumber="6" lineNumber="43"/>
+           <line covNumber="7" lineNumber="42"/>
+           <line covNumber="7" lineNumber="65"/>
+           <line covNumber="4" lineNumber="80"/>
+           <line covNumber="7" lineNumber="62"/>
+           <line covNumber="4" lineNumber="81"/>
+           <line covNumber="7" lineNumber="63"/>
+           <line covNumber="7" lineNumber="60"/>
+           <line covNumber="5" lineNumber="85"/>
+           <line covNumber="1" lineNumber="48"/>
+           <line covNumber="1" lineNumber="45"/>
+           <line covNumber="6" lineNumber="44"/>
+           <line covNumber="1" lineNumber="29"/>
+           <line covNumber="7" lineNumber="30"/>
+           <line covNumber="0" lineNumber="51"/>
+           <line covNumber="7" lineNumber="70"/>
+           <line covNumber="7" lineNumber="72"/>
+           <line covNumber="5" lineNumber="73"/>
+           <line covNumber="5" lineNumber="74"/>
+           <line covNumber="1" lineNumber="75"/>
+           <line covNumber="0" lineNumber="50"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/array/unique.js" covLine="13" coverage="100.0%" totalLine="13">
+           <line covNumber="9" lineNumber="47"/>
+           <line covNumber="1" lineNumber="23"/>
+           <line covNumber="9" lineNumber="36"/>
+           <line covNumber="9" lineNumber="24"/>
+           <line covNumber="39" lineNumber="39"/>
+           <line covNumber="9" lineNumber="28"/>
+           <line covNumber="39" lineNumber="37"/>
+           <line covNumber="7" lineNumber="29"/>
+           <line covNumber="39" lineNumber="38"/>
+           <line covNumber="117" lineNumber="30"/>
+           <line covNumber="15" lineNumber="42"/>
+           <line covNumber="15" lineNumber="41"/>
+           <line covNumber="144" lineNumber="40"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/event/_eventFilter/_crossElementBoundary.js" covLine="5" coverage="100.0%" totalLine="5">
+           <line covNumber="12" lineNumber="30"/>
+           <line covNumber="7" lineNumber="43"/>
+           <line covNumber="5" lineNumber="41"/>
+           <line covNumber="2" lineNumber="27"/>
+           <line covNumber="12" lineNumber="28"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/lang/getModule.js" covLine="7" coverage="100.0%" totalLine="7">
+           <line covNumber="3" lineNumber="30"/>
+           <line covNumber="1" lineNumber="22"/>
+           <line covNumber="9" lineNumber="23"/>
+           <line covNumber="6" lineNumber="34"/>
+           <line covNumber="9" lineNumber="26"/>
+           <line covNumber="16" lineNumber="27"/>
+           <line covNumber="13" lineNumber="28"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/dom/hasClass.js" covLine="9" coverage="100.0%" totalLine="9">
+           <line covNumber="3" lineNumber="30"/>
+           <line covNumber="7" lineNumber="43"/>
+           <line covNumber="19" lineNumber="42"/>
+           <line covNumber="15" lineNumber="41"/>
+           <line covNumber="18" lineNumber="31"/>
+           <line covNumber="8" lineNumber="46"/>
+           <line covNumber="15" lineNumber="36"/>
+           <line covNumber="21" lineNumber="34"/>
+           <line covNumber="15" lineNumber="39"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/dom/getText.js" covLine="10" coverage="100.0%" totalLine="10">
+           <line covNumber="7" lineNumber="30"/>
+           <line covNumber="6" lineNumber="32"/>
+           <line covNumber="6" lineNumber="31"/>
+           <line covNumber="1" lineNumber="23"/>
+           <line covNumber="15" lineNumber="24"/>
+           <line covNumber="6" lineNumber="33"/>
+           <line covNumber="6" lineNumber="34"/>
+           <line covNumber="15" lineNumber="26"/>
+           <line covNumber="15" lineNumber="29"/>
+           <line covNumber="13" lineNumber="38"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/dom/ready.js" covLine="23" coverage="52.272724%" totalLine="44">
+           <line covNumber="2" lineNumber="79"/>
+           <line covNumber="2" lineNumber="78"/>
+           <line covNumber="0" lineNumber="59"/>
+           <line covNumber="0" lineNumber="58"/>
+           <line covNumber="2" lineNumber="57"/>
+           <line covNumber="0" lineNumber="35"/>
+           <line covNumber="0" lineNumber="36"/>
+           <line covNumber="0" lineNumber="39"/>
+           <line covNumber="0" lineNumber="37"/>
+           <line covNumber="0" lineNumber="38"/>
+           <line covNumber="0" lineNumber="64"/>
+           <line covNumber="0" lineNumber="82"/>
+           <line covNumber="0" lineNumber="83"/>
+           <line covNumber="2" lineNumber="104"/>
+           <line covNumber="2" lineNumber="80"/>
+           <line covNumber="0" lineNumber="62"/>
+           <line covNumber="0" lineNumber="81"/>
+           <line covNumber="2" lineNumber="99"/>
+           <line covNumber="0" lineNumber="87"/>
+           <line covNumber="0" lineNumber="61"/>
+           <line covNumber="1" lineNumber="100"/>
+           <line covNumber="0" lineNumber="85"/>
+           <line covNumber="2" lineNumber="49"/>
+           <line covNumber="2" lineNumber="97"/>
+           <line covNumber="2" lineNumber="48"/>
+           <line covNumber="2" lineNumber="69"/>
+           <line covNumber="4" lineNumber="47"/>
+           <line covNumber="0" lineNumber="92"/>
+           <line covNumber="2" lineNumber="46"/>
+           <line covNumber="0" lineNumber="91"/>
+           <line covNumber="2" lineNumber="22"/>
+           <line covNumber="2" lineNumber="24"/>
+           <line covNumber="2" lineNumber="25"/>
+           <line covNumber="2" lineNumber="29"/>
+           <line covNumber="2" lineNumber="30"/>
+           <line covNumber="2" lineNumber="32"/>
+           <line covNumber="2" lineNumber="31"/>
+           <line covNumber="2" lineNumber="70"/>
+           <line covNumber="0" lineNumber="71"/>
+           <line covNumber="2" lineNumber="73"/>
+           <line covNumber="2" lineNumber="75"/>
+           <line covNumber="0" lineNumber="88"/>
+           <line covNumber="0" lineNumber="50"/>
+           <line covNumber="0" lineNumber="76"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/array/filter.js" covLine="8" coverage="100.0%" totalLine="8">
+           <line covNumber="6" lineNumber="30"/>
+           <line covNumber="8" lineNumber="41"/>
+           <line covNumber="27" lineNumber="31"/>
+           <line covNumber="1" lineNumber="22"/>
+           <line covNumber="8" lineNumber="23"/>
+           <line covNumber="5" lineNumber="36"/>
+           <line covNumber="27" lineNumber="34"/>
+           <line covNumber="8" lineNumber="29"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/event/stop.js" covLine="1" coverage="25.0%" totalLine="4">
+           <line covNumber="1" lineNumber="22"/>
+           <line covNumber="0" lineNumber="23"/>
+           <line covNumber="0" lineNumber="24"/>
+           <line covNumber="0" lineNumber="25"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/dom/_styleFilter.js" covLine="1" coverage="100.0%" totalLine="1">
+           <line covNumber="29" lineNumber="16"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/dom/removeClass.js" covLine="11" coverage="100.0%" totalLine="11">
+           <line covNumber="12" lineNumber="49"/>
+           <line covNumber="12" lineNumber="48"/>
+           <line covNumber="12" lineNumber="30"/>
+           <line covNumber="13" lineNumber="43"/>
+           <line covNumber="31" lineNumber="42"/>
+           <line covNumber="13" lineNumber="44"/>
+           <line covNumber="12" lineNumber="32"/>
+           <line covNumber="21" lineNumber="41"/>
+           <line covNumber="12" lineNumber="40"/>
+           <line covNumber="2" lineNumber="53"/>
+           <line covNumber="2" lineNumber="29"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/async/when.js" covLine="7" coverage="100.0%" totalLine="7">
+           <line covNumber="1" lineNumber="22"/>
+           <line covNumber="6" lineNumber="23"/>
+           <line covNumber="4" lineNumber="24"/>
+           <line covNumber="4" lineNumber="25"/>
+           <line covNumber="2" lineNumber="27"/>
+           <line covNumber="2" lineNumber="28"/>
+           <line covNumber="2" lineNumber="29"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/event/_unload.js" covLine="12" coverage="66.66667%" totalLine="18">
+           <line covNumber="0" lineNumber="45"/>
+           <line covNumber="2" lineNumber="19"/>
+           <line covNumber="2" lineNumber="35"/>
+           <line covNumber="2" lineNumber="18"/>
+           <line covNumber="2" lineNumber="36"/>
+           <line covNumber="2" lineNumber="24"/>
+           <line covNumber="0" lineNumber="33"/>
+           <line covNumber="2" lineNumber="25"/>
+           <line covNumber="2" lineNumber="28"/>
+           <line covNumber="0" lineNumber="37"/>
+           <line covNumber="0" lineNumber="29"/>
+           <line covNumber="0" lineNumber="38"/>
+           <line covNumber="2" lineNumber="43"/>
+           <line covNumber="2" lineNumber="42"/>
+           <line covNumber="2" lineNumber="32"/>
+           <line covNumber="0" lineNumber="51"/>
+           <line covNumber="2" lineNumber="53"/>
+           <line covNumber="2" lineNumber="50"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/cookie/set.js" covLine="2" coverage="100.0%" totalLine="2">
+           <line covNumber="1" lineNumber="37"/>
+           <line covNumber="2" lineNumber="38"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/lang/toArray.js" covLine="12" coverage="92.30769%" totalLine="13">
+           <line covNumber="0" lineNumber="44"/>
+           <line covNumber="48" lineNumber="33"/>
+           <line covNumber="5" lineNumber="25"/>
+           <line covNumber="96" lineNumber="26"/>
+           <line covNumber="5" lineNumber="39"/>
+           <line covNumber="2" lineNumber="27"/>
+           <line covNumber="94" lineNumber="28"/>
+           <line covNumber="5" lineNumber="37"/>
+           <line covNumber="41" lineNumber="29"/>
+           <line covNumber="5" lineNumber="38"/>
+           <line covNumber="53" lineNumber="32"/>
+           <line covNumber="5" lineNumber="41"/>
+           <line covNumber="38" lineNumber="40"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/url.js" covLine="1" coverage="100.0%" totalLine="1">
+           <line covNumber="6" lineNumber="16"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/object/extend.js" covLine="5" coverage="100.0%" totalLine="5">
+           <line covNumber="555" lineNumber="30"/>
+           <line covNumber="553" lineNumber="31"/>
+           <line covNumber="174" lineNumber="35"/>
+           <line covNumber="18" lineNumber="27"/>
+           <line covNumber="174" lineNumber="29"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/array/remove.js" covLine="6" coverage="100.0%" totalLine="6">
+           <line covNumber="7" lineNumber="30"/>
+           <line covNumber="9" lineNumber="33"/>
+           <line covNumber="3" lineNumber="25"/>
+           <line covNumber="9" lineNumber="26"/>
+           <line covNumber="9" lineNumber="28"/>
+           <line covNumber="39" lineNumber="29"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/element.js" covLine="32" coverage="96.969696%" totalLine="33">
+           <line covNumber="2" lineNumber="132"/>
+           <line covNumber="4" lineNumber="133"/>
+           <line covNumber="4" lineNumber="138"/>
+           <line covNumber="20" lineNumber="113"/>
+           <line covNumber="89" lineNumber="56"/>
+           <line covNumber="2" lineNumber="111"/>
+           <line covNumber="2" lineNumber="137"/>
+           <line covNumber="2" lineNumber="36"/>
+           <line covNumber="52" lineNumber="33"/>
+           <line covNumber="3" lineNumber="156"/>
+           <line covNumber="48" lineNumber="155"/>
+           <line covNumber="2" lineNumber="152"/>
+           <line covNumber="8" lineNumber="107"/>
+           <line covNumber="2" lineNumber="105"/>
+           <line covNumber="2" lineNumber="87"/>
+           <line covNumber="2" lineNumber="101"/>
+           <line covNumber="2" lineNumber="100"/>
+           <line covNumber="2" lineNumber="49"/>
+           <line covNumber="72" lineNumber="127"/>
+           <line covNumber="2" lineNumber="68"/>
+           <line covNumber="2" lineNumber="121"/>
+           <line covNumber="89" lineNumber="47"/>
+           <line covNumber="2" lineNumber="46"/>
+           <line covNumber="22" lineNumber="168"/>
+           <line covNumber="2" lineNumber="28"/>
+           <line covNumber="52" lineNumber="29"/>
+           <line covNumber="2" lineNumber="167"/>
+           <line covNumber="52" lineNumber="30"/>
+           <line covNumber="0" lineNumber="31"/>
+           <line covNumber="11" lineNumber="70"/>
+           <line covNumber="22" lineNumber="71"/>
+           <line covNumber="107" lineNumber="88"/>
+           <line covNumber="2" lineNumber="50"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/json/decode.js" covLine="1" coverage="100.0%" totalLine="1">
+           <line covNumber="1" lineNumber="24"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/page/lazyLoadImage.js" covLine="1" coverage="3.4482758%" totalLine="29">
+           <line covNumber="0" lineNumber="79"/>
+           <line covNumber="0" lineNumber="58"/>
+           <line covNumber="0" lineNumber="57"/>
+           <line covNumber="0" lineNumber="56"/>
+           <line covNumber="0" lineNumber="55"/>
+           <line covNumber="0" lineNumber="33"/>
+           <line covNumber="0" lineNumber="43"/>
+           <line covNumber="0" lineNumber="42"/>
+           <line covNumber="0" lineNumber="41"/>
+           <line covNumber="0" lineNumber="82"/>
+           <line covNumber="0" lineNumber="62"/>
+           <line covNumber="0" lineNumber="63"/>
+           <line covNumber="0" lineNumber="69"/>
+           <line covNumber="0" lineNumber="68"/>
+           <line covNumber="0" lineNumber="45"/>
+           <line covNumber="0" lineNumber="44"/>
+           <line covNumber="1" lineNumber="28"/>
+           <line covNumber="0" lineNumber="29"/>
+           <line covNumber="0" lineNumber="30"/>
+           <line covNumber="0" lineNumber="32"/>
+           <line covNumber="0" lineNumber="51"/>
+           <line covNumber="0" lineNumber="70"/>
+           <line covNumber="0" lineNumber="71"/>
+           <line covNumber="0" lineNumber="54"/>
+           <line covNumber="0" lineNumber="72"/>
+           <line covNumber="0" lineNumber="73"/>
+           <line covNumber="0" lineNumber="74"/>
+           <line covNumber="0" lineNumber="75"/>
+           <line covNumber="0" lineNumber="50"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/dom/getParent.js" covLine="3" coverage="100.0%" totalLine="3">
+           <line covNumber="1" lineNumber="22"/>
+           <line covNumber="3" lineNumber="23"/>
+           <line covNumber="3" lineNumber="25"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/cookie/getRaw.js" covLine="6" coverage="100.0%" totalLine="6">
+           <line covNumber="3" lineNumber="30"/>
+           <line covNumber="2" lineNumber="24"/>
+           <line covNumber="12" lineNumber="25"/>
+           <line covNumber="9" lineNumber="34"/>
+           <line covNumber="4" lineNumber="26"/>
+           <line covNumber="4" lineNumber="29"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/cookie/remove.js" covLine="4" coverage="100.0%" totalLine="4">
+           <line covNumber="1" lineNumber="22"/>
+           <line covNumber="5" lineNumber="23"/>
+           <line covNumber="5" lineNumber="24"/>
+           <line covNumber="5" lineNumber="25"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/dom/removeStyle.js" covLine="9" coverage="64.28571%" totalLine="14">
+           <line covNumber="1" lineNumber="47"/>
+           <line covNumber="1" lineNumber="46"/>
+           <line covNumber="1" lineNumber="35"/>
+           <line covNumber="1" lineNumber="36"/>
+           <line covNumber="1" lineNumber="33"/>
+           <line covNumber="1" lineNumber="34"/>
+           <line covNumber="0" lineNumber="39"/>
+           <line covNumber="1" lineNumber="28"/>
+           <line covNumber="1" lineNumber="37"/>
+           <line covNumber="1" lineNumber="29"/>
+           <line covNumber="0" lineNumber="43"/>
+           <line covNumber="0" lineNumber="42"/>
+           <line covNumber="0" lineNumber="41"/>
+           <line covNumber="0" lineNumber="40"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/lang/_instances.js" covLine="1" coverage="100.0%" totalLine="1">
+           <line covNumber="1" lineNumber="20"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/dom/getWindow.js" covLine="4" coverage="100.0%" totalLine="4">
+           <line covNumber="8" lineNumber="30"/>
+           <line covNumber="2" lineNumber="24"/>
+           <line covNumber="8" lineNumber="25"/>
+           <line covNumber="8" lineNumber="26"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/page/loadCssFile.js" covLine="6" coverage="100.0%" totalLine="6">
+           <line covNumber="3" lineNumber="22"/>
+           <line covNumber="2" lineNumber="23"/>
+           <line covNumber="2" lineNumber="25"/>
+           <line covNumber="2" lineNumber="26"/>
+           <line covNumber="2" lineNumber="27"/>
+           <line covNumber="2" lineNumber="29"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/event/preventDefault.js" covLine="3" coverage="75.0%" totalLine="4">
+           <line covNumber="5" lineNumber="22"/>
+           <line covNumber="14" lineNumber="23"/>
+           <line covNumber="14" lineNumber="24"/>
+           <line covNumber="0" lineNumber="26"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/dom/droppable.js" covLine="23" coverage="100.0%" totalLine="23">
+           <line covNumber="11" lineNumber="49"/>
+           <line covNumber="3" lineNumber="78"/>
+           <line covNumber="2" lineNumber="69"/>
+           <line covNumber="3" lineNumber="77"/>
+           <line covNumber="2" lineNumber="68"/>
+           <line covNumber="4" lineNumber="59"/>
+           <line covNumber="11" lineNumber="46"/>
+           <line covNumber="2" lineNumber="55"/>
+           <line covNumber="1" lineNumber="39"/>
+           <line covNumber="3" lineNumber="41"/>
+           <line covNumber="3" lineNumber="40"/>
+           <line covNumber="7" lineNumber="51"/>
+           <line covNumber="1" lineNumber="70"/>
+           <line covNumber="2" lineNumber="53"/>
+           <line covNumber="1" lineNumber="71"/>
+           <line covNumber="4" lineNumber="80"/>
+           <line covNumber="4" lineNumber="63"/>
+           <line covNumber="2" lineNumber="54"/>
+           <line covNumber="4" lineNumber="81"/>
+           <line covNumber="1" lineNumber="60"/>
+           <line covNumber="2" lineNumber="73"/>
+           <line covNumber="1" lineNumber="61"/>
+           <line covNumber="3" lineNumber="76"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/object/isEmpty.js" covLine="4" coverage="100.0%" totalLine="4">
+           <line covNumber="7" lineNumber="21"/>
+           <line covNumber="1" lineNumber="20"/>
+           <line covNumber="3" lineNumber="22"/>
+           <line covNumber="4" lineNumber="25"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/dom/empty.js" covLine="5" coverage="100.0%" totalLine="5">
+           <line covNumber="3" lineNumber="33"/>
+           <line covNumber="1" lineNumber="25"/>
+           <line covNumber="3" lineNumber="26"/>
+           <line covNumber="3" lineNumber="28"/>
+           <line covNumber="3" lineNumber="29"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/string/toHalfWidth.js" covLine="3" coverage="100.0%" totalLine="3">
+           <line covNumber="1" lineNumber="121"/>
+           <line covNumber="12" lineNumber="122"/>
+           <line covNumber="129" lineNumber="124"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/sio/_removeScriptTag.js" covLine="7" coverage="77.77778%" totalLine="9">
+           <line covNumber="616" lineNumber="19"/>
+           <line covNumber="9" lineNumber="17"/>
+           <line covNumber="1246" lineNumber="18"/>
+           <line covNumber="9" lineNumber="23"/>
+           <line covNumber="0" lineNumber="15"/>
+           <line covNumber="0" lineNumber="24"/>
+           <line covNumber="2" lineNumber="13"/>
+           <line covNumber="9" lineNumber="26"/>
+           <line covNumber="9" lineNumber="14"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/dom/getAncestorByClass.js" covLine="7" coverage="100.0%" totalLine="7">
+           <line covNumber="4" lineNumber="30"/>
+           <line covNumber="3" lineNumber="32"/>
+           <line covNumber="6" lineNumber="31"/>
+           <line covNumber="1" lineNumber="36"/>
+           <line covNumber="1" lineNumber="26"/>
+           <line covNumber="4" lineNumber="27"/>
+           <line covNumber="4" lineNumber="28"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/json/stringify.js" covLine="49" coverage="96.07843%" totalLine="51">
+           <line covNumber="2" lineNumber="116"/>
+           <line covNumber="0" lineNumber="79"/>
+           <line covNumber="163" lineNumber="114"/>
+           <line covNumber="2" lineNumber="113"/>
+           <line covNumber="13" lineNumber="158"/>
+           <line covNumber="13" lineNumber="157"/>
+           <line covNumber="38" lineNumber="119"/>
+           <line covNumber="63" lineNumber="152"/>
+           <line covNumber="63" lineNumber="153"/>
+           <line covNumber="50" lineNumber="150"/>
+           <line covNumber="10" lineNumber="82"/>
+           <line covNumber="16" lineNumber="81"/>
+           <line covNumber="16" lineNumber="84"/>
+           <line covNumber="16" lineNumber="85"/>
+           <line covNumber="12" lineNumber="125"/>
+           <line covNumber="2" lineNumber="67"/>
+           <line covNumber="33" lineNumber="128"/>
+           <line covNumber="6" lineNumber="68"/>
+           <line covNumber="78" lineNumber="122"/>
+           <line covNumber="13" lineNumber="129"/>
+           <line covNumber="2" lineNumber="26"/>
+           <line covNumber="2" lineNumber="31"/>
+           <line covNumber="6" lineNumber="72"/>
+           <line covNumber="16" lineNumber="73"/>
+           <line covNumber="16" lineNumber="75"/>
+           <line covNumber="13" lineNumber="135"/>
+           <line covNumber="14" lineNumber="132"/>
+           <line covNumber="1" lineNumber="133"/>
+           <line covNumber="1" lineNumber="55"/>
+           <line covNumber="1" lineNumber="105"/>
+           <line covNumber="2" lineNumber="104"/>
+           <line covNumber="78" lineNumber="60"/>
+           <line covNumber="6" lineNumber="131"/>
+           <line covNumber="20" lineNumber="130"/>
+           <line covNumber="67" lineNumber="143"/>
+           <line covNumber="5" lineNumber="97"/>
+           <line covNumber="2" lineNumber="96"/>
+           <line covNumber="2" lineNumber="45"/>
+           <line covNumber="4" lineNumber="147"/>
+           <line covNumber="1" lineNumber="47"/>
+           <line covNumber="63" lineNumber="149"/>
+           <line covNumber="78" lineNumber="46"/>
+           <line covNumber="1" lineNumber="51"/>
+           <line covNumber="0" lineNumber="52"/>
+           <line covNumber="1" lineNumber="54"/>
+           <line covNumber="13" lineNumber="140"/>
+           <line covNumber="6" lineNumber="88"/>
+           <line covNumber="67" lineNumber="142"/>
+           <line covNumber="67" lineNumber="141"/>
+           <line covNumber="1" lineNumber="50"/>
+           <line covNumber="6" lineNumber="89"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/dom/insertHTML.js" covLine="7" coverage="43.75%" totalLine="16">
+           <line covNumber="0" lineNumber="49"/>
+           <line covNumber="0" lineNumber="48"/>
+           <line covNumber="0" lineNumber="45"/>
+           <line covNumber="0" lineNumber="44"/>
+           <line covNumber="7" lineNumber="56"/>
+           <line covNumber="0" lineNumber="47"/>
+           <line covNumber="12" lineNumber="35"/>
+           <line covNumber="12" lineNumber="34"/>
+           <line covNumber="0" lineNumber="39"/>
+           <line covNumber="7" lineNumber="28"/>
+           <line covNumber="12" lineNumber="29"/>
+           <line covNumber="12" lineNumber="30"/>
+           <line covNumber="0" lineNumber="43"/>
+           <line covNumber="0" lineNumber="42"/>
+           <line covNumber="0" lineNumber="51"/>
+           <line covNumber="12" lineNumber="53"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/dom/_styleFixer/opacity.js" covLine="1" coverage="16.666668%" totalLine="6">
+           <line covNumber="0" lineNumber="21"/>
+           <line covNumber="0" lineNumber="20"/>
+           <line covNumber="1" lineNumber="18"/>
+           <line covNumber="0" lineNumber="25"/>
+           <line covNumber="0" lineNumber="27"/>
+           <line covNumber="0" lineNumber="29"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/dom/setBorderBoxHeight.js" covLine="2" coverage="100.0%" totalLine="2">
+           <line covNumber="2" lineNumber="24"/>
+           <line covNumber="21" lineNumber="26"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/lang/decontrol.js" covLine="3" coverage="100.0%" totalLine="3">
+           <line covNumber="1" lineNumber="22"/>
+           <line covNumber="1" lineNumber="23"/>
+           <line covNumber="1" lineNumber="24"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/lang/Event.js" covLine="32" coverage="100.0%" totalLine="32">
+           <line covNumber="57" lineNumber="57"/>
+           <line covNumber="57" lineNumber="56"/>
+           <line covNumber="24" lineNumber="82"/>
+           <line covNumber="57" lineNumber="64"/>
+           <line covNumber="1" lineNumber="83"/>
+           <line covNumber="40" lineNumber="65"/>
+           <line covNumber="7" lineNumber="80"/>
+           <line covNumber="57" lineNumber="62"/>
+           <line covNumber="22" lineNumber="104"/>
+           <line covNumber="23" lineNumber="86"/>
+           <line covNumber="57" lineNumber="60"/>
+           <line covNumber="22" lineNumber="99"/>
+           <line covNumber="22" lineNumber="102"/>
+           <line covNumber="22" lineNumber="97"/>
+           <line covNumber="57" lineNumber="48"/>
+           <line covNumber="35" lineNumber="66"/>
+           <line covNumber="7" lineNumber="96"/>
+           <line covNumber="57" lineNumber="69"/>
+           <line covNumber="23" lineNumber="95"/>
+           <line covNumber="7" lineNumber="44"/>
+           <line covNumber="23" lineNumber="92"/>
+           <line covNumber="57" lineNumber="46"/>
+           <line covNumber="23" lineNumber="90"/>
+           <line covNumber="7" lineNumber="28"/>
+           <line covNumber="58" lineNumber="29"/>
+           <line covNumber="58" lineNumber="30"/>
+           <line covNumber="58" lineNumber="32"/>
+           <line covNumber="58" lineNumber="31"/>
+           <line covNumber="57" lineNumber="51"/>
+           <line covNumber="57" lineNumber="52"/>
+           <line covNumber="38" lineNumber="53"/>
+           <line covNumber="23" lineNumber="88"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/dom/setBorderBoxSize.js" covLine="14" coverage="100.0%" totalLine="14">
+           <line covNumber="47" lineNumber="45"/>
+           <line covNumber="26" lineNumber="46"/>
+           <line covNumber="47" lineNumber="36"/>
+           <line covNumber="208" lineNumber="33"/>
+           <line covNumber="4" lineNumber="27"/>
+           <line covNumber="47" lineNumber="28"/>
+           <line covNumber="47" lineNumber="37"/>
+           <line covNumber="47" lineNumber="29"/>
+           <line covNumber="26" lineNumber="38"/>
+           <line covNumber="47" lineNumber="30"/>
+           <line covNumber="26" lineNumber="43"/>
+           <line covNumber="47" lineNumber="32"/>
+           <line covNumber="26" lineNumber="51"/>
+           <line covNumber="47" lineNumber="54"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/dom/query.js" covLine="385" coverage="67.78169%" totalLine="568">
+           <line covNumber="0" lineNumber="806"/>
+           <line covNumber="0" lineNumber="807"/>
+           <line covNumber="0" lineNumber="338"/>
+           <line covNumber="3" lineNumber="803"/>
+           <line covNumber="0" lineNumber="1414"/>
+           <line covNumber="1" lineNumber="1413"/>
+           <line covNumber="0" lineNumber="1317"/>
+           <line covNumber="1" lineNumber="1412"/>
+           <line covNumber="1" lineNumber="1316"/>
+           <line covNumber="0" lineNumber="1419"/>
+           <line covNumber="1" lineNumber="946"/>
+           <line covNumber="78" lineNumber="333"/>
+           <line covNumber="0" lineNumber="1418"/>
+           <line covNumber="0" lineNumber="1417"/>
+           <line covNumber="66" lineNumber="158"/>
+           <line covNumber="1" lineNumber="1312"/>
+           <line covNumber="78" lineNumber="157"/>
+           <line covNumber="1" lineNumber="1310"/>
+           <line covNumber="0" lineNumber="334"/>
+           <line covNumber="1" lineNumber="947"/>
+           <line covNumber="0" lineNumber="335"/>
+           <line covNumber="0" lineNumber="531"/>
+           <line covNumber="5" lineNumber="601"/>
+           <line covNumber="0" lineNumber="153"/>
+           <line covNumber="6" lineNumber="746"/>
+           <line covNumber="5" lineNumber="608"/>
+           <line covNumber="37" lineNumber="537"/>
+           <line covNumber="37" lineNumber="536"/>
+           <line covNumber="0" lineNumber="604"/>
+           <line covNumber="5" lineNumber="742"/>
+           <line covNumber="5" lineNumber="603"/>
+           <line covNumber="1" lineNumber="202"/>
+           <line covNumber="0" lineNumber="349"/>
+           <line covNumber="1" lineNumber="203"/>
+           <line covNumber="1" lineNumber="204"/>
+           <line covNumber="0" lineNumber="1329"/>
+           <line covNumber="0" lineNumber="1424"/>
+           <line covNumber="1" lineNumber="1328"/>
+           <line covNumber="0" lineNumber="1423"/>
+           <line covNumber="1" lineNumber="931"/>
+           <line covNumber="11" lineNumber="201"/>
+           <line covNumber="252" lineNumber="932"/>
+           <line covNumber="1" lineNumber="1428"/>
+           <line covNumber="14" lineNumber="169"/>
+           <line covNumber="78" lineNumber="342"/>
+           <line covNumber="0" lineNumber="1324"/>
+           <line covNumber="252" lineNumber="934"/>
+           <line covNumber="1" lineNumber="1327"/>
+           <line covNumber="7" lineNumber="935"/>
+           <line covNumber="1" lineNumber="1321"/>
+           <line covNumber="67" lineNumber="345"/>
+           <line covNumber="76" lineNumber="166"/>
+           <line covNumber="7" lineNumber="936"/>
+           <line covNumber="78" lineNumber="165"/>
+           <line covNumber="1" lineNumber="1323"/>
+           <line covNumber="1" lineNumber="348"/>
+           <line covNumber="62" lineNumber="167"/>
+           <line covNumber="245" lineNumber="939"/>
+           <line covNumber="78" lineNumber="161"/>
+           <line covNumber="0" lineNumber="162"/>
+           <line covNumber="0" lineNumber="1330"/>
+           <line covNumber="3" lineNumber="543"/>
+           <line covNumber="0" lineNumber="738"/>
+           <line covNumber="0" lineNumber="546"/>
+           <line covNumber="3" lineNumber="545"/>
+           <line covNumber="3" lineNumber="549"/>
+           <line covNumber="0" lineNumber="733"/>
+           <line covNumber="2" lineNumber="1437"/>
+           <line covNumber="1" lineNumber="1436"/>
+           <line covNumber="0" lineNumber="825"/>
+           <line covNumber="11" lineNumber="210"/>
+           <line covNumber="401" lineNumber="1433"/>
+           <line covNumber="82" lineNumber="318"/>
+           <line covNumber="3" lineNumber="828"/>
+           <line covNumber="3" lineNumber="829"/>
+           <line covNumber="401" lineNumber="1431"/>
+           <line covNumber="89" lineNumber="316"/>
+           <line covNumber="1" lineNumber="213"/>
+           <line covNumber="89" lineNumber="317"/>
+           <line covNumber="19" lineNumber="214"/>
+           <line covNumber="15" lineNumber="179"/>
+           <line covNumber="8" lineNumber="927"/>
+           <line covNumber="18" lineNumber="178"/>
+           <line covNumber="8" lineNumber="928"/>
+           <line covNumber="14" lineNumber="177"/>
+           <line covNumber="1" lineNumber="217"/>
+           <line covNumber="0" lineNumber="218"/>
+           <line covNumber="1" lineNumber="926"/>
+           <line covNumber="84" lineNumber="310"/>
+           <line covNumber="0" lineNumber="820"/>
+           <line covNumber="2" lineNumber="923"/>
+           <line covNumber="0" lineNumber="821"/>
+           <line covNumber="1" lineNumber="921"/>
+           <line covNumber="0" lineNumber="170"/>
+           <line covNumber="0" lineNumber="513"/>
+           <line covNumber="0" lineNumber="729"/>
+           <line covNumber="0" lineNumber="512"/>
+           <line covNumber="0" lineNumber="417"/>
+           <line covNumber="0" lineNumber="171"/>
+           <line covNumber="0" lineNumber="725"/>
+           <line covNumber="0" lineNumber="724"/>
+           <line covNumber="12" lineNumber="621"/>
+           <line covNumber="0" lineNumber="172"/>
+           <line covNumber="12" lineNumber="620"/>
+           <line covNumber="0" lineNumber="627"/>
+           <line covNumber="0" lineNumber="626"/>
+           <line covNumber="0" lineNumber="720"/>
+           <line covNumber="0" lineNumber="819"/>
+           <line covNumber="0" lineNumber="624"/>
+           <line covNumber="0" lineNumber="414"/>
+           <line covNumber="0" lineNumber="516"/>
+           <line covNumber="0" lineNumber="1446"/>
+           <line covNumber="0" lineNumber="812"/>
+           <line covNumber="1" lineNumber="221"/>
+           <line covNumber="0" lineNumber="1445"/>
+           <line covNumber="0" lineNumber="813"/>
+           <line covNumber="41" lineNumber="222"/>
+           <line covNumber="1" lineNumber="1309"/>
+           <line covNumber="41" lineNumber="224"/>
+           <line covNumber="78" lineNumber="327"/>
+           <line covNumber="0" lineNumber="816"/>
+           <line covNumber="0" lineNumber="225"/>
+           <line covNumber="2" lineNumber="1444"/>
+           <line covNumber="38" lineNumber="914"/>
+           <line covNumber="41" lineNumber="228"/>
+           <line covNumber="78" lineNumber="188"/>
+           <line covNumber="89" lineNumber="323"/>
+           <line covNumber="38" lineNumber="915"/>
+           <line covNumber="164" lineNumber="229"/>
+           <line covNumber="11" lineNumber="324"/>
+           <line covNumber="11" lineNumber="189"/>
+           <line covNumber="38" lineNumber="911"/>
+           <line covNumber="2" lineNumber="1449"/>
+           <line covNumber="89" lineNumber="321"/>
+           <line covNumber="0" lineNumber="1304"/>
+           <line covNumber="0" lineNumber="522"/>
+           <line covNumber="3" lineNumber="427"/>
+           <line covNumber="0" lineNumber="521"/>
+           <line covNumber="0" lineNumber="719"/>
+           <line covNumber="2" lineNumber="428"/>
+           <line covNumber="5" lineNumber="610"/>
+           <line covNumber="0" lineNumber="715"/>
+           <line covNumber="2" lineNumber="185"/>
+           <line covNumber="0" lineNumber="611"/>
+           <line covNumber="5" lineNumber="614"/>
+           <line covNumber="0" lineNumber="808"/>
+           <line covNumber="0" lineNumber="711"/>
+           <line covNumber="0" lineNumber="710"/>
+           <line covNumber="2" lineNumber="1451"/>
+           <line covNumber="51" lineNumber="618"/>
+           <line covNumber="0" lineNumber="526"/>
+           <line covNumber="3" lineNumber="423"/>
+           <line covNumber="0" lineNumber="525"/>
+           <line covNumber="0" lineNumber="527"/>
+           <line covNumber="4" lineNumber="843"/>
+           <line covNumber="4" lineNumber="842"/>
+           <line covNumber="8" lineNumber="988"/>
+           <line covNumber="2" lineNumber="841"/>
+           <line covNumber="0" lineNumber="114"/>
+           <line covNumber="24" lineNumber="570"/>
+           <line covNumber="0" lineNumber="113"/>
+           <line covNumber="76" lineNumber="110"/>
+           <line covNumber="1" lineNumber="981"/>
+           <line covNumber="1" lineNumber="980"/>
+           <line covNumber="2" lineNumber="847"/>
+           <line covNumber="0" lineNumber="985"/>
+           <line covNumber="8" lineNumber="984"/>
+           <line covNumber="76" lineNumber="119"/>
+           <line covNumber="4" lineNumber="435"/>
+           <line covNumber="4" lineNumber="433"/>
+           <line covNumber="3" lineNumber="431"/>
+           <line covNumber="4" lineNumber="432"/>
+           <line covNumber="2" lineNumber="574"/>
+           <line covNumber="2" lineNumber="575"/>
+           <line covNumber="0" lineNumber="702"/>
+           <line covNumber="2" lineNumber="579"/>
+           <line covNumber="0" lineNumber="576"/>
+           <line covNumber="0" lineNumber="706"/>
+           <line covNumber="1" lineNumber="977"/>
+           <line covNumber="9" lineNumber="979"/>
+           <line covNumber="0" lineNumber="832"/>
+           <line covNumber="251" lineNumber="300"/>
+           <line covNumber="1" lineNumber="978"/>
+           <line covNumber="3" lineNumber="831"/>
+           <line covNumber="76" lineNumber="128"/>
+           <line covNumber="10" lineNumber="302"/>
+           <line covNumber="11" lineNumber="301"/>
+           <line covNumber="2" lineNumber="582"/>
+           <line covNumber="76" lineNumber="124"/>
+           <line covNumber="3" lineNumber="838"/>
+           <line covNumber="1" lineNumber="305"/>
+           <line covNumber="0" lineNumber="971"/>
+           <line covNumber="240" lineNumber="308"/>
+           <line covNumber="2" lineNumber="839"/>
+           <line covNumber="12" lineNumber="129"/>
+           <line covNumber="84" lineNumber="309"/>
+           <line covNumber="3" lineNumber="836"/>
+           <line covNumber="1" lineNumber="975"/>
+           <line covNumber="3" lineNumber="835"/>
+           <line covNumber="4" lineNumber="447"/>
+           <line covNumber="3" lineNumber="441"/>
+           <line covNumber="1" lineNumber="442"/>
+           <line covNumber="76" lineNumber="120"/>
+           <line covNumber="2" lineNumber="587"/>
+           <line covNumber="2" lineNumber="588"/>
+           <line covNumber="76" lineNumber="135"/>
+           <line covNumber="64" lineNumber="132"/>
+           <line covNumber="15" lineNumber="139"/>
+           <line covNumber="15" lineNumber="136"/>
+           <line covNumber="0" lineNumber="966"/>
+           <line covNumber="15" lineNumber="137"/>
+           <line covNumber="15" lineNumber="862"/>
+           <line covNumber="0" lineNumber="965"/>
+           <line covNumber="69" lineNumber="866"/>
+           <line covNumber="0" lineNumber="961"/>
+           <line covNumber="0" lineNumber="960"/>
+           <line covNumber="1" lineNumber="453"/>
+           <line covNumber="4" lineNumber="452"/>
+           <line covNumber="2" lineNumber="458"/>
+           <line covNumber="1" lineNumber="455"/>
+           <line covNumber="2" lineNumber="456"/>
+           <line covNumber="7" lineNumber="556"/>
+           <line covNumber="0" lineNumber="557"/>
+           <line covNumber="2" lineNumber="459"/>
+           <line covNumber="3" lineNumber="552"/>
+           <line covNumber="3" lineNumber="553"/>
+           <line covNumber="10" lineNumber="550"/>
+           <line covNumber="10" lineNumber="551"/>
+           <line covNumber="0" lineNumber="959"/>
+           <line covNumber="15" lineNumber="145"/>
+           <line covNumber="3" lineNumber="850"/>
+           <line covNumber="0" lineNumber="146"/>
+           <line covNumber="3" lineNumber="852"/>
+           <line covNumber="0" lineNumber="955"/>
+           <line covNumber="3" lineNumber="1407"/>
+           <line covNumber="15" lineNumber="149"/>
+           <line covNumber="0" lineNumber="853"/>
+           <line covNumber="0" lineNumber="956"/>
+           <line covNumber="3" lineNumber="856"/>
+           <line covNumber="0" lineNumber="951"/>
+           <line covNumber="1" lineNumber="1404"/>
+           <line covNumber="0" lineNumber="952"/>
+           <line covNumber="3" lineNumber="1400"/>
+           <line covNumber="2" lineNumber="460"/>
+           <line covNumber="2" lineNumber="1203"/>
+           <line covNumber="2" lineNumber="1206"/>
+           <line covNumber="3" lineNumber="465"/>
+           <line covNumber="5" lineNumber="466"/>
+           <line covNumber="5" lineNumber="468"/>
+           <line covNumber="5" lineNumber="469"/>
+           <line covNumber="6" lineNumber="566"/>
+           <line covNumber="8" lineNumber="140"/>
+           <line covNumber="2" lineNumber="1207"/>
+           <line covNumber="3" lineNumber="562"/>
+           <line covNumber="7" lineNumber="142"/>
+           <line covNumber="0" lineNumber="687"/>
+           <line covNumber="35" lineNumber="683"/>
+           <line covNumber="18" lineNumber="887"/>
+           <line covNumber="4" lineNumber="675"/>
+           <line covNumber="3" lineNumber="671"/>
+           <line covNumber="13" lineNumber="679"/>
+           <line covNumber="18" lineNumber="875"/>
+           <line covNumber="0" lineNumber="870"/>
+           <line covNumber="0" lineNumber="694"/>
+           <line covNumber="28" lineNumber="698"/>
+           <line covNumber="3" lineNumber="797"/>
+           <line covNumber="0" lineNumber="792"/>
+           <line covNumber="0" lineNumber="996"/>
+           <line covNumber="0" lineNumber="994"/>
+           <line covNumber="0" lineNumber="995"/>
+           <line covNumber="0" lineNumber="992"/>
+           <line covNumber="0" lineNumber="690"/>
+           <line covNumber="0" lineNumber="999"/>
+           <line covNumber="22" lineNumber="781"/>
+           <line covNumber="22" lineNumber="783"/>
+           <line covNumber="18" lineNumber="784"/>
+           <line covNumber="12" lineNumber="785"/>
+           <line covNumber="0" lineNumber="649"/>
+           <line covNumber="10" lineNumber="789"/>
+           <line covNumber="19" lineNumber="643"/>
+           <line covNumber="11" lineNumber="197"/>
+           <line covNumber="1" lineNumber="196"/>
+           <line covNumber="11" lineNumber="190"/>
+           <line covNumber="78" lineNumber="193"/>
+           <line covNumber="19" lineNumber="641"/>
+           <line covNumber="11" lineNumber="198"/>
+           <line covNumber="11" lineNumber="199"/>
+           <line covNumber="22" lineNumber="780"/>
+           <line covNumber="0" lineNumber="506"/>
+           <line covNumber="0" lineNumber="503"/>
+           <line covNumber="108" lineNumber="771"/>
+           <line covNumber="30" lineNumber="637"/>
+           <line covNumber="25" lineNumber="777"/>
+           <line covNumber="108" lineNumber="774"/>
+           <line covNumber="83" lineNumber="775"/>
+           <line covNumber="39" lineNumber="633"/>
+           <line covNumber="21" lineNumber="634"/>
+           <line covNumber="3" lineNumber="778"/>
+           <line covNumber="0" lineNumber="501"/>
+           <line covNumber="0" lineNumber="502"/>
+           <line covNumber="0" lineNumber="630"/>
+           <line covNumber="0" lineNumber="500"/>
+           <line covNumber="9" lineNumber="766"/>
+           <line covNumber="0" lineNumber="762"/>
+           <line covNumber="0" lineNumber="663"/>
+           <line covNumber="0" lineNumber="664"/>
+           <line covNumber="0" lineNumber="667"/>
+           <line covNumber="10" lineNumber="754"/>
+           <line covNumber="0" lineNumber="657"/>
+           <line covNumber="5" lineNumber="750"/>
+           <line covNumber="3" lineNumber="758"/>
+           <line covNumber="0" lineNumber="653"/>
+           <line covNumber="0" lineNumber="1195"/>
+           <line covNumber="210" lineNumber="1198"/>
+           <line covNumber="225" lineNumber="1191"/>
+           <line covNumber="210" lineNumber="1194"/>
+           <line covNumber="0" lineNumber="1091"/>
+           <line covNumber="0" lineNumber="1099"/>
+           <line covNumber="0" lineNumber="1089"/>
+           <line covNumber="7" lineNumber="1187"/>
+           <line covNumber="13" lineNumber="1186"/>
+           <line covNumber="11" lineNumber="1183"/>
+           <line covNumber="24" lineNumber="1182"/>
+           <line covNumber="243" lineNumber="1180"/>
+           <line covNumber="1" lineNumber="1082"/>
+           <line covNumber="0" lineNumber="1088"/>
+           <line covNumber="0" lineNumber="1087"/>
+           <line covNumber="1" lineNumber="1086"/>
+           <line covNumber="1" lineNumber="28"/>
+           <line covNumber="1" lineNumber="1079"/>
+           <line covNumber="1" lineNumber="30"/>
+           <line covNumber="243" lineNumber="1178"/>
+           <line covNumber="2" lineNumber="1452"/>
+           <line covNumber="2" lineNumber="1455"/>
+           <line covNumber="1" lineNumber="1075"/>
+           <line covNumber="1" lineNumber="1073"/>
+           <line covNumber="0" lineNumber="1067"/>
+           <line covNumber="1" lineNumber="1460"/>
+           <line covNumber="0" lineNumber="1064"/>
+           <line covNumber="0" lineNumber="1061"/>
+           <line covNumber="0" lineNumber="1060"/>
+           <line covNumber="0" lineNumber="1059"/>
+           <line covNumber="0" lineNumber="1057"/>
+           <line covNumber="2" lineNumber="1199"/>
+           <line covNumber="104" lineNumber="79"/>
+           <line covNumber="104" lineNumber="77"/>
+           <line covNumber="11" lineNumber="80"/>
+           <line covNumber="11" lineNumber="81"/>
+           <line covNumber="78" lineNumber="86"/>
+           <line covNumber="78" lineNumber="70"/>
+           <line covNumber="171" lineNumber="71"/>
+           <line covNumber="171" lineNumber="72"/>
+           <line covNumber="171" lineNumber="74"/>
+           <line covNumber="104" lineNumber="75"/>
+           <line covNumber="78" lineNumber="59"/>
+           <line covNumber="0" lineNumber="56"/>
+           <line covNumber="78" lineNumber="55"/>
+           <line covNumber="78" lineNumber="63"/>
+           <line covNumber="0" lineNumber="60"/>
+           <line covNumber="1" lineNumber="49"/>
+           <line covNumber="1" lineNumber="45"/>
+           <line covNumber="1" lineNumber="44"/>
+           <line covNumber="0" lineNumber="1298"/>
+           <line covNumber="1" lineNumber="46"/>
+           <line covNumber="78" lineNumber="51"/>
+           <line covNumber="78" lineNumber="53"/>
+           <line covNumber="78" lineNumber="50"/>
+           <line covNumber="0" lineNumber="1003"/>
+           <line covNumber="0" lineNumber="1290"/>
+           <line covNumber="0" lineNumber="1291"/>
+           <line covNumber="0" lineNumber="1294"/>
+           <line covNumber="1" lineNumber="1109"/>
+           <line covNumber="0" lineNumber="1395"/>
+           <line covNumber="1" lineNumber="1106"/>
+           <line covNumber="5" lineNumber="487"/>
+           <line covNumber="8" lineNumber="486"/>
+           <line covNumber="10" lineNumber="280"/>
+           <line covNumber="0" lineNumber="1393"/>
+           <line covNumber="0" lineNumber="1394"/>
+           <line covNumber="0" lineNumber="1102"/>
+           <line covNumber="4" lineNumber="1392"/>
+           <line covNumber="110" lineNumber="284"/>
+           <line covNumber="0" lineNumber="1100"/>
+           <line covNumber="110" lineNumber="283"/>
+           <line covNumber="5" lineNumber="489"/>
+           <line covNumber="5" lineNumber="488"/>
+           <line covNumber="107" lineNumber="289"/>
+           <line covNumber="110" lineNumber="286"/>
+           <line covNumber="3" lineNumber="287"/>
+           <line covNumber="8" lineNumber="482"/>
+           <line covNumber="4" lineNumber="1389"/>
+           <line covNumber="4" lineNumber="1388"/>
+           <line covNumber="4" lineNumber="1387"/>
+           <line covNumber="4" lineNumber="1386"/>
+           <line covNumber="0" lineNumber="1289"/>
+           <line covNumber="0" lineNumber="1288"/>
+           <line covNumber="0" lineNumber="1011"/>
+           <line covNumber="1" lineNumber="1281"/>
+           <line covNumber="1" lineNumber="1284"/>
+           <line covNumber="0" lineNumber="1286"/>
+           <line covNumber="0" lineNumber="1382"/>
+           <line covNumber="0" lineNumber="1383"/>
+           <line covNumber="3" lineNumber="476"/>
+           <line covNumber="3" lineNumber="475"/>
+           <line covNumber="110" lineNumber="271"/>
+           <line covNumber="3" lineNumber="1380"/>
+           <line covNumber="110" lineNumber="273"/>
+           <line covNumber="4" lineNumber="1381"/>
+           <line covNumber="110" lineNumber="275"/>
+           <line covNumber="0" lineNumber="276"/>
+           <line covNumber="110" lineNumber="279"/>
+           <line covNumber="3" lineNumber="1376"/>
+           <line covNumber="3" lineNumber="1375"/>
+           <line covNumber="3" lineNumber="1378"/>
+           <line covNumber="1" lineNumber="1278"/>
+           <line covNumber="0" lineNumber="1000"/>
+           <line covNumber="1" lineNumber="1275"/>
+           <line covNumber="1" lineNumber="1272"/>
+           <line covNumber="0" lineNumber="1122"/>
+           <line covNumber="0" lineNumber="1123"/>
+           <line covNumber="0" lineNumber="1129"/>
+           <line covNumber="0" lineNumber="1126"/>
+           <line covNumber="0" lineNumber="1127"/>
+           <line covNumber="0" lineNumber="1131"/>
+           <line covNumber="0" lineNumber="1130"/>
+           <line covNumber="2" lineNumber="103"/>
+           <line covNumber="1" lineNumber="1269"/>
+           <line covNumber="2" lineNumber="99"/>
+           <line covNumber="2" lineNumber="100"/>
+           <line covNumber="1" lineNumber="1266"/>
+           <line covNumber="1" lineNumber="1265"/>
+           <line covNumber="2" lineNumber="595"/>
+           <line covNumber="1" lineNumber="1261"/>
+           <line covNumber="2" lineNumber="97"/>
+           <line covNumber="2" lineNumber="597"/>
+           <line covNumber="2" lineNumber="96"/>
+           <line covNumber="1" lineNumber="391"/>
+           <line covNumber="2" lineNumber="92"/>
+           <line covNumber="89" lineNumber="294"/>
+           <line covNumber="1" lineNumber="1112"/>
+           <line covNumber="253" lineNumber="296"/>
+           <line covNumber="86" lineNumber="295"/>
+           <line covNumber="0" lineNumber="496"/>
+           <line covNumber="21" lineNumber="290"/>
+           <line covNumber="1" lineNumber="1117"/>
+           <line covNumber="1" lineNumber="1118"/>
+           <line covNumber="4" lineNumber="1398"/>
+           <line covNumber="8" lineNumber="492"/>
+           <line covNumber="3" lineNumber="1399"/>
+           <line covNumber="251" lineNumber="297"/>
+           <line covNumber="251" lineNumber="298"/>
+           <line covNumber="1" lineNumber="1121"/>
+           <line covNumber="0" lineNumber="590"/>
+           <line covNumber="0" lineNumber="591"/>
+           <line covNumber="2" lineNumber="88"/>
+           <line covNumber="8" lineNumber="1257"/>
+           <line covNumber="0" lineNumber="89"/>
+           <line covNumber="1" lineNumber="1256"/>
+           <line covNumber="0" lineNumber="1149"/>
+           <line covNumber="0" lineNumber="1350"/>
+           <line covNumber="0" lineNumber="1148"/>
+           <line covNumber="37" lineNumber="240"/>
+           <line covNumber="37" lineNumber="241"/>
+           <line covNumber="1" lineNumber="1145"/>
+           <line covNumber="2" lineNumber="383"/>
+           <line covNumber="2" lineNumber="384"/>
+           <line covNumber="0" lineNumber="1047"/>
+           <line covNumber="2" lineNumber="381"/>
+           <line covNumber="78" lineNumber="1253"/>
+           <line covNumber="15" lineNumber="1246"/>
+           <line covNumber="2" lineNumber="388"/>
+           <line covNumber="0" lineNumber="1054"/>
+           <line covNumber="0" lineNumber="1052"/>
+           <line covNumber="2" lineNumber="1247"/>
+           <line covNumber="0" lineNumber="1053"/>
+           <line covNumber="5" lineNumber="1348"/>
+           <line covNumber="1" lineNumber="1154"/>
+           <line covNumber="0" lineNumber="1349"/>
+           <line covNumber="5" lineNumber="1347"/>
+           <line covNumber="4" lineNumber="248"/>
+           <line covNumber="5" lineNumber="1345"/>
+           <line covNumber="41" lineNumber="247"/>
+           <line covNumber="5" lineNumber="1342"/>
+           <line covNumber="5" lineNumber="1343"/>
+           <line covNumber="0" lineNumber="1138"/>
+           <line covNumber="5" lineNumber="1340"/>
+           <line covNumber="0" lineNumber="1135"/>
+           <line covNumber="0" lineNumber="371"/>
+           <line covNumber="0" lineNumber="372"/>
+           <line covNumber="0" lineNumber="1037"/>
+           <line covNumber="0" lineNumber="1036"/>
+           <line covNumber="15" lineNumber="1240"/>
+           <line covNumber="15" lineNumber="1241"/>
+           <line covNumber="37" lineNumber="239"/>
+           <line covNumber="13" lineNumber="1233"/>
+           <line covNumber="0" lineNumber="1040"/>
+           <line covNumber="15" lineNumber="1235"/>
+           <line covNumber="0" lineNumber="375"/>
+           <line covNumber="0" lineNumber="1041"/>
+           <line covNumber="2" lineNumber="1236"/>
+           <line covNumber="5" lineNumber="1339"/>
+           <line covNumber="0" lineNumber="1042"/>
+           <line covNumber="0" lineNumber="376"/>
+           <line covNumber="15" lineNumber="1239"/>
+           <line covNumber="37" lineNumber="232"/>
+           <line covNumber="1" lineNumber="1335"/>
+           <line covNumber="164" lineNumber="231"/>
+           <line covNumber="37" lineNumber="233"/>
+           <line covNumber="1" lineNumber="1143"/>
+           <line covNumber="1" lineNumber="1338"/>
+           <line covNumber="37" lineNumber="236"/>
+           <line covNumber="37" lineNumber="235"/>
+           <line covNumber="37" lineNumber="237"/>
+           <line covNumber="0" lineNumber="1168"/>
+           <line covNumber="1" lineNumber="1167"/>
+           <line covNumber="3" lineNumber="1373"/>
+           <line covNumber="3" lineNumber="1372"/>
+           <line covNumber="1" lineNumber="1371"/>
+           <line covNumber="2" lineNumber="1231"/>
+           <line covNumber="0" lineNumber="1029"/>
+           <line covNumber="15" lineNumber="1230"/>
+           <line covNumber="0" lineNumber="1026"/>
+           <line covNumber="4" lineNumber="361"/>
+           <line covNumber="0" lineNumber="1025"/>
+           <line covNumber="2" lineNumber="362"/>
+           <line covNumber="0" lineNumber="1024"/>
+           <line covNumber="0" lineNumber="366"/>
+           <line covNumber="0" lineNumber="1032"/>
+           <line covNumber="2" lineNumber="365"/>
+           <line covNumber="0" lineNumber="1033"/>
+           <line covNumber="2" lineNumber="364"/>
+           <line covNumber="0" lineNumber="1031"/>
+           <line covNumber="15" lineNumber="1223"/>
+           <line covNumber="15" lineNumber="1224"/>
+           <line covNumber="0" lineNumber="368"/>
+           <line covNumber="1" lineNumber="1171"/>
+           <line covNumber="5" lineNumber="1366"/>
+           <line covNumber="281" lineNumber="1172"/>
+           <line covNumber="110" lineNumber="269"/>
+           <line covNumber="110" lineNumber="268"/>
+           <line covNumber="326" lineNumber="267"/>
+           <line covNumber="89" lineNumber="266"/>
+           <line covNumber="281" lineNumber="1176"/>
+           <line covNumber="78" lineNumber="265"/>
+           <line covNumber="1" lineNumber="1158"/>
+           <line covNumber="1" lineNumber="1157"/>
+           <line covNumber="1" lineNumber="1159"/>
+           <line covNumber="5" lineNumber="1360"/>
+           <line covNumber="0" lineNumber="1363"/>
+           <line covNumber="0" lineNumber="1016"/>
+           <line covNumber="0" lineNumber="1019"/>
+           <line covNumber="0" lineNumber="1018"/>
+           <line covNumber="0" lineNumber="1012"/>
+           <line covNumber="0" lineNumber="1015"/>
+           <line covNumber="208" lineNumber="1215"/>
+           <line covNumber="208" lineNumber="1216"/>
+           <line covNumber="4" lineNumber="357"/>
+           <line covNumber="1" lineNumber="356"/>
+           <line covNumber="0" lineNumber="1211"/>
+           <line covNumber="5" lineNumber="1353"/>
+           <line covNumber="78" lineNumber="257"/>
+           <line covNumber="5" lineNumber="1354"/>
+           <line covNumber="5" lineNumber="1355"/>
+           <line covNumber="41" lineNumber="253"/>
+           <line covNumber="1" lineNumber="1163"/>
+           <line covNumber="5" lineNumber="1358"/>
+           <line covNumber="1" lineNumber="256"/>
+           <line covNumber="5" lineNumber="1359"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/string.js" covLine="1" coverage="100.0%" totalLine="1">
+           <line covNumber="56" lineNumber="16"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/event/getKeyCode.js" covLine="2" coverage="100.0%" totalLine="2">
+           <line covNumber="1" lineNumber="21"/>
+           <line covNumber="3" lineNumber="22"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/string/encodeHTML.js" covLine="3" coverage="100.0%" totalLine="3">
+           <line covNumber="3" lineNumber="36"/>
+           <line covNumber="3" lineNumber="27"/>
+           <line covNumber="90" lineNumber="28"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/event/fire.js" covLine="66" coverage="74.1573%" totalLine="89">
+           <line covNumber="29" lineNumber="116"/>
+           <line covNumber="29" lineNumber="117"/>
+           <line covNumber="22" lineNumber="114"/>
+           <line covNumber="0" lineNumber="112"/>
+           <line covNumber="7" lineNumber="110"/>
+           <line covNumber="22" lineNumber="111"/>
+           <line covNumber="0" lineNumber="159"/>
+           <line covNumber="0" lineNumber="155"/>
+           <line covNumber="1" lineNumber="118"/>
+           <line covNumber="0" lineNumber="154"/>
+           <line covNumber="1" lineNumber="119"/>
+           <line covNumber="0" lineNumber="152"/>
+           <line covNumber="0" lineNumber="153"/>
+           <line covNumber="7" lineNumber="150"/>
+           <line covNumber="7" lineNumber="151"/>
+           <line covNumber="0" lineNumber="125"/>
+           <line covNumber="1" lineNumber="126"/>
+           <line covNumber="1" lineNumber="127"/>
+           <line covNumber="3" lineNumber="128"/>
+           <line covNumber="0" lineNumber="121"/>
+           <line covNumber="0" lineNumber="122"/>
+           <line covNumber="0" lineNumber="123"/>
+           <line covNumber="19" lineNumber="169"/>
+           <line covNumber="3" lineNumber="129"/>
+           <line covNumber="1" lineNumber="166"/>
+           <line covNumber="29" lineNumber="207"/>
+           <line covNumber="1" lineNumber="165"/>
+           <line covNumber="3" lineNumber="208"/>
+           <line covNumber="19" lineNumber="168"/>
+           <line covNumber="26" lineNumber="209"/>
+           <line covNumber="19" lineNumber="167"/>
+           <line covNumber="0" lineNumber="162"/>
+           <line covNumber="7" lineNumber="164"/>
+           <line covNumber="0" lineNumber="120"/>
+           <line covNumber="19" lineNumber="211"/>
+           <line covNumber="3" lineNumber="134"/>
+           <line covNumber="19" lineNumber="212"/>
+           <line covNumber="3" lineNumber="135"/>
+           <line covNumber="3" lineNumber="132"/>
+           <line covNumber="7" lineNumber="210"/>
+           <line covNumber="29" lineNumber="216"/>
+           <line covNumber="0" lineNumber="214"/>
+           <line covNumber="0" lineNumber="137"/>
+           <line covNumber="0" lineNumber="219"/>
+           <line covNumber="29" lineNumber="217"/>
+           <line covNumber="0" lineNumber="177"/>
+           <line covNumber="29" lineNumber="218"/>
+           <line covNumber="19" lineNumber="170"/>
+           <line covNumber="19" lineNumber="171"/>
+           <line covNumber="0" lineNumber="174"/>
+           <line covNumber="29" lineNumber="109"/>
+           <line covNumber="0" lineNumber="175"/>
+           <line covNumber="0" lineNumber="108"/>
+           <line covNumber="19" lineNumber="172"/>
+           <line covNumber="29" lineNumber="107"/>
+           <line covNumber="29" lineNumber="106"/>
+           <line covNumber="32" lineNumber="104"/>
+           <line covNumber="32" lineNumber="103"/>
+           <line covNumber="3" lineNumber="131"/>
+           <line covNumber="1" lineNumber="102"/>
+           <line covNumber="3" lineNumber="130"/>
+           <line covNumber="1" lineNumber="101"/>
+           <line covNumber="61" lineNumber="100"/>
+           <line covNumber="332" lineNumber="98"/>
+           <line covNumber="0" lineNumber="220"/>
+           <line covNumber="3" lineNumber="144"/>
+           <line covNumber="332" lineNumber="97"/>
+           <line covNumber="1" lineNumber="145"/>
+           <line covNumber="61" lineNumber="96"/>
+           <line covNumber="1" lineNumber="146"/>
+           <line covNumber="61" lineNumber="95"/>
+           <line covNumber="7" lineNumber="147"/>
+           <line covNumber="1" lineNumber="94"/>
+           <line covNumber="1" lineNumber="45"/>
+           <line covNumber="7" lineNumber="148"/>
+           <line covNumber="1" lineNumber="93"/>
+           <line covNumber="7" lineNumber="149"/>
+           <line covNumber="1" lineNumber="92"/>
+           <line covNumber="1" lineNumber="46"/>
+           <line covNumber="29" lineNumber="188"/>
+           <line covNumber="29" lineNumber="187"/>
+           <line covNumber="29" lineNumber="189"/>
+           <line covNumber="0" lineNumber="181"/>
+           <line covNumber="19" lineNumber="183"/>
+           <line covNumber="1" lineNumber="184"/>
+           <line covNumber="1" lineNumber="185"/>
+           <line covNumber="29" lineNumber="186"/>
+           <line covNumber="0" lineNumber="142"/>
+           <line covNumber="0" lineNumber="141"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/object.js" covLine="1" coverage="100.0%" totalLine="1">
+           <line covNumber="29" lineNumber="16"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/browser/chrome.js" covLine="1" coverage="100.0%" totalLine="1">
+           <line covNumber="1" lineNumber="15"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/dom.js" covLine="1" coverage="100.0%" totalLine="1">
+           <line covNumber="90" lineNumber="16"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/number/pad.js" covLine="5" coverage="100.0%" totalLine="5">
+           <line covNumber="235" lineNumber="32"/>
+           <line covNumber="2" lineNumber="23"/>
+           <line covNumber="235" lineNumber="24"/>
+           <line covNumber="235" lineNumber="28"/>
+           <line covNumber="127" lineNumber="29"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/dom/toggleClass.js" covLine="4" coverage="100.0%" totalLine="4">
+           <line covNumber="3" lineNumber="30"/>
+           <line covNumber="6" lineNumber="32"/>
+           <line covNumber="1" lineNumber="28"/>
+           <line covNumber="9" lineNumber="29"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/dom/ddManager.js" covLine="1" coverage="100.0%" totalLine="1">
+           <line covNumber="1" lineNumber="22"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/string/filterFormat.js" covLine="17" coverage="100.0%" totalLine="17">
+           <line covNumber="17" lineNumber="49"/>
+           <line covNumber="23" lineNumber="48"/>
+           <line covNumber="2" lineNumber="44"/>
+           <line covNumber="23" lineNumber="47"/>
+           <line covNumber="1" lineNumber="55"/>
+           <line covNumber="74" lineNumber="46"/>
+           <line covNumber="30" lineNumber="33"/>
+           <line covNumber="74" lineNumber="39"/>
+           <line covNumber="30" lineNumber="37"/>
+           <line covNumber="74" lineNumber="38"/>
+           <line covNumber="4" lineNumber="30"/>
+           <line covNumber="74" lineNumber="43"/>
+           <line covNumber="74" lineNumber="41"/>
+           <line covNumber="31" lineNumber="32"/>
+           <line covNumber="74" lineNumber="40"/>
+           <line covNumber="31" lineNumber="31"/>
+           <line covNumber="74" lineNumber="52"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/lang/module.js" covLine="15" coverage="93.75%" totalLine="16">
+           <line covNumber="3" lineNumber="45"/>
+           <line covNumber="3" lineNumber="44"/>
+           <line covNumber="3" lineNumber="47"/>
+           <line covNumber="5" lineNumber="35"/>
+           <line covNumber="1" lineNumber="23"/>
+           <line covNumber="2" lineNumber="36"/>
+           <line covNumber="10" lineNumber="24"/>
+           <line covNumber="0" lineNumber="33"/>
+           <line covNumber="3" lineNumber="38"/>
+           <line covNumber="10" lineNumber="30"/>
+           <line covNumber="3" lineNumber="43"/>
+           <line covNumber="10" lineNumber="42"/>
+           <line covNumber="5" lineNumber="32"/>
+           <line covNumber="5" lineNumber="31"/>
+           <line covNumber="9" lineNumber="51"/>
+           <line covNumber="10" lineNumber="50"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/lang/inherits.js" covLine="14" coverage="100.0%" totalLine="14">
+           <line covNumber="3" lineNumber="49"/>
+           <line covNumber="5" lineNumber="48"/>
+           <line covNumber="1" lineNumber="57"/>
+           <line covNumber="5" lineNumber="46"/>
+           <line covNumber="5" lineNumber="36"/>
+           <line covNumber="5" lineNumber="39"/>
+           <line covNumber="5" lineNumber="37"/>
+           <line covNumber="5" lineNumber="43"/>
+           <line covNumber="5" lineNumber="42"/>
+           <line covNumber="5" lineNumber="32"/>
+           <line covNumber="1" lineNumber="31"/>
+           <line covNumber="5" lineNumber="40"/>
+           <line covNumber="5" lineNumber="53"/>
+           <line covNumber="1" lineNumber="50"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/string/subByte.js" covLine="7" coverage="100.0%" totalLine="7">
+           <line covNumber="43" lineNumber="30"/>
+           <line covNumber="14" lineNumber="31"/>
+           <line covNumber="29" lineNumber="35"/>
+           <line covNumber="29" lineNumber="39"/>
+           <line covNumber="1" lineNumber="27"/>
+           <line covNumber="43" lineNumber="28"/>
+           <line covNumber="43" lineNumber="29"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/browser/ie.js" covLine="1" coverage="100.0%" totalLine="1">
+           <line covNumber="43" lineNumber="17"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/array/find.js" covLine="8" coverage="100.0%" totalLine="8">
+           <line covNumber="18" lineNumber="30"/>
+           <line covNumber="2" lineNumber="31"/>
+           <line covNumber="4" lineNumber="36"/>
+           <line covNumber="1" lineNumber="24"/>
+           <line covNumber="6" lineNumber="25"/>
+           <line covNumber="6" lineNumber="27"/>
+           <line covNumber="4" lineNumber="28"/>
+           <line covNumber="18" lineNumber="29"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/browser/isWebkit.js" covLine="1" coverage="100.0%" totalLine="1">
+           <line covNumber="21" lineNumber="21"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/dom/getAncestorBy.js" covLine="6" coverage="100.0%" totalLine="6">
+           <line covNumber="1" lineNumber="24"/>
+           <line covNumber="2" lineNumber="33"/>
+           <line covNumber="7" lineNumber="25"/>
+           <line covNumber="7" lineNumber="27"/>
+           <line covNumber="14" lineNumber="28"/>
+           <line covNumber="5" lineNumber="29"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/swf/createHTML.js" covLine="59" coverage="93.650795%" totalLine="63">
+           <line covNumber="3" lineNumber="79"/>
+           <line covNumber="1" lineNumber="158"/>
+           <line covNumber="1" lineNumber="157"/>
+           <line covNumber="43" lineNumber="156"/>
+           <line covNumber="45" lineNumber="155"/>
+           <line covNumber="45" lineNumber="154"/>
+           <line covNumber="3" lineNumber="152"/>
+           <line covNumber="3" lineNumber="153"/>
+           <line covNumber="3" lineNumber="83"/>
+           <line covNumber="3" lineNumber="86"/>
+           <line covNumber="3" lineNumber="87"/>
+           <line covNumber="3" lineNumber="84"/>
+           <line covNumber="3" lineNumber="85"/>
+           <line covNumber="3" lineNumber="67"/>
+           <line covNumber="3" lineNumber="66"/>
+           <line covNumber="3" lineNumber="69"/>
+           <line covNumber="3" lineNumber="68"/>
+           <line covNumber="3" lineNumber="129"/>
+           <line covNumber="1" lineNumber="166"/>
+           <line covNumber="3" lineNumber="165"/>
+           <line covNumber="3" lineNumber="168"/>
+           <line covNumber="42" lineNumber="161"/>
+           <line covNumber="3" lineNumber="70"/>
+           <line covNumber="0" lineNumber="71"/>
+           <line covNumber="0" lineNumber="72"/>
+           <line covNumber="0" lineNumber="76"/>
+           <line covNumber="45" lineNumber="132"/>
+           <line covNumber="23" lineNumber="133"/>
+           <line covNumber="35" lineNumber="58"/>
+           <line covNumber="3" lineNumber="138"/>
+           <line covNumber="3" lineNumber="57"/>
+           <line covNumber="3" lineNumber="139"/>
+           <line covNumber="3" lineNumber="170"/>
+           <line covNumber="3" lineNumber="109"/>
+           <line covNumber="3" lineNumber="108"/>
+           <line covNumber="3" lineNumber="64"/>
+           <line covNumber="18" lineNumber="106"/>
+           <line covNumber="3" lineNumber="65"/>
+           <line covNumber="18" lineNumber="105"/>
+           <line covNumber="3" lineNumber="104"/>
+           <line covNumber="3" lineNumber="63"/>
+           <line covNumber="3" lineNumber="103"/>
+           <line covNumber="3" lineNumber="60"/>
+           <line covNumber="3" lineNumber="99"/>
+           <line covNumber="45" lineNumber="131"/>
+           <line covNumber="45" lineNumber="130"/>
+           <line covNumber="2" lineNumber="49"/>
+           <line covNumber="3" lineNumber="143"/>
+           <line covNumber="3" lineNumber="144"/>
+           <line covNumber="1" lineNumber="97"/>
+           <line covNumber="1" lineNumber="96"/>
+           <line covNumber="3" lineNumber="145"/>
+           <line covNumber="3" lineNumber="95"/>
+           <line covNumber="3" lineNumber="94"/>
+           <line covNumber="0" lineNumber="92"/>
+           <line covNumber="3" lineNumber="149"/>
+           <line covNumber="3" lineNumber="91"/>
+           <line covNumber="3" lineNumber="51"/>
+           <line covNumber="3" lineNumber="140"/>
+           <line covNumber="3" lineNumber="142"/>
+           <line covNumber="3" lineNumber="88"/>
+           <line covNumber="3" lineNumber="141"/>
+           <line covNumber="3" lineNumber="50"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/dom/toggle.js" covLine="4" coverage="100.0%" totalLine="4">
+           <line covNumber="1" lineNumber="24"/>
+           <line covNumber="4" lineNumber="25"/>
+           <line covNumber="4" lineNumber="26"/>
+           <line covNumber="4" lineNumber="28"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/lang/guid.js" covLine="3" coverage="100.0%" totalLine="3">
+           <line covNumber="11" lineNumber="23"/>
+           <line covNumber="20" lineNumber="24"/>
+           <line covNumber="11" lineNumber="28"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/event/once.js" covLine="7" coverage="100.0%" totalLine="7">
+           <line covNumber="1" lineNumber="30"/>
+           <line covNumber="1" lineNumber="32"/>
+           <line covNumber="1" lineNumber="31"/>
+           <line covNumber="1" lineNumber="35"/>
+           <line covNumber="1" lineNumber="36"/>
+           <line covNumber="1" lineNumber="28"/>
+           <line covNumber="1" lineNumber="29"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/dom/drag.js" covLine="45" coverage="93.75%" totalLine="48">
+           <line covNumber="23" lineNumber="116"/>
+           <line covNumber="11" lineNumber="79"/>
+           <line covNumber="23" lineNumber="117"/>
+           <line covNumber="11" lineNumber="78"/>
+           <line covNumber="23" lineNumber="114"/>
+           <line covNumber="11" lineNumber="77"/>
+           <line covNumber="11" lineNumber="59"/>
+           <line covNumber="23" lineNumber="115"/>
+           <line covNumber="11" lineNumber="58"/>
+           <line covNumber="11" lineNumber="57"/>
+           <line covNumber="66" lineNumber="113"/>
+           <line covNumber="66" lineNumber="119"/>
+           <line covNumber="66" lineNumber="107"/>
+           <line covNumber="2" lineNumber="106"/>
+           <line covNumber="11" lineNumber="64"/>
+           <line covNumber="11" lineNumber="62"/>
+           <line covNumber="11" lineNumber="63"/>
+           <line covNumber="11" lineNumber="81"/>
+           <line covNumber="11" lineNumber="102"/>
+           <line covNumber="11" lineNumber="99"/>
+           <line covNumber="11" lineNumber="60"/>
+           <line covNumber="11" lineNumber="61"/>
+           <line covNumber="11" lineNumber="100"/>
+           <line covNumber="1" lineNumber="84"/>
+           <line covNumber="11" lineNumber="67"/>
+           <line covNumber="11" lineNumber="98"/>
+           <line covNumber="2" lineNumber="48"/>
+           <line covNumber="11" lineNumber="69"/>
+           <line covNumber="2" lineNumber="127"/>
+           <line covNumber="11" lineNumber="95"/>
+           <line covNumber="0" lineNumber="128"/>
+           <line covNumber="11" lineNumber="94"/>
+           <line covNumber="66" lineNumber="121"/>
+           <line covNumber="0" lineNumber="93"/>
+           <line covNumber="66" lineNumber="122"/>
+           <line covNumber="2" lineNumber="47"/>
+           <line covNumber="11" lineNumber="92"/>
+           <line covNumber="66" lineNumber="123"/>
+           <line covNumber="11" lineNumber="90"/>
+           <line covNumber="11" lineNumber="51"/>
+           <line covNumber="11" lineNumber="52"/>
+           <line covNumber="11" lineNumber="71"/>
+           <line covNumber="66" lineNumber="120"/>
+           <line covNumber="0" lineNumber="72"/>
+           <line covNumber="11" lineNumber="73"/>
+           <line covNumber="11" lineNumber="74"/>
+           <line covNumber="2" lineNumber="89"/>
+           <line covNumber="2" lineNumber="50"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/string/toCamelCase.js" covLine="5" coverage="100.0%" totalLine="5">
+           <line covNumber="1031" lineNumber="30"/>
+           <line covNumber="15" lineNumber="32"/>
+           <line covNumber="33" lineNumber="33"/>
+           <line covNumber="31" lineNumber="27"/>
+           <line covNumber="1046" lineNumber="29"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/sio.js" covLine="1" coverage="100.0%" totalLine="1">
+           <line covNumber="3" lineNumber="16"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/cookie.js" covLine="1" coverage="100.0%" totalLine="1">
+           <line covNumber="5" lineNumber="16"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/event/getPageY.js" covLine="4" coverage="80.0%" totalLine="5">
+           <line covNumber="8" lineNumber="31"/>
+           <line covNumber="1" lineNumber="23"/>
+           <line covNumber="8" lineNumber="24"/>
+           <line covNumber="8" lineNumber="26"/>
+           <line covNumber="0" lineNumber="27"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/dom/next.js" covLine="2" coverage="100.0%" totalLine="2">
+           <line covNumber="1" lineNumber="23"/>
+           <line covNumber="7" lineNumber="24"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/string/wbr.js" covLine="2" coverage="100.0%" totalLine="2">
+           <line covNumber="1" lineNumber="28"/>
+           <line covNumber="4" lineNumber="29"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/object/merge.js" covLine="18" coverage="100.0%" totalLine="18">
+           <line covNumber="8" lineNumber="67"/>
+           <line covNumber="4" lineNumber="66"/>
+           <line covNumber="24" lineNumber="48"/>
+           <line covNumber="12" lineNumber="56"/>
+           <line covNumber="1" lineNumber="55"/>
+           <line covNumber="1" lineNumber="36"/>
+           <line covNumber="18" lineNumber="33"/>
+           <line covNumber="28" lineNumber="37"/>
+           <line covNumber="28" lineNumber="38"/>
+           <line covNumber="1" lineNumber="32"/>
+           <line covNumber="1" lineNumber="31"/>
+           <line covNumber="4" lineNumber="40"/>
+           <line covNumber="12" lineNumber="64"/>
+           <line covNumber="4" lineNumber="65"/>
+           <line covNumber="8" lineNumber="70"/>
+           <line covNumber="20" lineNumber="71"/>
+           <line covNumber="12" lineNumber="75"/>
+           <line covNumber="19" lineNumber="50"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/dom/_g.js" covLine="5" coverage="100.0%" totalLine="5">
+           <line covNumber="47" lineNumber="30"/>
+           <line covNumber="47" lineNumber="22"/>
+           <line covNumber="803" lineNumber="23"/>
+           <line covNumber="52" lineNumber="24"/>
+           <line covNumber="751" lineNumber="26"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/dom/setStyles.js" covLine="6" coverage="100.0%" totalLine="6">
+           <line covNumber="121" lineNumber="30"/>
+           <line covNumber="339" lineNumber="31"/>
+           <line covNumber="121" lineNumber="34"/>
+           <line covNumber="15" lineNumber="27"/>
+           <line covNumber="121" lineNumber="28"/>
+           <line covNumber="15" lineNumber="38"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/string/filterFormat/toInt.js" covLine="3" coverage="100.0%" totalLine="3">
+           <line covNumber="1" lineNumber="23"/>
+           <line covNumber="3" lineNumber="24"/>
+           <line covNumber="1" lineNumber="26"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/string/filterFormat/escapeString.js" covLine="5" coverage="100.0%" totalLine="5">
+           <line covNumber="1" lineNumber="30"/>
+           <line covNumber="1" lineNumber="23"/>
+           <line covNumber="9" lineNumber="24"/>
+           <line covNumber="7" lineNumber="25"/>
+           <line covNumber="7" lineNumber="26"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/page/getViewHeight.js" covLine="3" coverage="100.0%" totalLine="3">
+           <line covNumber="13" lineNumber="22"/>
+           <line covNumber="3" lineNumber="23"/>
+           <line covNumber="3" lineNumber="26"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/async/get.js" covLine="6" coverage="100.0%" totalLine="6">
+           <line covNumber="1" lineNumber="20"/>
+           <line covNumber="2" lineNumber="17"/>
+           <line covNumber="2" lineNumber="18"/>
+           <line covNumber="1" lineNumber="23"/>
+           <line covNumber="1" lineNumber="16"/>
+           <line covNumber="2" lineNumber="26"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/fn/bind.js" covLine="5" coverage="100.0%" totalLine="5">
+           <line covNumber="15" lineNumber="30"/>
+           <line covNumber="15" lineNumber="32"/>
+           <line covNumber="3" lineNumber="27"/>
+           <line covNumber="12" lineNumber="28"/>
+           <line covNumber="12" lineNumber="29"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/dom/setPixel.js" covLine="2" coverage="100.0%" totalLine="2">
+           <line covNumber="2" lineNumber="20"/>
+           <line covNumber="1" lineNumber="19"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/global/getZIndex.js" covLine="6" coverage="100.0%" totalLine="6">
+           <line covNumber="1" lineNumber="21"/>
+           <line covNumber="4" lineNumber="22"/>
+           <line covNumber="4" lineNumber="23"/>
+           <line covNumber="4" lineNumber="24"/>
+           <line covNumber="4" lineNumber="26"/>
+           <line covNumber="1" lineNumber="28"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/array/indexOf.js" covLine="9" coverage="100.0%" totalLine="9">
+           <line covNumber="19" lineNumber="30"/>
+           <line covNumber="5" lineNumber="31"/>
+           <line covNumber="7" lineNumber="35"/>
+           <line covNumber="19" lineNumber="33"/>
+           <line covNumber="1" lineNumber="25"/>
+           <line covNumber="42" lineNumber="34"/>
+           <line covNumber="19" lineNumber="26"/>
+           <line covNumber="12" lineNumber="39"/>
+           <line covNumber="19" lineNumber="29"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/array/map.js" covLine="5" coverage="100.0%" totalLine="5">
+           <line covNumber="4" lineNumber="20"/>
+           <line covNumber="1" lineNumber="19"/>
+           <line covNumber="4" lineNumber="23"/>
+           <line covNumber="9" lineNumber="24"/>
+           <line covNumber="4" lineNumber="26"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/dom/_styleFilter/filter.js" covLine="5" coverage="100.0%" totalLine="5">
+           <line covNumber="377" lineNumber="21"/>
+           <line covNumber="806" lineNumber="20"/>
+           <line covNumber="1034" lineNumber="19"/>
+           <line covNumber="29" lineNumber="18"/>
+           <line covNumber="1034" lineNumber="25"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/sio/log.js" covLine="8" coverage="100.0%" totalLine="8">
+           <line covNumber="1" lineNumber="30"/>
+           <line covNumber="1" lineNumber="44"/>
+           <line covNumber="1" lineNumber="32"/>
+           <line covNumber="1" lineNumber="23"/>
+           <line covNumber="1" lineNumber="15"/>
+           <line covNumber="1" lineNumber="16"/>
+           <line covNumber="1" lineNumber="25"/>
+           <line covNumber="1" lineNumber="37"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/string/formatColor.js" covLine="16" coverage="100.0%" totalLine="16">
+           <line covNumber="4" lineNumber="49"/>
+           <line covNumber="1" lineNumber="48"/>
+           <line covNumber="1" lineNumber="45"/>
+           <line covNumber="1" lineNumber="58"/>
+           <line covNumber="3" lineNumber="56"/>
+           <line covNumber="5" lineNumber="46"/>
+           <line covNumber="1" lineNumber="55"/>
+           <line covNumber="1" lineNumber="22"/>
+           <line covNumber="1" lineNumber="24"/>
+           <line covNumber="1" lineNumber="51"/>
+           <line covNumber="1" lineNumber="65"/>
+           <line covNumber="3" lineNumber="52"/>
+           <line covNumber="3" lineNumber="53"/>
+           <line covNumber="2" lineNumber="62"/>
+           <line covNumber="1" lineNumber="63"/>
+           <line covNumber="1" lineNumber="61"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/event/get.js" covLine="2" coverage="100.0%" totalLine="2">
+           <line covNumber="1" lineNumber="25"/>
+           <line covNumber="1" lineNumber="26"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/lang/createClass.js" covLine="23" coverage="95.83333%" totalLine="24">
+           <line covNumber="6" lineNumber="67"/>
+           <line covNumber="6" lineNumber="77"/>
+           <line covNumber="7" lineNumber="44"/>
+           <line covNumber="7" lineNumber="47"/>
+           <line covNumber="0" lineNumber="55"/>
+           <line covNumber="2" lineNumber="35"/>
+           <line covNumber="6" lineNumber="36"/>
+           <line covNumber="6" lineNumber="37"/>
+           <line covNumber="7" lineNumber="41"/>
+           <line covNumber="6" lineNumber="40"/>
+           <line covNumber="1" lineNumber="82"/>
+           <line covNumber="6" lineNumber="64"/>
+           <line covNumber="7" lineNumber="52"/>
+           <line covNumber="6" lineNumber="70"/>
+           <line covNumber="6" lineNumber="62"/>
+           <line covNumber="6" lineNumber="80"/>
+           <line covNumber="7" lineNumber="54"/>
+           <line covNumber="1" lineNumber="81"/>
+           <line covNumber="6" lineNumber="60"/>
+           <line covNumber="6" lineNumber="73"/>
+           <line covNumber="6" lineNumber="74"/>
+           <line covNumber="6" lineNumber="87"/>
+           <line covNumber="1" lineNumber="84"/>
+           <line covNumber="9" lineNumber="50"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/fn/methodize.js" covLine="3" coverage="100.0%" totalLine="3">
+           <line covNumber="3" lineNumber="23"/>
+           <line covNumber="109" lineNumber="24"/>
+           <line covNumber="67" lineNumber="25"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/dom/getAncestorByTag.js" covLine="7" coverage="100.0%" totalLine="7">
+           <line covNumber="5" lineNumber="30"/>
+           <line covNumber="1" lineNumber="24"/>
+           <line covNumber="6" lineNumber="25"/>
+           <line covNumber="1" lineNumber="34"/>
+           <line covNumber="6" lineNumber="26"/>
+           <line covNumber="6" lineNumber="28"/>
+           <line covNumber="6" lineNumber="29"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/dom/_matchNode.js" covLine="6" coverage="100.0%" totalLine="6">
+           <line covNumber="7" lineNumber="32"/>
+           <line covNumber="4" lineNumber="23"/>
+           <line covNumber="26" lineNumber="24"/>
+           <line covNumber="26" lineNumber="26"/>
+           <line covNumber="28" lineNumber="27"/>
+           <line covNumber="19" lineNumber="28"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/string/stripTags.js" covLine="2" coverage="100.0%" totalLine="2">
+           <line covNumber="12" lineNumber="21"/>
+           <line covNumber="1" lineNumber="20"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/page/loadJsFile.js" covLine="6" coverage="100.0%" totalLine="6">
+           <line covNumber="1" lineNumber="21"/>
+           <line covNumber="4" lineNumber="22"/>
+           <line covNumber="4" lineNumber="24"/>
+           <line covNumber="4" lineNumber="25"/>
+           <line covNumber="4" lineNumber="26"/>
+           <line covNumber="4" lineNumber="28"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/event/getPageX.js" covLine="4" coverage="80.0%" totalLine="5">
+           <line covNumber="8" lineNumber="31"/>
+           <line covNumber="1" lineNumber="23"/>
+           <line covNumber="8" lineNumber="24"/>
+           <line covNumber="8" lineNumber="26"/>
+           <line covNumber="0" lineNumber="27"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/string/decodeHTML.js" covLine="5" coverage="100.0%" totalLine="5">
+           <line covNumber="8" lineNumber="32"/>
+           <line covNumber="7" lineNumber="33"/>
+           <line covNumber="1" lineNumber="25"/>
+           <line covNumber="8" lineNumber="26"/>
+           <line covNumber="1" lineNumber="37"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/dom/remove.js" covLine="4" coverage="100.0%" totalLine="4">
+           <line covNumber="3" lineNumber="24"/>
+           <line covNumber="41" lineNumber="25"/>
+           <line covNumber="41" lineNumber="26"/>
+           <line covNumber="40" lineNumber="28"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/event/getTarget.js" covLine="2" coverage="100.0%" totalLine="2">
+           <line covNumber="2" lineNumber="23"/>
+           <line covNumber="11" lineNumber="24"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/dom/getCurrentStyle.js" covLine="3" coverage="100.0%" totalLine="3">
+           <line covNumber="17" lineNumber="30"/>
+           <line covNumber="1" lineNumber="27"/>
+           <line covNumber="17" lineNumber="28"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/dom/_NAME_ATTRS.js" covLine="6" coverage="75.0%" totalLine="8">
+           <line covNumber="14" lineNumber="21"/>
+           <line covNumber="14" lineNumber="20"/>
+           <line covNumber="0" lineNumber="32"/>
+           <line covNumber="14" lineNumber="31"/>
+           <line covNumber="14" lineNumber="35"/>
+           <line covNumber="14" lineNumber="36"/>
+           <line covNumber="0" lineNumber="33"/>
+           <line covNumber="14" lineNumber="39"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/dom/hide.js" covLine="5" coverage="100.0%" totalLine="5">
+           <line covNumber="1" lineNumber="33"/>
+           <line covNumber="1" lineNumber="25"/>
+           <line covNumber="5" lineNumber="26"/>
+           <line covNumber="5" lineNumber="27"/>
+           <line covNumber="5" lineNumber="29"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/browser/isStrict.js" covLine="1" coverage="100.0%" totalLine="1">
+           <line covNumber="24" lineNumber="20"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/number.js" covLine="1" coverage="100.0%" totalLine="1">
+           <line covNumber="4" lineNumber="16"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/dom/opacity.js" covLine="5" coverage="83.33333%" totalLine="6">
+           <line covNumber="0" lineNumber="21"/>
+           <line covNumber="2" lineNumber="19"/>
+           <line covNumber="2" lineNumber="17"/>
+           <line covNumber="2" lineNumber="18"/>
+           <line covNumber="2" lineNumber="15"/>
+           <line covNumber="1" lineNumber="14"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/cookie/get.js" covLine="6" coverage="100.0%" totalLine="6">
+           <line covNumber="2" lineNumber="30"/>
+           <line covNumber="5" lineNumber="32"/>
+           <line covNumber="1" lineNumber="26"/>
+           <line covNumber="7" lineNumber="27"/>
+           <line covNumber="7" lineNumber="28"/>
+           <line covNumber="2" lineNumber="29"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/async.js" covLine="1" coverage="100.0%" totalLine="1">
+           <line covNumber="4" lineNumber="12"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/browser/safari.js" covLine="3" coverage="100.0%" totalLine="3">
+           <line covNumber="3" lineNumber="22"/>
+           <line covNumber="3" lineNumber="9"/>
+           <line covNumber="3" lineNumber="8"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/event/getEvent.js" covLine="7" coverage="87.5%" totalLine="8">
+           <line covNumber="0" lineNumber="30"/>
+           <line covNumber="1" lineNumber="23"/>
+           <line covNumber="7" lineNumber="24"/>
+           <line covNumber="5" lineNumber="33"/>
+           <line covNumber="2" lineNumber="25"/>
+           <line covNumber="5" lineNumber="27"/>
+           <line covNumber="5" lineNumber="28"/>
+           <line covNumber="42" lineNumber="29"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/event/_eventFilter.js" covLine="1" coverage="100.0%" totalLine="1">
+           <line covNumber="2" lineNumber="12"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/lang/register.js" covLine="5" coverage="100.0%" totalLine="5">
+           <line covNumber="1" lineNumber="24"/>
+           <line covNumber="2" lineNumber="25"/>
+           <line covNumber="2" lineNumber="26"/>
+           <line covNumber="2" lineNumber="28"/>
+           <line covNumber="1" lineNumber="29"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/object/map.js" covLine="6" coverage="100.0%" totalLine="6">
+           <line covNumber="1" lineNumber="31"/>
+           <line covNumber="1" lineNumber="24"/>
+           <line covNumber="1" lineNumber="25"/>
+           <line covNumber="1" lineNumber="26"/>
+           <line covNumber="3" lineNumber="27"/>
+           <line covNumber="3" lineNumber="28"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/browser/opera.js" covLine="1" coverage="100.0%" totalLine="1">
+           <line covNumber="29" lineNumber="27"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/string/format.js" covLine="12" coverage="100.0%" totalLine="12">
+           <line covNumber="1" lineNumber="30"/>
+           <line covNumber="3" lineNumber="42"/>
+           <line covNumber="67" lineNumber="44"/>
+           <line covNumber="26" lineNumber="32"/>
+           <line covNumber="67" lineNumber="41"/>
+           <line covNumber="1" lineNumber="47"/>
+           <line covNumber="26" lineNumber="31"/>
+           <line covNumber="1" lineNumber="51"/>
+           <line covNumber="26" lineNumber="33"/>
+           <line covNumber="25" lineNumber="34"/>
+           <line covNumber="67" lineNumber="39"/>
+           <line covNumber="25" lineNumber="38"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/page.js" covLine="1" coverage="100.0%" totalLine="1">
+           <line covNumber="43" lineNumber="16"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/object/each.js" covLine="10" coverage="100.0%" totalLine="10">
+           <line covNumber="65" lineNumber="30"/>
+           <line covNumber="65" lineNumber="32"/>
+           <line covNumber="4" lineNumber="24"/>
+           <line covNumber="2" lineNumber="33"/>
+           <line covNumber="27" lineNumber="25"/>
+           <line covNumber="27" lineNumber="26"/>
+           <line covNumber="27" lineNumber="27"/>
+           <line covNumber="65" lineNumber="28"/>
+           <line covNumber="65" lineNumber="29"/>
+           <line covNumber="27" lineNumber="38"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/ajax/request.js" covLine="51" coverage="70.83333%" totalLine="72">
+           <line covNumber="5" lineNumber="78"/>
+           <line covNumber="0" lineNumber="195"/>
+           <line covNumber="3" lineNumber="35"/>
+           <line covNumber="7" lineNumber="194"/>
+           <line covNumber="7" lineNumber="36"/>
+           <line covNumber="7" lineNumber="197"/>
+           <line covNumber="0" lineNumber="158"/>
+           <line covNumber="0" lineNumber="191"/>
+           <line covNumber="5" lineNumber="190"/>
+           <line covNumber="5" lineNumber="156"/>
+           <line covNumber="5" lineNumber="155"/>
+           <line covNumber="7" lineNumber="119"/>
+           <line covNumber="2" lineNumber="152"/>
+           <line covNumber="7" lineNumber="151"/>
+           <line covNumber="2" lineNumber="80"/>
+           <line covNumber="0" lineNumber="125"/>
+           <line covNumber="0" lineNumber="121"/>
+           <line covNumber="0" lineNumber="122"/>
+           <line covNumber="7" lineNumber="200"/>
+           <line covNumber="0" lineNumber="124"/>
+           <line covNumber="7" lineNumber="201"/>
+           <line covNumber="7" lineNumber="129"/>
+           <line covNumber="7" lineNumber="206"/>
+           <line covNumber="0" lineNumber="165"/>
+           <line covNumber="2" lineNumber="207"/>
+           <line covNumber="0" lineNumber="167"/>
+           <line covNumber="14" lineNumber="162"/>
+           <line covNumber="0" lineNumber="164"/>
+           <line covNumber="5" lineNumber="160"/>
+           <line covNumber="0" lineNumber="232"/>
+           <line covNumber="7" lineNumber="120"/>
+           <line covNumber="7" lineNumber="235"/>
+           <line covNumber="7" lineNumber="75"/>
+           <line covNumber="7" lineNumber="211"/>
+           <line covNumber="7" lineNumber="212"/>
+           <line covNumber="0" lineNumber="59"/>
+           <line covNumber="7" lineNumber="213"/>
+           <line covNumber="7" lineNumber="56"/>
+           <line covNumber="7" lineNumber="55"/>
+           <line covNumber="7" lineNumber="219"/>
+           <line covNumber="7" lineNumber="179"/>
+           <line covNumber="7" lineNumber="217"/>
+           <line covNumber="15" lineNumber="176"/>
+           <line covNumber="7" lineNumber="172"/>
+           <line covNumber="7" lineNumber="107"/>
+           <line covNumber="7" lineNumber="106"/>
+           <line covNumber="7" lineNumber="105"/>
+           <line covNumber="7" lineNumber="63"/>
+           <line covNumber="0" lineNumber="60"/>
+           <line covNumber="7" lineNumber="130"/>
+           <line covNumber="7" lineNumber="100"/>
+           <line covNumber="0" lineNumber="220"/>
+           <line covNumber="0" lineNumber="221"/>
+           <line covNumber="0" lineNumber="222"/>
+           <line covNumber="21" lineNumber="146"/>
+           <line covNumber="0" lineNumber="223"/>
+           <line covNumber="7" lineNumber="147"/>
+           <line covNumber="0" lineNumber="148"/>
+           <line covNumber="7" lineNumber="226"/>
+           <line covNumber="0" lineNumber="188"/>
+           <line covNumber="7" lineNumber="228"/>
+           <line covNumber="0" lineNumber="187"/>
+           <line covNumber="0" lineNumber="229"/>
+           <line covNumber="7" lineNumber="182"/>
+           <line covNumber="7" lineNumber="183"/>
+           <line covNumber="7" lineNumber="185"/>
+           <line covNumber="5" lineNumber="186"/>
+           <line covNumber="7" lineNumber="53"/>
+           <line covNumber="21" lineNumber="54"/>
+           <line covNumber="7" lineNumber="140"/>
+           <line covNumber="21" lineNumber="142"/>
+           <line covNumber="21" lineNumber="141"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/string/getByteLength.js" covLine="2" coverage="100.0%" totalLine="2">
+           <line covNumber="2" lineNumber="26"/>
+           <line covNumber="55" lineNumber="27"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/object/isPlain.js" covLine="8" coverage="100.0%" totalLine="8">
+           <line covNumber="10" lineNumber="48"/>
+           <line covNumber="2" lineNumber="42"/>
+           <line covNumber="10" lineNumber="47"/>
+           <line covNumber="3" lineNumber="22"/>
+           <line covNumber="43" lineNumber="23"/>
+           <line covNumber="31" lineNumber="33"/>
+           <line covNumber="43" lineNumber="25"/>
+           <line covNumber="12" lineNumber="39"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/dom/contains.js" covLine="5" coverage="100.0%" totalLine="5">
+           <line covNumber="29" lineNumber="32"/>
+           <line covNumber="3" lineNumber="25"/>
+           <line covNumber="29" lineNumber="27"/>
+           <line covNumber="29" lineNumber="28"/>
+           <line covNumber="29" lineNumber="29"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/lang/createSingle.js" covLine="5" coverage="100.0%" totalLine="5">
+           <line covNumber="4" lineNumber="30"/>
+           <line covNumber="6" lineNumber="31"/>
+           <line covNumber="4" lineNumber="33"/>
+           <line covNumber="3" lineNumber="27"/>
+           <line covNumber="4" lineNumber="28"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/dom/_styleFixer/display.js" covLine="1" coverage="14.285715%" totalLine="7">
+           <line covNumber="0" lineNumber="21"/>
+           <line covNumber="1" lineNumber="19"/>
+           <line covNumber="0" lineNumber="31"/>
+           <line covNumber="0" lineNumber="22"/>
+           <line covNumber="0" lineNumber="23"/>
+           <line covNumber="0" lineNumber="24"/>
+           <line covNumber="0" lineNumber="26"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/event/_listeners.js" covLine="1" coverage="100.0%" totalLine="1">
+           <line covNumber="22" lineNumber="18"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/object/values.js" covLine="6" coverage="100.0%" totalLine="6">
+           <line covNumber="35" lineNumber="30"/>
+           <line covNumber="2" lineNumber="23"/>
+           <line covNumber="35" lineNumber="24"/>
+           <line covNumber="35" lineNumber="25"/>
+           <line covNumber="180" lineNumber="26"/>
+           <line covNumber="180" lineNumber="27"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/dom/setBorderBoxWidth.js" covLine="2" coverage="100.0%" totalLine="2">
+           <line covNumber="2" lineNumber="24"/>
+           <line covNumber="21" lineNumber="26"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/number/comma.js" covLine="6" coverage="100.0%" totalLine="6">
+           <line covNumber="7" lineNumber="30"/>
+           <line covNumber="1" lineNumber="23"/>
+           <line covNumber="7" lineNumber="24"/>
+           <line covNumber="4" lineNumber="25"/>
+           <line covNumber="7" lineNumber="28"/>
+           <line covNumber="7" lineNumber="29"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/url/queryToJson.js" covLine="15" coverage="100.0%" totalLine="15">
+           <line covNumber="3" lineNumber="44"/>
+           <line covNumber="4" lineNumber="46"/>
+           <line covNumber="44" lineNumber="36"/>
+           <line covNumber="1" lineNumber="24"/>
+           <line covNumber="46" lineNumber="33"/>
+           <line covNumber="18" lineNumber="25"/>
+           <line covNumber="2" lineNumber="34"/>
+           <line covNumber="44" lineNumber="37"/>
+           <line covNumber="44" lineNumber="38"/>
+           <line covNumber="7" lineNumber="43"/>
+           <line covNumber="37" lineNumber="42"/>
+           <line covNumber="18" lineNumber="32"/>
+           <line covNumber="44" lineNumber="41"/>
+           <line covNumber="44" lineNumber="40"/>
+           <line covNumber="18" lineNumber="50"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/number/randomInt.js" covLine="2" coverage="100.0%" totalLine="2">
+           <line covNumber="1" lineNumber="24"/>
+           <line covNumber="22" lineNumber="25"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/dom/create.js" covLine="3" coverage="100.0%" totalLine="3">
+           <line covNumber="61" lineNumber="20"/>
+           <line covNumber="2" lineNumber="19"/>
+           <line covNumber="61" lineNumber="22"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/array/removeAt.js" covLine="2" coverage="100.0%" totalLine="2">
+           <line covNumber="1" lineNumber="24"/>
+           <line covNumber="10" lineNumber="25"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/sio/_createScriptTag.js" covLine="5" coverage="100.0%" totalLine="5">
+           <line covNumber="12" lineNumber="17"/>
+           <line covNumber="12" lineNumber="18"/>
+           <line covNumber="12" lineNumber="15"/>
+           <line covNumber="12" lineNumber="16"/>
+           <line covNumber="2" lineNumber="14"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/array/lastIndexOf.js" covLine="11" coverage="100.0%" totalLine="11">
+           <line covNumber="4" lineNumber="43"/>
+           <line covNumber="7" lineNumber="32"/>
+           <line covNumber="8" lineNumber="31"/>
+           <line covNumber="3" lineNumber="35"/>
+           <line covNumber="8" lineNumber="34"/>
+           <line covNumber="1" lineNumber="26"/>
+           <line covNumber="4" lineNumber="39"/>
+           <line covNumber="8" lineNumber="27"/>
+           <line covNumber="8" lineNumber="37"/>
+           <line covNumber="8" lineNumber="29"/>
+           <line covNumber="23" lineNumber="38"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/array/hash.js" covLine="5" coverage="100.0%" totalLine="5">
+           <line covNumber="14" lineNumber="21"/>
+           <line covNumber="6" lineNumber="20"/>
+           <line covNumber="6" lineNumber="19"/>
+           <line covNumber="1" lineNumber="18"/>
+           <line covNumber="6" lineNumber="23"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/dom/prev.js" covLine="2" coverage="100.0%" totalLine="2">
+           <line covNumber="1" lineNumber="24"/>
+           <line covNumber="7" lineNumber="25"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/lang.js" covLine="1" coverage="100.0%" totalLine="1">
+           <line covNumber="83" lineNumber="16"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/json.js" covLine="1" coverage="100.0%" totalLine="1">
+           <line covNumber="4" lineNumber="16"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/event/un.js" covLine="14" coverage="87.5%" totalLine="16">
+           <line covNumber="17" lineNumber="66"/>
+           <line covNumber="530" lineNumber="48"/>
+           <line covNumber="58" lineNumber="58"/>
+           <line covNumber="530" lineNumber="44"/>
+           <line covNumber="0" lineNumber="56"/>
+           <line covNumber="0" lineNumber="55"/>
+           <line covNumber="17" lineNumber="28"/>
+           <line covNumber="66" lineNumber="29"/>
+           <line covNumber="66" lineNumber="30"/>
+           <line covNumber="66" lineNumber="43"/>
+           <line covNumber="66" lineNumber="32"/>
+           <line covNumber="58" lineNumber="51"/>
+           <line covNumber="58" lineNumber="52"/>
+           <line covNumber="58" lineNumber="53"/>
+           <line covNumber="66" lineNumber="62"/>
+           <line covNumber="58" lineNumber="54"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/form/serialize.js" covLine="24" coverage="100.0%" totalLine="24">
+           <line covNumber="9" lineNumber="66"/>
+           <line covNumber="14" lineNumber="48"/>
+           <line covNumber="1" lineNumber="78"/>
+           <line covNumber="14" lineNumber="47"/>
+           <line covNumber="2" lineNumber="55"/>
+           <line covNumber="16" lineNumber="46"/>
+           <line covNumber="1" lineNumber="24"/>
+           <line covNumber="1" lineNumber="25"/>
+           <line covNumber="12" lineNumber="27"/>
+           <line covNumber="1" lineNumber="37"/>
+           <line covNumber="12" lineNumber="38"/>
+           <line covNumber="16" lineNumber="43"/>
+           <line covNumber="16" lineNumber="42"/>
+           <line covNumber="1" lineNumber="41"/>
+           <line covNumber="9" lineNumber="65"/>
+           <line covNumber="1" lineNumber="70"/>
+           <line covNumber="1" lineNumber="83"/>
+           <line covNumber="1" lineNumber="71"/>
+           <line covNumber="5" lineNumber="54"/>
+           <line covNumber="1" lineNumber="72"/>
+           <line covNumber="4" lineNumber="73"/>
+           <line covNumber="4" lineNumber="74"/>
+           <line covNumber="3" lineNumber="75"/>
+           <line covNumber="14" lineNumber="50"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/lang/isElement.js" covLine="2" coverage="100.0%" totalLine="2">
+           <line covNumber="1" lineNumber="24"/>
+           <line covNumber="10" lineNumber="25"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/dom/_styleFixer/float.js" covLine="1" coverage="100.0%" totalLine="1">
+           <line covNumber="1" lineNumber="17"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/browser.js" covLine="1" coverage="100.0%" totalLine="1">
+           <line covNumber="53" lineNumber="17"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/string/filterFormat/escapeJs.js" covLine="10" coverage="100.0%" totalLine="10">
+           <line covNumber="2" lineNumber="31"/>
+           <line covNumber="1" lineNumber="23"/>
+           <line covNumber="1" lineNumber="36"/>
+           <line covNumber="4" lineNumber="24"/>
+           <line covNumber="2" lineNumber="25"/>
+           <line covNumber="2" lineNumber="34"/>
+           <line covNumber="2" lineNumber="26"/>
+           <line covNumber="4" lineNumber="27"/>
+           <line covNumber="4" lineNumber="28"/>
+           <line covNumber="2" lineNumber="29"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu.js" covLine="3" coverage="100.0%" totalLine="3">
+           <line covNumber="241" lineNumber="30"/>
+           <line covNumber="241" lineNumber="35"/>
+           <line covNumber="241" lineNumber="39"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/swf/Proxy.js" covLine="4" coverage="19.047619%" totalLine="21">
+           <line covNumber="0" lineNumber="67"/>
+           <line covNumber="0" lineNumber="66"/>
+           <line covNumber="0" lineNumber="58"/>
+           <line covNumber="1" lineNumber="57"/>
+           <line covNumber="1" lineNumber="22"/>
+           <line covNumber="0" lineNumber="36"/>
+           <line covNumber="0" lineNumber="33"/>
+           <line covNumber="0" lineNumber="34"/>
+           <line covNumber="0" lineNumber="39"/>
+           <line covNumber="0" lineNumber="27"/>
+           <line covNumber="0" lineNumber="37"/>
+           <line covNumber="0" lineNumber="38"/>
+           <line covNumber="0" lineNumber="30"/>
+           <line covNumber="0" lineNumber="40"/>
+           <line covNumber="0" lineNumber="31"/>
+           <line covNumber="1" lineNumber="51"/>
+           <line covNumber="0" lineNumber="52"/>
+           <line covNumber="1" lineNumber="65"/>
+           <line covNumber="0" lineNumber="70"/>
+           <line covNumber="0" lineNumber="71"/>
+           <line covNumber="0" lineNumber="72"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/ajax.js" covLine="1" coverage="100.0%" totalLine="1">
+           <line covNumber="3" lineNumber="16"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/fn/wrapReturnValue.js" covLine="9" coverage="100.0%" totalLine="9">
+           <line covNumber="107" lineNumber="21"/>
+           <line covNumber="2" lineNumber="20"/>
+           <line covNumber="31" lineNumber="30"/>
+           <line covNumber="107" lineNumber="22"/>
+           <line covNumber="65" lineNumber="23"/>
+           <line covNumber="65" lineNumber="24"/>
+           <line covNumber="32" lineNumber="25"/>
+           <line covNumber="33" lineNumber="27"/>
+           <line covNumber="2" lineNumber="28"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/dom/_styleFixer.js" covLine="1" coverage="100.0%" totalLine="1">
+           <line covNumber="32" lineNumber="16"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/dom/getComputedStyle.js" covLine="7" coverage="87.5%" totalLine="8">
+           <line covNumber="352" lineNumber="30"/>
+           <line covNumber="352" lineNumber="31"/>
+           <line covNumber="29" lineNumber="24"/>
+           <line covNumber="352" lineNumber="25"/>
+           <line covNumber="0" lineNumber="34"/>
+           <line covNumber="352" lineNumber="26"/>
+           <line covNumber="352" lineNumber="28"/>
+           <line covNumber="352" lineNumber="29"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/lang/isBoolean.js" covLine="2" coverage="100.0%" totalLine="2">
+           <line covNumber="1" lineNumber="24"/>
+           <line covNumber="8" lineNumber="25"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/page/createStyleSheet.js" covLine="14" coverage="60.869564%" totalLine="23">
+           <line covNumber="0" lineNumber="67"/>
+           <line covNumber="2" lineNumber="66"/>
+           <line covNumber="1" lineNumber="48"/>
+           <line covNumber="0" lineNumber="69"/>
+           <line covNumber="0" lineNumber="68"/>
+           <line covNumber="0" lineNumber="59"/>
+           <line covNumber="4" lineNumber="58"/>
+           <line covNumber="4" lineNumber="45"/>
+           <line covNumber="4" lineNumber="57"/>
+           <line covNumber="4" lineNumber="44"/>
+           <line covNumber="4" lineNumber="47"/>
+           <line covNumber="4" lineNumber="33"/>
+           <line covNumber="0" lineNumber="39"/>
+           <line covNumber="4" lineNumber="37"/>
+           <line covNumber="4" lineNumber="43"/>
+           <line covNumber="0" lineNumber="41"/>
+           <line covNumber="5" lineNumber="32"/>
+           <line covNumber="0" lineNumber="40"/>
+           <line covNumber="3" lineNumber="51"/>
+           <line covNumber="2" lineNumber="65"/>
+           <line covNumber="3" lineNumber="53"/>
+           <line covNumber="0" lineNumber="60"/>
+           <line covNumber="0" lineNumber="61"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/dom/getAttr.js" covLine="7" coverage="100.0%" totalLine="7">
+           <line covNumber="55" lineNumber="30"/>
+           <line covNumber="1" lineNumber="31"/>
+           <line covNumber="54" lineNumber="35"/>
+           <line covNumber="54" lineNumber="34"/>
+           <line covNumber="10" lineNumber="39"/>
+           <line covNumber="10" lineNumber="27"/>
+           <line covNumber="55" lineNumber="28"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/cookie/setRaw.js" covLine="9" coverage="100.0%" totalLine="9">
+           <line covNumber="2" lineNumber="49"/>
+           <line covNumber="2" lineNumber="48"/>
+           <line covNumber="9" lineNumber="41"/>
+           <line covNumber="9" lineNumber="47"/>
+           <line covNumber="9" lineNumber="46"/>
+           <line covNumber="3" lineNumber="36"/>
+           <line covNumber="9" lineNumber="52"/>
+           <line covNumber="10" lineNumber="37"/>
+           <line covNumber="1" lineNumber="38"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/async/_isDeferred.js" covLine="3" coverage="100.0%" totalLine="3">
+           <line covNumber="55" lineNumber="17"/>
+           <line covNumber="4" lineNumber="15"/>
+           <line covNumber="55" lineNumber="16"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/date/parse.js" covLine="8" coverage="100.0%" totalLine="8">
+           <line covNumber="4" lineNumber="48"/>
+           <line covNumber="1" lineNumber="59"/>
+           <line covNumber="4" lineNumber="43"/>
+           <line covNumber="19" lineNumber="42"/>
+           <line covNumber="20" lineNumber="41"/>
+           <line covNumber="20" lineNumber="40"/>
+           <line covNumber="15" lineNumber="55"/>
+           <line covNumber="1" lineNumber="39"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/dom/children.js" covLine="6" coverage="100.0%" totalLine="6">
+           <line covNumber="1" lineNumber="24"/>
+           <line covNumber="5" lineNumber="33"/>
+           <line covNumber="5" lineNumber="25"/>
+           <line covNumber="5" lineNumber="27"/>
+           <line covNumber="12" lineNumber="28"/>
+           <line covNumber="9" lineNumber="29"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/element/extend.js" covLine="4" coverage="100.0%" totalLine="4">
+           <line covNumber="1" lineNumber="30"/>
+           <line covNumber="1" lineNumber="32"/>
+           <line covNumber="1" lineNumber="31"/>
+           <line covNumber="1" lineNumber="29"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/lang/Class/$addEventListeners.js" covLine="8" coverage="100.0%" totalLine="8">
+           <line covNumber="2" lineNumber="30"/>
+           <line covNumber="3" lineNumber="35"/>
+           <line covNumber="4" lineNumber="36"/>
+           <line covNumber="3" lineNumber="33"/>
+           <line covNumber="3" lineNumber="34"/>
+           <line covNumber="1" lineNumber="27"/>
+           <line covNumber="4" lineNumber="28"/>
+           <line covNumber="1" lineNumber="29"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/lang/isArray.js" covLine="2" coverage="100.0%" totalLine="2">
+           <line covNumber="11" lineNumber="24"/>
+           <line covNumber="192" lineNumber="25"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/dom/fixable.js" covLine="55" coverage="87.30159%" totalLine="63">
+           <line covNumber="14" lineNumber="113"/>
+           <line covNumber="28" lineNumber="110"/>
+           <line covNumber="14" lineNumber="111"/>
+           <line covNumber="9" lineNumber="36"/>
+           <line covNumber="8" lineNumber="159"/>
+           <line covNumber="8" lineNumber="156"/>
+           <line covNumber="8" lineNumber="155"/>
+           <line covNumber="8" lineNumber="118"/>
+           <line covNumber="9" lineNumber="38"/>
+           <line covNumber="11" lineNumber="119"/>
+           <line covNumber="8" lineNumber="153"/>
+           <line covNumber="0" lineNumber="150"/>
+           <line covNumber="0" lineNumber="151"/>
+           <line covNumber="8" lineNumber="82"/>
+           <line covNumber="8" lineNumber="83"/>
+           <line covNumber="8" lineNumber="86"/>
+           <line covNumber="8" lineNumber="87"/>
+           <line covNumber="9" lineNumber="125"/>
+           <line covNumber="9" lineNumber="126"/>
+           <line covNumber="9" lineNumber="128"/>
+           <line covNumber="9" lineNumber="121"/>
+           <line covNumber="9" lineNumber="123"/>
+           <line covNumber="9" lineNumber="124"/>
+           <line covNumber="1" lineNumber="169"/>
+           <line covNumber="1" lineNumber="165"/>
+           <line covNumber="1" lineNumber="168"/>
+           <line covNumber="1" lineNumber="163"/>
+           <line covNumber="1" lineNumber="164"/>
+           <line covNumber="1" lineNumber="160"/>
+           <line covNumber="8" lineNumber="71"/>
+           <line covNumber="0" lineNumber="72"/>
+           <line covNumber="0" lineNumber="74"/>
+           <line covNumber="0" lineNumber="75"/>
+           <line covNumber="9" lineNumber="134"/>
+           <line covNumber="9" lineNumber="135"/>
+           <line covNumber="8" lineNumber="59"/>
+           <line covNumber="8" lineNumber="138"/>
+           <line covNumber="8" lineNumber="57"/>
+           <line covNumber="10" lineNumber="139"/>
+           <line covNumber="8" lineNumber="177"/>
+           <line covNumber="1" lineNumber="174"/>
+           <line covNumber="28" lineNumber="109"/>
+           <line covNumber="1" lineNumber="172"/>
+           <line covNumber="4" lineNumber="107"/>
+           <line covNumber="32" lineNumber="106"/>
+           <line covNumber="0" lineNumber="62"/>
+           <line covNumber="32" lineNumber="104"/>
+           <line covNumber="8" lineNumber="103"/>
+           <line covNumber="0" lineNumber="131"/>
+           <line covNumber="0" lineNumber="130"/>
+           <line covNumber="8" lineNumber="61"/>
+           <line covNumber="8" lineNumber="100"/>
+           <line covNumber="8" lineNumber="98"/>
+           <line covNumber="10" lineNumber="48"/>
+           <line covNumber="8" lineNumber="97"/>
+           <line covNumber="8" lineNumber="96"/>
+           <line covNumber="8" lineNumber="95"/>
+           <line covNumber="8" lineNumber="149"/>
+           <line covNumber="8" lineNumber="91"/>
+           <line covNumber="8" lineNumber="90"/>
+           <line covNumber="8" lineNumber="51"/>
+           <line covNumber="8" lineNumber="53"/>
+           <line covNumber="8" lineNumber="141"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/cookie/_isValidKey.js" covLine="2" coverage="100.0%" totalLine="2">
+           <line covNumber="5" lineNumber="20"/>
+           <line covNumber="22" lineNumber="47"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/swf/getMovie.js" covLine="3" coverage="75.0%" totalLine="4">
+           <line covNumber="0" lineNumber="32"/>
+           <line covNumber="2" lineNumber="25"/>
+           <line covNumber="4" lineNumber="28"/>
+           <line covNumber="4" lineNumber="29"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/page/load.js" covLine="63" coverage="87.5%" totalLine="72">
+           <line covNumber="8" lineNumber="116"/>
+           <line covNumber="14" lineNumber="78"/>
+           <line covNumber="14" lineNumber="77"/>
+           <line covNumber="8" lineNumber="115"/>
+           <line covNumber="0" lineNumber="111"/>
+           <line covNumber="10" lineNumber="197"/>
+           <line covNumber="11" lineNumber="196"/>
+           <line covNumber="8" lineNumber="191"/>
+           <line covNumber="11" lineNumber="190"/>
+           <line covNumber="12" lineNumber="156"/>
+           <line covNumber="6" lineNumber="193"/>
+           <line covNumber="10" lineNumber="155"/>
+           <line covNumber="8" lineNumber="119"/>
+           <line covNumber="18" lineNumber="153"/>
+           <line covNumber="14" lineNumber="150"/>
+           <line covNumber="10" lineNumber="199"/>
+           <line covNumber="14" lineNumber="83"/>
+           <line covNumber="4" lineNumber="86"/>
+           <line covNumber="4" lineNumber="87"/>
+           <line covNumber="8" lineNumber="84"/>
+           <line covNumber="21" lineNumber="85"/>
+           <line covNumber="1" lineNumber="202"/>
+           <line covNumber="8" lineNumber="127"/>
+           <line covNumber="8" lineNumber="128"/>
+           <line covNumber="8" lineNumber="121"/>
+           <line covNumber="8" lineNumber="122"/>
+           <line covNumber="8" lineNumber="124"/>
+           <line covNumber="11" lineNumber="166"/>
+           <line covNumber="0" lineNumber="167"/>
+           <line covNumber="12" lineNumber="161"/>
+           <line covNumber="12" lineNumber="162"/>
+           <line covNumber="12" lineNumber="164"/>
+           <line covNumber="1" lineNumber="75"/>
+           <line covNumber="3" lineNumber="134"/>
+           <line covNumber="3" lineNumber="135"/>
+           <line covNumber="9" lineNumber="133"/>
+           <line covNumber="3" lineNumber="138"/>
+           <line covNumber="3" lineNumber="137"/>
+           <line covNumber="12" lineNumber="179"/>
+           <line covNumber="12" lineNumber="177"/>
+           <line covNumber="12" lineNumber="171"/>
+           <line covNumber="0" lineNumber="109"/>
+           <line covNumber="12" lineNumber="172"/>
+           <line covNumber="0" lineNumber="108"/>
+           <line covNumber="4" lineNumber="173"/>
+           <line covNumber="0" lineNumber="107"/>
+           <line covNumber="5" lineNumber="105"/>
+           <line covNumber="5" lineNumber="104"/>
+           <line covNumber="5" lineNumber="103"/>
+           <line covNumber="3" lineNumber="131"/>
+           <line covNumber="3" lineNumber="99"/>
+           <line covNumber="5" lineNumber="102"/>
+           <line covNumber="8" lineNumber="130"/>
+           <line covNumber="3" lineNumber="100"/>
+           <line covNumber="3" lineNumber="98"/>
+           <line covNumber="3" lineNumber="97"/>
+           <line covNumber="8" lineNumber="145"/>
+           <line covNumber="8" lineNumber="146"/>
+           <line covNumber="8" lineNumber="95"/>
+           <line covNumber="8" lineNumber="94"/>
+           <line covNumber="14" lineNumber="93"/>
+           <line covNumber="14" lineNumber="91"/>
+           <line covNumber="4" lineNumber="90"/>
+           <line covNumber="0" lineNumber="187"/>
+           <line covNumber="11" lineNumber="189"/>
+           <line covNumber="12" lineNumber="181"/>
+           <line covNumber="1" lineNumber="182"/>
+           <line covNumber="1" lineNumber="183"/>
+           <line covNumber="11" lineNumber="185"/>
+           <line covNumber="0" lineNumber="186"/>
+           <line covNumber="0" lineNumber="140"/>
+           <line covNumber="0" lineNumber="141"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/fn/multize.js" covLine="14" coverage="100.0%" totalLine="14">
+           <line covNumber="72" lineNumber="48"/>
+           <line covNumber="14" lineNumber="45"/>
+           <line covNumber="78" lineNumber="35"/>
+           <line covNumber="72" lineNumber="36"/>
+           <line covNumber="3" lineNumber="25"/>
+           <line covNumber="110" lineNumber="26"/>
+           <line covNumber="86" lineNumber="39"/>
+           <line covNumber="78" lineNumber="27"/>
+           <line covNumber="86" lineNumber="37"/>
+           <line covNumber="86" lineNumber="38"/>
+           <line covNumber="60" lineNumber="42"/>
+           <line covNumber="72" lineNumber="40"/>
+           <line covNumber="110" lineNumber="53"/>
+           <line covNumber="6" lineNumber="50"/>
+    </testsuite> 
+    
+    <testsuite browser="ff ie6 chrome" casename="baidu/event/stopPropagation.js" covLine="3" coverage="75.0%" totalLine="4">
+           <line covNumber="2" lineNumber="21"/>
+           <line covNumber="2" lineNumber="22"/>
+           <line covNumber="2" lineNumber="23"/>
+           <line covNumber="0" lineNumber="25"/>
+    </testsuite> 
+    
+</testsuites>
