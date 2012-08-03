@@ -5,6 +5,8 @@
 	<property name="report.path" value="test/tools/br/report" />
 	<property name="coverage.path" value="test/coverage" />
 	<property name="report.file" value="test/tools/br/report.xml" />
+	<property name="coverage.report.file" value="test/tools/br/coveragereport/totalCoverage/coverage_report.xml" />
+	<property name="coverage.source.file" value="test/tools/br/coveragereport/totalCoverage/source.js" />
 	<property name="git.project" value="Tangram-base" />
 	<property name="git.user" value="" />
 	<path id="ext.classpath">
@@ -21,6 +23,8 @@
 	<target name="init">
 		<delete file="${report.file}" />
 		<delete dir="${report.path}" />
+		<delete file="${coverage.report.file}" />
+		<delete file="${coverage.source.file}" />
 		<mkdir dir="${report.path}/html" />
 		<mkdir dir="${report.path}/coverage/html" />
 		<mkdir dir="${report.path}/coverage/history" />
@@ -41,7 +45,7 @@
 	</target>
 	<target name="execute_j" depends="init,coverage">
 		<gitext />
-		<get src="http://${serverip}/addTask?proj=${git.user}.${git.project}" dest="/tmp/${git.uesr}_${git.project}.php"/>
+		<get src="http://${serverip}/addTask?proj=${git.user}.${git.project}&amp;cov=true" dest="/tmp/${git.uesr}_${git.project}.php"/>
 	</target>
 	<target name="getreport" depends="init,coverage,execute">
 		<waitfor maxwait="30" maxwaitunit="minute">
