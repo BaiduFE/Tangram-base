@@ -2,7 +2,7 @@
 header("Cache-Control: no-cache; ALL: no-store;");
 header("Content-Type: text/html; charset=utf-8");
 print '<html>
-	<script type="text/javascript" src="../../tools/br/import.php?f=baidu.page.lazyLoadImage&fromframe=true"></script>
+	<script type="text/javascript" src="../../tools/br/import.php?f=baidu.page.lazyLoadImage"></script>
 	<script type="text/javascript">
 	baidu.page.lazyLoadImage({	
 		onlazyload : function(){
