@@ -30,7 +30,7 @@ test("stop事件--结合stopPropagation和preventDefault",function(){
 	a.target = '_self';
 	a.onclick = function(e){//onclick事件中stopPropagation
 		e = e || window.event;
-		baidu.event.stopPropagation(e);
+		baidu.event.stop(e);
 	};
 	/*body中添加click事件的侦听，button的stopPropagation成功，则button的onclick事件不会冒泡到body*/
 	var propaFromSrcElem = function(e){
@@ -44,7 +44,6 @@ test("stop事件--结合stopPropagation和preventDefault",function(){
 	document.body.appendChild(a);
 	ua.beforedispatch = function(e){
 		e = e || window.event;
-		baidu.event.preventDefault(e);	
 	};
     
     setTimeout(function(){
