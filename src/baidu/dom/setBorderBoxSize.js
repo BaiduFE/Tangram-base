@@ -3,7 +3,6 @@
  * Copyright 2009 Baidu Inc. All rights reserved.
  */
 
-///import baidu.dom;
 ///import baidu.dom.setStyles;
 ///import baidu.dom.getStyle;
 ///import baidu.dom._styleFilter.px;

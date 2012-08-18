@@ -32,7 +32,7 @@ baidu.lang.module = function(name, module, owner) {
             if (!(new RegExp('^[a-zA-Z_\x24][a-zA-Z0-9_\x24]*\x24')).test(packages[0])) {
                 throw '';
             }
-            owner = eval(packages[0]);
+            owner = window['eval'](packages[0]);
             i = 1;
         }catch (e) {
             owner = window;

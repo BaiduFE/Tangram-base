@@ -22,7 +22,7 @@
 (function(){
     // 将正则表达式预创建，可提高效率
     var reg1 = /^\#[\da-f]{6}$/i,
-        reg2 = /^rgb\((\d+), (\d+), (\d+)\)$/,
+        reg2 = /^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/i,
         keyword = {
             black: '#000000',
             silver: '#c0c0c0',

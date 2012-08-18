@@ -21,6 +21,7 @@
  * <b>注意：</b>对于移除的dom元素，IE下会释放该元素的空间，继续使用该元素的引用进行操作将会引发不可预料的问题。
  * @meta standard
  */
+
 baidu.dom.remove = function (element) {
     element = baidu.dom._g(element);
 	var tmpEl = element.parentNode;
