@@ -27,6 +27,8 @@
 baidu.string.subByte = function (source, length, tail) {
     source = String(source);
     tail = tail || '';
+    
+    
     if (length < 0 || baidu.string.getByteLength(source) <= length) {
         return source + tail;
     }

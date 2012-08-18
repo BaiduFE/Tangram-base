@@ -18,7 +18,7 @@ baidu.dom.opacity = function(element, opacity){
         element.style.opacity = opacity;
         element.style.KHTMLOpacity = opacity;
     } else {
-        element.style.filter = "progid:DXImageTransform.Microsoft.Alpha(opacity:"+
+        element.style.filter = "progid:DXImageTransform.Microsoft.Alpha(opacity="+
             Math.floor(opacity * 100) +")";
     }
 };

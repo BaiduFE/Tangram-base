@@ -9,7 +9,6 @@
  * date: 2010/12/14
  */
 
-///import baidu.dom;
 ///import baidu.dom._g;
 
 ///import baidu.dom.getStyle;
