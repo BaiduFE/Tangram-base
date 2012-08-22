@@ -45,7 +45,7 @@
 	</target>
 	<target name="execute_j" depends="init,coverage">
 		<gitext />
-		<get src="http://${serverip}/addTask?proj=${git.user}.${git.project}&amp;cov=true" dest="/tmp/${git.uesr}_${git.project}.php"/>
+		<get src="http://${serverip}/addTask?proj=${git.user}.${git.project}" dest="/tmp/${git.uesr}_${git.project}.php"/>
 	</target>
 	<target name="getreport" depends="init,coverage,execute">
 		<waitfor maxwait="30" maxwaitunit="minute">
