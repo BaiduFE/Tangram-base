@@ -21,6 +21,6 @@
  *             
  * @returns {boolean} 类型判断结果
  */
-baidu.lang.isBoolean = function(o) {
-    return typeof o === 'boolean';
+baidu.lang.isBoolean = function(val) {
+    return '[object Boolean]' === Object.prototype.toString.call(val);
 };
