@@ -31,7 +31,7 @@
 	</target>
        
 	<target name="close">
-		<exec executable="sh /home/work/soft/timer/stopbrow.sh">
+		<exec executable="/home/work/soft/timer/stopbrow.sh">
 		</exec> 
 	</target>
 
