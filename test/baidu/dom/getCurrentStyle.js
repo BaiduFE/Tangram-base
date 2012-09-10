@@ -42,10 +42,10 @@ test("get style from css file", function() {
 
 	div.appendChild(p);
 	div.appendChild(img);
-	$(div).attr('className', "content");
-	$(div1).attr('className', 'content');
-	$(img).attr('className', 'content');
-	$(p).attr('className', 'pid');
+	$(div).attr('class', "content");
+	$(div1).attr('class', 'content');
+	$(img).attr('class', 'content');
+	$(p).attr('class', 'pid');
 
 	ua.loadcss(upath + 'style.css', function() {
 		/** IE的float属性叫styleFloat，firefox则是cssFloat * */
