@@ -30,12 +30,8 @@
 		<mkdir dir="${report.path}/coverage/history" />
 	</target>
        
-	<target name="close">
-		
+	<target name="close">		
 		<exec executable="/home/tangram/soft/timer/stopbrow.sh">
-			<arg value="--encoding=UTF-8" />
-			<arg value="src" />
-			<arg value="${coverage.path}" />
 		</exec> 
 	</target>
 
@@ -52,7 +48,7 @@
 		<gitext />
 		<get src="http://${serverip}/${git.user}/${git.project}/test/tools/br/runall.php?ci=true&amp;cov=true" dest="/tmp/${git.user}_${git.project}.php" />
 	</target>
-	<target name="execute_j" depends="init,coverage">
+	<target name="execute_j" depends="init,close,coverage">
 		<gitext />
 		<get src="http://${serverip}/addTask?proj=${git.user}.${git.project}&amp;cov=true" dest="/tmp/${git.uesr}_${git.project}.php"/>
 	</target>
