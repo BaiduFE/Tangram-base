@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="project" default="getreport" basedir="../">
+	<!-- 配置信息 10.32.34.115:8000 -->
+	<property name="serverip" value="10.48.32.115:8000" />
+	<property name="report.path" value="test/tools/br/report" />
+	<property name="coverage.path" value="test/coverage" />
+	<property name="report.file" value="test/tools/br/report.xml" />
+	<property name="coverage.report.file" value="test/tools/br/coveragereport/totalCoverage/coverage_report.xml" />
+	<property name="coverage.source.file" value="test/tools/br/coveragereport/totalCoverage/source.js" />
+	<property name="git.project" value="Tangram-base" />
+	<property name="git.user" value="" />
+	<path id="ext.classpath">
+		<fileset dir="test/tools/lib">
+			<include name="**/*.jar" />
+		</fileset>
+	</path>
+
+	<import file="build_report.xml" />
+
+	<!--为hudson做的扩展，用于支持多用户运行环境，会直接提取当前项目的父目录名称作为user -->
+	<taskdef name="gitext" classname="com.baidu.tangram.GitExt" classpathref="ext.classpath" />
+
+	<target name="init">
+		<delete file="${report.file}" />
+		<delete dir="${report.path}" />
+		<delete file="${coverage.report.file}" />
+		<delete file="${coverage.source.file}" />
+		<mkdir dir="${report.path}/html" />
+		<mkdir dir="${report.path}/coverage/html" />
+		<mkdir dir="${report.path}/coverage/history" />
+	</target>
+       
+	<target name="close">
+		
+		<exec executable="/home/tangram/soft/timer/stopbrow.sh">
+			<arg value="--encoding=UTF-8" />
+			<arg value="src" />
+			<arg value="${coverage.path}" />
+		</exec> 
+	</target>
+
+	<target name="coverage">
+		<delete dir="${coverage.path}" />
+		<exec executable="jscoverage">
+			<arg value="--encoding=UTF-8" />
+			<arg value="src" />
+			<arg value="${coverage.path}" />
+		</exec> 
+	</target>
+
+	<target name="execute" depends="init,coverage">
+		<gitext />
+		<get src="http://${serverip}/${git.user}/${git.project}/test/tools/br/runall.php?ci=true&amp;cov=true" dest="/tmp/${git.user}_${git.project}.php" />
+	</target>
+	<target name="execute_j" depends="init,coverage">
+		<gitext />
+		<get src="http://${serverip}/addTask?proj=${git.user}.${git.project}&amp;cov=true" dest="/tmp/${git.uesr}_${git.project}.php"/>
+	</target>
+	<target name="getreport" depends="init,coverage,execute">
+		<waitfor maxwait="30" maxwaitunit="minute">
+			<available file="${report.file}" />
+		</waitfor>
+
+		<!-- junit report and mail -->
+		<antcall target="mail" />
+		<!-- junit report and mail end -->
+	</target>
+	<target name="getreport_j" depends="init,coverage,execute_j">
+		<waitfor maxwait="30" maxwaitunit="minute">
+			<!-- 5分钟跑不出来结果，实际观察发现执行耗时20分钟，此处调整为等待半小时 -->
+			<available file="${report.file}" />
+		</waitfor>
+		<waitfor maxwait="20" maxwaitunit="second">
+			<istrue value="false"/>
+		</waitfor>
+	</target>
+
+	<taskdef name='taskImport' classname="com.baidu.tangram.TaskImport" classpathref="ext.classpath">
+	</taskdef>
+
+</project>
