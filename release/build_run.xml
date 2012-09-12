@@ -30,10 +30,6 @@
 		<mkdir dir="${report.path}/coverage/history" />
 	</target>
        
-	<target name="close">
-		<exec executable="/home/work/soft/timer/stopbrow.sh">
-		</exec> 
-	</target>
 
 	<target name="coverage">
 		<delete dir="${coverage.path}" />
@@ -48,7 +44,7 @@
 		<gitext />
 		<get src="http://${serverip}/${git.user}/${git.project}/test/tools/br/runall.php?ci=true&amp;cov=true" dest="/tmp/${git.user}_${git.project}.php" />
 	</target>
-	<target name="execute_j" depends="init,close,coverage">
+	<target name="execute_j" depends="init,coverage">
 		<gitext />
 		<get src="http://${serverip}/addTask?proj=${git.user}.${git.project}&amp;cov=true" dest="/tmp/${git.uesr}_${git.project}.php"/>
 	</target>
