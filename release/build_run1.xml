@@ -31,7 +31,8 @@
 	</target>
        
 	<target name="close">		
-		<exec executable="/home/tangram/soft/timer/stopbrow.sh">
+	         <echo>[report] : ${ext.classpath}</echo>
+                <exec executable="/home/tangram/soft/timer/stopbrow.sh">
 		</exec> 
 	</target>
 
