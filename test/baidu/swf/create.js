@@ -1,6 +1,7 @@
 module("baidu.swf.create");
 
 test('test', function() {
+	expect(1);
 	stop();
 	ua.importsrc("baidu.swf.getMovie", function(){
 		var div = document.body.appendChild(document.createElement('div'));
@@ -15,18 +16,14 @@ test('test', function() {
 		var swf = baidu.swf.getMovie('test0');
 		var h = setInterval(function() {
 			try {
-				if (swf.Playing)
-					clearInterval(h);
-				else if (swf.GetVariable
-						|| baidu.swf.getMovie('test0').GetVariable("/:message"))
+				if (swf.GetVariable && swf.GetVariable("/:message") == "Type something here")
 					clearInterval(h);
 				else
 					return;
 			} catch (e) {
 				return;
 			}
-			equals(swf.GetVariable("/:message"), 'Type something here',
-					'swf create success');
+			ok(true, "swf create successfully");
 			swf.StopPlay();
 			$(div).remove();
 			start();
@@ -35,6 +32,7 @@ test('test', function() {
 });
 
 test('test, no target', function() {
+	expect(1);
 	stop();
 	baidu.swf.create({
 		id : 'test0',
@@ -47,18 +45,14 @@ test('test, no target', function() {
 	var swf = baidu.swf.getMovie('test0');
 	var h = setInterval(function() {
 		try {
-			if (swf.Playing)
-				clearInterval(h);
-			else if (swf.GetVariable
-					|| baidu.swf.getMovie('test0').GetVariable("/:message"))
+			if (swf.GetVariable && swf.GetVariable("/:message") == "Type something here")
 				clearInterval(h);
 			else
 				return;
 		} catch (e) {
 			return;
 		}
-		equals(swf.GetVariable("/:message"), 'Type something here',
-				'swf create success');
+		ok(true, "swf create successfully");
 		swf.StopPlay();
 		$('#test0').remove();
 		start();
