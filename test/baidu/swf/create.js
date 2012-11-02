@@ -16,7 +16,7 @@ test('test', function() {
 		var swf = baidu.swf.getMovie('test0');
 		var h = setInterval(function() {
 			try {
-				if (swf.GetVariable && swf.GetVariable("/:message") == "Type something here")
+				if((swf.playing || swf.GetVariable) && swf.GetVariable("/:message") == "Type something here")
 					clearInterval(h);
 				else
 					return;
@@ -45,7 +45,7 @@ test('test, no target', function() {
 	var swf = baidu.swf.getMovie('test0');
 	var h = setInterval(function() {
 		try {
-			if (swf.GetVariable && swf.GetVariable("/:message") == "Type something here")
+			if((swf.playing || swf.GetVariable) && swf.GetVariable("/:message") == "Type something here")
 				clearInterval(h);
 			else
 				return;
