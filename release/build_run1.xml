@@ -44,7 +44,7 @@
 		</exec> 
 	</target>
 
-	<target name="execute" depends="init,coverage">
+	<target name="execute" depends="init,close,coverage">
 		<gitext />
 		<get src="http://${serverip}/${git.user}/${git.project}/test/tools/br/runall.php?ci=true&amp;cov=true" dest="/tmp/${git.user}_${git.project}.php" />
 	</target>
