@@ -44,15 +44,15 @@
 		</exec> 
 	</target>
 
-	<target name="execute" depends="init,coverage">
+	<target name="execute" depends="init,close,coverage">
 		<gitext />
 		<get src="http://${serverip}/${git.user}/${git.project}/test/tools/br/runall.php?ci=true&amp;cov=true" dest="/tmp/${git.user}_${git.project}.php" />
 	</target>
-	<target name="execute_j" depends="init,coverage">
+	<target name="execute_j" depends="init,close,coverage">
 		<gitext />
 		<get src="http://${serverip}/addTask?proj=${git.user}.${git.project}&amp;cov=true" dest="/tmp/${git.uesr}_${git.project}.php"/>
 	</target>
-	<target name="getreport" depends="init,coverage,execute">
+	<target name="getreport" depends="execute">
 		<waitfor maxwait="30" maxwaitunit="minute">
 			<available file="${report.file}" />
 		</waitfor>
@@ -61,7 +61,7 @@
 		<antcall target="mail" />
 		<!-- junit report and mail end -->
 	</target>
-	<target name="getreport_j" depends="init,coverage,execute_j">
+	<target name="getreport_j" depends="execute_j">
 		<waitfor maxwait="30" maxwaitunit="minute">
 			<!-- 5分钟跑不出来结果，实际观察发现执行耗时20分钟，此处调整为等待半小时 -->
 			<available file="${report.file}" />
