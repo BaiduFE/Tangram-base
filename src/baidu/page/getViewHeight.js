@@ -20,8 +20,9 @@
  * @returns {number} 页面视觉区域高度
  */
 baidu.page.getViewHeight = function () {
-    var doc = document,
-        client = doc.compatMode == 'BackCompat' ? doc.body : doc.documentElement;
+	var de = document.documentElement.clientHeight,
+	    db = document.body.clientHeight;
 
-    return client.clientHeight;
+	//@author: wangxiao  兼容IE9    
+	return Math.min(de||db, db);
 };
